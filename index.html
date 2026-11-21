@@ -537,6 +537,68 @@ function speak(text, lang, rate){
   }catch(e){}
 }
 
+/* ---------- 원어민 MP3 재생 (있으면 MP3, 없거나 실패하면 위 TTS로 폴백) ----------
+   · 파일: audio/{카드 id}.mp3  (예: audio/d1it01.mp3)
+   · iOS 사파리는 사용자 터치 핸들러 안에서 곧바로 play()를 불러야 소리가 나요.
+   · 🐢 느리게 듣기는 <audio> 자체 배속(playbackRate)으로 처리 — iOS에서도 확실히 동작. */
+const AUDIO_BASE = "audio/";
+const audioEls = {};
+let playingEl = null;
+function cardLang(c){ return c && c.type === "en" ? "en-US" : "it-IT"; }
+function audioEl(id){
+  if(!id) return null;
+  let a = audioEls[id];
+  if(!a){
+    try{
+      a = new Audio();
+      a.preload = "auto";
+      a.src = AUDIO_BASE + id + ".mp3";
+      audioEls[id] = a;
+    }catch(e){ return null; }
+  }
+  return a;
+}
+function prefetchAudio(ids){
+  (ids || []).forEach(id => { if(id && !audioEls[id]) audioEl(id); });
+}
+function stopAudio(){
+  if(playingEl){ try{ playingEl.pause(); playingEl.currentTime = 0; }catch(e){} playingEl = null; }
+}
+function playAudio(id, text, lang, rate){
+  rate = rate || 1;
+  stopAudio();
+  const a = id ? audioEl(id) : null;
+  if(!a){ speak(text, lang, rate); return; }
+  let fellBack = false;
+  const fallback = () => {
+    if(fellBack) return;
+    fellBack = true;
+    try{ a.pause(); }catch(e){}
+    if(playingEl === a) playingEl = null;
+    speak(text, lang, rate);
+  };
+  const applyRate = () => { try{ a.defaultPlaybackRate = rate; a.playbackRate = rate; }catch(e){} };
+  a.onerror = fallback;
+  a.onended = () => { if(playingEl === a) playingEl = null; };
+  a.onloadedmetadata = applyRate;
+  a.onplaying = applyRate;
+  try{ a.currentTime = 0; }catch(e){}
+  applyRate();
+  playingEl = a;
+  let p = null;
+  try{ p = a.play(); }catch(e){ fallback(); return; }
+  if(p && p.then) p.then(applyRate).catch(() => { if(playingEl === a) fallback(); });
+}
+function questionAudioId(q){
+  if(!q) return "";
+  if(q.kind === "qa") return String(q.cardId || "").replace(/^qa:/, "");
+  return (q.src && q.src.id) || "";
+}
+function playQuestionAudio(q){
+  if(!q || !q.audio) return;
+  playAudio(questionAudioId(q), q.audio.text, q.audio.lang, 1);
+}
+
 /* =====================================================================
    4) 범위 / 카드 상태
    ===================================================================== */
@@ -655,6 +717,7 @@ function renderFlash(){
 
   const c = list[flashIdx];
   const st = cs(c.id);
+  prefetchAudio([c.id, (list[flashIdx+1]||{}).id]);
   body.innerHTML = `
     <div class="card ${flipped?"flipped":""}" id="card" role="button" aria-label="카드 뒤집기">
       <div class="front">${frontHTML(c)}</div>
@@ -891,7 +954,7 @@ function renderQuestion(){
     main = `
       ${q.ask ? `<div class="qsub" style="font-weight:800;color:#8a8a8a">${esc(q.ask)}</div>` : ""}
       <div class="qprompt ${pc}"${langAttr}>${esc(q.prompt)}</div>
-      ${(q.kind === "meaning" || q.kind === "reverse") ? `<button class="audio-btn" data-audio="q">🔊 ${q.src && q.src.type === "en" ? "영어로 듣기" : "발음 듣기"}</button>` : ""}`;
+      ${q.kind === "meaning" ? `<button class="audio-btn" data-audio="q">🔊 ${q.src && q.src.type === "en" ? "영어로 듣기" : "발음 듣기"}</button>` : ""}`;
   }
 
   const opts = q.options.map((o,i)=>
@@ -904,7 +967,7 @@ function renderQuestion(){
      <button class="checkbtn" id="qCheck" disabled>확인</button>
      <div class="fb" id="qFb"></div>`;
 
-  if(q.audio) speak(q.audio.text, q.audio.lang, 1);
+  if(q.audio) playQuestionAudio(q);
 }
 function checkAnswer(){
   if(!quiz || quiz.answered) return;
@@ -942,12 +1005,15 @@ function checkAnswer(){
   }
 
   const correctText = q.options.find(o=>o.correct).text;
+  const ansId = q.src ? q.src.id : (q.kind === "qa" ? questionAudioId(q) + "a" : "");
+  quiz.ansAudio = ansId ? {id:ansId, text:q.src ? q.src.front : correctText, lang:q.src ? cardLang(q.src) : "it-IT"} : null;
   const last = quiz.idx >= quiz.list.length-1;
   const fb = $("#qFb");
   fb.className = "fb show " + (ok?"ok":"no");
   fb.innerHTML = `
     <h4>${ok ? (quiz.combo>=3 ? "정답! 🔥 "+quiz.combo+"연속!" : "정답이에요! 🎉") : "아쉬워요 😅"}</h4>
     ${ok ? "" : `<p><b>정답 · </b>${esc(correctText)}</p>`}
+    ${quiz.ansAudio ? `<button class="audio-btn" data-answer-audio="1">🔊 정답 발음 듣기</button>` : ""}
     ${(q.explain||[]).filter(Boolean).map(t=>`<p>${esc(t)}</p>`).join("")}
     <button class="go" id="qNext">${last ? "결과 보기" : "계속"}</button>`;
   const chk = $("#qCheck");
@@ -1040,7 +1106,7 @@ $("#viewFlash").addEventListener("click", e=>{
     const c = list[flashIdx];
     if(c){
       const slow = say.hasAttribute("data-say-slow");
-      speak(c.front, c.type==="en"?"en-US":"it-IT", slow ? .62 : 1);
+      playAudio(c.id, c.front, cardLang(c), slow ? .72 : 1);
     }
     return;
   }
@@ -1101,10 +1167,14 @@ $("#viewQuiz").addEventListener("click", e=>{
   }
   if(e.target.closest("#qCheck")){ checkAnswer(); return; }
   if(e.target.closest("#qNext")){ nextQuestion(); return; }
+  if(e.target.closest("[data-answer-audio]")){
+    if(quiz && quiz.ansAudio) playAudio(quiz.ansAudio.id, quiz.ansAudio.text, quiz.ansAudio.lang, 1);
+    return;
+  }
   const aud = e.target.closest("[data-audio]");
   if(aud && quiz){
     const q = quiz.list[quiz.idx];
-    if(q.audio) speak(q.audio.text, q.audio.lang, 1);
+    if(q.audio) playQuestionAudio(q);
     return;
   }
   const peek = e.target.closest("[data-peek]");
