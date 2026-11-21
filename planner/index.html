@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="이탈리아 2027"/>
+<meta name="theme-color" content="#14493F"/>
+<link rel="manifest" href="./manifest.json"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%2314493F'/><text x='50' y='66' font-size='54' text-anchor='middle'>🇮🇹</text></svg>"/>
+<title>이탈리아 신혼여행 2027</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root{--bg:#FAF7F0;--card:#FFFDF7;--green:#14493F;--green2:#1E6356;--mint:#E4EFEA;--org:#C25A2A;--orgbg:#FBEEE5;--gold:#F2C879;--line:#E4DEC9;--ink:#1F2D27;--sub:#5B6B63;}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;overscroll-behavior-y:contain;}
+.header{background:var(--green);color:#FAF7F0;padding:calc(env(safe-area-inset-top,14px) + 12px) 16px 14px;position:sticky;top:0;z-index:20;box-shadow:0 2px 10px rgba(20,73,63,.18);}
+.h-top{display:flex;justify-content:space-between;align-items:center;}
+.h-title{font-size:19px;font-weight:800;letter-spacing:-.02em;}
+.dday{background:var(--gold);color:var(--green);font-size:12px;font-weight:800;padding:4px 10px;border-radius:99px;}
+.h-flight{margin-top:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:10px;padding:8px 11px;font-size:12px;line-height:1.45;color:#E7F0EC;}
+.h-flight b{color:var(--gold);}
+main{padding:12px 14px calc(env(safe-area-inset-bottom,16px) + 78px);max-width:680px;margin:0 auto;}
+.day-scroll{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none;}
+.day-scroll::-webkit-scrollbar{display:none;}
+.day-chip{flex:0 0 auto;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:8px 12px;text-align:center;min-width:74px;cursor:pointer;transition:.15s;}
+.day-chip.active{background:var(--green);border-color:var(--green);color:#fff;}
+.day-chip .d1{font-size:11px;font-weight:700;opacity:.8;}
+.day-chip .d2{font-size:14px;font-weight:800;margin-top:2px;}
+.day-chip .d3{font-size:11px;margin-top:1px;opacity:.85;}
+.day-banner{background:var(--mint);border-radius:14px;padding:12px 14px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.day-banner h2{margin:0;font-size:16px;font-weight:800;color:var(--green);}
+.day-banner p{margin:3px 0 0;font-size:12.5px;color:var(--sub);}
+.btn-add{background:var(--green);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.item-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:0 2px 6px rgba(0,0,0,.03);transition:.15s;}
+.item-card.done{opacity:.58;background:#F4F1E8;}
+.item-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+.time-badge{display:inline-block;background:var(--orgbg);color:var(--org);font-size:12px;font-weight:800;padding:3px 8px;border-radius:7px;}
+.move-badge{display:inline-block;background:var(--mint);color:var(--green);font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:7px;margin-left:4px;}
+.item-title{font-size:16px;font-weight:800;margin:7px 0 4px;line-height:1.35;}
+.item-note{font-size:13.5px;color:var(--sub);line-height:1.5;margin:0;}
+.item-actions{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap;}
+.act-btn{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:9px;padding:7px 11px;font-size:12.5px;font-weight:700;text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;gap:4px;}
+.act-btn.map{background:var(--green);border-color:var(--green);color:#fff;}
+.chk-btn{width:26px;height:26px;border-radius:8px;border:2px solid var(--green);background:#fff;color:#fff;font-size:14px;font-weight:900;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.item-card.done .chk-btn{background:var(--green);}
+#mapBox{height:380px;border-radius:16px;border:1.5px solid var(--line);overflow:hidden;margin-bottom:12px;}
+.sec-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px;}
+.sec-card h3{margin:0 0 8px;font-size:16px;font-weight:800;color:var(--green);}
+.row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #EFEADF;font-size:13.5px;gap:8px;}
+.row:last-child{border-bottom:none;}
+.pill{font-size:11.5px;font-weight:800;padding:3px 8px;border-radius:7px;white-space:nowrap;}
+.p-g{background:var(--mint);color:var(--green);}
+.p-o{background:var(--orgbg);color:var(--org);}
+.calc-box{background:var(--green);color:#fff;border-radius:16px;padding:14px;margin-bottom:12px;}
+.calc-row{display:flex;gap:8px;margin-top:8px;}
+.calc-row input{flex:1;padding:10px 12px;border-radius:10px;border:none;font-size:16px;font-weight:700;}
+.chk-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #EFEADF;cursor:pointer;}
+.chk-row:last-child{border-bottom:none;}
+.chk-row input{width:20px;height:20px;accent-color:var(--green);margin-top:2px;flex-shrink:0;}
+.chk-row.checked span{text-decoration:line-through;color:#8E9B94;}
+nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;padding:6px 6px calc(env(safe-area-inset-bottom,10px) + 4px);z-index:30;}
+.tab{flex:1;border:none;background:none;padding:6px 0;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11.5px;font-weight:700;color:var(--sub);cursor:pointer;}
+.tab.active{color:var(--green);}
+.tab .ico{font-size:20px;}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center;z-index:50;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--bg);width:100%;max-width:680px;border-radius:20px 20px 0 0;padding:18px 16px calc(env(safe-area-inset-bottom,16px) + 14px);}
+.modal input,.modal textarea{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:15px;margin-top:8px;font-family:inherit;background:#fff;}
+.hidden{display:none;}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="h-top">
+    <div class="h-title">🇮🇹 승현 · 근호 이탈리아</div>
+    <div class="dday" id="ddayBadge">D-...</div>
+  </div>
+  <div class="h-flight">
+    <b>가는 편</b> 27.09.28(화) 01:20 인천 &rarr; 14:15 로마(FCO)<br/>
+    <b>오는 편</b> 27.10.11(월) 14:15 밀라노(MXP) &rarr; 10.12 인천
+  </div>
+</header>
+
+<main>
+  <section id="tab-plan">
+    <div class="day-scroll" id="dayScroll"></div>
+    <div class="day-banner" id="dayBanner"></div>
+    <div id="planList"></div>
+  </section>
+
+  <section id="tab-map" class="hidden">
+    <div class="day-scroll" id="mapDayScroll"></div>
+    <div id="mapBox"></div>
+    <div class="sec-card" id="mapLegend"></div>
+  </section>
+
+  <section id="tab-stay" class="hidden">
+    <div class="sec-card">
+      <h3>🏨 5도시 핵심 숙소 (총 12박)</h3>
+      <div class="row"><div><b>로마 2박</b> (9/29~10/1)<br/><span style="color:var(--sub);font-size:12px;">Suite Rione Monti · 무료취소</span></div><a class="act-btn map" target="_blank" href="https://www.booking.com/searchresults.html?ss=Suite+Rione+Monti+Rome">58.2만</a></div>
+      <div class="row"><div><b>소렌토 3박</b> (10/1~4)<br/><span style="color:var(--sub);font-size:12px;">Casa Astarita · 중심 400m · 조식</span></div><a class="act-btn map" target="_blank" href="https://www.booking.com/searchresults.html?ss=Casa+Astarita+Sorrento">63.8만</a></div>
+      <div class="row"><div><b>피렌체 2박</b> (10/4~6)<br/><span style="color:var(--sub);font-size:12px;">Le Tre Stanze · 두오모뷰 · 무료취소</span></div><a class="act-btn map" target="_blank" href="https://www.booking.com/searchresults.html?ss=Le+Tre+Stanze+Florence">53.2만</a></div>
+      <div class="row"><div><b>오르티세이 4박</b> (10/6~10)<br/><span style="color:var(--sub);font-size:12px;">Avita Suites · 리프트 250m (환불불가)</span></div><a class="act-btn map" target="_blank" href="https://www.booking.com/searchresults.html?ss=Avita+Suites+Ortisei">115.6만</a></div>
+      <div class="row"><div><b>밀라노 1박</b> (10/10~11)<br/><span style="color:var(--sub);font-size:12px;">Lancaster Hotel · 첸트랄레 5분</span></div><a class="act-btn map" target="_blank" href="https://www.booking.com/searchresults.html?ss=Lancaster+Hotel+Milan">28.3만</a></div>
+    </div>
+
+    <div class="sec-card">
+      <h3>🏔️ 돌로미티 3+1박 추천 조합</h3>
+      <div class="row"><div><b>1위 · 마르몰라다 3박 + ADLER 1박</b><br/><span style="color:var(--sub);font-size:12px;">3,500㎡ 스파·조식/티/디너 포함</span></div><span class="pill p-o">171~196만</span></div>
+      <div class="row"><div><b>2위 · 마르몰라다 3박 + Hartmann 1박</b><br/><span style="color:var(--sub);font-size:12px;">성인전용 샬레 · 조식/스파 가성비 최고</span></div><span class="pill p-o">146~166만</span></div>
+      <div class="row"><div><b>3위 · 마르몰라다 3박 + Stetteneck 1박</b><br/><span style="color:var(--sub);font-size:12px;">광장 1분 · 1,000만 원 이내 적정</span></div><span class="pill p-g">136~153만</span></div>
+      <div class="row"><div><b>번외 · Avita 4박 + 데이 스파 1회</b><br/><span style="color:var(--sub);font-size:12px;">짐 이동 0회 · My Arbor 데이스파 약 30만</span></div><span class="pill p-g">146만</span></div>
+    </div>
+
+    <div class="sec-card">
+      <h3>📸 피렌체 일몰 스냅 (10/5 · 17:15~19:15)</h3>
+      <div class="row"><div><b>포토로스냅 × 살롱반하 2h 헤메드</b><br/><span style="color:var(--sub);font-size:12px;">드레스1벌+부케+남녀 헤메 (수트+€50)</span></div><a class="act-btn map" target="_blank" href="https://fotoro.kr/">104.2만</a></div>
+      <div class="row"><div><b>벨로스냅 2h</b><br/><span style="color:var(--sub);font-size:12px;">원본 1,000+ · 보정 20 (오하 제휴 가능)</span></div><span class="pill p-g">57만</span></div>
+    </div>
+  </section>
+
+  <section id="tab-budget" class="hidden">
+    <div class="calc-box">
+      <div style="font-size:13px;font-weight:700;color:var(--gold);">💶 유로 &harr; 원화 간편 계산기 (1€ = 1,650원)</div>
+      <div class="calc-row">
+        <input type="number" id="eurIn" placeholder="유로 (€)" oninput="calcEur()"/>
+        <input type="text" id="krwOut" readonly value="0 원"/>
+      </div>
+    </div>
+
+    <div class="sec-card">
+      <h3>💰 2인 총예산 요약 (12박 14일)</h3>
+      <div class="row"><div><b>기본안</b> (현재 v4 그대로)</div><b>1,031만 원</b></div>
+      <div class="row"><div><b>예산안</b> (항공만 카타르 209만 적용)</div><b style="color:var(--green);">977만 원</b></div>
+      <div class="row"><div><b>절약안</b> (항공+스냅+점심 등 5가지)</div><b style="color:var(--org);">921만 원</b></div>
+    </div>
+
+    <div class="sec-card">
+      <h3>☑️ 시기별 필수 체크리스트 (자동 저장)</h3>
+      <div id="checkList"></div>
+    </div>
+
+    <div class="sec-card">
+      <h3>📤 백업 · 초기화</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="act-btn map" onclick="exportData()">일정 내보내기 (.json)</button>
+        <button class="act-btn" onclick="resetData()">기본값으로 되돌리기</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<nav class="tabbar">
+  <button class="tab active" onclick="goTab('plan',this)"><span class="ico">📋</span>일정</button>
+  <button class="tab" onclick="goTab('map',this)"><span class="ico">🗺️</span>지도</button>
+  <button class="tab" onclick="goTab('stay',this)"><span class="ico">🏨</span>숙소·스냅</button>
+  <button class="tab" onclick="goTab('budget',this)"><span class="ico">💰</span>예산·체크</button>
+</nav>
+
+<div class="modal-bg" id="editModal">
+  <div class="modal">
+    <h3 id="mTitle" style="margin:0;color:var(--green);">일정 추가 / 수정</h3>
+    <input id="mTime" placeholder="시간 (예: 14:30)"/>
+    <input id="mName" placeholder="장소 / 일정명"/>
+    <input id="mMove" placeholder="이동수단 (예: 도보 10분 · 지하철)"/>
+    <textarea id="mNote" rows="3" placeholder="메모 · 예약 팁"></textarea>
+    <div style="display:flex;gap:8px;margin-top:12px;">
+      <button class="act-btn" style="flex:1;justify-content:center;" onclick="closeModal()">취소</button>
+      <button class="act-btn map" style="flex:2;justify-content:center;" onclick="saveModal()">저장하기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DEFAULT_DAYS = [
+  {d:"9/28(화)", city:"출국", sub:"인천 공항 출발", items:[
+    {t:"22:30", name:"인천국제공항 집결 · 수속", move:"공항철도/버스", note:"여권 만료일 2028-03-12 이후 확인 · 보조배터리 기내", lat:37.4602, lng:126.4407}
+  ]},
+  {d:"9/29(수)", city:"로마", sub:"도착 · 올빼미형 여유 입성", items:[
+    {t:"01:20", name:"인천 출발 (카타르항공)", move:"비행 19h(경유)", note:"기내 수면 · EES 생체인식 입국 대비", lat:41.8003, lng:12.2389},
+    {t:"14:15", name:"로마 피우미치노(FCO) 착륙", move:"90~120분 버퍼", note:"수하물 찾고 16:15~16:45 레오나르도 익스프레스(€14) 탑승", lat:41.8003, lng:12.2389},
+    {t:"17:30", name:"숙소 체크인 · 트레비·스페인 광장", move:"도보 산책", note:"몬티 지구 숙소 짐 풀고 가볍게 저녁 & 젤라또", lat:41.9009, lng:12.4833}
+  ]},
+  {d:"9/30(목)", city:"로마", sub:"바티칸 · 트라스테베레", items:[
+    {t:"09:30", name:"바티칸 박물관 & 성 베드로 대성당", move:"지하철 A선", note:"D-60 (27-08-01) 공식 홈페이지 오픈런 필수!", lat:41.9065, lng:12.4536},
+    {t:"16:00", name:"판테온 · 나보나 광장", move:"도보", note:"타짜도르 커피 한 잔 후 천사의 성 야경", lat:41.8986, lng:12.4769},
+    {t:"19:30", name:"트라스테베레 저녁", move:"트램/도보", note:"유명 파스타집 · 웨이팅 있어 19시 전후 추천", lat:41.8897, lng:12.4708}
+  ]},
+  {d:"10/1(금)", city:"소렌토", sub:"콜로세움 → 나폴리 → 소렌토", items:[
+    {t:"09:50", name:"콜로세움 · 포로 로마노", move:"도보/지하철", note:"D-30 (27-09-01) 예약 · 캐리어는 테르미니 보관", lat:41.8902, lng:12.4922},
+    {t:"13:25", name:"로마 테르미니 &rarr; 나폴리 중앙역", move:"프레차로사 1h10m", note:"도착 후 지하 Napoli Garibaldi에서 사철 환승", lat:40.8529, lng:14.2729},
+    {t:"15:40", name:"소렌토 도착 · 체크인", move:"사철 €4.60(Tap&Go)", note:"피아차 타소 산책 · 레몬 셔벗 & 해산물 저녁", lat:40.6263, lng:14.3758}
+  ]},
+  {d:"10/2(토)", city:"카프리", sub:"카프리 섬 · 푸른 동굴", items:[
+    {t:"09:30", name:"소렌토항 &rarr; 카프리섬", move:"페리 25분", note:"물놀이·수영 가능! 푸른 동굴은 파도 여부에 따라 결정", lat:40.5532, lng:14.2222},
+    {t:"13:00", name:"아나카프리 1인 체어리프트", move:"버스/리프트", note:"몬테 솔라로 정상 뷰 · 아우구스투스 정원", lat:40.5507, lng:14.2121}
+  ]},
+  {d:"10/3(일)", city:"남부", sub:"포지타노 · 아말피 (페리만 3구간)", items:[
+    {t:"09:00", name:"소렌토 &rarr; 포지타노 &rarr; 아말피", move:"NLG/트래블마르 페리", note:"SITA 버스 정체 없이 페리로만 이동! 수영·해변 여유", lat:40.6281, lng:14.4850},
+    {t:"16:55", name:"소렌토 복귀 · 마지막 밤", move:"페리 50분", note:"레몬 첼로 쇼핑 · 저녁 식사", lat:40.6263, lng:14.3758}
+  ]},
+  {d:"10/4(월)", city:"피렌체", sub:"피렌체 입성 · 두오모 · 티본", items:[
+    {t:"10:30", name:"소렌토 &rarr; 나폴리 &rarr; 피렌체", move:"사철 + 고속열차 3h", note:"환승 1시간 25분+ 여유 배정 (월요일 우피치 휴관!)", lat:43.7764, lng:11.2479},
+    {t:"16:00", name:"피렌체 두오모 & 쿠폴라", move:"도보", note:"D-30 전(27-08-31) 브루넬레스키 패스 예약", lat:43.7731, lng:11.2560},
+    {t:"20:00", name:"티본 스테이크 저녁", move:"도보", note:"달오스테/트래토리아 자자 등 사전 예약 추천", lat:43.7760, lng:11.2535}
+  ]},
+  {d:"10/5(화)", city:"피렌체", sub:"우피치 + 일몰 스냅", items:[
+    {t:"09:30", name:"우피치 미술관", move:"도보", note:"비너스의 탄생 · 봄 핵심 2시간 집중 관람", lat:43.7678, lng:11.2553},
+    {t:"15:00", name:"스냅 헤메 & 환복 준비", move:"도보", note:"살롱반하 제휴 시 15시 전후 메이크업 시작", lat:43.7715, lng:11.2530},
+    {t:"17:15", name:"일몰 스냅 (17:15~19:15)", move:"도보 촬영", note:"일몰 18:50 · 미켈란젤로 언덕 · 베키오 다리", lat:43.7629, lng:11.2651}
+  ]},
+  {d:"10/6(수)", city:"돌로미티", sub:"베로나 렌터카 픽업 → 오르티세이", items:[
+    {t:"08:30", name:"피렌체 &rarr; 베로나 포르타 누오바", move:"프레차로사 1h35m", note:"국제운전면허증 · 운전자 신용카드 필수 지참", lat:45.4289, lng:10.9826},
+    {t:"10:30", name:"렌터카(자동) 픽업 &rarr; 오르티세이", move:"렌터카 2h15m", note:"10/10 밀라노 15:30~16:30 반납(101시간 5일 요금)", lat:46.5750, lng:11.6710}
+  ]},
+  {d:"10/7(목)", city:"돌로미티", sub:"세체다 능선", items:[
+    {t:"09:30", name:"세체다 케이블카", move:"도보/케이블카", note:"날씨 맑은 날 우선 배치 · 바람막이/경량패딩", lat:46.6004, lng:11.7244}
+  ]},
+  {d:"10/8(금)", city:"돌로미티", sub:"알페 디 시우시 · 카레짜 호수", items:[
+    {t:"09:30", name:"알페 디 시우시 (유럽 최대 고원)", move:"케이블카", note:"09:00~17:00 차량 통제 → 오르티세이에서 곤돌라 이용", lat:46.5446, lng:11.6168},
+    {t:"15:00", name:"카레짜 호수 드라이브", move:"렌터카 40분", note:"에메랄드 빛 호수 산책", lat:46.4092, lng:11.5750}
+  ]},
+  {d:"10/9(토)", city:"돌로미티", sub:"하프 드라이브 & 스파 힐링", items:[
+    {t:"10:30", name:"하프 삼각 드라이브 (47km·66분)", move:"렌터카", note:"파소 가르데나 → 셀라 고개 (무료 · 2시간 내외)", lat:46.5504, lng:11.8075},
+    {t:"15:00", name:"스파 휴식 (ADLER 또는 마르 돌로미트)", move:"도보/차량", note:"3+1박 플렉스 또는 My Arbor 데이 스파(주말 €100)", lat:46.5742, lng:11.6730}
+  ]},
+  {d:"10/10(일)", city:"밀라노", sub:"시르미오네 → 밀라노 반납 · 두오모", items:[
+    {t:"09:00", name:"오르티세이 출발 &rarr; 시르미오네", move:"렌터카 2h10m", note:"가르다 호수 산책 & 점심(약 2시간)", lat:45.4975, lng:10.6061},
+    {t:"15:30", name:"밀라노 첸트랄레 렌터카 반납", move:"렌터카 1h45m", note:"일요일 영업 확인 · 풀투풀 주유 후 16:30 전 반납", lat:45.4859, lng:9.2043},
+    {t:"17:30", name:"밀라노 두오모 지붕 & 비토리오 갤러리아", move:"지하철 M3", note:"일몰 야경 감상 · 일요일 Area C 무료", lat:45.4641, lng:9.1919}
+  ]},
+  {d:"10/11(월)", city:"귀국", sub:"말펜사 공항 출국", items:[
+    {t:"09:55", name:"첸트랄레역 &rarr; 말펜사 공항(MXP T1)", move:"말펜사 익스프레스 51분", note:"10:46 도착 · 택스리펀 후 14:15 인천행 탑승", lat:45.6301, lng:8.7255}
+  ]},
+  {d:"10/12(화)", city:"도착", sub:"인천국제공항 귀국", items:[
+    {t:"10:30", name:"인천국제공항 도착", move:"귀가", note:"꿈같은 12박 14일 신혼여행 마무리 💛", lat:37.4602, lng:126.4407}
+  ]}
+];
+
+const DEFAULT_CHECKS = [
+  "[1순위·지금] 오르티세이 3+1박 결정 후 무료취소 숙소 잡기",
+  "[1순위·이번 주] 피렌체 일몰 스냅 문의 (포토로 × 살롱반하 / 벨로)",
+  "[1순위·추적] 카타르 항공 다구간 209만 원 이하 특가 시 발권",
+  "여권 만료일 2028-03-12 이후인지 확인",
+  "[27-03~04] 고속열차(프레차로사) · 베로나→밀라노 렌터카(자동)",
+  "[27-08-01] 바티칸 투어 예약 (D-60)",
+  "[27-08-31] 피렌체 두오모·우피치 예약 마감",
+  "[27-09-01] 콜로세움 예약 (D-30)",
+  "[27-09-10] 국제운전면허증 · ETIAS · 여행자보험"
+];
+
+let days = JSON.parse(localStorage.getItem('it_days_v1') || 'null') || JSON.parse(JSON.stringify(DEFAULT_DAYS));
+let checks = JSON.parse(localStorage.getItem('it_chks_v1') || 'null') || {};
+let curDay = 0, mapDay = 0, mapObj = null, editIdx = null;
+
+function updateDday(){
+  const diff = Math.ceil((new Date('2027-09-28T00:00:00+09:00') - new Date()) / 86400000);
+  document.getElementById('ddayBadge').textContent = diff > 0 ? `D-${diff}` : (diff === 0 ? 'D-DAY' : `D+${-diff}`);
+}
+
+function renderPlan(){
+  const sc = document.getElementById('dayScroll');
+  sc.innerHTML = days.map((x,i)=>`<div class="day-chip ${i===curDay?'active':''}" onclick="curDay=${i};renderPlan()"><div class="d1">DAY ${i+1}</div><div class="d2">${x.d}</div><div class="d3">${x.city}</div></div>`).join('');
+  const d = days[curDay];
+  document.getElementById('dayBanner').innerHTML = `<div><h2>DAY ${curDay+1} · ${d.d} (${d.city})</h2><p>${d.sub}</p></div><button class="btn-add" onclick="openModal(null)">+ 일정</button>`;
+  document.getElementById('planList').innerHTML = d.items.map((it,idx)=>`
+    <div class="item-card ${it.done?'done':''}">
+      <div class="item-top">
+        <div><span class="time-badge">${it.t}</span><span class="move-badge">${it.move||'이동'}</span></div>
+        <button class="chk-btn" onclick="toggleDone(${idx})">${it.done?'✓':''}</button>
+      </div>
+      <div class="item-title">${it.name}</div>
+      <p class="item-note">${it.note||''}</p>
+      <div class="item-actions">
+        <a class="act-btn map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(it.name.replace(/<[^>]+>|&rarr;/g,' '))}">🧭 구글맵</a>
+        <button class="act-btn" onclick="openModal(${idx})">✏️ 수정</button>
+        <button class="act-btn" onclick="delItem(${idx})">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+function toggleDone(idx){
+  days[curDay].items[idx].done = !days[curDay].items[idx].done;
+  localStorage.setItem('it_days_v1', JSON.stringify(days));
+  renderPlan();
+}
+function delItem(idx){
+  if(!confirm('이 일정을 삭제할까요?')) return;
+  days[curDay].items.splice(idx,1);
+  localStorage.setItem('it_days_v1', JSON.stringify(days));
+  renderPlan();
+}
+function openModal(idx){
+  editIdx = idx;
+  const it = idx!==null ? days[curDay].items[idx] : {t:'',name:'',move:'',note:''};
+  document.getElementById('mTitle').textContent = idx!==null ? '일정 수정' : '새 일정 추가';
+  document.getElementById('mTime').value = it.t;
+  document.getElementById('mName').value = it.name.replace(/&rarr;/g,'→');
+  document.getElementById('mMove').value = it.move;
+  document.getElementById('mNote').value = it.note;
+  document.getElementById('editModal').classList.add('open');
+}
+function closeModal(){ document.getElementById('editModal').classList.remove('open'); }
+function saveModal(){
+  const item = {
+    t: document.getElementById('mTime').value || '12:00',
+    name: document.getElementById('mName').value || '새 일정',
+    move: document.getElementById('mMove').value || '도보',
+    note: document.getElementById('mNote').value || '',
+    lat: days[curDay].items[0]?.lat || 41.9028,
+    lng: days[curDay].items[0]?.lng || 12.4964
+  };
+  if(editIdx!==null) days[curDay].items[editIdx] = {...days[curDay].items[editIdx], ...item};
+  else days[curDay].items.push(item);
+  localStorage.setItem('it_days_v1', JSON.stringify(days));
+  closeModal(); renderPlan();
+}
+
+function renderMap(){
+  const sc = document.getElementById('mapDayScroll');
+  sc.innerHTML = days.map((x,i)=>`<div class="day-chip ${i===mapDay?'active':''}" onclick="mapDay=${i};renderMap()"><div class="d1">DAY ${i+1}</div><div class="d2">${x.d}</div><div class="d3">${x.city}</div></div>`).join('');
+  if(!mapObj){
+    mapObj = L.map('mapBox');
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM'}).addTo(mapObj);
+  }
+  mapObj.eachLayer(l=>{ if(l instanceof L.Marker || l instanceof L.Polyline) mapObj.removeLayer(l); });
+  const pts = days[mapDay].items.filter(i=>i.lat && i.lng);
+  const latlngs = [];
+  pts.forEach((p,idx)=>{
+    const ll = [p.lat, p.lng]; latlngs.push(ll);
+    L.marker(ll).addTo(mapObj).bindPopup(`<b>${idx+1}. ${p.name}</b><br/>${p.t} · ${p.move}`);
+  });
+  if(latlngs.length>1) L.polyline(latlngs,{color:'#C25A2A',weight:3.5,dashArray:'6,6'}).addTo(mapObj);
+  if(latlngs.length===1) mapObj.setView(latlngs[0], 13);
+  else if(latlngs.length>1) mapObj.fitBounds(latlngs, {padding:[35,35]});
+  setTimeout(()=>mapObj.invalidateSize(), 100);
+  document.getElementById('mapLegend').innerHTML = `<h3>DAY ${mapDay+1} · ${days[mapDay].city} 동선 (${pts.length}곳)</h3>` +
+    pts.map((p,i)=>`<div class="row"><div><b>${i+1}. ${p.name}</b><br/><span style="font-size:12px;color:var(--sub);">${p.t} · ${p.move}</span></div><a class="act-btn map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}">구글맵</a></div>`).join('');
+}
+
+function renderChecks(){
+  document.getElementById('checkList').innerHTML = DEFAULT_CHECKS.map((c,i)=>`
+    <label class="chk-row ${checks[i]?'checked':''}">
+      <input type="checkbox" ${checks[i]?'checked':''} onchange="checks[${i}]=this.checked;localStorage.setItem('it_chks_v1',JSON.stringify(checks));renderChecks()"/>
+      <span>${c}</span>
+    </label>`).join('');
+}
+
+function calcEur(){
+  const v = parseFloat(document.getElementById('eurIn').value || '0');
+  document.getElementById('krwOut').value = Math.round(v * 1650).toLocaleString() + ' 원';
+}
+
+function exportData(){
+  const blob = new Blob([JSON.stringify({days,checks},null,2)],{type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'italy_2027_backup.json'; a.click();
+}
+function resetData(){
+  if(!confirm('직접 수정하신 메모·체크를 기본값으로 되돌릴까요?')) return;
+  localStorage.removeItem('it_days_v1'); localStorage.removeItem('it_chks_v1');
+  days = JSON.parse(JSON.stringify(DEFAULT_DAYS)); checks = {};
+  renderPlan(); renderChecks();
+}
+
+function goTab(id, btn){
+  document.querySelectorAll('main > section').forEach(s=>s.classList.add('hidden'));
+  document.getElementById('tab-'+id).classList.remove('hidden');
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(id==='map') renderMap();
+}
+
+updateDday(); renderPlan(); renderChecks();
+</script>
+</body>
+</html>
