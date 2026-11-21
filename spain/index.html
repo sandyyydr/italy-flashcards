@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="이베리아 2027"/>
+<meta name="theme-color" content="#14493F"/>
+<link rel="manifest" href="./manifest.json"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%2314493F'/><text x='50' y='66' font-size='54' text-anchor='middle'>🇪🇸</text></svg>"/>
+<title>포르투갈·스페인·마요르카 2027</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root{--bg:#FAF7F0;--card:#FFFDF7;--green:#14493F;--green2:#1E6356;--mint:#E4EFEA;--org:#C25A2A;--orgbg:#FBEEE5;--gold:#F2C879;--line:#E4DEC9;--ink:#1F2D27;--sub:#5B6B63;--teal:#1F6F6A;}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;overscroll-behavior-y:contain;}
+.header{background:var(--green);color:#FAF7F0;padding:calc(env(safe-area-inset-top,14px) + 12px) 16px 14px;position:sticky;top:0;z-index:20;box-shadow:0 2px 10px rgba(20,73,63,.18);}
+.h-top{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.h-title{font-size:19px;font-weight:800;letter-spacing:-.02em;}
+.dday{background:var(--gold);color:var(--green);font-size:12px;font-weight:800;padding:4px 10px;border-radius:99px;white-space:nowrap;}
+.h-flight{margin-top:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:10px;padding:8px 11px;font-size:12px;line-height:1.45;color:#E7F0EC;}
+.h-flight b{color:var(--gold);}
+main{padding:12px 14px calc(env(safe-area-inset-bottom,16px) + 78px);max-width:680px;margin:0 auto;}
+.day-scroll{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none;}
+.day-scroll::-webkit-scrollbar{display:none;}
+.day-chip{flex:0 0 auto;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:8px 12px;text-align:center;min-width:74px;cursor:pointer;transition:.15s;}
+.day-chip.active{background:var(--green);border-color:var(--green);color:#fff;}
+.day-chip .d1{font-size:11px;font-weight:700;opacity:.8;}
+.day-chip .d2{font-size:14px;font-weight:800;margin-top:2px;}
+.day-chip .d3{font-size:11px;margin-top:1px;opacity:.85;}
+.day-banner{background:var(--mint);border-radius:14px;padding:12px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.day-banner h2{margin:0;font-size:16px;font-weight:800;color:var(--green);}
+.day-banner p{margin:3px 0 0;font-size:12.5px;color:var(--sub);}
+.btn-add{background:var(--green);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.item-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:0 2px 6px rgba(0,0,0,.03);transition:.15s;}
+.item-card.done{opacity:.58;background:#F4F1E8;}
+.item-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+.time-badge{display:inline-block;background:var(--orgbg);color:var(--org);font-size:12px;font-weight:800;padding:3px 8px;border-radius:7px;}
+.move-badge{display:inline-block;background:var(--mint);color:var(--green);font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:7px;margin-left:4px;}
+.item-title{font-size:16px;font-weight:800;margin:7px 0 4px;line-height:1.35;}
+.item-note{font-size:13.5px;color:var(--sub);line-height:1.5;margin:0;}
+.item-body{display:flex;gap:11px;align-items:flex-start;}
+.item-thumb{width:76px;height:76px;border-radius:12px;object-fit:cover;flex-shrink:0;border:1px solid var(--line);margin-top:4px;}
+.item-warn{margin-top:8px;background:var(--orgbg);border-left:3.5px solid var(--org);border-radius:8px;padding:7px 10px;font-size:12.5px;color:#7A3214;line-height:1.45;font-weight:600;}
+.tips-card{background:#FFFBF1;border:1.5px solid #EBD8B7;border-radius:14px;padding:11px 13px;margin-bottom:10px;}
+.tips-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px;}
+.tips-head h4{margin:0;font-size:13px;font-weight:800;color:#8A4A1E;letter-spacing:-.01em;}
+.tips-head span{font-size:10.5px;font-weight:800;color:#A0703F;background:#F6E8D2;border-radius:99px;padding:2px 7px;white-space:nowrap;}
+.tip-row{display:flex;gap:8px;align-items:flex-start;padding:5px 0;font-size:12.5px;line-height:1.5;color:#4A3B2A;cursor:pointer;border-bottom:1px dashed #F1E5D2;}
+.tip-row:last-child{border-bottom:none;}
+.tip-row input{width:17px;height:17px;accent-color:var(--org);margin-top:2px;flex-shrink:0;}
+.tip-row.on span{text-decoration:line-through;color:#A79B8A;}
+.item-actions{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap;}
+.act-btn{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:9px;padding:7px 11px;font-size:12.5px;font-weight:700;text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;gap:4px;}
+.act-btn.map{background:var(--green);border-color:var(--green);color:#fff;}
+.chk-btn{width:26px;height:26px;border-radius:8px;border:2px solid var(--green);background:#fff;color:#fff;font-size:14px;font-weight:900;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.item-card.done .chk-btn{background:var(--green);}
+#mapBox{height:380px;border-radius:16px;border:1.5px solid var(--line);overflow:hidden;margin-bottom:12px;}
+.sec-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px;}
+.sec-card h3{margin:0 0 8px;font-size:16px;font-weight:800;color:var(--green);}
+.row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #EFEADF;font-size:13.5px;gap:8px;}
+.row:last-child{border-bottom:none;}
+.pill{font-size:11.5px;font-weight:800;padding:3px 8px;border-radius:7px;white-space:nowrap;}
+.p-g{background:var(--mint);color:var(--green);}
+.p-o{background:var(--orgbg);color:var(--org);}
+.calc-box{background:var(--green);color:#fff;border-radius:16px;padding:14px;margin-bottom:12px;}
+.calc-row{display:flex;gap:8px;margin-top:8px;align-items:center;}
+.calc-row input{flex:1;min-width:0;width:100%;padding:10px;border-radius:10px;border:none;font-size:15px;font-weight:700;}
+.chk-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #EFEADF;cursor:pointer;}
+.chk-row:last-child{border-bottom:none;}
+.chk-row input{width:20px;height:20px;accent-color:var(--green);margin-top:2px;flex-shrink:0;}
+.chk-row.checked span{text-decoration:line-through;color:#8E9B94;}
+nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;padding:6px 6px calc(env(safe-area-inset-bottom,10px) + 4px);z-index:30;}
+.tab{flex:1;border:none;background:none;padding:6px 0;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11.5px;font-weight:700;color:var(--sub);cursor:pointer;}
+.tab.active{color:var(--green);}
+.tab .ico{font-size:20px;}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center;z-index:50;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--bg);width:100%;max-width:680px;border-radius:20px 20px 0 0;padding:18px 16px calc(env(safe-area-inset-bottom,16px) + 14px);max-height:88vh;overflow:auto;}
+.modal input,.modal textarea{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:15px;margin-top:8px;font-family:inherit;background:#fff;}
+.hidden{display:none;}
+
+.route-box{margin-top:8px;background:#F9F8F4;border:1px solid #E5E1D6;border-radius:10px;padding:8px 10px;}
+.route-bar{display:flex;height:22px;border-radius:99px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.04);overflow:hidden;background:#E9E6DE;font-size:10.5px;font-weight:800;line-height:22px;}
+.r-seg{display:flex;align-items:center;justify-content:center;gap:3px;white-space:nowrap;overflow:hidden;padding:0 4px;}
+.r-walk{background:#E8E6DF;color:#5C6360;}
+.r-txt{font-size:12px;color:#14493F;font-weight:700;margin-top:5px;line-height:1.4;}
+.stay-band{background:#EFF7F3;border:1.5px solid #CBE3D7;border-radius:14px;padding:10px 13px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.stay-band .k{font-size:11px;font-weight:800;color:var(--green);}
+.stay-band .v{font-size:13.5px;font-weight:800;color:var(--ink);}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="h-top">
+    <div class="h-title">🇪🇸 승현 · 근호 이베리아</div>
+    <div class="dday" id="ddayBadge">D-...</div>
+  </div>
+  <div class="h-flight">
+    <b>가는 편</b> 27.09.28(화) 23:55 인천 &rarr; 09.29 12:35 리스본(LIS)<br/>
+    <b>오는 편</b> 27.10.11(월) 15:20 팔마(PMI) &rarr; 바르셀로나 &rarr; 20:50 인천
+  </div>
+</header>
+
+<main>
+  <section id="tab-plan">
+    <div class="day-scroll" id="dayScroll"></div>
+    <div class="day-banner" id="dayBanner"></div>
+    <div id="planList"></div>
+  </section>
+
+  <section id="tab-map" class="hidden">
+    <div class="day-scroll" id="mapDayScroll"></div>
+    <div id="mapBox"></div>
+    <div id="mapGoogleBtn" style="margin-bottom:10px;"></div>
+    <div class="sec-card" id="mapLegend"></div>
+  </section>
+
+  <section id="tab-wallet" class="hidden">
+    <div class="calc-box" style="margin-bottom:10px;padding:11px 13px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <div style="font-size:12.5px;font-weight:800;color:var(--gold);">💱 유로 &harr; 원화 계산기</div>
+        <button onclick="editRate()" style="border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;border-radius:8px;padding:3px 8px;font-size:11px;font-weight:700;cursor:pointer;">환율 <span id="rateLbl">1,650</span>원 수정</button>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input id="wEur" type="text" inputmode="decimal" placeholder="€ 유로" oninput="formatAmtInput(this);calcWalletCur('eur')" style="flex:1;min-width:0;padding:8px 10px;border-radius:9px;border:none;font-size:14px;font-weight:700;"/>
+        <span style="color:var(--gold);font-weight:900;">&harr;</span>
+        <input id="wKrw" type="text" inputmode="numeric" placeholder="₩ 한국돈" oninput="formatAmtInput(this);calcWalletCur('krw')" style="flex:1;min-width:0;padding:8px 10px;border-radius:9px;border:none;font-size:14px;font-weight:700;"/>
+      </div>
+    </div>
+
+    <div class="sec-card" style="border:2px solid var(--org);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <h3 style="margin:0;color:var(--org);">💶 🇰🇷 이베리아 통합 가계부</h3>
+        <button class="act-btn" onclick="editItBudget()">환전·예산 수정</button>
+      </div>
+      <div id="itBudgetBar" style="margin-bottom:10px;"></div>
+      <div id="itExpSum" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;"></div>
+      <div id="itCurPills" style="display:flex;gap:6px;margin-bottom:8px;"></div>
+      <div id="itCatPills" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:7px;"></div>
+      <div id="itPayPills" style="display:flex;gap:6px;margin-bottom:8px;"></div>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+        <input id="itAmt" type="text" inputmode="decimal" placeholder="금액 입력" oninput="formatAmtInput(this);updateItKrw()" style="flex:1;padding:10px;border:1.5px solid var(--line);border-radius:10px;font-size:15px;"/>
+        <span id="itKrwPre" style="font-size:12.5px;font-weight:700;color:var(--org);min-width:96px;text-align:right;">약 0원</span>
+      </div>
+      <input id="itMemo" placeholder="내용 (예: 항공권, 숙소, 칼라 롬바르드 선베드 등)" style="width:100%;padding:10px;border:1.5px solid var(--line);border-radius:10px;font-size:14.5px;margin-bottom:8px;"/>
+      <button class="act-btn map" style="width:100%;justify-content:center;padding:11px;font-size:14.5px;" onclick="addItExp()">➕ 지출 기록하기</button>
+      <div style="font-size:11.5px;color:var(--sub);margin-top:8px;line-height:1.5;">원화(₩)는 항공·숙소처럼 <b>출발 전에 결제한 돈</b>, 유로(€)는 현지에서 쓰는 돈입니다. 환전한 현금·카드 잔액을 각각 따로 봅니다.</div>
+    </div>
+
+    <div class="sec-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <h3 style="margin:0;">📊 원화 · 유로 분류 & 카테고리 비교</h3>
+        <button class="act-btn map" onclick="copyItExp()">📋 내역 복사</button>
+      </div>
+      <div id="itExpCats"></div>
+    </div>
+
+    <div class="sec-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <h3 style="margin:0;">🧾 사용 내역</h3>
+        <div id="itListFilter" style="display:flex;gap:4px;"></div>
+      </div>
+      <div id="itExpList"></div>
+    </div>
+  </section>
+
+  <section id="tab-budget" class="hidden">
+    <div class="sec-card" style="border:2px solid var(--green);">
+      <h3>🎛️ 내 조합 시뮬레이터 (실시간 총액 · 1,000만 원 판정)</h3>
+      <div style="font-size:12.5px;color:var(--sub);margin-bottom:10px;">항공·앞 3도시 숙소·마요르카 등급·스냅을 고르면 총액이 바로 계산됩니다.</div>
+      <div id="simControls"></div>
+      <div id="simResult" style="margin-top:12px;"></div>
+    </div>
+
+    <div class="sec-card">
+      <h3>💰 예산 3안 (2인 · 12박)</h3>
+      <div class="row"><div><b>A 가성비</b> · 마요르카 CM 팰리스(5성)</div><b>959만</b></div>
+      <div class="row"><div><b>B 밸런스</b> · 에퀘스 쁘띠(4성 리조트)</div><b style="color:var(--green);">978만</b></div>
+      <div class="row"><div><b>C 5성 집중</b> · 그란 호텔 소예르</div><b style="color:var(--org);">1,045만 (초과)</b></div>
+      <div style="font-size:12px;color:var(--sub);margin-top:8px;line-height:1.5;">귀국편을 핀에어(전날 공항 1박)로 바꾸면 각각 −92만 → <b>867 · 886 · 953만</b>. 위 시뮬레이터에서 바로 확인할 수 있어요.</div>
+    </div>
+
+    <div class="sec-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <h3 style="margin:0;">🌍 전 일정 공통 실전 팁</h3>
+        <span class="pill p-o" style="font-size:10.5px;">12박 · 이베리아</span>
+      </div>
+      <div id="commonTips"></div>
+    </div>
+
+    <div class="sec-card">
+      <h3>☑️ 사전 예약 체크리스트 (자동 저장)</h3>
+      <div id="checkList"></div>
+    </div>
+
+    <div class="sec-card">
+      <h3>📤 백업 · 초기화</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="act-btn map" onclick="exportData()">일정 내보내기 (.json)</button>
+        <button class="act-btn" onclick="resetData()">기본값으로 되돌리기</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<nav class="tabbar">
+  <button class="tab active" onclick="goTab('plan',this)"><span class="ico">📋</span>일정</button>
+  <button class="tab" onclick="goTab('map',this)"><span class="ico">🗺️</span>지도</button>
+  <button class="tab" onclick="goTab('wallet',this)"><span class="ico">💶</span>가계부</button>
+  <button class="tab" onclick="goTab('budget',this)"><span class="ico">💰</span>예산·체크</button>
+</nav>
+
+<div class="modal-bg" id="editModal">
+  <div class="modal">
+    <h3 id="mTitle" style="margin:0;color:var(--green);">일정 추가 / 수정</h3>
+    <input id="mTime" placeholder="시간 (예: 10:30)"/>
+    <input id="mName" placeholder="장소 / 일정명"/>
+    <input id="mMove" placeholder="이동수단 (예: 도보 10분 · 지하철)"/>
+    <textarea id="mNote" rows="3" placeholder="메모 · 예약 팁"></textarea>
+    <div style="display:flex;gap:8px;margin-top:12px;">
+      <button class="act-btn" style="flex:1;justify-content:center;" onclick="closeModal()">취소</button>
+      <button class="act-btn map" style="flex:2;justify-content:center;" onclick="saveModal()">저장하기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ───────── 일정 데이터 (두 분 모두 올빼미형 · 매일 10:00~10:30 이후 출발) ───────── */
+const DEFAULT_DAYS = [
+  {d:"9/28(화)", city:"출국", sub:"밤 비행 · 21시 공항", stay:"인천 (집)", items:[
+    {t:"21:00", name:"인천공항 T1 도착 · 수속", gq:"Incheon International Airport Terminal 1", move:"공항철도/리무진", segs:[{l:"공항철도",w:3,c:"#1E5CA8"},{l:"수속",w:1}], how:"김천 → KTX 서울/인천공항 → T1 3층 출국장", note:"저녁은 공항에서. 낮에 미리 짐을 싸두면 밤 비행이 편합니다.", warn:"여권 만료일 2028-04-11 이후 · 보조배터리·라이터는 기내만 · 위탁 25kg 포함", img:"./img/incheon.jpg", lat:37.4602, lng:126.4407},
+    {t:"23:55", name:"인천 출발 (에미레이트)", gq:"Incheon International Airport", move:"비행 20h40", segs:[{b:"EK",l:"두바이 1회",w:3,c:"#5C1D3B"},{l:"리스본 12:35",w:3,c:"#5C1D3B"}], how:"인천(ICN) → 두바이(DXB) 환승 → 리스본(LIS)", note:"기내에서 길게 잡니다. 도하·두바이 환승 게이트는 탑승 전 확인.", warn:"목베개·안대·양치도구를 기내 가방에", img:"./img/incheon.jpg", lat:37.4602, lng:126.4407}
+  ]},
+  {d:"9/29(수)", city:"포르투", sub:"리스본 도착 → 기차로 포르투", stay:"Porto Ribeira (강변 로프트)", items:[
+    {t:"12:35", name:"리스본 공항 도착", gq:"Humberto Delgado Airport, Lisbon", move:"택시 15분", segs:[{l:"입국 60분",w:2},{b:"택시",l:"15분",w:2,c:"#14493F"}], how:"LIS 공항 → 오리엔트(Oriente) 역까지 택시·지하철", note:"EES 첫 입국 지문·얼굴 등록으로 심사가 깁니다. 1시간 여유.", warn:"입국 심사 줄 대비 · 짐 찾는 곳에서 소매치기 주의", img:"./img/lisbon_view.jpg", lat:38.7742, lng:-9.1342},
+    {t:"15:00", name:"AP 기차 → 포르투 캄파냐", gq:"Gare do Oriente, Lisbon", move:"기차 3시간", segs:[{b:"CP",l:"알파 펜둘라르 3h",w:4,c:"#B92929"}], how:"리스본 오리엔트 → 포르투 캄파냐 (2인 편도 약 10만 4천 원)", note:"좌석 지정. 창가 자리에서 두루강 하구가 보입니다.", warn:"짐칸은 좌석 근처로 · 역에서 캐리어 끌고 계단 주의", img:"./img/porto_douro.jpg", lat:38.7670, lng:-9.0990},
+    {t:"18:30", name:"리베이라 체크인 · 강변 산책", gq:"Ribeira, Porto", move:"도보 10분", segs:[{l:"도보 10분",w:3}], how:"캄파냐 역 → 지하철·택시로 리베이라 (언덕이라 택시 권장)", note:"짐 풀고 리베이라 강변 → 20:00 저녁. 첫날은 무리하지 않습니다.", warn:"돌바닥·언덕 · 도시세 1인 1박 €2 안팎 현장 결제", img:"./img/porto_ribeira.jpg", lat:41.1405, lng:-8.6130}
+  ]},
+  {d:"9/30(목)", city:"포르투", sub:"늦게 나서는 포르투 하루", stay:"Porto Ribeira (강변 로프트)", items:[
+    {t:"10:30", name:"숙소 출발 (조식 후)", gq:"Ribeira, Porto", move:"도보", segs:[{l:"도보 15분",w:3}], how:"리베이라 → 클레리고스 방향으로 언덕 산책", note:"아침은 숙소 근처 카페에서. 10:30에 나서면 충분합니다.", warn:"비 예보가 잦은 도시 — 접이식 우산", img:"./img/porto_ribeira.jpg", lat:41.1405, lng:-8.6130},
+    {t:"11:00", name:"클레리고스 탑", gq:"Clérigos Church, Porto", move:"도보 5분", segs:[{l:"도보 5분",w:2}], how:"탑 전망대까지 계단 (엘리베이터 없음)", note:"포르투에서 가장 높은 전망. 정오 빛이 강 건너로 들어옵니다.", warn:"계단이 좁고 많음 · 가방은 앞으로", img:"./img/porto_clerigos.jpg", lat:41.1455, lng:-8.6146},
+    {t:"12:30", name:"리브루아리아 렐루", gq:"Livraria Lello, Porto", move:"도보 4분", segs:[{l:"도보 4분",w:2}], how:"클레리고스 → 렐루 (입장권 필요, 온라인 예약 권장)", note:"점심 직전이 가장 한적합니다. 입장권은 서점 옆 건물에서 교환.", warn:"입장권 없으면 줄만 섭니다 · 내부 사진은 조용히", img:"./img/porto_clerigos.jpg", lat:41.1469, lng:-8.6147},
+    {t:"13:30", name:"프란세지냐 점심", gq:"Café Santiago, Porto", move:"도보 3분", segs:[{l:"도보 3분",w:2}], how:"렐루 근처 식당", note:"포르투 대표 음식. 양이 많으니 하나는 나눠도 됩니다.", warn:"관광지 값 · 커버차지 확인", lat:41.1462, lng:-8.6060},
+    {t:"15:30", name:"돔 루이스 1세 다리", gq:"Dom Luís I Bridge, Porto", move:"도보 12분", segs:[{l:"도보 12분",w:3}], how:"상층·하층 모두 보행 가능. 상층에서 리베이라 지붕이 한 장에 담깁니다.", note:"건너편이 가이아 와인셀러 지구.", warn:"다리 위 바람 · 난간 쪽 사진은 천천히", img:"./img/porto_bridge.jpg", lat:41.1394, lng:-8.6093},
+    {t:"16:30", name:"가이아 포트 와인 셀러", gq:"Vila Nova de Gaia, Portugal", move:"도보 8분", segs:[{l:"도보 8분",w:2}], how:"다리 건너 가이아 강변 셀러 1곳은 투어 예약, 1곳은 셀프 시음", note:"투어 45분 + 시음. 20:00 강변 야경 후 숙소.", warn:"시음 후 운전 금지 · 다음 날 기차라 괜찮습니다", img:"./img/porto_douro.jpg", lat:41.1339, lng:-8.6130}
+  ]},
+  {d:"10/1(금)", city:"리스본", sub:"포르투 → 리스본 · 알파마", stay:"Lisbon Castel & Downtown (로시우)", items:[
+    {t:"10:30", name:"포르투 출발 (AP 기차)", gq:"Porto Campanhã, Portugal", move:"기차 2h50", segs:[{b:"CP",l:"2h50",w:4,c:"#B92929"}], how:"캄파냐 → 리스본 오리엔트", note:"숙소에서 10:00에 나와 역으로. 13:30 리스본 도착.", warn:"역 이동 15분 여유 · 짐은 좌석 옆 선반", img:"./img/porto_douro.jpg", lat:41.1490, lng:-8.5850},
+    {t:"13:30", name:"리스본 체크인", gq:"Rossio, Lisbon", move:"택시 15분", segs:[{b:"택시",l:"15분",w:2,c:"#14493F"}], how:"오리엔트 → 로시우 (숙소 2층, 엘리베이터 없음)", note:"짐 두고 15:30에 알파마로.", warn:"계단 2층 · 캐리어 직접 들기", img:"./img/lisbon_alfama.jpg", lat:38.7106, lng:-9.1530},
+    {t:"15:30", name:"알파마 골목 산책", gq:"Alfama, Lisbon", move:"도보·트램 12번", segs:[{l:"도보 15분",w:2},{b:"T12",l:"트램",w:2,c:"#1F8E4D"}], how:"로시우 → 알파마 입구 → 골목 (28번은 만원이라 12번·도보)", note:"가장 오래된 동네. 세탁물 골목이 이 도시의 사진입니다.", warn:"소매치기 최다 구역 · 가방 앞으로", img:"./img/lisbon_alfama.jpg", lat:38.7120, lng:-9.1300},
+    {t:"18:00", name:"산타루치아 전망대", gq:"Miradouro de Santa Luzia, Lisbon", move:"도보 8분", segs:[{l:"도보 8분",w:2}], how:"알파마 골목 → 전망대", note:"10월 초 일몰 19:15. 18:40에 자리를 잡으세요.", warn:"해 진 뒤 쌀쌀 — 얇은 겉옷", img:"./img/lisbon_view.jpg", lat:38.7117, lng:-9.1305},
+    {t:"21:00", name:"알파마 파두 한 곡", gq:"Alfama, Lisbon", move:"도보 6분", segs:[{l:"도보 6분",w:2}], how:"작은 클럽 (예약 권장)", note:"예약 없이 가면 22시 이후 대기. 1시간 공연이면 충분합니다.", warn:"공연 중 촬영 금지 · 최소 주문 확인", lat:38.7110, lng:-9.1280}
+  ]},
+  {d:"10/2(토)", city:"리스본", sub:"벨렘 · 강변", stay:"Lisbon Castel & Downtown (로시우)", items:[
+    {t:"10:30", name:"숙소 출발 → 벨렘", gq:"Belém, Lisbon", move:"트램·버스 25분", segs:[{b:"T15",l:"트램 25분",w:3,c:"#1F8E4D"}], how:"로시우 → 벨렘 (15번 트램 또는 728번 버스)", note:"11:00 입장으로 잡으면 줄이 짧습니다.", warn:"트램 안 소매치기 · 카드 접촉결제 가능", img:"./img/jeronimos.jpg", lat:38.6979, lng:-9.2065},
+    {t:"11:00", name:"헤로니모 수도원", gq:"Jerónimos Monastery, Lisbon", move:"도보 3분", segs:[{l:"도보 3분",w:2}], how:"온라인 시간 지정 입장 (€18)", note:"회랑이 가장 비는 시간대. 1시간이면 충분합니다.", warn:"월요일 휴무 · 어깨·무릎 가리기", img:"./img/jeronimos.jpg", lat:38.6979, lng:-9.2065},
+    {t:"13:00", name:"벨렘 점심", gq:"Belém, Lisbon", move:"도보 5분", segs:[{l:"도보 5분",w:2}], how:"강을 보는 식당", note:"해산물 + 와인 한 잔. 오후는 벨렘탑과 에그타르트.", warn:"관광지 값 · 13시 이후 붐빔", lat:38.6960, lng:-9.2030},
+    {t:"14:30", name:"벨렘탑", gq:"Belém Tower, Lisbon", move:"도보 10분", segs:[{l:"도보 10분",w:2}], how:"€15 · 시간 지정 (탑 내부 인원 제한)", note:"줄이 길면 외관과 강변 산책으로 충분합니다.", warn:"월요일 휴무 · 탑 계단 좁음", img:"./img/belem_tower.jpg", lat:38.6916, lng:-9.2160},
+    {t:"16:00", name:"파스테이스 드 벨렘", gq:"Pastéis de Belém, Lisbon", move:"도보 8분", segs:[{l:"도보 8분",w:2}], how:"에그타르트 원조", note:"포장 줄이 매장 줄보다 짧습니다. 강변에서 먹어도 좋아요.", warn:"카드 가능 · 계피·설탕은 셀프", lat:38.6975, lng:-9.2032},
+    {t:"17:30", name:"카이스 두 소드레 산책", gq:"Cais do Sodré, Lisbon", move:"트램 20분", segs:[{b:"T15",l:"20분",w:3,c:"#1F8E4D"}], how:"벨렘 → 카이스 두 소드레 (강변)", note:"저녁은 여기서. 다음 날 신트라라 일찍 자지 않아도 됩니다.", warn:"밤에는 골목 조명이 어두움", img:"./img/lisbon_tram.jpg", lat:38.7060, lng:-9.1450}
+  ]},
+  {d:"10/3(일)", city:"신트라", sub:"페나 궁전 11:00 · 호카곶", stay:"Lisbon Castel & Downtown (로시우)", items:[
+    {t:"10:00", name:"호시우 역 출발", gq:"Rossio Station, Lisbon", move:"기차 40분", segs:[{b:"CP",l:"40분",w:3,c:"#B92929"}], how:"로시우 → 신트라 (왕복 2인 약 €10)", note:"10:40 신트라 도착 → 434번 버스로 페나.", warn:"기차 안 소매치기 · 434번 줄 길면 택시 €10~15", img:"./img/sintra_town.jpg", lat:38.7146, lng:-9.1406},
+    {t:"11:00", name:"페나 궁전", gq:"Pena Palace, Sintra", move:"버스 15분", segs:[{b:"434",l:"버스 15분",w:3,c:"#C25A2A"}], how:"€20 · 시간 지정 입장 (정문 → 성벽 도보 10분)", note:"11:00 입장. 성벽 위에서 신트라 숲이 한눈에.", warn:"산 위는 안개·비 잦음 · 편한 신발", img:"./img/sintra_pena.jpg", lat:38.7876, lng:-9.3906},
+    {t:"13:30", name:"신트라 마을 점심", gq:"Sintra, Portugal", move:"버스 15분", segs:[{b:"434",l:"15분",w:2,c:"#C25A2A"}], how:"마을 중심", note:"관광지 값이지만 시간을 아끼려면 마을에서.", warn:"트라베세이루 과자 한 조각 추천", lat:38.7970, lng:-9.3880},
+    {t:"15:00", name:"레가레이라 저택", gq:"Quinta da Regaleira, Sintra", move:"도보 10분", segs:[{l:"도보 10분",w:2}], how:"€20 · 이니시에이션 우물", note:"왕복 40분이면 충분. 우물 아래에서 위를 올려다보는 사진.", warn:"계단·동굴 미끄럼 · 시간 지정 권장", img:"./img/sintra_regaleira.jpg", lat:38.7969, lng:-9.3963},
+    {t:"17:00", name:"호카곶 (유라시아 최서단)", gq:"Cabo da Roca, Portugal", move:"버스 40분", segs:[{b:"403",l:"40분",w:3,c:"#C25A2A"}], how:"신트라 → 403번 버스 → 호카곶", note:"절벽 끝에 서는 곳. 바람이 강해 겉옷 필수.", warn:"낙석·강풍 · 막차 시간 확인 후 리스본행", img:"./img/cabo_roca.jpg", lat:38.7805, lng:-9.4989},
+    {t:"19:30", name:"리스본 복귀 · 저녁", gq:"Rossio, Lisbon", move:"버스+기차 1h20", segs:[{b:"403",l:"버스",w:2,c:"#C25A2A"},{b:"CP",l:"기차",w:2,c:"#B92929"}], how:"호카곶 → 카스카이스 → 기차로 로시우", note:"도착 후 숙소 근처에서 저녁. 다음 날 14:00 비행입니다.", warn:"", lat:38.7146, lng:-9.1406}
+  ]},
+  {d:"10/4(월)", city:"바르셀로나", sub:"리스본 14:00 → BCN 16:55", stay:"Barcelona Gracia (아파트)", items:[
+    {t:"11:00", name:"체크아웃 · 공항으로", gq:"Humberto Delgado Airport, Lisbon", move:"지하철 25분", segs:[{b:"M",l:"빨간선 25분",w:3,c:"#E5532D"}], how:"로시우 → 공항 (지하철 + 환승 또는 택시 20분)", note:"13:00 공항 도착 목표. 부엘링 수속은 2시간 전.", warn:"체크인 마감 45분 전 · 위탁은 카운터에서", img:"./img/lisbon_view.jpg", lat:38.7742, lng:-9.1342},
+    {t:"14:00", name:"리스본 → 바르셀로나 (부엘링)", gq:"Barcelona-El Prat Airport", move:"비행 1h50", segs:[{b:"VY",l:"1h50 (시차 +1h)",w:4,c:"#C25A2A"}], how:"LIS 14:00 → BCN 16:55 (스페인이 1시간 빠릅니다)", note:"기내 10kg만 포함 — 위탁은 미리 결제.", warn:"구글엔 부엘링이 안 나옵니다 · 카약에서 확인", img:"./img/bcn_city.jpg", lat:41.2974, lng:2.0833},
+    {t:"18:30", name:"그라시아 숙소 체크인", gq:"Gràcia, Barcelona", move:"공항버스 40분", segs:[{b:"Aerobús",l:"40분",w:3,c:"#14493F"}], how:"BCN T2 → 아에로버스 → 카탈루냐 광장 → 지하철 L3 그라시아", note:"짐 풀고 19:30 고딕지구로.", warn:"관광세 1인 1박 €4.5 현장 결제", img:"./img/bcn_gothic.jpg", lat:41.4030, lng:2.1560},
+    {t:"19:30", name:"고딕지구 · 대성당", gq:"Barcelona Cathedral", move:"지하철 12분", segs:[{b:"L3",l:"12분",w:3,c:"#1F8E4D"},{l:"도보 5분",w:1}], how:"그라시아 → L3 리세우 → 고딕지구 도보", note:"로마 성벽 골목과 대성당 외관. 밤 조명이 좋습니다.", warn:"골목 소매치기 · 가방 앞으로", img:"./img/bcn_gothic.jpg", lat:41.3839, lng:2.1762},
+    {t:"21:00", name:"보른 지구 저녁", gq:"El Born, Barcelona", move:"도보 10분", segs:[{l:"도보 10분",w:2}], how:"고딕지구 → 보른 (타파스 2곳)", note:"도착일은 가볍게. 다음 날 사그라다 10:30.", warn:"저녁은 20~22시가 기본 · 19시엔 주방 안 열 수도", lat:41.3853, lng:2.1820}
+  ]},
+  {d:"10/5(화)", city:"바르셀로나", sub:"가우디 — 사그라다 10:30 · 구엘 15:30", stay:"Barcelona Gracia (아파트)", items:[
+    {t:"10:30", name:"사그라다 파밀리아", gq:"Sagrada Família, Barcelona", move:"지하철 15분", segs:[{b:"L2/L5",l:"15분",w:3,c:"#1F8E4D"}], how:"그라시아 → L2/L5 사그라다 파밀리아 역", note:"€26 · 시간 지정. 10:30 입장이면 동쪽 창 빛이 좋습니다.", warn:"민소매·짧은 반바지 입장 거절 · 가방 검사", img:"./img/bcn_sagrada.jpg", lat:41.4036, lng:2.1744},
+    {t:"12:30", name:"점심 · 이동", gq:"Gràcia, Barcelona", move:"지하철+버스 25분", segs:[{b:"24",l:"버스 20분",w:3,c:"#C25A2A"}], how:"사그라다 근처 점심 → 구엘공원행 24번 버스(언덕을 올라줌)", note:"15:30 입장까지 여유. 언덕은 버스로 올라가세요.", warn:"24번 버스 배차 확인 · 택시 €10", lat:41.4100, lng:2.1700},
+    {t:"15:30", name:"구엘공원", gq:"Park Güell, Barcelona", move:"버스 20분", segs:[{b:"24",l:"20분",w:3,c:"#C25A2A"}], how:"€18 · 시간 지정 (기념품 구역)", note:"도마뱀 계단·곡선 벤치. 언덕 위에서 바르셀로나가 보입니다.", warn:"무료 구역과 유료 구역 구분 · 물 챙기기", img:"./img/bcn_guell.jpg", lat:41.4145, lng:2.1527},
+    {t:"18:00", name:"그라시아 산책 · 저녁", gq:"Gràcia, Barcelona", move:"버스 20분", segs:[{b:"24",l:"20분",w:2,c:"#C25A2A"}], how:"구엘 → 그라시아 (숙소 동네)", note:"동네 광장에서 타파스. 다음 날 바트요 10:30.", warn:"", img:"./img/bcn_city.jpg", lat:41.4030, lng:2.1560}
+  ]},
+  {d:"10/6(수)", city:"바르셀로나", sub:"바트요 · 보른 · 바르셀로네타", stay:"Barcelona Gracia (아파트)", items:[
+    {t:"10:30", name:"카사 바트요", gq:"Casa Batlló, Barcelona", move:"지하철 12분", segs:[{b:"L3",l:"12분",w:3,c:"#1F8E4D"}], how:"그라시아 → L3 파세이그 데 그라시아", note:"시간 지정 입장. 지붕과 창문만 봐도 이 도시를 이해합니다.", warn:"외관만 봐도 충분하다 싶으면 입장료를 마요르카에", img:"./img/bcn_batllo.jpg", lat:41.3917, lng:2.1649},
+    {t:"13:00", name:"산타카테리나 시장 점심", gq:"Mercat de Santa Caterina, Barcelona", move:"도보 12분", segs:[{l:"도보 12분",w:3}], how:"바트요 → 보른 → 시장", note:"작은 시장이라 관광객이 적고 가격이 착합니다.", warn:"일요일 휴무 · 15시 전후 마감", lat:41.3874, lng:2.1780},
+    {t:"15:30", name:"바르셀로네타 해변", gq:"La Barceloneta, Barcelona", move:"지하철 15분", segs:[{b:"L4",l:"15분",w:3,c:"#1F8E4D"},{l:"도보 8분",w:1}], how:"보른 → L4 바르셀로네타", note:"수온 21℃ — 발 담그기와 산책. 10월 초까지 해변 바가 열려 있습니다.", warn:"선베드 유료 · 귀중품은 몸에 붙이기", img:"./img/bcn_beach.jpg", lat:41.3785, lng:2.1925},
+    {t:"19:30", name:"보케리아 시장 · 엘보른 저녁", gq:"Mercat de la Boqueria, Barcelona", move:"지하철 12분", segs:[{b:"L3",l:"12분",w:3,c:"#1F8E4D"}], how:"바르셀로네타 → 리세우 → 보케리아", note:"마지막 저녁은 해산물. 시장은 20:30에 닫기 시작합니다.", warn:"시장 안 가격 확인 · 소매치기 주의", img:"./img/bcn_city.jpg", lat:41.3817, lng:2.1716}
+  ]},
+  {d:"10/7(목)", city:"마요르카", sub:"BCN 13:45 → 팔마 14:35 · 칼라 도르", stay:"Cala d'Or (에퀘스 쁘띠 리조트)", items:[
+    {t:"10:30", name:"체크아웃 · 공항으로", gq:"Barcelona-El Prat Airport", move:"지하철+버스 45분", segs:[{b:"Aerobús",l:"45분",w:3,c:"#14493F"}], how:"그라시아 → 카탈루냐 → 아에로버스 → BCN T2", note:"11:30 공항 도착. 라이언에어는 수하물을 예약 화면에서 함께.", warn:"카운터 마감 40분 전 · 가방 무게 확인", img:"./img/bcn_city.jpg", lat:41.2974, lng:2.0833},
+    {t:"13:45", name:"바르셀로나 → 팔마 (라이언에어)", gq:"Palma de Mallorca Airport", move:"비행 50분", segs:[{b:"FR",l:"50분",w:3,c:"#5C1D3B"}], how:"BCN 13:45 → PMI 14:35", note:"짐은 위탁으로. 공항에서 렌터카 픽업.", warn:"작은 가방만 무료 · 위탁 미리 결제", img:"./img/mallorca_palma.jpg", lat:39.5517, lng:2.7388},
+    {t:"15:30", name:"렌터카 픽업", gq:"Palma de Mallorca Airport", move:"도보 8분", segs:[{l:"도보 8분",w:2}], how:"PMI 렌터카 센터 (4일 · €160)", note:"여권·한국면허증·국제면허증·운전자 명의 신용카드 4종.", warn:"인수 시 외관 360도 촬영 · 풀투풀 주유", img:"./img/mallorca_calador.jpg", lat:39.5517, lng:2.7388},
+    {t:"16:30", name:"칼라 도르 체크인", gq:"Cala d'Or, Mallorca", move:"렌터카 50분", segs:[{b:"차",l:"50분",w:4,c:"#14493F"}], how:"PMI → Ma-19 → 칼라 도르", note:"짐 풀고 바로 칼라 그란(도보 5분)에서 첫 수영.", warn:"마을 골목 좁음 · 주차 위치 확인", img:"./img/mallorca_calador.jpg", lat:39.3736, lng:3.2282},
+    {t:"18:00", name:"첫 수영 · 마을 저녁", gq:"Cala d'Or, Mallorca", move:"도보 5분", segs:[{l:"도보 5분",w:2}], how:"칼라 그란 해변 → 마을 식당", note:"수온 22℃. 저녁은 항구 쪽 해산물.", warn:"해 진 뒤 쌀쌀 · 비치타월 숙소에서", img:"./img/mallorca_calador.jpg", lat:39.3720, lng:3.2270}
+  ]},
+  {d:"10/8(금)", city:"마요르카", sub:"몬드라고 · 칼라 롬바르드", stay:"Cala d'Or (에퀘스 쁘띠 리조트)", items:[
+    {t:"10:30", name:"숙소 출발 (조식 후)", gq:"Cala d'Or, Mallorca", move:"렌터카", segs:[{b:"차",l:"12분",w:3,c:"#14493F"}], how:"칼라 도르 → 몬드라고 자연공원 주차장", note:"11:00 주차장 도착. 주차는 오전에 잡아야 합니다.", warn:"수건·아쿠아슈즈·물", img:"./img/mallorca_calador.jpg", lat:39.3736, lng:3.2282},
+    {t:"11:00", name:"몬드라고 · 사마라도르", gq:"Cala Mondragó, Mallorca", move:"도보 10분", segs:[{l:"도보 10분",w:2}], how:"주차장 → 사마라도르 → 몬드라고 해변", note:"자연공원 안의 두 만. 나무 그늘이 많아 오래 있기 좋습니다.", warn:"자연공원 내 흡연·취사 금지", img:"./img/mallorca_mondrago.jpg", lat:39.3539, lng:3.1857},
+    {t:"14:00", name:"칼라 도르 점심 → 숙소 풀", gq:"Cala d'Or, Mallorca", move:"렌터카 12분", segs:[{b:"차",l:"12분",w:3,c:"#14493F"}], how:"몬드라고 → 칼라 도르", note:"한낮 자외선을 피해 숙소 수영장에서 쉽니다.", warn:"선크림 재도포", lat:39.3736, lng:3.2282},
+    {t:"17:30", name:"칼라 롬바르드", gq:"Cala Llombards, Mallorca", move:"렌터카 20분", segs:[{b:"차",l:"20분",w:3,c:"#14493F"}], how:"칼라 도르 → 칼라 롬바르드 (무료주차 약 100대)", note:"해질녘 물빛과 절벽. 이 여행의 대표 사진을 여기서.", warn:"절벽 위 사진은 난간 안쪽에서", img:"./img/mallorca_llombards.jpg", lat:39.3369, lng:3.1053}
+  ]},
+  {d:"10/9(토)", city:"마요르카", sub:"칼라 산타니 · 에스 폰타스", stay:"Cala d'Or (에퀘스 쁘띠 리조트)", items:[
+    {t:"10:30", name:"숙소 출발", gq:"Cala d'Or, Mallorca", move:"렌터카", segs:[{b:"차",l:"10분",w:2,c:"#14493F"}], how:"칼라 도르 → 칼라 산타니", note:"마을 주차 후 도보. 11:00 해변 도착.", warn:"주차 자리 좁음 · 오전에", img:"./img/mallorca_calador.jpg", lat:39.3736, lng:3.2282},
+    {t:"11:00", name:"칼라 산타니 · 에스 폰타스", gq:"Cala Santanyí, Mallorca", move:"도보 12분", segs:[{l:"도보 12분",w:3}], how:"해변 → 에스 폰타스 석조 아치 (800m)", note:"70m 백사장과 석조 아치. 다이빙하는 사람들을 볼 수 있습니다.", warn:"아치 위 암벽 미끄럼 · 다이빙 금지", img:"./img/mallorca_llombards.jpg", lat:39.3437, lng:3.1400},
+    {t:"13:30", name:"칼라 산타니 마을 점심", gq:"Cala Santanyí, Mallorca", move:"도보 8분", segs:[{l:"도보 8분",w:2}], how:"해변 근처 식당", note:"2시 이후 붐빕니다. 13:30이 적당.", warn:"", lat:39.3445, lng:3.1420},
+    {t:"16:00", name:"칼라 롬바르드 (두 번째)", gq:"Cala Llombards, Mallorca", move:"렌터카 20분", segs:[{b:"차",l:"20분",w:3,c:"#14493F"}], how:"칼라 산타니 → 산타니 → 칼라 롬바르드", note:"오후 물놀이. 해 질 무렵이 가장 예쁩니다.", warn:"주차 만차 시 100m 위 임시 주차", img:"./img/mallorca_llombards.jpg", lat:39.3369, lng:3.1053}
+  ]},
+  {d:"10/10(일)", city:"마요르카", sub:"에스 트렌크 · 마지막 저녁", stay:"Cala d'Or (에퀘스 쁘띠 리조트)", items:[
+    {t:"10:30", name:"숙소 출발", gq:"Cala d'Or, Mallorca", move:"렌터카", segs:[{b:"차",l:"45분",w:4,c:"#14493F"}], how:"칼라 도르 → 에스 트렌크 (사 바랄리나 주차장)", note:"11:15 도착. 주차장이 526대라 넉넉합니다.", warn:"주차 유료 · 현금/카드", img:"./img/mallorca_calador.jpg", lat:39.3736, lng:3.2282},
+    {t:"11:15", name:"에스 트렌크", gq:"Es Trenc, Mallorca", move:"도보 8분", segs:[{l:"도보 8분",w:2}], how:"주차장 → 해변", note:"2~3km 백사장. 모래 바닥에 물이 얕아 오래 놀기 좋습니다.", warn:"자연공원 · 파라솔 없음 · 그늘막 챙기기", img:"./img/mallorca_trenc.jpg", lat:39.3439, lng:2.9887},
+    {t:"14:00", name:"콜로니아 산 조르디 점심", gq:"Colònia de Sant Jordi, Mallorca", move:"렌터카 12분", segs:[{b:"차",l:"12분",w:2,c:"#14493F"}], how:"에스 트렌크 → 콜로니아", note:"항구 마을 해산물. 16:30 숙소 복귀, 짐 정리.", warn:"", img:"./img/mallorca_trenc.jpg", lat:39.3186, lng:3.0036},
+    {t:"19:30", name:"마지막 저녁", gq:"Cala d'Or, Mallorca", move:"도보 8분", segs:[{l:"도보 8분",w:2}], how:"칼라 도르 항구 쪽", note:"다음 날 10:30 체크아웃. 짐은 밤에 미리.", warn:"렌터카 주유 상태 확인", lat:39.3720, lng:3.2270}
+  ]},
+  {d:"10/11(월)", city:"귀국", sub:"새벽 없이 · 15:20 팔마 → 20:50 인천", stay:"기내", items:[
+    {t:"10:30", name:"체크아웃 · 칼라 도르 출발", gq:"Cala d'Or, Mallorca", move:"렌터카", segs:[{l:"짐 정리",w:1},{b:"차",l:"50분",w:3,c:"#14493F"}], how:"칼라 도르 → PMI 공항 (주유 후 반납)", note:"12:30 공항 도착. 새벽 기상 없이 여유롭게.", warn:"반납 전 풀투풀 주유 영수증", img:"./img/mallorca_calador.jpg", lat:39.3736, lng:3.2282},
+    {t:"12:30", name:"렌터카 반납 · 수속", gq:"Palma de Mallorca Airport", move:"도보", segs:[{l:"반납",w:1},{l:"수속",w:2}], how:"PMI 렌터카 반납 → 라이언에어 수속", note:"위탁 20kg을 예약 화면에서 결제했다면 카운터는 짐만 맡깁니다.", warn:"택스 리펀드 물품은 부치기 전 확인", img:"./img/mallorca_palma.jpg", lat:39.5517, lng:2.7388},
+    {t:"15:20", name:"팔마 → 바르셀로나 (라이언에어)", gq:"Palma de Mallorca Airport", move:"비행 55분", segs:[{b:"FR",l:"55분",w:3,c:"#5C1D3B"}], how:"PMI 15:20 → BCN 16:15", note:"짐 찾고 대한항공 카운터로. 여유 4시간 35분.", warn:"BCN에서 짐 다시 부치기", img:"./img/bcn_city.jpg", lat:39.5517, lng:2.7388},
+    {t:"20:50", name:"바르셀로나 → 인천 (대한항공)", gq:"Barcelona-El Prat Airport", move:"비행 12h30", segs:[{b:"KE",l:"직항 12h30",w:4,c:"#1E5CA8"}], how:"BCN 20:50 → 인천 10/12 16:20", note:"새벽 없이 직항으로. 기내에서 길게 잡니다.", warn:"면세 한도·액체 규정 확인", img:"./img/incheon.jpg", lat:41.2974, lng:2.0833}
+  ]}
+];
+
+const DAY_TIPS = {
+  "9/28(화)":[
+    "🛂 여권 만료일 2028-04-11 이후인지 확인 — 부족하면 지금 갱신",
+    "🔋 보조배터리는 기내 가방에만 (위탁 금지)",
+    "🧦 12박이라 기내에서 양말·목베개가 생각보다 중요합니다",
+    "💊 상비약(소화제·진통제·멀미약)은 기내 가방에"
+  ],
+  "9/29(수)":[
+    "🛬 EES 첫 입국 — 지문·얼굴 등록으로 심사가 1시간까지 걸립니다",
+    "🚆 리스본 오리엔트 → 포르투 AP 기차는 좌석 지정. 2인 편도 약 10만 4천 원",
+    "🧳 포르투 역에서 리베이라까지는 언덕·돌바닥 — 택시 €8~10이 낫습니다",
+    "💶 포르투 도시세 1인 1박 €2 안팎, 현장 결제"
+  ],
+  "9/30(목)":[
+    "📚 리브루아리아 렐루는 입장권 필요 — 매표소가 서점 옆 건물에 있습니다",
+    "🍽 프란세지냐는 양이 많아 2인이 1개 + 샐러드면 충분",
+    "🍷 가이아 셀러는 투어 1곳만 예약하고 나머지는 셀프 시음이 가성비",
+    "☔ 10월 포르투는 비 오는 날이 월 11일 — 우산 챙기기"
+  ],
+  "10/1(금)":[
+    "🚋 28번 트램은 만원 + 소매치기 1순위 → 12번·24번 버스나 도보 추천",
+    "🌅 산타루치아 일몰 19:15 — 18:40에 자리 잡기",
+    "🎸 파두는 예약 없이 가면 22시 이후 대기합니다",
+    "🗝 숙소가 2층·엘리베이터 없음 — 캐리어 직접"
+  ],
+  "10/2(토)":[
+    "⚠️ 헤로니모·벨렘탑은 월요일 휴무 — 10/2은 토요일이라 안전",
+    "🥧 파스테이스 드 벨렘은 포장 줄이 매장 줄보다 짧습니다",
+    "🎟 헤로니모 €18 · 벨렘탑 €15, 둘 다 시간 지정",
+    "👗 성당·수도원은 어깨·무릎 가리기"
+  ],
+  "10/3(일)":[
+    "🚌 434번 버스가 11시 전후 만원 — 15분 이상 줄이면 택시 €10~15",
+    "🌫 페나 궁전은 안개가 잦아 11:00 입장이 무난",
+    "🏰 레가레이라는 이니시에이션 우물 아래에서 위를 올려다보는 사진",
+    "🌊 호카곶은 바람이 강해 겉옷 필수 — 막차 시간 확인"
+  ],
+  "10/4(월)":[
+    "✈️ 부엘링은 구글 플라이트에 안 나옵니다 — 카약에서 확인",
+    "🧳 기내 10kg만 포함 — 위탁은 예약 화면에서",
+    "🕐 스페인은 포르투갈보다 1시간 빠릅니다 (14:00 → 16:55)",
+    "🏨 바르셀로나 관광세 1인 1박 €4.5 현장 결제"
+  ],
+  "10/5(화)":[
+    "⛪ 사그라다 €26 — 온라인 시간 지정만, 2~3개월 전 오픈",
+    "👗 민소매·짧은 반바지는 입장 거절됩니다",
+    "🦎 구엘공원 €18 — 무료 구역과 유료 구역이 나뉩니다",
+    "🚌 구엘공원 언덕은 24번 버스가 올라줍니다"
+  ],
+  "10/6(수)":[
+    "🎭 카사 바트요는 시간 지정 입장 — 외관만 봐도 충분하면 입장료 아끼기",
+    "🏖 바르셀로네타 수온 21℃ — 발 담그기와 산책",
+    "🛍 보케리아 시장은 20:30에 닫기 시작합니다",
+    "👛 람블라스·고딕지구·지하철 3호선 소매치기 최다"
+  ],
+  "10/7(목)":[
+    "🎒 라이언에어 수하물은 예약 화면에서 함께 결제해야 저렴",
+    "🚗 렌터카 4종 서류: 여권·한국면허증·국제면허증·운전자 명의 신용카드",
+    "📸 인수 시 외관 360도 촬영 + 주유 정책 확인",
+    "🌊 칼라 그란은 숙소에서 도보 5분 — 첫날 수영은 여기서"
+  ],
+  "10/8(금)":[
+    "🅿️ 몬드라고 주차장은 오전에 차야 합니다",
+    "🌿 자연공원은 흡연·취사 금지",
+    "🥵 한낮 자외선이 강합니다 — 14시는 숙소 수영장",
+    "📷 칼라 롬바르드는 17:30 이후 빛이 가장 좋습니다"
+  ],
+  "10/9(토)":[
+    "🏖 칼라 산타니 주차는 마을에 — 오전에 자리 잡기",
+    "🪨 에스 폰타스 아치 위는 미끄럽고 다이빙 금지",
+    "🍽 마을 점심은 13:30이 적당 (2시 이후 붐빔)",
+    "🚗 해변 주차장은 오전 10시 전이 안전"
+  ],
+  "10/10(일)":[
+    "🅿️ 에스 트렌크 사 바랄리나 주차장 526대(유료)",
+    "⛱ 파라솔이 없는 자연 해변 — 그늘막·물 챙기기",
+    "🦞 콜로니아 산 조르디 항구 마을 해산물 추천",
+    "🧳 밤에 짐 미리 싸두면 마지막 날이 편합니다"
+  ],
+  "10/11(월)":[
+    "⛽ 렌터카 반납 전 풀투풀 주유 + 영수증",
+    "🧾 택스 리펀드 물품은 수하물 부치기 전에",
+    "✈️ BCN에서 짐 찾아 대한항공 카운터로 (여유 4h35)",
+    "🕗 20:50 직항 — 새벽 기상 없이 돌아옵니다"
+  ]
+};
+
+const COMMON_TIPS = [
+  "🎒 소매치기 최다: 람블라스·고딕지구·바르셀로나 지하철, 리스본 28번 트램·알파마, 포르투 상벤투 역 — 가방은 앞으로, 폰은 스트랩",
+  "📄 여권 사본 2부(종이+폰 사진) · 원본은 숙소 금고",
+  "📱 eSIM은 출발 전 설치 + 구글맵에 포르투갈·스페인·마요르카 오프라인 지도 저장",
+  "💶 €50·€20 소액권 위주로 환전 — €100 이상은 잘 안 받습니다",
+  "🚻 화장실은 보통 €0.5~1 — 동전 준비, 카페 이용 시 무료인 곳도",
+  "🚗 렌터카는 마요르카에서만. 바르셀로나 시내는 저배출구역(ZBE)",
+  "⛪ 성당 복장: 어깨·무릎 가리기 — 얇은 스카프 하나면 전부 해결",
+  "🍽 스페인 저녁은 20~22시, 포르투갈은 19~21시. 19시에 가면 주방이 안 열렸을 수 있어요",
+  "🌅 10월 초 일몰: 리스본 19:15 · 바르셀로나 19:25 · 마요르카 19:20",
+  "☎️ 긴급 112 · 주스페인 한국대사관 +34-91-353-2000"
+];
+
+const DEFAULT_CHECKS = [
+  "[지금] 장거리 항공 2편 발권 — 대한항공 직항은 360일 전 오픈, 이미 열렸습니다",
+  "[지금] 숙소 4곳 무료 취소로 예약 (마감 9/7·9/24·9/29·9/30)",
+  "[지금] 여권 만료일 2028-04-11 이후 확인",
+  "[27-04~05] 마요르카 렌터카 4일 + 국제운전면허증 발급",
+  "[27-07] 사그라다 파밀리아·구엘공원 예약 (2~3개월 전 오픈)",
+  "[27-07] 신트라 페냐 궁전·레가레이라 시간 지정 예약",
+  "[27-08] 여행자보험 2인 · ETIAS 시행 여부 확인(travel-europe.europa.eu)",
+  "[27-09-07] 마요르카 빌라/리조트 무료 취소 마감",
+  "[27-09-24] 포르투 숙소 무료 취소 마감",
+  "[27-09-29] 바르셀로나 숙소 무료 취소 마감",
+  "[27-09-30] 리스본 숙소 무료 취소 마감",
+  "[27-09-15] eSIM 설치 · 구글맵 오프라인 저장 · 유로 환전"
+];
+
+let days = JSON.parse(localStorage.getItem('es_days_v1') || 'null') || JSON.parse(JSON.stringify(DEFAULT_DAYS));
+let checks = JSON.parse(localStorage.getItem('es_chks_v1') || 'null') || {};
+let tips = JSON.parse(localStorage.getItem('es_tips_v1') || 'null') || {};
+let curDay = 0, mapDay = 0, mapObj = null, editIdx = null;
+
+function saveDays(){ localStorage.setItem('es_days_v1', JSON.stringify(days)); }
+
+function updateDday(){
+  const diff = Math.ceil((new Date('2027-09-28T00:00:00+09:00') - new Date()) / 86400000);
+  document.getElementById('ddayBadge').textContent = diff > 0 ? `D-${diff}` : (diff === 0 ? 'D-DAY' : `D+${-diff}`);
+}
+
+/* ───────── 이동 표시 ───────── */
+function routeDirUrl(prev, cur){
+  if(!cur) return '';
+  const dstName = cur.gq || cur.name.replace(/<[^>]+>|&rarr;/g,' ').trim();
+  const dst = dstName || `${cur.lat},${cur.lng}`;
+  if(!prev || (prev.gq===cur.gq && prev.lat===cur.lat && prev.lng===cur.lng)){
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(dst)}`;
+  }
+  const srcName = prev.gq || prev.name.replace(/<[^>]+>|&rarr;/g,' ').trim();
+  const src = srcName || `${prev.lat},${prev.lng}`;
+  if(src === dst) return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(dst)}`;
+  const m = (cur.move||'');
+  const mode = /렌터카|차|드라이브|택시/.test(m) ? 'driving' : (/도보/.test(m) && !/지하철|선|열차|트램|버스|기차/.test(m) ? 'walking' : 'transit');
+  return `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(src)}&destination=${encodeURIComponent(dst)}&travelmode=${mode}`;
+}
+function renderRouteBar(segs, how, prev, cur){
+  if(!segs && !how) return '';
+  const bar = segs ? `<div class="route-bar" style="flex:1;min-width:0;">${segs.map(s=>`<div class="r-seg ${s.c?'':'r-walk'}" style="flex:${s.w||1};${s.c?`background:${s.c};color:#fff;`:''}">${s.b?`<span style="background:#fff;color:${s.c||'#333'};border-radius:99px;padding:0 4px;font-size:9.5px;line-height:14px;">${s.b}</span>`:''}<span>${s.l}</span></div>`).join('')}</div>` : '';
+  const url = routeDirUrl(prev, cur);
+  const gbtn = url ? `<a class="act-btn map" onclick="event.stopPropagation()" target="_blank" rel="noopener" href="${url}" style="flex-shrink:0;padding:3px 8px;font-size:11px;border-radius:99px;">🧭 노선</a>` : '';
+  const topRow = bar ? `<div style="display:flex;align-items:center;gap:6px;">${bar}${gbtn}</div>` : '';
+  const txt = how ? `<div class="r-txt">🚇 ${how}</div>` : '';
+  return `<div class="route-box">${topRow}${txt}</div>`;
+}
+
+/* ───────── 일정 탭 ───────── */
+function renderPlan(){
+  const sc = document.getElementById('dayScroll');
+  sc.innerHTML = days.map((x,i)=>`<div class="day-chip ${i===curDay?'active':''}" onclick="curDay=${i};renderPlan()"><div class="d1">DAY ${i+1}</div><div class="d2">${x.d}</div><div class="d3">${x.city}</div></div>`).join('');
+  const d = days[curDay];
+  document.getElementById('dayBanner').innerHTML = `<div><h2>DAY ${curDay+1} · ${d.d} (${d.city})</h2><p>${d.sub}</p></div><button class="btn-add" onclick="openModal(null)">+ 일정</button>`;
+  const stayBanner = d.stay ? `<div class="stay-band"><div><div class="k">🏨 오늘의 숙소 출발</div><div class="v">${d.stay}</div></div><a class="act-btn map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.stay)}">구글맵</a></div>` : '';
+  document.getElementById('planList').innerHTML = stayBanner + renderDayTips(d) + d.items.map((it,idx)=>`
+    <div class="item-card ${it.done?'done':''}">
+      <div class="item-top">
+        <div><span class="time-badge">${it.t}</span><span class="move-badge">${it.move||'이동'}</span></div>
+        <button class="chk-btn" onclick="toggleDone(${idx})">${it.done?'✓':''}</button>
+      </div>
+      <div class="item-body">
+        <div style="flex:1;min-width:0;">
+          <div class="item-title">${it.name}</div>
+          <p class="item-note">${it.note||''}</p>
+        </div>
+        ${it.img ? `<img class="item-thumb" src="${it.img}" alt="${(it.name||'').replace(/"/g,'')}" loading="lazy"/>` : ''}
+      </div>
+      ${renderRouteBar(it.segs, it.how, idx>0?d.items[idx-1]:(d.stay?{gq:d.stay}:null), it)}
+      ${it.warn ? `<div class="item-warn">⚠️ 챙길 것·주의: ${it.warn}</div>` : ''}
+      <div class="item-actions">
+        <a class="act-btn map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(it.name.replace(/<[^>]+>|&rarr;/g,' '))}">🧭 구글맵</a>
+        <button class="act-btn" onclick="moveItem(${idx},-1)">▲</button>
+        <button class="act-btn" onclick="moveItem(${idx},1)">▼</button>
+        <button class="act-btn" onclick="openModal(${idx})">✏️ 수정</button>
+        <button class="act-btn" onclick="delItem(${idx})">🗑️</button>
+      </div>
+    </div>`).join('') + `
+    <div style="display:flex;gap:8px;margin:14px 0 4px;">
+      <button class="act-btn" style="flex:1;justify-content:center;" onclick="resetData()">↺ 전체 초기화</button>
+    </div>`;
+}
+
+function renderDayTips(d){
+  const list = DAY_TIPS[d.d];
+  if(!list || !list.length) return '';
+  return `<div class="tips-card">
+    <div class="tips-head"><h4>⚠️ 챙길 것·주의 · 실전 팁</h4><span>체크하면 저장</span></div>
+    ${list.map((t,i)=>{const k=d.d+'#'+i;return `<label class="tip-row ${tips[k]?'on':''}"><input type="checkbox" ${tips[k]?'checked':''} onchange="tips['${k}']=this.checked;localStorage.setItem('es_tips_v1',JSON.stringify(tips));renderPlan()"/><span>${t}</span></label>`;}).join('')}
+  </div>`;
+}
+function renderCommonTips(){
+  const el = document.getElementById('commonTips');
+  if(!el) return;
+  el.innerHTML = COMMON_TIPS.map((t,i)=>{const k='common#'+i;return `<label class="tip-row ${tips[k]?'on':''}"><input type="checkbox" ${tips[k]?'checked':''} onchange="tips['${k}']=this.checked;localStorage.setItem('es_tips_v1',JSON.stringify(tips));renderCommonTips()"/><span>${t}</span></label>`;}).join('');
+}
+
+function toggleDone(idx){
+  days[curDay].items[idx].done = !days[curDay].items[idx].done;
+  saveDays(); renderPlan();
+}
+function moveItem(idx, dir){
+  const list = days[curDay].items;
+  const ni = idx + dir;
+  if(ni < 0 || ni >= list.length) return;
+  [list[idx], list[ni]] = [list[ni], list[idx]];
+  saveDays(); renderPlan(); if(mapObj) renderMap();
+}
+function delItem(idx){
+  if(!confirm('이 일정을 삭제할까요? (지도에도 바로 반영됩니다)')) return;
+  days[curDay].items.splice(idx,1);
+  saveDays(); renderPlan(); if(mapObj) renderMap();
+}
+function openModal(idx){
+  editIdx = idx;
+  const it = idx!==null ? days[curDay].items[idx] : {t:'',name:'',move:'',note:''};
+  document.getElementById('mTitle').textContent = idx!==null ? '일정 수정' : '새 일정 추가';
+  document.getElementById('mTime').value = it.t;
+  document.getElementById('mName').value = it.name.replace(/&rarr;/g,'→');
+  document.getElementById('mMove').value = it.move||'';
+  document.getElementById('mNote').value = it.note||'';
+  document.getElementById('editModal').classList.add('open');
+}
+function closeModal(){ document.getElementById('editModal').classList.remove('open'); }
+function saveModal(){
+  const item = {
+    t: document.getElementById('mTime').value || '12:00',
+    name: document.getElementById('mName').value || '새 일정',
+    move: document.getElementById('mMove').value || '도보',
+    note: document.getElementById('mNote').value || '',
+    lat: (days[curDay].items[0]||{}).lat || 41.15,
+    lng: (days[curDay].items[0]||{}).lng || -8.61
+  };
+  if(editIdx!==null) days[curDay].items[editIdx] = {...days[curDay].items[editIdx], ...item};
+  else days[curDay].items.push(item);
+  saveDays(); closeModal(); renderPlan(); if(mapObj) renderMap();
+}
+
+/* ───────── 지도 탭 ───────── */
+function segMeta(move){
+  const m = (move||'');
+  if(/페리|배/.test(m)) return {ico:'⛴️', col:'#0E86A8', dash:'6,5'};
+  if(/기차|프레차|알파|CP|라피트|공항철도/.test(m)) return {ico:'🚆', col:'#B92929', dash:null};
+  if(/지하철|트램|버스|사철|M\d|L\d|T\d/.test(m)) return {ico:'🚇', col:'#E5532D', dash:null};
+  if(/렌터카|차|드라이브|택시/.test(m)) return {ico:'🚗', col:'#14493F', dash:null};
+  if(/케이블카|곤돌라|리프트/.test(m)) return {ico:'🚡', col:'#9A5B13', dash:'5,4'};
+  if(/비행|항공/.test(m)) return {ico:'✈️', col:'#5C1D3B', dash:'8,6'};
+  return {ico:'🚶', col:'#6B726E', dash:'4,5'};
+}
+let segLayers = [], segMarkers = [];
+function focusSeg(idx){
+  if(!mapObj || !segMarkers[idx]) return;
+  segLayers.forEach((l,i)=> l.setStyle({weight: i===idx-1?7:4, opacity: i===idx-1?1:0.55}));
+  if(idx > 0 && segLayers[idx-1]){
+    mapObj.fitBounds(segLayers[idx-1].getBounds(), {padding:[55,55], maxZoom:15});
+  } else {
+    mapObj.setView(segMarkers[idx].getLatLng(), 14);
+  }
+  segMarkers[idx].openPopup();
+  document.getElementById('mapBox').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function renderMap(){
+  const sc = document.getElementById('mapDayScroll');
+  sc.innerHTML = `<div class="day-chip ${mapDay===-1?'active':''}" onclick="mapDay=-1;renderMap()"><div class="d1">ALL</div><div class="d2">전체 루트</div><div class="d3">4도시</div></div>` +
+    days.map((x,i)=>`<div class="day-chip ${i===mapDay?'active':''}" onclick="mapDay=${i};renderMap()"><div class="d1">DAY ${i+1}</div><div class="d2">${x.d}</div><div class="d3">${x.city}</div></div>`).join('');
+  if(!mapObj){
+    mapObj = L.map('mapBox');
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap', maxZoom:19}).addTo(mapObj);
+  }
+  mapObj.eachLayer(l=>{ if(l instanceof L.Marker || l instanceof L.Polyline) mapObj.removeLayer(l); });
+  const pts = mapDay === -1
+    ? [{t:'9/29~10/1',name:'포르투 (두루강·와인셀러)',gq:'Porto, Portugal',move:'2박',lat:41.1496,lng:-8.6110},
+       {t:'10/1~10/4',name:'리스본 · 신트라',gq:'Lisbon, Portugal',move:'3박',lat:38.7223,lng:-9.1393},
+       {t:'10/4~10/7',name:'바르셀로나 (가우디)',gq:'Barcelona, Spain',move:'3박',lat:41.3874,lng:2.1686},
+       {t:'10/7~10/11',name:'마요르카 · 칼라 도르',gq:"Cala d'Or, Mallorca, Spain",move:'4박',lat:39.3736,lng:3.2282}]
+    : days[mapDay].items.filter(i=>i.lat && i.lng);
+  const latlngs = []; segLayers = []; segMarkers = [];
+  pts.forEach((p,idx)=>{
+    const ll = [p.lat, p.lng]; latlngs.push(ll);
+    const icon = L.divIcon({className:'',html:`<div style="background:#14493F;color:#F2C879;border:2px solid #fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.35);">${idx+1}</div>`,iconSize:[28,28],iconAnchor:[14,14]});
+    const mk = L.marker(ll,{icon}).addTo(mapObj).bindPopup(`<b>${idx+1}. ${p.name}</b><br/>${p.t} · ${p.move}${p.how?`<br/><span style="color:#14493F;font-weight:700;">${p.how}</span>`:''}`);
+    segMarkers.push(mk);
+    if(idx > 0){
+      const prev = [pts[idx-1].lat, pts[idx-1].lng];
+      if(prev[0]!==ll[0] || prev[1]!==ll[1]){
+        const sm = segMeta(p.move);
+        const pl = L.polyline([prev, ll],{color:sm.col,weight:4.5,opacity:0.85,dashArray:sm.dash}).addTo(mapObj);
+        segLayers[idx-1] = pl;
+        const mid = [(prev[0]+ll[0])/2, (prev[1]+ll[1])/2];
+        const mIcon = L.divIcon({className:'',html:`<div style="background:#fff;border:2px solid ${sm.col};border-radius:99px;padding:1px 5px;font-size:12px;box-shadow:0 2px 5px rgba(0,0,0,.22);white-space:nowrap;">${sm.ico}</div>`,iconSize:[28,22],iconAnchor:[14,11]});
+        L.marker(mid,{icon:mIcon}).addTo(mapObj).on('click', ()=>focusSeg(idx));
+      }
+    }
+  });
+  if(latlngs.length===1) mapObj.setView(latlngs[0], 13);
+  else if(latlngs.length>1) mapObj.fitBounds(latlngs, {padding:[36,36]});
+  setTimeout(()=>mapObj.invalidateSize(), 100);
+
+  const gBtn = document.getElementById('mapGoogleBtn');
+  const uPts = pts.filter((p,i)=> i===0 || `${p.lat},${p.lng}` !== `${pts[i-1].lat},${pts[i-1].lng}`);
+  if(uPts.length >= 2){
+    const path = uPts.map(p=>encodeURIComponent(p.gq||`${p.lat},${p.lng}`)).join('/');
+    gBtn.innerHTML = `<a class="act-btn map" style="width:100%;justify-content:center;padding:12px;font-size:14px;border-radius:12px;" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/${path}">🧭 구글맵으로 오늘 동선 한 번에 열기 (${uPts.length}곳)</a>`;
+  } else if(uPts.length === 1){
+    gBtn.innerHTML = `<a class="act-btn map" style="width:100%;justify-content:center;padding:12px;font-size:14px;border-radius:12px;" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${uPts[0].lat},${uPts[0].lng}">🧭 구글맵으로 위치 열기</a>`;
+  } else { gBtn.innerHTML = ''; }
+
+  const title = mapDay === -1 ? '이베리아 4도시 전체 루트 (12박)' : `DAY ${mapDay+1} · ${days[mapDay].city} 동선 (${pts.length}곳)`;
+  document.getElementById('mapLegend').innerHTML = `<h3>${title}</h3>` +
+    pts.map((p,i)=>`<div onclick="focusSeg(${i})" style="padding:9px 6px;border-bottom:1px solid #EFEADF;cursor:pointer;border-radius:10px;"><div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;"><div><b>${i+1}. ${p.name}</b> <span style="font-size:11px;color:var(--org);font-weight:700;">· 지도보기</span><br/><span style="font-size:12px;color:var(--sub);">${p.t} · ${p.move}</span></div><div style="display:flex;gap:4px;align-items:center;" onclick="event.stopPropagation()">${mapDay>=0?`<button class="act-btn" style="padding:3px 6px;" onclick="curDay=mapDay;moveItem(${i},-1)">▲</button><button class="act-btn" style="padding:3px 6px;" onclick="curDay=mapDay;moveItem(${i},1)">▼</button><button class="act-btn" style="padding:3px 6px;" onclick="curDay=mapDay;openModal(${i})">✏️</button><button class="act-btn" style="padding:3px 6px;" onclick="curDay=mapDay;delItem(${i})">🗑️</button>`:''}<a class="act-btn map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.gq||p.name.replace(/<[^>]+>|&rarr;/g,' '))}">구글맵</a></div></div>${renderRouteBar(p.segs, p.how, i>0?pts[i-1]:(mapDay>=0&&days[mapDay].stay?{gq:days[mapDay].stay}:null), p)}</div>`).join('');
+}
+
+/* ───────── 체크리스트 ───────── */
+function renderChecks(){
+  document.getElementById('checkList').innerHTML = DEFAULT_CHECKS.map((c,i)=>`
+    <label class="chk-row ${checks[i]?'checked':''}">
+      <input type="checkbox" ${checks[i]?'checked':''} onchange="checks[${i}]=this.checked;localStorage.setItem('es_chks_v1',JSON.stringify(checks));renderChecks()"/>
+      <span>${c}</span>
+    </label>`).join('');
+}
+
+function exportData(){
+  const blob = new Blob([JSON.stringify({days,checks,tips},null,2)],{type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'iberia_2027_backup.json'; a.click();
+}
+function resetData(){
+  if(!confirm('직접 수정하신 메모·체크를 기본값으로 되돌릴까요?')) return;
+  localStorage.removeItem('es_days_v1'); localStorage.removeItem('es_chks_v1');
+  localStorage.removeItem('es_tips_v1'); localStorage.removeItem('es_exp_v1');
+  localStorage.removeItem('es_sim_v1'); localStorage.removeItem('es_bud_v1');
+  days = JSON.parse(JSON.stringify(DEFAULT_DAYS)); checks = {}; tips = {};
+  simSel = {air:'ke',stay3:'mid',mall:'eques',snap:'none'};
+  itExps = []; itBudget = {krwGoal:3000000, cash:600, card:1200}; rate = 1650;
+  renderPlan(); renderChecks(); renderCommonTips(); renderSim(); renderItExp();
+}
+
+function goTab(id, btn){
+  document.querySelectorAll('main > section').forEach(s=>s.classList.add('hidden'));
+  document.getElementById('tab-'+id).classList.remove('hidden');
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(id==='map') renderMap();
+}
+
+/* ───────── 예산 시뮬레이터 ───────── */
+const SIM_OPTS = [
+  {key:'air', label:'✈️ 장거리 항공 (2인)', opts:[
+    {id:'ke', name:'대한항공 20:50 직항 (새벽 없음) 416만', cost:4161258},
+    {id:'finn', name:'핀에어 10:05 + 전날 공항 1박 324만', cost:3242624, warn:'🧳 10/10 저녁에 팔마→바르셀로나로 미리 넘어와 공항 근처 1박이 필요합니다. 10/11 07:30 기상.'}
+  ]},
+  {key:'stay3', label:'🏨 앞 3도시 숙소 (포르투2·리스본3·바르셀로나3)', opts:[
+    {id:'low', name:'최저가 조합 117만 (루즈 알파마·강변 로프트)', cost:1167596, warn:'🛏 루즈 알파마는 후기가 49개로 적고, 침대는 퀸 1개입니다. 포르투는 강변 로프트.'},
+    {id:'mid', name:'더블 침대 확인 조합 130만 (카스텔&다운타운)', cost:1299677},
+    {id:'boutique', name:'부티크 혼합 159만 (게스트하우스 두로·상벤투)', cost:1593113, warn:'🍳 두로·상벤투는 조식·파티오가 있지만 방이 21㎡ 안팎으로 좁습니다.'}
+  ]},
+  {key:'mall', label:'🌊 마요르카 4박 (10/7~11)', opts:[
+    {id:'cm', name:'CM 몰로르카 팰리스 5성 102만', cost:1023460, warn:'🛏 트윈 침대 기준가 · 성인전용 · 사 코마(몬드라고 15~25분)'},
+    {id:'eques', name:'에퀘스 쁘띠 리조트 4성 108만', cost:1082750},
+    {id:'gran', name:'그란 호텔 소예르 5성 175만', cost:1746272, warn:'🧾 무료 취소 표시 없는 요금제 · 객실 38개 · 소예르(해변 20분)'},
+    {id:'trenc', name:'이베로스타 에스 트렌크 5성 190만', cost:1895909},
+    {id:'villa', name:'소예르 전용수영장 빌라 215만', cost:2148806, warn:'🚗 소예르 골목이 좁아 소형차 필요 · 체크인 16~18시 · 9/7까지 무료 취소'}
+  ]},
+  {key:'snap', label:'📸 스냅 (선택 · 참고 추정가)', opts:[
+    {id:'none', name:'없음 0원', cost:0},
+    {id:'bcn', name:'바르셀로나 2시간 스냅 57만 (추정)', cost:570000, warn:'📷 10/6 오후는 바르셀로네타 일정 — 스냅을 넣으면 해변을 10/5 저녁으로 옮기세요.'},
+    {id:'pmi', name:'마요르카 해변 스냅 65만 (추정)', cost:650000, warn:'📷 10/9 칼라 롬바르드 해질녘 촬영이 가장 좋습니다. 렌터카 동선 유지.'}
+  ]}
+];
+let simSel = JSON.parse(localStorage.getItem('es_sim_v1')||'null') || {air:'ke',stay3:'mid',mall:'eques',snap:'none'};
+
+function renderSim(){
+  document.getElementById('simControls').innerHTML = SIM_OPTS.map(g=>`
+    <div style="margin-bottom:10px;">
+      <div style="font-size:12.5px;font-weight:800;color:var(--green);margin-bottom:5px;">${g.label}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        ${g.opts.map(o=>`<button onclick="simSel['${g.key}']='${o.id}';localStorage.setItem('es_sim_v1',JSON.stringify(simSel));renderSim()" style="border:1.5px solid ${simSel[g.key]===o.id?'var(--green)':'var(--line)'};background:${simSel[g.key]===o.id?'var(--green)':'#fff'};color:${simSel[g.key]===o.id?'#fff':'var(--ink)'};border-radius:9px;padding:6px 10px;font-size:12px;font-weight:700;cursor:pointer;text-align:left;">${o.name}</button>`).join('')}
+      </div>
+    </div>`).join('');
+
+  // 고정: 유럽 내 3편 35.0 + 위탁 25.0 + 리스본↔포르투 기차 21.0 + 식비 138.0 + 교통·관광·렌터카 90.0 + 보험 15.0
+  const FIXED_OTHER = 3240259;
+  let varSum = 0; const warns = [];
+  SIM_OPTS.forEach(g=>{
+    const picked = g.opts.find(o=>o.id===simSel[g.key]) || g.opts[0];
+    varSum += picked.cost;
+    if(picked.warn) warns.push(picked.warn);
+  });
+  const total = FIXED_OTHER + varSum;
+  const diff = total - 10000000;
+  let badge = '', boxBg = '', boxCol = '';
+  if(total <= 9900000){
+    badge = `🟢 예산 적정 — 1,000만 원보다 ${Math.round(-diff/10000).toLocaleString()}만 원 여유`;
+    boxBg = '#E4EFEA'; boxCol = '#14493F';
+  } else if(total <= 10300000){
+    badge = `🟡 예산 경계 — 1,000만 원보다 +${Math.round(diff/10000).toLocaleString()}만 원`;
+    boxBg = '#FFF4DC'; boxCol = '#8A5A00';
+  } else {
+    badge = `🚨 초과 +${Math.round(diff/10000).toLocaleString()}만 원 · 조합을 낮추세요`;
+    boxBg = '#FDE8E4'; boxCol = '#A82E1B';
+  }
+  const mallName = (SIM_OPTS[2].opts.find(o=>o.id===simSel.mall)||{}).name || '';
+  const routeTxt = `포르투(2) → 리스본(3) → 바르셀로나(3) → 마요르카(4) · 마지막 숙소: ${mallName.split(' ')[0]}`;
+
+  document.getElementById('simResult').innerHTML = `
+    <div style="background:${boxBg};color:${boxCol};border-radius:12px;padding:12px;">
+      <div style="font-size:12px;font-weight:800;">${badge}</div>
+      <div style="font-size:22px;font-weight:900;margin-top:4px;">총 ${Math.round(total/10000).toLocaleString()}만 원 <span style="font-size:13px;font-weight:600;">(${total.toLocaleString()}원)</span></div>
+      <div style="font-size:12px;margin-top:6px;opacity:.9;"><b>동선</b>: ${routeTxt}</div>
+      <div style="font-size:11.5px;margin-top:4px;opacity:.85;">고정 지출 ${Math.round(FIXED_OTHER/10000)}만 (유럽 내 항공·위탁·기차·식비·교통관광·보험)</div>
+    </div>
+    ${warns.length ? `<div style="margin-top:8px;background:#FFFDF6;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.55;">
+      <b style="color:var(--org);">⚠️ 선택한 조합의 주의</b><br/>
+      ${warns.map(w=>`• ${w}`).join('<br/>')}
+    </div>` : ''}`;
+}
+
+/* ───────── 가계부 ───────── */
+const IT_CATS = ['✈️ 항공·교통','🏨 숙소·도시세','🎟 입장·투어','🍽 식비·카페','🛍 쇼핑·기타'];
+let rate = parseFloat(localStorage.getItem('es_rate')||'1650');
+let itCur = 'EUR', itCat = IT_CATS[3], itPay = 'card', itFilter = 'ALL';
+let itExps = JSON.parse(localStorage.getItem('es_exp_v1')||'[]').map(e=>({...e, cur: e.cur||'EUR'}));
+let itBudget = JSON.parse(localStorage.getItem('es_bud_v1')||'null') || {krwGoal:3000000, cash:600, card:1200};
+
+function editRate(){
+  const r = prompt('적용할 환율 (1€ = ? 원)', rate);
+  if(r===null) return;
+  const v = parseFloat(r);
+  if(!v || v <= 0) return alert('숫자로 입력해 주세요.');
+  rate = v;
+  localStorage.setItem('es_rate', String(rate));
+  document.getElementById('rateLbl').textContent = Math.round(rate).toLocaleString();
+  calcWalletCur('eur'); renderItExp();
+}
+function editItBudget(){
+  const w = prompt('🇰🇷 한국돈(₩) 예산 — 항공·숙소 등 사전 결제분 (예: 9000000)', itBudget.krwGoal);
+  if(w===null) return;
+  const c = prompt('💶 환전한 유로 현금(€) (예: 600)', itBudget.cash);
+  if(c===null) return;
+  const k = prompt('💳 유로 카드/충전 잔액(€) (예: 1200)', itBudget.card);
+  if(k===null) return;
+  itBudget = {krwGoal: Math.max(0, parseInt(w.replace(/,/g,''))||0), cash: Math.max(0, parseFloat(c)||0), card: Math.max(0, parseFloat(k)||0)};
+  localStorage.setItem('es_bud_v1', JSON.stringify(itBudget));
+  renderItExp();
+}
+
+function renderItExp(){
+  const eurExps = itExps.filter(e=>e.cur==='EUR');
+  const krwExps = itExps.filter(e=>e.cur==='KRW');
+  const cashUsed = eurExps.filter(e=>e.pay==='cash').reduce((a,b)=>a+b.amt,0);
+  const cardUsed = eurExps.filter(e=>e.pay==='card').reduce((a,b)=>a+b.amt,0);
+  const eurUsed = cashUsed + cardUsed;
+  const eurGoal = itBudget.cash + itBudget.card;
+  const krwUsed = krwExps.reduce((a,b)=>a+b.amt,0);
+  const krwCashUsed = krwExps.filter(e=>e.pay==='cash').reduce((a,b)=>a+b.amt,0);
+  const krwCardUsed = krwExps.filter(e=>e.pay==='card').reduce((a,b)=>a+b.amt,0);
+
+  const totalKrwEq = krwUsed + Math.round(eurUsed * rate);
+  const totalGoalKrw = itBudget.krwGoal + Math.round(eurGoal * rate);
+  const totalLeftKrw = totalGoalKrw - totalKrwEq;
+  const pct = totalGoalKrw > 0 ? Math.min(100, Math.round(totalKrwEq / totalGoalKrw * 100)) : 0;
+
+  const cashLeft = itBudget.cash - cashUsed;
+  const cardLeft = itBudget.card - cardUsed;
+  const krwLeft = itBudget.krwGoal - krwUsed;
+  const toW = e => Math.round(e*rate).toLocaleString()+'원';
+
+  document.getElementById('itBudgetBar').innerHTML = `
+    <div style="background:var(--green);color:#fff;border-radius:12px;padding:12px 13px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--gold);font-weight:700;">
+        <span>전체 지출 (예산 ${Math.round(totalGoalKrw/10000).toLocaleString()}만)</span>
+        <span>${pct}% 사용</span>
+      </div>
+      <div style="font-size:20px;font-weight:900;margin-top:3px;">총 ${totalKrwEq.toLocaleString()}원 <span style="font-size:12.5px;font-weight:600;">(남음 ${totalLeftKrw.toLocaleString()}원)</span></div>
+      <div style="font-size:11.5px;margin-top:3px;opacity:.9;">🇰🇷 원화 ${krwUsed.toLocaleString()}원 + 💶 유로 €${eurUsed.toLocaleString()} (${toW(eurUsed)})</div>
+      <div style="height:8px;background:rgba(255,255,255,.22);border-radius:99px;overflow:hidden;margin-top:7px;">
+        <div style="height:100%;width:${pct}%;background:${totalLeftKrw<0?'#FF7B6B':'#F2C879'};border-radius:99px;"></div>
+      </div>
+    </div>`;
+
+  document.getElementById('itExpSum').innerHTML = `
+    <div style="background:#FFFDF6;border:1.5px solid var(--line);border-radius:12px;padding:9px 10px;">
+      <div style="font-size:11px;color:var(--sub);font-weight:700;">💶 남은 현금 (환전 €${itBudget.cash})</div>
+      <div style="font-size:17px;font-weight:900;color:${cashLeft<0?'#B93222':'var(--green)'};margin-top:2px;">€${cashLeft.toLocaleString()}</div>
+      <div style="font-size:11px;color:var(--sub);">사용 €${cashUsed.toLocaleString()}</div>
+    </div>
+    <div style="background:#FFFDF6;border:1.5px solid var(--line);border-radius:12px;padding:9px 10px;">
+      <div style="font-size:11px;color:var(--sub);font-weight:700;">💳 남은 카드 (€${itBudget.card})</div>
+      <div style="font-size:17px;font-weight:900;color:${cardLeft<0?'#B93222':'var(--org)'};margin-top:2px;">€${cardLeft.toLocaleString()}</div>
+      <div style="font-size:11px;color:var(--sub);">사용 €${cardUsed.toLocaleString()}</div>
+    </div>
+    <div style="grid-column:span 2;background:#F6FBF8;border:1.5px solid #CBE3D7;border-radius:12px;padding:9px 11px;display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="font-size:11.5px;color:var(--green);font-weight:800;">🇰🇷 사전 결제 ₩ (${Math.round(itBudget.krwGoal/10000).toLocaleString()}만)</div>
+        <div style="font-size:11px;color:var(--sub);">💳 카드 ${krwCardUsed.toLocaleString()}원 · 💵 현금/이체 ${krwCashUsed.toLocaleString()}원</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:16px;font-weight:900;color:${krwLeft<0?'#B93222':'var(--green)'};">남음 ${Math.round(krwLeft/10000).toLocaleString()}만</div>
+        <div style="font-size:11px;color:var(--sub);">사용 ${krwUsed.toLocaleString()}원</div>
+      </div>
+    </div>`;
+
+  document.getElementById('itCurPills').innerHTML = `
+    <button onclick="itCur='EUR';updateItPlaceholder();renderItExp()" style="flex:1;border:2px solid ${itCur==='EUR'?'var(--org)':'var(--line)'};background:${itCur==='EUR'?'var(--orgbg)':'#fff'};color:${itCur==='EUR'?'var(--org)':'var(--ink)'};border-radius:10px;padding:8px;font-size:13px;font-weight:800;cursor:pointer;">💶 유로(€) 현지 지출</button>
+    <button onclick="itCur='KRW';updateItPlaceholder();renderItExp()" style="flex:1;border:2px solid ${itCur==='KRW'?'var(--green)':'var(--line)'};background:${itCur==='KRW'?'#E4EFEA':'#fff'};color:${itCur==='KRW'?'var(--green)':'var(--ink)'};border-radius:10px;padding:8px;font-size:13px;font-weight:800;cursor:pointer;">🇰🇷 한국돈(₩) 사전 지출</button>`;
+
+  document.getElementById('itCatPills').innerHTML = IT_CATS.map(c=>`<button onclick="itCat='${c}';renderItExp()" style="border:1.5px solid ${itCat===c?'var(--green)':'var(--line)'};background:${itCat===c?'var(--green)':'#fff'};color:${itCat===c?'#fff':'var(--ink)'};border-radius:8px;padding:5px 9px;font-size:12px;font-weight:700;cursor:pointer;">${c}</button>`).join('');
+  document.getElementById('itPayPills').innerHTML = `
+    <button onclick="itPay='card';renderItExp()" style="flex:1;border:1.5px solid ${itPay==='card'?'var(--green)':'var(--line)'};background:${itPay==='card'?'var(--green)':'#fff'};color:${itPay==='card'?'#fff':'var(--ink)'};border-radius:8px;padding:7px 10px;font-size:12.5px;font-weight:700;cursor:pointer;">💳 카드</button>
+    <button onclick="itPay='cash';renderItExp()" style="flex:1;border:1.5px solid ${itPay==='cash'?'var(--green)':'var(--line)'};background:${itPay==='cash'?'var(--green)':'#fff'};color:${itPay==='cash'?'#fff':'var(--ink)'};border-radius:8px;padding:7px 10px;font-size:12.5px;font-weight:700;cursor:pointer;">💵 ${itCur==='EUR'?'현금':'현금·이체'}</button>`;
+
+  const byC = {}; IT_CATS.forEach(c=>byC[c]={eur:0,krw:0});
+  itExps.forEach(e=>{
+    if(!byC[e.cat]) byC[e.cat]={eur:0,krw:0};
+    if(e.cur==='KRW') byC[e.cat].krw += e.amt;
+    else byC[e.cat].eur += e.amt;
+  });
+  document.getElementById('itExpCats').innerHTML = IT_CATS.map(c=>{
+    const eq = byC[c].krw + Math.round(byC[c].eur*rate);
+    const p = totalKrwEq ? Math.round(eq/totalKrwEq*100) : 0;
+    const subTxt = [byC[c].krw?`${byC[c].krw.toLocaleString()}원`:'', byC[c].eur?`€${byC[c].eur.toLocaleString()}`:''].filter(Boolean).join(' + ') || '0원';
+    return `<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:3px;"><b>${c}</b><span>${subTxt} (총 ${eq.toLocaleString()}원)</span></div><div style="height:7px;background:#EFE8D8;border-radius:99px;overflow:hidden;"><div style="height:100%;width:${p}%;background:var(--org);"></div></div></div>`;
+  }).join('');
+
+  document.getElementById('itListFilter').innerHTML = [['ALL','전체'],['EUR','💶 유로'],['KRW','🇰🇷 원화']].map(([k,lbl])=>`<button onclick="itFilter='${k}';renderItExp()" style="border:1px solid ${itFilter===k?'var(--green)':'var(--line)'};background:${itFilter===k?'var(--green)':'#fff'};color:${itFilter===k?'#fff':'var(--ink)'};border-radius:7px;padding:3px 7px;font-size:11px;font-weight:700;cursor:pointer;">${lbl}</button>`).join('');
+
+  const filtered = itExps.filter(e=>itFilter==='ALL' || e.cur===itFilter);
+  document.getElementById('itExpList').innerHTML = filtered.length
+    ? filtered.slice().reverse().map(e=>`<div class="row"><div><b>${e.memo||e.cat}</b><br/><span style="font-size:11.5px;color:var(--sub);">${e.cur==='KRW'?'🇰🇷 원화':'💶 유로'} · ${e.cat} · ${e.pay==='cash'?'현금/이체':'카드'} · ${e.time}</span></div><div><b>${e.cur==='KRW'?e.amt.toLocaleString()+'원':'€'+e.amt.toLocaleString()}</b> <button class="act-btn" style="padding:2px 6px;" onclick="delItExp(${e.id})">✕</button></div></div>`).join('')
+    : '<div style="font-size:13px;color:var(--sub);padding:6px 0;">아직 기록이 없어요. 유로(현지 지출)와 원화(사전 결제)를 골라 기록해 보세요.</div>';
+}
+function formatAmtInput(el){
+  let raw = el.value.replace(/[^0-9.]/g, '');
+  const parts = raw.split('.');
+  if(parts.length > 2) raw = parts[0] + '.' + parts.slice(1).join('');
+  const [intP, decP] = raw.split('.');
+  const formatted = (intP ? Number(intP).toLocaleString() : '') + (decP !== undefined ? '.' + decP : '');
+  el.value = formatted;
+}
+function parseAmtVal(id){
+  return parseFloat((document.getElementById(id).value||'').replace(/,/g,'')) || 0;
+}
+function calcWalletCur(from){
+  if(from==='eur'){
+    const e = parseAmtVal('wEur');
+    document.getElementById('wKrw').value = e ? Math.round(e*rate).toLocaleString() : '';
+  } else {
+    const k = parseAmtVal('wKrw');
+    document.getElementById('wEur').value = k ? (k/rate).toFixed(1) : '';
+  }
+}
+function updateItPlaceholder(){
+  const inp = document.getElementById('itAmt');
+  inp.placeholder = itCur==='EUR' ? '금액 (€ 유로)' : '금액 (₩ 원화)';
+  updateItKrw();
+}
+function updateItKrw(){
+  const v = parseAmtVal('itAmt');
+  document.getElementById('itKrwPre').textContent = itCur==='EUR'
+    ? '약 ' + Math.round(v*rate).toLocaleString() + '원'
+    : '약 €' + (v/rate).toFixed(1);
+}
+function addItExp(){
+  const amt = parseAmtVal('itAmt');
+  if(!amt||amt<=0) return alert('금액을 입력해 주세요!');
+  const memo = document.getElementById('itMemo').value.trim();
+  const d = new Date();
+  const time = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+  itExps.push({id:Date.now(),cur:itCur,cat:itCat,pay:itPay,amt,memo,time});
+  localStorage.setItem('es_exp_v1',JSON.stringify(itExps));
+  document.getElementById('itAmt').value=''; document.getElementById('itMemo').value='';
+  updateItKrw(); renderItExp();
+}
+function copyItExp(){
+  const eurExps = itExps.filter(e=>e.cur==='EUR');
+  const krwExps = itExps.filter(e=>e.cur==='KRW');
+  const cashUsed = eurExps.filter(e=>e.pay==='cash').reduce((a,b)=>a+b.amt,0);
+  const cardUsed = eurExps.filter(e=>e.pay==='card').reduce((a,b)=>a+b.amt,0);
+  const krwUsed = krwExps.reduce((a,b)=>a+b.amt,0);
+  const totalEq = krwUsed + Math.round((cashUsed+cardUsed)*rate);
+  const txt = `[🇪🇸 이베리아 통합 가계부] 1€=${rate}원\n총 지출(원화환산): ${totalEq.toLocaleString()}원\n🇰🇷 원화 지출: ${krwUsed.toLocaleString()}원 (남음 ${(itBudget.krwGoal-krwUsed).toLocaleString()}원)\n💶 유로 현금: 사용 €${cashUsed} / 남음 €${itBudget.cash-cashUsed}\n💳 유로 카드: 사용 €${cardUsed} / 남음 €${itBudget.card-cardUsed}\n\n` +
+    itExps.map(e=>`- ${e.time} | ${e.cur==='KRW'?'원화':'유로'} | ${e.pay==='cash'?'현금':'카드'} | ${e.memo||e.cat}: ${e.cur==='KRW'?e.amt.toLocaleString()+'원':'€'+e.amt}`).join('\n');
+  navigator.clipboard?.writeText(txt).then(()=>alert('가계부 요약이 복사됐어요!')).catch(()=>prompt('복사해 주세요:', txt));
+}
+function delItExp(id){
+  itExps = itExps.filter(e=>e.id!==id);
+  localStorage.setItem('es_exp_v1',JSON.stringify(itExps));
+  renderItExp();
+}
+
+updateDday();
+document.getElementById('rateLbl').textContent = Math.round(rate).toLocaleString();
+renderPlan(); renderChecks(); renderCommonTips(); renderSim(); renderItExp();
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body>
+</html>
