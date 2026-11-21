@@ -124,6 +124,13 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
   </section>
 
   <section id="tab-budget" class="hidden">
+    <div class="sec-card" style="border:2px solid var(--green);">
+      <h3>🎛️ 내 조합 시뮬레이터 (가격 · 동선 · 오류 경고)</h3>
+      <div style="font-size:12.5px;color:var(--sub);margin-bottom:10px;">조건을 톡톡 고르면 최종 금액과 시간·동선 경고를 바로 계산해요.</div>
+      <div id="simControls"></div>
+      <div id="simResult" style="margin-top:12px;"></div>
+    </div>
+
     <div class="calc-box">
       <div style="font-size:13px;font-weight:700;color:var(--gold);">💶 유로 &harr; 원화 간편 계산기 (1€ = 1,650원)</div>
       <div class="calc-row">
@@ -326,7 +333,7 @@ function renderMap(){
     days.map((x,i)=>`<div class="day-chip ${i===mapDay?'active':''}" onclick="mapDay=${i};renderMap()"><div class="d1">DAY ${i+1}</div><div class="d2">${x.d}</div><div class="d3">${x.city}</div></div>`).join('');
   if(!mapObj){
     mapObj = L.map('mapBox');
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{attribution:'© OSM · CARTO',maxZoom:19}).addTo(mapObj);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM'}).addTo(mapObj);
   }
   mapObj.eachLayer(l=>{ if(l instanceof L.Marker || l instanceof L.Polyline) mapObj.removeLayer(l); });
   const pts = mapDay === -1
@@ -391,7 +398,82 @@ function goTab(id, btn){
   if(id==='map') renderMap();
 }
 
-updateDday(); renderPlan(); renderChecks();
+const SIM_OPTS = [
+  {key:'air', label:'✈️ 국제선 항공', opts:[
+    {id:'std', name:'카타르 기본 (263.2만)', cost:2632000},
+    {id:'hana', name:'카타르 하나카드 (209만)', cost:2090000, warn:'💳 하나카드 결제 조건·위탁 25kg 포함 여부를 발권 시 꼭 확인하세요.'}
+  ]},
+  {key:'dol', label:'🏔️ 돌로미티 4박 (10/6~10)', opts:[
+    {id:'avita', name:'Avita 4박 (115.6만)', cost:1156478, warn:'⚠️ Avita Suites는 환불 불가 상품입니다! 10/6 일정 확정 후 결제하세요.'},
+    {id:'adler', name:'마르몰라다3 + ADLER 1박 (183만)', cost:1835000, warn:'🧳 10/9(토) 짐 싸서 숙소 이동 1회 발생 + ADLER 1박 고가 구간입니다.'},
+    {id:'hart', name:'마르몰라다3 + Hartmann 1박 (156만)', cost:1560000, warn:'🧳 10/9(토) 숙소 이동 1회 발생 (성인전용 샬레 · 스파 포함 가성비 2위).'},
+    {id:'stet', name:'마르몰라다3 + Stetteneck 1박 (144만)', cost:1445000, warn:'🧳 10/9(토) 숙소 이동 1회 발생 (광장 1분 · 1,000만 이내 적합).'},
+    {id:'dayspa', name:'Avita 4박 + My Arbor 데이스파 (146만)', cost:1456478, warn:'⚠️ Avita 환불불가 주의 · 데이스파(주말 €100/인)는 브릭센 차로 50분 거리입니다.'}
+  ]},
+  {key:'sor', label:'🍋 소렌토 3박 (10/1~4)', opts:[
+    {id:'casa', name:'Casa Astarita (63.8만)', cost:638294},
+    {id:'akyra', name:'Akyra Suites (77.2만)', cost:772189},
+    {id:'bella', name:'Bella Sorrento 테라스 (108.7만)', cost:1087404, warn:'💸 소렌토 숙소 업그레이드(+45만)보다 돌로미티 투자가 만족도가 높아요.'}
+  ]},
+  {key:'snap', label:'📸 피렌체 스냅 (10/5)', opts:[
+    {id:'bello', name:'벨로스냅 2h 단독 (57만)', cost:570000},
+    {id:'fotoro_he', name:'포토로 × 살롱반하 2h 헤메드 (104.2만)', cost:1042000, warn:'⏰ 10/5(화) 15:00 헤메 시작 필수! 오전 우피치(09:30~12:00) 후 점심 시간에 쫓기지 않게 주의하세요.'},
+    {id:'page', name:'페이지포토 가성비 (36.3만)', cost:363000}
+  ]},
+  {key:'car', label:'🚗 10/10 렌터카 반납', opts:[
+    {id:'mil', name:'밀라노 첸트랄레 (5일 59.5만+원웨이)', cost:595000, warn:'⛽ 일요일 15:30~16:30 반납(18시 마감 전) · 풀투풀 주유 필수 · 시르미오네 경유 가능!'},
+    {id:'ver', name:'베로나역 반납 (4일 47만+열차)', cost:540000, warn:'🗺️ 동선 변경: 시르미오네 경유 불가 & 베로나→밀라노 고속열차 별도 탑승 필요.'}
+  ]}
+];
+let simSel = JSON.parse(localStorage.getItem('it_sim_v1')||'null') || {air:'hana',dol:'avita',sor:'casa',snap:'bello',car:'mil'};
+
+function renderSim(){
+  document.getElementById('simControls').innerHTML = SIM_OPTS.map(g=>`
+    <div style="margin-bottom:10px;">
+      <div style="font-size:12.5px;font-weight:800;color:var(--green);margin-bottom:5px;">${g.label}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        ${g.opts.map(o=>`<button onclick="simSel['${g.key}']='${o.id}';localStorage.setItem('it_sim_v1',JSON.stringify(simSel));renderSim()" style="border:1.5px solid ${simSel[g.key]===o.id?'var(--green)':'var(--line)'};background:${simSel[g.key]===o.id?'var(--green)':'#fff'};color:${simSel[g.key]===o.id?'#fff':'var(--ink)'};border-radius:9px;padding:6px 10px;font-size:12px;font-weight:700;cursor:pointer;">${o.name}</button>`).join('')}
+      </div>
+    </div>`).join('');
+
+  // 고정 항목(로마58.2만 + 피렌체53.2만 + 밀라노28.3만 + 기차/페리85.8만 + 식비120만 + 입장료60.5만 + 보험/예비비31만 + 도시세/교통19.6만 = 약 456.6만)
+  const FIXED_OTHER = 4566000;
+  let varSum = 0; const warns = [];
+  SIM_OPTS.forEach(g=>{
+    const picked = g.opts.find(o=>o.id===simSel[g.key]) || g.opts[0];
+    varSum += picked.cost;
+    if(picked.warn) warns.push(picked.warn);
+  });
+  const total = FIXED_OTHER + varSum;
+  const diff = total - 10000000;
+  let badge = '', boxBg = '', boxCol = '';
+  if(total <= 10000000){
+    badge = `🟢 예산 적정 (1,000만 원보다 ${Math.abs(Math.round(diff/10000)).toLocaleString()}만 원 여유!)`;
+    boxBg = '#E4EFEA'; boxCol = '#14493F';
+  } else if(total <= 10300000){
+    badge = `🟡 예산 경계 (1,000만 원보다 +${Math.round(diff/10000).toLocaleString()}만 원)`;
+    boxBg = '#FFF4DC'; boxCol = '#8A5A00';
+  } else {
+    badge = `🚨 예산 초과 경고! (+${Math.round(diff/10000).toLocaleString()}만 원 초과 · 부적정)`;
+    boxBg = '#FDE8E4'; boxCol = '#A82E1B';
+  }
+  const routeTxt = simSel.car==='ver'
+    ? '로마(2) → 소렌토(3) → 피렌체(2) → 오르티세이(4) → 베로나 반납 → 밀라노(1)'
+    : '로마(2) → 소렌토(3) → 피렌체(2) → 오르티세이(4) → 시르미오네 → 밀라노(1)';
+
+  document.getElementById('simResult').innerHTML = `
+    <div style="background:${boxBg};color:${boxCol};border-radius:12px;padding:12px;">
+      <div style="font-size:12px;font-weight:800;">${badge}</div>
+      <div style="font-size:22px;font-weight:900;margin-top:4px;">총 ${Math.round(total/10000).toLocaleString()}만 원 <span style="font-size:13px;font-weight:600;">(${total.toLocaleString()}원)</span></div>
+      <div style="font-size:12px;margin-top:6px;opacity:.9;"><b>동선</b>: ${routeTxt}</div>
+    </div>
+    ${warns.length ? `<div style="margin-top:8px;background:#FFFDF6;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.55;">
+      <b style="color:var(--org);">⚠️ 선택한 조합의 주의 · 시간 · 동선 체크</b><br/>
+      ${warns.map(w=>`• ${w}`).join('<br/>')}
+    </div>` : ''}`;
+}
+
+updateDday(); renderPlan(); renderChecks(); renderSim();
 </script>
 </body>
 </html>
