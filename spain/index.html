@@ -256,17 +256,17 @@ const DEFAULT_DAYS = [
   ]},
   {d:"10/2(토)", city:"리스본", sub:"벨렘 · 강변", stay:"Lisbon Castel & Downtown (로시우)", items:[
     {t:"10:30", name:"숙소 출발 → 벨렘", gq:"Belém, Lisbon", move:"트램·버스 25분", segs:[{b:"T15",l:"트램 25분",w:3,c:"#1F8E4D"}], how:"로시우 → 벨렘 (15번 트램 또는 728번 버스)", note:"11:00 입장으로 잡으면 줄이 짧습니다.", warn:"트램 안 소매치기 · 카드 접촉결제 가능", img:"./img/jeronimos.jpg", lat:38.6979, lng:-9.2065},
-    {t:"11:00", name:"헤로니모 수도원", gq:"Jerónimos Monastery, Lisbon", move:"도보 3분", segs:[{l:"도보 3분",w:2}], how:"온라인 시간 지정 입장 (€18)", note:"회랑이 가장 비는 시간대. 1시간이면 충분합니다.", warn:"월요일 휴무 · 어깨·무릎 가리기", img:"./img/jeronimos.jpg", lat:38.6979, lng:-9.2065},
+    {t:"11:00", name:"헤로니모 수도원", gq:"Jerónimos Monastery, Lisbon", move:"도보 3분", segs:[{l:"도보 3분",w:2}], how:"벨렘 정류장 → 도보 3분", note:"회랑이 가장 비는 시간대. 1시간이면 충분합니다.", warn:"월요일 휴무 · 어깨·무릎 가리기", img:"./img/jeronimos.jpg", lat:38.6979, lng:-9.2065},
     {t:"13:00", name:"벨렘 점심", gq:"Belém, Lisbon", move:"도보 5분", segs:[{l:"도보 5분",w:2}], how:"강을 보는 식당", note:"해산물 + 와인 한 잔. 오후는 벨렘탑과 에그타르트.", warn:"관광지 값 · 13시 이후 붐빔", lat:38.6960, lng:-9.2030},
-    {t:"14:30", name:"벨렘탑", gq:"Belém Tower, Lisbon", move:"도보 10분", segs:[{l:"도보 10분",w:2}], how:"€15 · 시간 지정 (탑 내부 인원 제한)", note:"줄이 길면 외관과 강변 산책으로 충분합니다.", warn:"월요일 휴무 · 탑 계단 좁음", img:"./img/belem_tower.jpg", lat:38.6916, lng:-9.2160},
+    {t:"14:30", name:"벨렘탑", gq:"Belém Tower, Lisbon", move:"도보 10분", segs:[{l:"도보 10분",w:2}], how:"헤로니모 → 강변 따라 도보 10분", note:"줄이 길면 외관과 강변 산책으로 충분합니다.", warn:"월요일 휴무 · 탑 계단 좁음", img:"./img/belem_tower.jpg", lat:38.6916, lng:-9.2160},
     {t:"16:00", name:"파스테이스 드 벨렘", gq:"Pastéis de Belém, Lisbon", move:"도보 8분", segs:[{l:"도보 8분",w:2}], how:"에그타르트 원조", note:"포장 줄이 매장 줄보다 짧습니다. 강변에서 먹어도 좋아요.", warn:"카드 가능 · 계피·설탕은 셀프", lat:38.6975, lng:-9.2032},
     {t:"17:30", name:"카이스 두 소드레 산책", gq:"Cais do Sodré, Lisbon", move:"트램 20분", segs:[{b:"T15",l:"20분",w:3,c:"#1F8E4D"}], how:"벨렘 → 카이스 두 소드레 (강변)", note:"저녁은 여기서. 다음 날 신트라라 일찍 자지 않아도 됩니다.", warn:"밤에는 골목 조명이 어두움", img:"./img/lisbon_tram.jpg", lat:38.7060, lng:-9.1450}
   ]},
   {d:"10/3(일)", city:"신트라", sub:"페나 궁전 11:00 · 호카곶", stay:"Lisbon Castel & Downtown (로시우)", items:[
     {t:"10:00", name:"호시우 역 출발", gq:"Rossio Station, Lisbon", move:"기차 40분", segs:[{b:"CP",l:"40분",w:3,c:"#B92929"}], how:"로시우 → 신트라 (왕복 2인 약 €10)", note:"10:40 신트라 도착 → 434번 버스로 페나.", warn:"기차 안 소매치기 · 434번 줄 길면 택시 €10~15", img:"./img/sintra_town.jpg", lat:38.7146, lng:-9.1406},
-    {t:"11:00", name:"페나 궁전", gq:"Pena Palace, Sintra", move:"버스 15분", segs:[{b:"434",l:"버스 15분",w:3,c:"#C25A2A"}], how:"€20 · 시간 지정 입장 (정문 → 성벽 도보 10분)", note:"11:00 입장. 성벽 위에서 신트라 숲이 한눈에.", warn:"산 위는 안개·비 잦음 · 편한 신발", img:"./img/sintra_pena.jpg", lat:38.7876, lng:-9.3906},
+    {t:"11:00", name:"페나 궁전", gq:"Pena Palace, Sintra", move:"버스 15분", segs:[{b:"434",l:"버스 15분",w:3,c:"#C25A2A"}], how:"434번 버스 종점 → 정문 → 성벽까지 도보 10분", note:"11:00 입장. 성벽 위에서 신트라 숲이 한눈에.", warn:"산 위는 안개·비 잦음 · 편한 신발", img:"./img/sintra_pena.jpg", lat:38.7876, lng:-9.3906},
     {t:"13:30", name:"신트라 마을 점심", gq:"Sintra, Portugal", move:"버스 15분", segs:[{b:"434",l:"15분",w:2,c:"#C25A2A"}], how:"마을 중심", note:"관광지 값이지만 시간을 아끼려면 마을에서.", warn:"트라베세이루 과자 한 조각 추천", lat:38.7970, lng:-9.3880},
-    {t:"15:00", name:"레가레이라 저택", gq:"Quinta da Regaleira, Sintra", move:"도보 10분", segs:[{l:"도보 10분",w:2}], how:"€20 · 이니시에이션 우물", note:"왕복 40분이면 충분. 우물 아래에서 위를 올려다보는 사진.", warn:"계단·동굴 미끄럼 · 시간 지정 권장", img:"./img/sintra_regaleira.jpg", lat:38.7969, lng:-9.3963},
+    {t:"15:00", name:"레가레이라 저택", gq:"Quinta da Regaleira, Sintra", move:"도보 10분", segs:[{l:"도보 10분",w:2}], how:"신트라 마을 → 도보 10분 (입구에서 우물까지 5분)", note:"왕복 40분이면 충분. 우물 아래에서 위를 올려다보는 사진.", warn:"계단·동굴 미끄럼 · 시간 지정 권장", img:"./img/sintra_regaleira.jpg", lat:38.7969, lng:-9.3963},
     {t:"17:00", name:"호카곶 (유라시아 최서단)", gq:"Cabo da Roca, Portugal", move:"버스 40분", segs:[{b:"403",l:"40분",w:3,c:"#C25A2A"}], how:"신트라 → 403번 버스 → 호카곶", note:"절벽 끝에 서는 곳. 바람이 강해 겉옷 필수.", warn:"낙석·강풍 · 막차 시간 확인 후 리스본행", img:"./img/cabo_roca.jpg", lat:38.7805, lng:-9.4989},
     {t:"19:30", name:"리스본 복귀 · 저녁", gq:"Rossio, Lisbon", move:"버스+기차 1h20", segs:[{b:"403",l:"버스",w:2,c:"#C25A2A"},{b:"CP",l:"기차",w:2,c:"#B92929"}], how:"호카곶 → 카스카이스 → 기차로 로시우", note:"도착 후 숙소 근처에서 저녁. 다음 날 14:00 비행입니다.", warn:"", lat:38.7146, lng:-9.1406}
   ]},
@@ -280,7 +280,7 @@ const DEFAULT_DAYS = [
   {d:"10/5(화)", city:"바르셀로나", sub:"가우디 — 사그라다 10:30 · 구엘 15:30", stay:"Barcelona Gracia (아파트)", items:[
     {t:"10:30", name:"사그라다 파밀리아", gq:"Sagrada Família, Barcelona", move:"지하철 15분", segs:[{b:"L2/L5",l:"15분",w:3,c:"#1F8E4D"}], how:"그라시아 → L2/L5 사그라다 파밀리아 역", note:"€26 · 시간 지정. 10:30 입장이면 동쪽 창 빛이 좋습니다.", warn:"민소매·짧은 반바지 입장 거절 · 가방 검사", img:"./img/bcn_sagrada.jpg", lat:41.4036, lng:2.1744},
     {t:"12:30", name:"점심 · 이동", gq:"Gràcia, Barcelona", move:"지하철+버스 25분", segs:[{b:"24",l:"버스 20분",w:3,c:"#C25A2A"}], how:"사그라다 근처 점심 → 구엘공원행 24번 버스(언덕을 올라줌)", note:"15:30 입장까지 여유. 언덕은 버스로 올라가세요.", warn:"24번 버스 배차 확인 · 택시 €10", lat:41.4100, lng:2.1700},
-    {t:"15:30", name:"구엘공원", gq:"Park Güell, Barcelona", move:"버스 20분", segs:[{b:"24",l:"20분",w:3,c:"#C25A2A"}], how:"€18 · 시간 지정 (기념품 구역)", note:"도마뱀 계단·곡선 벤치. 언덕 위에서 바르셀로나가 보입니다.", warn:"무료 구역과 유료 구역 구분 · 물 챙기기", img:"./img/bcn_guell.jpg", lat:41.4145, lng:2.1527},
+    {t:"15:30", name:"구엘공원", gq:"Park Güell, Barcelona", move:"버스 20분", segs:[{b:"24",l:"20분",w:3,c:"#C25A2A"}], how:"24번 버스 정류장 → 도보 5분 (언덕)", note:"도마뱀 계단·곡선 벤치. 언덕 위에서 바르셀로나가 보입니다.", warn:"무료 구역과 유료 구역 구분 · 물 챙기기", img:"./img/bcn_guell.jpg", lat:41.4145, lng:2.1527},
     {t:"18:00", name:"그라시아 산책 · 저녁", gq:"Gràcia, Barcelona", move:"버스 20분", segs:[{b:"24",l:"20분",w:2,c:"#C25A2A"}], how:"구엘 → 그라시아 (숙소 동네)", note:"동네 광장에서 타파스. 다음 날 바트요 10:30.", warn:"", img:"./img/bcn_city.jpg", lat:41.4030, lng:2.1560}
   ]},
   {d:"10/6(수)", city:"바르셀로나", sub:"바트요 · 보른 · 바르셀로네타", stay:"Barcelona Gracia (아파트)", items:[
