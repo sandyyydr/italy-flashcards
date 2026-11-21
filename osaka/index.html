@@ -409,6 +409,7 @@ function goTab(id, btn){
 }
 
 updateDday(); renderMoney(); renderPlan(); renderChecks();
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
 </script>
 </body>
 </html>
