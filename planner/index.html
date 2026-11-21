@@ -138,7 +138,7 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
       <div id="itCatPills" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:7px;"></div>
       <div id="itPayPills" style="display:flex;gap:6px;margin-bottom:8px;"></div>
       <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
-        <input id="itAmt" type="number" step="any" placeholder="금액 입력" oninput="updateItKrw()" style="flex:1;padding:10px;border:1.5px solid var(--line);border-radius:10px;font-size:15px;"/>
+        <input id="itAmt" type="text" inputmode="decimal" placeholder="금액 입력" oninput="formatAmtInput(this);updateItKrw()" style="flex:1;padding:10px;border:1.5px solid var(--line);border-radius:10px;font-size:15px;"/>
         <span id="itKrwPre" style="font-size:12.5px;font-weight:700;color:var(--org);min-width:96px;text-align:right;">약 0원</span>
       </div>
       <input id="itMemo" placeholder="내용 (예: 항공권, 숙소, 트라스테베레 파스타 등)" style="width:100%;padding:10px;border:1.5px solid var(--line);border-radius:10px;font-size:14.5px;margin-bottom:8px;"/>
@@ -625,19 +625,30 @@ function renderItExp(){
     ? filtered.slice().reverse().map(e=>`<div class="row"><div><b>${e.memo||e.cat}</b><br/><span style="font-size:11.5px;color:var(--sub);">${e.cur==='KRW'?'🇰🇷 원화':'💶 유로'} · ${e.cat} · ${e.pay==='cash'?'현금/이체':'카드'} · ${e.time}</span></div><div><b>${e.cur==='KRW'?e.amt.toLocaleString()+'원':'€'+e.amt}</b> <button class="act-btn" style="padding:2px 6px;" onclick="delItExp(${e.id})">✕</button></div></div>`).join('')
     : '<div style="font-size:13px;color:var(--sub);padding:6px 0;">아직 기록이 없어요. 원화(₩)와 유로(€)를 골라 기록해 보세요!</div>';
 }
+function formatAmtInput(el){
+  let raw = el.value.replace(/[^0-9.]/g, '');
+  const parts = raw.split('.');
+  if(parts.length > 2) raw = parts[0] + '.' + parts.slice(1).join('');
+  const [intP, decP] = raw.split('.');
+  const formatted = (intP ? Number(intP).toLocaleString() : '') + (decP !== undefined ? '.' + decP : '');
+  el.value = formatted;
+}
+function parseAmtVal(id){
+  return parseFloat((document.getElementById(id).value||'').replace(/,/g,'')) || 0;
+}
 function updateItPlaceholder(){
   const inp = document.getElementById('itAmt');
   inp.placeholder = itCur==='EUR' ? '금액 (€ 유로)' : '금액 (₩ 원화)';
   updateItKrw();
 }
 function updateItKrw(){
-  const v = parseFloat(document.getElementById('itAmt').value||'0');
+  const v = parseAmtVal('itAmt');
   document.getElementById('itKrwPre').textContent = itCur==='EUR'
     ? '약 ' + Math.round(v*1650).toLocaleString() + '원'
     : '약 €' + (v/1650).toFixed(1);
 }
 function addItExp(){
-  const amt = parseFloat(document.getElementById('itAmt').value||'0');
+  const amt = parseAmtVal('itAmt');
   if(!amt||amt<=0) return alert('금액을 입력해 주세요!');
   const memo = document.getElementById('itMemo').value.trim();
   const d = new Date();

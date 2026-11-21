@@ -109,7 +109,7 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
       <div class="cat-pills" id="catPills"></div>
       <div class="cat-pills" id="payPills"></div>
       <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
-        <input id="expAmt" class="inp" type="number" style="margin:0;flex:1;" placeholder="금액 (¥ 엔화)" oninput="updateKrwPreview()"/>
+        <input id="expAmt" class="inp" type="text" inputmode="numeric" style="margin:0;flex:1;" placeholder="금액 (¥ 엔화)" oninput="formatAmtInput(this);updateKrwPreview()"/>
         <span id="krwPreview" style="font-size:12.5px;font-weight:700;color:var(--org);min-width:84px;text-align:right;">약 0원</span>
       </div>
       <input id="expMemo" class="inp" placeholder="내용 (예: 이치란 라멘 3인, 단톤 패딩 등)"/>
@@ -289,12 +289,16 @@ function renderMoney(){
     </div>`).join('') : '<div style="font-size:13px;color:var(--sub);">아직 입력된 내역이 없어요! 위에서 바로 추가해 보세요.</div>');
 }
 
+function formatAmtInput(el){
+  const raw = el.value.replace(/[^0-9]/g, '');
+  el.value = raw ? Number(raw).toLocaleString() : '';
+}
 function updateKrwPreview(){
-  const v = parseFloat(document.getElementById('expAmt').value||'0');
+  const v = parseFloat((document.getElementById('expAmt').value||'').replace(/,/g,'')) || 0;
   document.getElementById('krwPreview').textContent = '약 ' + fmt(v);
 }
 function addExpense(){
-  const amt = parseInt(document.getElementById('expAmt').value,10);
+  const amt = parseInt((document.getElementById('expAmt').value||'').replace(/,/g,''), 10);
   if(!amt || amt<=0) return alert('엔화 금액을 입력해 주세요!');
   const memo = document.getElementById('expMemo').value.trim();
   const d = new Date();
