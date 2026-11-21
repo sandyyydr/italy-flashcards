@@ -344,7 +344,8 @@ function renderPlan(){
   sc.innerHTML = days.map((x,i)=>`<div class="day-chip ${i===curDay?'active':''}" onclick="curDay=${i};renderPlan()"><div class="d1">DAY ${i+1}</div><div class="d2">${x.d}</div><div class="d3">${x.city}</div></div>`).join('');
   const d = days[curDay];
   document.getElementById('dayBanner').innerHTML = `<div><h2>DAY ${curDay+1} · ${d.d} (${d.city})</h2><p>${d.sub}</p></div><button class="btn-add" onclick="openModal(null)">+ 일정</button>`;
-  document.getElementById('planList').innerHTML = d.items.map((it,idx)=>`
+  const stayBanner = d.stay ? `<div style="background:#EFF7F3;border:1.5px solid #CBE3D7;border-radius:14px;padding:10px 13px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:8px;"><div><div style="font-size:11px;font-weight:800;color:var(--green);">🏨 아침 출발 숙소 (임시 거점 · 확정 시 교체)</div><div style="font-size:13.5px;font-weight:800;color:var(--ink);">${d.stay}</div></div><a class="act-btn map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.stay)}">구글맵</a></div>` : '';
+  document.getElementById('planList').innerHTML = stayBanner + d.items.map((it,idx)=>`
     <div class="item-card ${it.done?'done':''}">
       <div class="item-top">
         <div><span class="time-badge">${it.t}</span><span class="move-badge">${it.move||'이동'}</span></div>
