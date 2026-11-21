@@ -398,6 +398,30 @@ function renderPlan(){
     </div>`).join('');
 }
 
+
+function segMeta(move){
+  const m = (move||'');
+  if(/페리|배/.test(m)) return {ico:'⛴️', col:'#0E86A8', dash:'6,5'};
+  if(/프레차|고속|라피트|공항철도|JR/.test(m)) return {ico:'🚆', col:'#B92929', dash:null};
+  if(/지하철|사철|트램|미도스지|사카이스지|한신/.test(m)) return {ico:'🚇', col:'#E5532D', dash:null};
+  if(/렌터카|차|드라이브|택시/.test(m)) return {ico:'🚗', col:'#14493F', dash:null};
+  if(/곤돌라|케이블카|리프트/.test(m)) return {ico:'🚡', col:'#9A5B13', dash:'5,4'};
+  if(/비행|항공/.test(m)) return {ico:'✈️', col:'#5C1D3B', dash:'8,6'};
+  return {ico:'🚶', col:'#6B726E', dash:'4,5'};
+}
+let segLayers = [], segMarkers = [];
+function focusSeg(idx){
+  if(!mapObj || !segMarkers[idx]) return;
+  segLayers.forEach((l,i)=> l.setStyle({weight: i===idx-1?7:4, opacity: i===idx-1?1:0.55}));
+  if(idx > 0 && segLayers[idx-1]){
+    mapObj.fitBounds(segLayers[idx-1].getBounds(), {padding:[55,55], maxZoom:15});
+  } else {
+    mapObj.setView(segMarkers[idx].getLatLng(), 14);
+  }
+  segMarkers[idx].openPopup();
+  document.getElementById('mapBox').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
 function renderMap(){
   document.getElementById('mapDayScroll').innerHTML = DAYS.map((x,i)=>`<div class="day-chip ${i===mapDay?'active':''}" onclick="mapDay=${i};renderMap()"><div class="d1">DAY ${i+1}</div><div class="d2">${x.d}</div><div class="d3">${x.city}</div></div>`).join('');
   if(!mapObj){
@@ -406,13 +430,24 @@ function renderMap(){
   }
   mapObj.eachLayer(l=>{ if(l instanceof L.Marker || l instanceof L.Polyline) mapObj.removeLayer(l); });
   const pts = DAYS[mapDay].items;
-  const latlngs = [];
+  const latlngs = []; segLayers = []; segMarkers = [];
   pts.forEach((p,idx)=>{
     const ll = [p.lat, p.lng]; latlngs.push(ll);
     const icon = L.divIcon({className:'',html:`<div style="background:#14493F;color:#F2C879;border:2px solid #fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.35);">${idx+1}</div>`,iconSize:[28,28],iconAnchor:[14,14]});
-    L.marker(ll,{icon}).addTo(mapObj).bindPopup(`<b>${idx+1}. ${p.name}</b><br/>${p.t} · ${p.move}`);
+    const mk = L.marker(ll,{icon}).addTo(mapObj).bindPopup(`<b>${idx+1}. ${p.name}</b><br/>${p.t} · ${p.move}${p.how?`<br/><span style="color:#14493F;font-weight:700;">${p.how}</span>`:''}`);
+    segMarkers.push(mk);
+    if(idx > 0){
+      const prev = [pts[idx-1].lat, pts[idx-1].lng];
+      if(prev[0]!==ll[0] || prev[1]!==ll[1]){
+        const sm = segMeta(p.move);
+        const pl = L.polyline([prev, ll],{color:sm.col,weight:4.5,opacity:0.85,dashArray:sm.dash}).addTo(mapObj);
+        segLayers[idx-1] = pl;
+        const mid = [(prev[0]+ll[0])/2, (prev[1]+ll[1])/2];
+        const mIcon = L.divIcon({className:'',html:`<div style="background:#fff;border:2px solid ${sm.col};border-radius:99px;padding:1px 5px;font-size:12px;box-shadow:0 2px 5px rgba(0,0,0,.22);white-space:nowrap;">${sm.ico}</div>`,iconSize:[28,22],iconAnchor:[14,11]});
+        L.marker(mid,{icon:mIcon}).addTo(mapObj).on('click', ()=>focusSeg(idx));
+      }
+    }
   });
-  if(latlngs.length>1) L.polyline(latlngs,{color:'#C25A2A',weight:4,dashArray:'7,6'}).addTo(mapObj);
   mapObj.fitBounds(latlngs, {padding:[36,36]});
   setTimeout(()=>mapObj.invalidateSize(), 100);
   const uPts = pts.filter((p,i)=> i===0 || `${p.lat},${p.lng}` !== `${pts[i-1].lat},${pts[i-1].lng}`);
@@ -422,7 +457,7 @@ function renderMap(){
   } else if(uPts.length === 1){
     gBtn.innerHTML = `<a class="act-btn map" style="width:100%;justify-content:center;padding:12px;font-size:14px;border-radius:12px;" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${uPts[0].lat},${uPts[0].lng}">🧭 구글맵 앱으로 위치 열기</a>`;
   }
-  document.getElementById('mapLegend').innerHTML = `<h3>DAY ${mapDay+1} · ${DAYS[mapDay].city} 동선</h3>` + pts.map((p,i)=>`<div style="padding:9px 0;border-bottom:1px solid #EFEADF;"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><div><b>${i+1}. ${p.name}</b><br/><span style="font-size:12px;color:var(--sub);">${p.t} · ${p.move}</span></div><a class="act-btn map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}">구글맵</a></div>${renderRouteBar(p.segs, p.how)}</div>`).join('');
+  document.getElementById('mapLegend').innerHTML = `<h3>DAY ${mapDay+1} · ${DAYS[mapDay].city} 동선</h3>` + pts.map((p,i)=>`<div onclick="focusSeg(${i})" style="padding:9px 6px;border-bottom:1px solid #EFEADF;cursor:pointer;border-radius:10px;"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><div><b>${i+1}. ${p.name}</b> <span style="font-size:11px;color:var(--org);font-weight:700;">· 지도보기</span><br/><span style="font-size:12px;color:var(--sub);">${p.t} · ${p.move}</span></div><a class="act-btn map" onclick="event.stopPropagation()" target="_blank" href="https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}">구글맵</a></div>${renderRouteBar(p.segs, p.how)}</div>`).join('');
 }
 
 function renderChecks(){
