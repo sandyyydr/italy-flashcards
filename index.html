@@ -1041,6 +1041,7 @@ function makeBlank(c){
     sentence: pick.sentence,
     word: word,
     hint: hint,
+    audioId: (pick.sentence === c.front) ? c.id : (c.id + "_ex"),
     masked: pick.sentence.slice(0, pick.hit.start) + "( ___ )" + pick.sentence.slice(pick.hit.end)
   };
 }
@@ -1118,7 +1119,7 @@ function buildPool(){
     if(c.rev !== false){
       qs.push(Object.assign({}, base, {
         group: "situation", kind: "reverse",
-        ctx: c.tag ? ("상황 · " + c.tag) : "",
+        ctx: c.tag ? (c.type === "word" ? "🔤 단어" : ("상황 · " + c.tag)) : "",
         ask: c.type === "en" ? "영어로 뭐라고 할까요?" : "이탈리아어로 뭐라고 할까요?",
         prompt: c.ko,
         options: mkOptions(c.front, pickDistractors(c.front, sameFronts, 3)),
@@ -1140,7 +1141,7 @@ function buildPool(){
         hint: bk.hint,
         promptLang: lang,
         options: mkOptions(bk.word, pickDistractors(bk.word, sameWords.concat(relSame), 3)),
-        ansAudio: {id: "", text: bk.word, lang: lang},
+        ansAudio: {id: bk.audioId, text: bk.sentence, lang: lang},
         explain: [].concat(
           ["완성 문장 · " + bk.sentence],
           [bk.hint],
