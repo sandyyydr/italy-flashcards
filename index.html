@@ -127,6 +127,32 @@ main{flex:1;padding:14px 16px calc(30px + env(safe-area-inset-bottom))}
 }
 .tipbox b{color:#3c3c3c}
 
+/* 단어 뜻 쪼개기 · 같이 외울 파생 표현 */
+.bdbox{
+  width:100%;background:#f8fbf2;border:2px solid #e6f0d8;border-radius:14px;
+  padding:9px 11px 10px;display:flex;flex-direction:column;gap:6px;text-align:left;
+}
+.bdhead{font-size:10.5px;font-weight:800;color:#5f9a1f;letter-spacing:-.1px}
+.bdwrap{display:flex;flex-wrap:wrap;gap:5px}
+.bdpill{
+  display:inline-flex;align-items:baseline;gap:5px;background:#fff;border:1.5px solid #dce9c9;
+  border-radius:999px;padding:4px 9px;font-size:12px;line-height:1.25;letter-spacing:-.2px;max-width:100%;
+}
+.bdpill b{font-weight:800;color:#3f7d00}
+.bdpill i{font-style:normal;font-weight:700;color:#8f8f8f;font-size:11.5px}
+.relbox{
+  width:100%;background:#fff9ee;border:2px solid #f7e7cb;border-radius:14px;
+  padding:9px 11px 10px;display:flex;flex-direction:column;gap:6px;text-align:left;
+}
+.relhead{font-size:10.5px;font-weight:800;color:#b0762a;letter-spacing:-.1px}
+.relwrap{display:flex;flex-wrap:wrap;gap:5px}
+.relpill{
+  display:inline-flex;align-items:baseline;gap:5px;background:#fff;border:1.5px solid #f0dcb8;
+  border-radius:999px;padding:4px 9px;font-size:12px;line-height:1.25;letter-spacing:-.2px;max-width:100%;
+}
+.relpill b{font-weight:800;color:#8a5b12}
+.relpill i{font-style:normal;font-weight:700;color:#a9906a;font-size:11.5px}
+
 /* 예시문 박스 */
 .exbox{
   width:100%;background:#f3f9ff;border:2px solid #d9eefb;border-radius:14px;
@@ -349,7 +375,11 @@ main{flex:1;padding:14px 16px calc(30px + env(safe-area-inset-bottom))}
               exPron   이탈리아어 예시문의 한글 발음
               exMeaning 예시문의 한국어 뜻
               → 뒷면 💬 박스에 표시되고 audio/{id}_ex.mp3 로 재생됨
+     breakdown: [[단어, 뜻], …]  뒷면 🔎 한 단어씩 — 문장을 핵심 단어·덩어리 2~5개로 쪼개 뜻 표시 (단어 카드는 어원/품사 1~2개)
+     related  : [[표현, 뜻], …]  뒷면 🔄 같이 외워요 — 파생 표현·반대말 2~3개
      rev    : false 로 두면 "…로 뭐라고 할까?" 문제를 만들지 않음
+
+   ※ example.exText 는 3~5단어(영어 5~8단어) 아주 짧은 실전 문장으로 쓴다.
    ===================================================================== */
 const DAYS_DATA = [
   {
@@ -360,114 +390,176 @@ const DAYS_DATA = [
     cards: [
       /* ---------- 이탈리아어 ---------- */
       {id:"d1it01", type:"it", tag:"인사", front:"Buongiorno!", pron:"부온조르노", ko:"안녕하세요", en:"Hello / Good morning",
+       breakdown:[["buon","좋은"],["giorno","날"]],
+       related:[["Buonasera!","저녁 인사"],["Arrivederci!","안녕히 가세요"]],
        tip:"아침부터 오후까지 두루 쓰는 인사. 기사·직원에게 먼저 건네요.",
-       example:{exText:"Buongiorno, siamo appena arrivati da Seoul.", exPron:"부온조르노, 쟈모 아뻬나 아리바티 다 서울", exMeaning:"안녕하세요, 저희 방금 서울에서 도착했어요."}},
+       example:{exText:"Buongiorno, signore!", exPron:"부온조르노, 시뇨레", exMeaning:"안녕하세요, 선생님!"}},
       {id:"d1it02", type:"it", tag:"감사", front:"Grazie mille!", pron:"그라찌에 밀레", ko:"정말 감사합니다", en:"Thanks a lot",
+       breakdown:[["grazie","고마워요"],["mille","1000 = 천 번"]],
+       related:[["Prego","천만에요"],["Grazie tante","정말 고마워요"]],
        tip:"밀레(mille)는 ‘1000’. 짐을 들어줄 때, 표를 받을 때 씁니다.",
-       example:{exText:"Grazie mille per l’aiuto!", exPron:"그라찌에 밀레 뻬르 라이우토", exMeaning:"도와주셔서 정말 감사합니다!"}},
+       example:{exText:"Grazie mille, signora!", exPron:"그라찌에 밀레, 시뇨라", exMeaning:"정말 감사합니다, 부인!"}},
       {id:"d1it03", type:"it", tag:"부탁", front:"Per favore.", pron:"뻬르 파보레", ko:"부탁합니다", en:"Please",
+       breakdown:[["per","~을 위해"],["favore","호의"]],
+       related:[["Grazie","고마워요"],["Scusi","실례합니다"]],
        tip:"문장 끝에 붙이면 정중해져요. “콘 카르타, 뻬르 파보레”처럼.",
-       example:{exText:"Due biglietti per il treno, per favore.", exPron:"두에 빌리에티 뻬르 일 트레노, 뻬르 파보레", exMeaning:"기차 표 두 장 주세요."}},
+       example:{exText:"Un caffè, per favore.", exPron:"운 카페, 뻬르 파보레", exMeaning:"커피 한 잔 주세요."}},
       {id:"d1it04", type:"it", tag:"길 묻기", front:"Scusi, dov’è il taxi?", pron:"스쿠지, 도베 일 택시", ko:"실례합니다, 택시는 어디예요?", en:"Excuse me, where is the taxi?",
+       breakdown:[["Scusi","실례합니다"],["dove","어디"],["è","~이다"],["il bagno","화장실"]],
+       related:[["uscita","출구"],["stazione","역"]],
        tip:"Scusi = 실례합니다. 도착홀에서 표지판 대신 사람에게 물어보세요.",
-       example:{exText:"Scusi, dov’è la stazione?", exPron:"스쿠지, 도베 라 스타치오네", exMeaning:"실례합니다, 기차역이 어디예요?"}},
+       example:{exText:"Scusi, dov’è il bagno?", exPron:"스쿠지, 도베 일 바뇨", exMeaning:"실례합니다, 화장실이 어디예요?"}},
       {id:"d1it05", type:"it", tag:"가격", front:"Quanto costa?", pron:"콴토 코스타", ko:"얼마예요?", en:"How much is it?",
+       breakdown:[["quanto","얼마"],["costa","비용이 들다"]],
+       related:[["Troppo caro!","너무 비싸요"],["Quanto tempo?","얼마나 걸려요?"]],
        tip:"요금·가격을 물을 때. 택시에 타기 전에 꼭.",
-       example:{exText:"Quanto costa il biglietto per Termini?", exPron:"콴토 코스타 일 빌리에토 뻬르 테르미니", exMeaning:"테르미니까지 표가 얼마예요?"}},
+       example:{exText:"Quanto costa il biglietto?", exPron:"콴토 코스타 일 빌리에토", exMeaning:"표가 얼마예요?"}},
       {id:"d1it06", type:"it", tag:"못 알아들음", front:"Non capisco. Parla inglese?", pron:"논 카피스코 · 팔라 인글레제", ko:"못 알아들었어요. 영어 하시나요?", en:"I don’t understand. Do you speak English?",
+       breakdown:[["non","안"],["capisco","이해해요"],["scusi","실례합니다"]],
+       related:[["Non lo so","몰라요"],["Più lentamente","더 천천히"]],
        tip:"말이 빨라 놓쳤을 때 이 한 마디면 다시 설명해 줘요.",
-       example:{exText:"Scusi, non capisco. Può ripetere, per favore?", exPron:"스쿠지, 논 카피스코. 푸오 리페테레, 뻬르 파보레", exMeaning:"죄송해요, 못 알아들었어요. 다시 한번 말씀해 주시겠어요?"}},
+       example:{exText:"Mi scusi, non capisco.", exPron:"미 스쿠지, 논 카피스코", exMeaning:"죄송해요, 못 알아들었어요."}},
       {id:"d1it07", type:"it", tag:"신혼", front:"Siamo in luna di miele.", pron:"쟈모 인 루나 디 미엘레", ko:"신혼여행이에요.", en:"We’re on our honeymoon.",
+       breakdown:[["siamo","우리는 ~이다"],["in","~안에"],["luna di miele","신혼 (꿀의 달)"]],
+       related:[["sposi","신혼부부"],["Congratulazioni!","축하해요!"]],
        tip:"기사·호텔러가 축하해 주고 방·서비스가 조금 더 좋아지는 문장.",
-       example:{exText:"Siamo in luna di miele, è il nostro primo giorno a Roma.", exPron:"쟈모 인 루나 디 미엘레, 에 일 노스트로 프리모 조르노 아 로마", exMeaning:"신혼여행이에요, 로마에서의 첫날이에요."}},
+       example:{exText:"È il nostro viaggio di nozze.", exPron:"에 일 노스트로 비앗조 디 노쩨", exMeaning:"저희 신혼여행이에요."}},
       {id:"d1it08", type:"it", tag:"대답", front:"A questo indirizzo, per favore.", pron:"아 퀘스토 인디리초, 뻬르 파보레", ko:"이 주소로 가주세요", en:"To this address, please.",
+       breakdown:[["A","~로"],["questo","이"],["indirizzo","주소"]],
+       related:[["albergo","호텔"],["stazione","역"],["aeroporto","공항"]],
        tip:"주소 화면을 같이 보여주면 완벽. 택시 첫 대답으로.",
-       example:{exText:"A questo indirizzo, per favore. È vicino al Colosseo?", exPron:"아 퀘스토 인디리초, 뻬르 파보레. 에 비치노 알 콜로세오", exMeaning:"이 주소로 가주세요. 콜로세오 근처인가요?"}},
+       example:{exText:"A questo indirizzo, grazie.", exPron:"아 퀘스토 인디리초, 그라찌에", exMeaning:"이 주소로 가주세요, 감사합니다."}},
       {id:"d1it09", type:"it", tag:"대답", front:"Con carta, per favore.", pron:"콘 카르타, 뻬르 파보레", ko:"카드로 할게요", en:"By card, please.",
+       breakdown:[["con","~로"],["carta","카드"],["posso","~해도 되나요"]],
+       related:[["In contanti","현금으로"],["Il conto","계산서"]],
        tip:"현금만 받는 곳이면 “In contanti, per favore.”",
        example:{exText:"Posso pagare con carta?", exPron:"포쏘 파가레 콘 카르타", exMeaning:"카드로 계산할 수 있나요?"}},
       {id:"d1it10", type:"it", tag:"대답", front:"Due valigie.", pron:"두에 발리제", ko:"캐리어 2개예요", en:"Two suitcases.",
+       breakdown:[["due","2"],["valigie","캐리어들"]],
+       related:[["una valigia","캐리어 1개"],["due borse","가방 2개"]],
        tip:"손가방은 due borse. 숫자만 바꿔 쓰면 돼요.",
-       example:{exText:"Abbiamo due valigie e due borse.", exPron:"아비아모 두에 발리제 에 두에 보르세", exMeaning:"캐리어 두 개랑 가방 두 개가 있어요."}},
+       example:{exText:"Abbiamo due valigie.", exPron:"아비아모 두에 발리제", exMeaning:"캐리어 두 개 있어요."}},
 
       /* ---------- 영어 ---------- */
       {id:"d1en01", type:"en", tag:"입국심사", front:"We’re here on our honeymoon for two weeks, and we’re staying in Rome for the first three nights.",
        ko:"신혼여행으로 2주 왔고, 첫 3일은 로마에 묵어요.",
+       breakdown:[["on our honeymoon","신혼여행으로"],["for two weeks","2주 동안"],["staying in Rome","로마에 묵어요"]],
+       related:[["twelve nights","12박"],["We’re on holiday.","휴가예요"]],
        tip:"목적·기간·숙소를 한 번에. 여권과 호텔 예약 확인서를 미리 손에.",
-       example:{exText:"We’re here on our honeymoon for twelve nights — three in Rome, then Florence and the Amalfi Coast.", exPron:"", exMeaning:"신혼여행으로 12박인데, 로마에서 3일 지내고 피렌체와 아말피 해안에 가요."}},
+       example:{exText:"We’re here on our honeymoon.", exPron:"", exMeaning:"신혼여행으로 왔어요."}},
       {id:"d1en02", type:"en", tag:"택시 정액요금", front:"Could you confirm that the fixed fare to the city centre applies?",
        ko:"시내까지 정액요금이 적용되는지 확인해 주실 수 있나요?",
+       breakdown:[["fixed fare","정액 요금"],["city centre","시내"],["confirm","확인해 주다"]],
+       related:[["Is the meter running?","미터기 켜져 있나요?"],["flat rate","정액 요금"]],
        tip:"탑승 전에 확인. 미터기 차량이면 “Is the meter running?”",
-       example:{exText:"Before we get in — the fixed fare to the city centre is fifty-five euros with the luggage, correct?", exPron:"", exMeaning:"타기 전에 확인할게요 — 시내까지 짐 포함 55유로 정액 맞나요?"}},
+       example:{exText:"Is the fixed fare fifty-five euros?", exPron:"", exMeaning:"정액 요금이 55유로인가요?"}},
       {id:"d1en03", type:"en", tag:"카드·영수증", front:"Can I pay by card, and could I get a receipt at the end?",
        ko:"카드로 계산할 수 있고, 마지막에 영수증도 받을 수 있을까요?",
+       breakdown:[["pay by card","카드로 계산"],["receipt","영수증"],["at the end","마지막에"]],
+       related:[["Could I get a receipt?","영수증 받을 수 있나요?"],["Do you take card?","카드 되나요?"]],
        tip:"하차 직전에. 영수증은 요금 분쟁·경비 정산용으로 꼭 받으세요.",
-       example:{exText:"Could we pay by card, and would you mind giving us a receipt?", exPron:"", exMeaning:"카드로 계산해도 되나요? 그리고 영수증도 받을 수 있을까요?"}},
+       example:{exText:"Can we pay by card, please?", exPron:"", exMeaning:"카드로 계산할 수 있나요?"}},
       {id:"d1en04", type:"en", tag:"얼리 체크인", front:"We’ve just arrived from the airport — is early check-in possible, or could we leave our bags until the room is ready?",
        ko:"방금 공항에서 도착했는데, 얼리 체크인이 되나요? 안 되면 방이 준비될 때까지 짐을 맡길 수 있을까요?",
+       breakdown:[["leave our bags","짐을 맡기다"],["early check-in","얼리 체크인"],["until","~까지"]],
+       related:[["Is the room ready?","방 준비됐나요?"],["luggage storage","짐 보관소"]],
        tip:"체크인 시간 전에 도착할 때. 짐 보관은 대부분 무료예요.",
-       example:{exText:"Our room isn’t ready yet — could you keep our luggage here until check-in?", exPron:"", exMeaning:"방이 아직 준비되지 않았는데, 체크인까지 짐을 맡아 주실 수 있나요?"}},
+       example:{exText:"Could we leave our bags here?", exPron:"", exMeaning:"짐을 여기 맡길 수 있을까요?"}},
       {id:"d1en05", type:"en", tag:"이동 수단", front:"Is the Leonardo Express the quickest way into Termini right now, or is a taxi faster with this traffic?",
        ko:"지금 테르미니까지는 레오나르도 익스프레스가 가장 빠른가요? 아니면 이 교통 상황엔 택시가 더 빠를까요?",
+       breakdown:[["faster","더 빠른"],["right now","지금"],["traffic","교통 상황"]],
+       related:[["the fastest way","가장 빠른 길"],["in this traffic","이 교통 상황에서"]],
        tip:"right now · with this traffic → 지금 시각 기준으로 비교해 달라는 뉘앙스.",
-       example:{exText:"With this traffic, is the train still faster than a taxi to Termini?", exPron:"", exMeaning:"이 교통 상황이면 테르미니까지는 그래도 기차가 택시보다 빠른가요?"}},
+       example:{exText:"Is the train faster than a taxi?", exPron:"", exMeaning:"기차가 택시보다 빠른가요?"}},
       {id:"d1en06", type:"en", tag:"기차표", front:"Two tickets to Termini, please. Do we need to validate them before boarding?",
        ko:"테르미니까지 2장 주세요. 타기 전에 개찰해야 하나요?",
+       breakdown:[["tickets","표"],["validate","개찰하다"],["before boarding","타기 전에"]],
+       related:[["one way","편도"],["return","왕복"],["platform","승강장"]],
        tip:"validate = 개찰구에 넣기. 안 하면 벌금이에요.",
-       example:{exText:"Two tickets to Termini, please — and do we validate them at the machine on the platform?", exPron:"", exMeaning:"테르미니까지 두 장 주세요 — 승강장 기계에 개찰하면 되나요?"}},
+       example:{exText:"Two tickets to Termini, please.", exPron:"", exMeaning:"테르미니까지 두 장 주세요."}},
       {id:"d1en07", type:"en", tag:"정액 재확인", front:"To Monti, inside the walls — that’s the flat fifty-five euro with all the luggage, right?",
        ko:"성벽 안쪽 몬티까지, 짐 포함 55유로 정액 맞죠?",
+       breakdown:[["flat","정액의"],["all inclusive","전부 포함"],["inside the walls","성벽 안쪽"]],
+       related:[["extra charge","추가 요금"],["all inclusive","전부 포함"]],
        tip:"타기 전에 못 박아 두면 바가지를 막을 수 있어요.",
-       example:{exText:"Just to be sure — Monti, inside the walls, is fifty-five euros all inclusive, right?", exPron:"", exMeaning:"확실히 해두려고요 — 성벽 안쪽 몬티까지 짐 다 포함 55유로 맞죠?"}},
+       example:{exText:"Is it fifty-five euros with luggage?", exPron:"", exMeaning:"짐 포함 55유로인가요?"}},
       {id:"d1en08", type:"en", tag:"숙소 앞 하차", front:"Could you drop us at the entrance on Via Cavour? The lane to the door is too narrow for the car.",
        ko:"비아 카보르 입구에 내려 주실 수 있나요? 문 앞 골목은 차가 들어가기엔 너무 좁아요.",
+       breakdown:[["drop us","내려 주세요"],["entrance","입구"],["narrow","좁은"]],
+       related:[["Pull over here, please.","여기 세워 주세요"],["the corner","모퉁이"]],
        tip:"drop us at ~ = ~에 내려 주세요.",
-       example:{exText:"Could you drop us right at the corner? The street to the door is too narrow for the car.", exPron:"", exMeaning:"모퉁이에 내려 주실 수 있나요? 문 앞 길은 차가 들어가기엔 너무 좁아요."}},
+       example:{exText:"Could you drop us here, please?", exPron:"", exMeaning:"여기서 내려 주시겠어요?"}},
       {id:"d1en09", type:"en", tag:"리스닝", rev:false, front:"Where are you flying in from? How long will you stay?",
        ko:"어디서 오셨어요? 얼마나 머무르세요?",
+       breakdown:[["flying in from","~에서 오다"],["How long","얼마나"],["stay","머무르다"]],
+       related:[["How long?","얼마나요?"],["I’m staying…","~에 묵어요"]],
        tip:"대답: “From Seoul — twelve nights.”",
-       example:{exText:"We flew in from Seoul this morning, and we’re staying twelve nights.", exPron:"", exMeaning:"오늘 아침 서울에서 왔고, 12박 머물러요."}},
+       example:{exText:"From Seoul — twelve nights.", exPron:"", exMeaning:"서울에서 왔고, 12박이에요."}},
       {id:"d1en10", type:"en", tag:"리스닝", rev:false, front:"Anything to declare? Any liquids or sharp objects?",
        ko:"신고할 물건이 있나요? 액체나 날카로운 물건은요?",
+       breakdown:[["declare","신고하다"],["liquids","액체"],["sharp objects","날카로운 물건"]],
+       related:[["checked bag","위탁 수하물"],["duty free","면세"]],
        tip:"대답: “No, it’s all in the checked bag.”",
-       example:{exText:"No, nothing to declare — it’s all in the checked bags.", exPron:"", exMeaning:"아니요, 신고할 건 없어요 — 모두 위탁 수하물에 있어요."}},
+       example:{exText:"No, nothing to declare.", exPron:"", exMeaning:"신고할 건 없어요."}},
       {id:"d1en11", type:"en", tag:"리스닝", rev:false, front:"Track 23 — down the stairs, on your left.",
        ko:"23번 선로 — 계단으로 내려가서 왼쪽이에요.",
+       breakdown:[["Track","선로·승강장"],["down the stairs","계단 내려가서"],["on your left","왼쪽에"]],
+       related:[["upstairs","위층"],["on your right","오른쪽에"]],
        tip:"대답: “Downstairs, got it — thank you.”",
-       example:{exText:"Down the stairs and to the left — got it, thank you!", exPron:"", exMeaning:"계단 내려가서 왼쪽이군요 — 알겠습니다, 감사합니다!"}},
+       example:{exText:"Downstairs, on the left. Thank you!", exPron:"", exMeaning:"계단 아래 왼쪽이군요. 감사합니다!"}},
       {id:"d1en12", type:"en", tag:"리스닝", rev:false, front:"First time in Rome?",
        ko:"로마는 처음이에요?",
+       breakdown:[["first time","처음"],["in Rome","로마에서"]],
+       related:[["It’s my first time.","처음이에요"],["Welcome!","환영해요"]],
        tip:"대답: “Yes — it’s our honeymoon.”",
-       example:{exText:"Yes, it’s our first time — we’re here on our honeymoon.", exPron:"", exMeaning:"네, 처음이에요 — 신혼여행으로 왔어요."}},
+       example:{exText:"Yes, it’s our honeymoon.", exPron:"", exMeaning:"네, 신혼여행이에요."}},
 
       /* ---------- 단어 ---------- */
       {id:"d1w01", type:"word", tag:"단어", front:"aeroporto", pron:"아에로포르토", ko:"공항", en:"airport",
+       breakdown:[["aero","하늘"],["porto","항구·문"]],
+       related:[["aereo","비행기"],["volo","항공편"]],
        tip:"공항 표지판의 주인공. 이 단어만 알아도 안 헤매요.",
        example:{exText:"Dov’è l’aeroporto?", exPron:"도베 라에로포르토", exMeaning:"공항이 어디예요?"}},
       {id:"d1w02", type:"word", tag:"단어", front:"taxi", pron:"택시", ko:"택시", en:"taxi",
+       breakdown:[["taxi","택시 (영어와 같아요)"]],
+       related:[["taxista","택시 기사"],["fermata","정류장"]],
        tip:"이탈리아어도 taxi. 단, 공식 흰색 택시만.",
        example:{exText:"C’è un taxi qui?", exPron:"체 운 택시 퀴", exMeaning:"여기 택시 있어요?"}},
       {id:"d1w03", type:"word", tag:"단어", front:"bagaglio", pron:"바갈리오", ko:"수하물 · 짐", en:"luggage",
+       breakdown:[["bagaglio","짐 한 개"],["bagagli","짐 (복수)"]],
+       related:[["ritiro bagagli","짐 찾는 곳"]],
        tip:"복수는 bagagli(바갈리). 공항 표지판은 복수형이에요.",
        example:{exText:"Questo è il mio bagaglio.", exPron:"퀘스토 에 일 미오 바갈리오", exMeaning:"이게 제 짐이에요."}},
       {id:"d1w04", type:"word", tag:"단어", front:"albergo", pron:"알베르고", ko:"호텔", en:"hotel",
+       breakdown:[["albergo","호텔"],["hotel","요즘은 hotel도 써요"]],
+       related:[["prenotazione","예약"],["camera","방"]],
        tip:"호텔은 albergo. 요즘은 hotel도 많이 써요.",
-       example:{exText:"Il nostro albergo è vicino alla stazione.", exPron:"일 노스트로 알베르고 에 비치노 알라 스타치오네", exMeaning:"저희 호텔은 역 근처예요."}},
+       example:{exText:"Dov’è il nostro albergo?", exPron:"도베 일 노스트로 알베르고", exMeaning:"저희 호텔이 어디예요?"}},
       {id:"d1w05", type:"word", tag:"단어", front:"ricevuta", pron:"리체부타", ko:"영수증", en:"receipt",
+       breakdown:[["ricevere","받다"],["-uta","받은 것 → 영수증"]],
+       related:[["scontrino","영수증(작은)"],["conto","계산서"]],
        tip:"택시·식당에서 꼭. 요금 분쟁 때 필요해요.",
        example:{exText:"Posso avere la ricevuta?", exPron:"포쏘 아베레 라 리체부타", exMeaning:"영수증을 받을 수 있을까요?"}},
       {id:"d1w06", type:"word", tag:"단어", front:"uscita", pron:"우시타", ko:"출구", en:"exit",
+       breakdown:[["uscire","나가다"],["-ita","나가는 곳 → 출구"]],
+       related:[["entrata","입구"],["ingresso","입장"]],
        tip:"반대말은 entrata(입구). 역·지하철에서 자주 봐요.",
-       example:{exText:"L’uscita è a destra.", exPron:"루시타 에 아 데스트라", exMeaning:"출구는 오른쪽에 있어요."}},
+       example:{exText:"Dov’è l’uscita?", exPron:"도베 루시타", exMeaning:"출구가 어디예요?"}},
       {id:"d1w07", type:"word", tag:"단어", front:"treni", pron:"트레니", ko:"기차", en:"trains",
+       breakdown:[["treno","기차"],["-i","복수 → 기차들"]],
+       related:[["binario","승강장"],["stazione","역"]],
        tip:"단수는 treno. 역 표지판은 복수형이에요.",
-       example:{exText:"Dove sono i treni per Roma?", exPron:"도베 소노 이 트레니 뻬르 로마", exMeaning:"로마 가는 기차는 어디에 있나요?"}},
+       example:{exText:"Dove sono i treni?", exPron:"도베 소노 이 트레니", exMeaning:"기차는 어디에 있나요?"}},
       {id:"d1w08", type:"word", tag:"단어", front:"biglietto", pron:"빌리에토", ko:"표", en:"ticket",
+       breakdown:[["biglietto","표 한 장"],["gli","‘ㄹ리’ 발음"]],
+       related:[["biglietti","표 (복수)"],["convalidare","개찰하다"]],
        tip:"gli는 ‘ㄹ리’ 소리. 개찰은 convalidare.",
-       example:{exText:"Un biglietto per il Leonardo Express, per favore.", exPron:"운 빌리에토 뻬르 일 레오나르도 익스프레스, 뻬르 파보레", exMeaning:"레오나르도 익스프레스 표 한 장 주세요."}},
+       example:{exText:"Un biglietto, per favore.", exPron:"운 빌리에토, 뻬르 파보레", exMeaning:"표 한 장 주세요."}},
       {id:"d1w09", type:"word", tag:"단어", front:"bagagli", pron:"바갈리", ko:"수하물 (표지판)", en:"baggage",
+       breakdown:[["bagaglio","짐"],["-i","복수 → 짐들"]],
+       related:[["ritiro bagagli","짐 찾는 곳"]],
        tip:"bagaglio의 복수. 짐 찾는 곳은 ritiro bagagli.",
-       example:{exText:"Dove si ritirano i bagagli?", exPron:"도베 시 리티라노 이 바갈리", exMeaning:"짐은 어디에서 찾나요?"}}
+       example:{exText:"Dove sono i bagagli?", exPron:"도베 소노 이 바갈리", exMeaning:"짐이 어디예요?"}}
     ],
 
     /* 현지인이 먼저 묻는 말 → 내 대답 (리스닝 퀴즈로 출제) */
@@ -725,6 +817,27 @@ function exHTML(c){
       </div>
     </div>`;
 }
+function bdHTML(c){
+  const b = c && c.breakdown;
+  if(!b || !b.length) return "";
+  return `<div class="bdbox">
+      <div class="bdhead">🔎 한 단어씩</div>
+      <div class="bdwrap">${b.map(p=>`<span class="bdpill"><b>${esc(p[0])}</b><i>${esc(p[1])}</i></span>`).join("")}</div>
+    </div>`;
+}
+function relHTML(c){
+  const r = c && c.related;
+  if(!r || !r.length) return "";
+  return `<div class="relbox">
+      <div class="relhead">🔄 같이 외워요</div>
+      <div class="relwrap">${r.map(p=>`<span class="relpill"><b>${esc(p[0])}</b><i>${esc(p[1])}</i></span>`).join("")}</div>
+    </div>`;
+}
+function bdLine(c){
+  const b = c && c.breakdown;
+  if(!b || !b.length) return "";
+  return "🔎 " + b.map(p => p[0] + " (" + p[1] + ")").join(" · ");
+}
 function backHTML(c){
   const kind = c.type==="en" ? "🇬🇧 영어" : c.type==="word" ? "🔤 단어" : "🇮🇹 이탈리아어";
   const koCls = c.ko.length > 26 ? "sm" : "";
@@ -733,6 +846,8 @@ function backHTML(c){
     <div class="engline" lang="${c.type==="en"?"en":"it"}">${esc(c.front)}</div>
     <div class="ko ${koCls}">${esc(c.ko)}</div>
     ${c.pron ? `<div class="pron small">${esc(c.pron)}</div>` : ""}
+    ${bdHTML(c)}
+    ${relHTML(c)}
     <div class="tipbox">💡 ${esc(c.tip)}</div>
     ${exHTML(c)}
     ${c.en && c.type !== "en" ? `<div class="engline">English · ${esc(c.en)}</div>` : ""}
@@ -871,6 +986,7 @@ function buildPool(){
       explain:[].concat(
         c.pron ? ["발음 · "+c.pron] : [],
         (c.en && c.type!=="en") ? [c.en] : [],
+        bdLine(c),
         c.tip ? [c.tip] : []
       )
     }));
@@ -884,6 +1000,7 @@ function buildPool(){
         options:mkOptions(c.front, pickDistractors(c.front, pool, 3)),
         explain:[].concat(
           c.pron ? ["발음 · "+c.pron] : [],
+          bdLine(c),
           c.tip ? [c.tip] : []
         ),
         answerNote:c.front
@@ -899,6 +1016,7 @@ function buildPool(){
       explain:[].concat(
         ["들린 문장 · "+c.front],
         c.pron ? ["발음 · "+c.pron] : [],
+        bdLine(c),
         c.tip ? [c.tip] : []
       ),
       transcript:c.front
