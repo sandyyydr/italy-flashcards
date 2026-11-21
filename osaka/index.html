@@ -191,6 +191,21 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
   <button class="tab" onclick="goTab('wish',this)"><span class="ico">🛍️</span>위시·체크</button>
 </nav>
 
+<div class="modal-bg" id="planModal">
+  <div class="modal">
+    <h3 id="pmTitle" style="margin:0 0 8px;color:var(--green);">일정 추가 / 수정</h3>
+    <input id="pmTime" class="inp" placeholder="시간 (예: 14:30)"/>
+    <input id="pmName" class="inp" placeholder="장소 / 일정명 (예: 돈키호테 도톤보리점)"/>
+    <input id="pmGq" class="inp" placeholder="구글맵용 위치 이름 (예: Don Quijote Dotonbori, Osaka)"/>
+    <input id="pmMove" class="inp" placeholder="이동수단 (예: 도보 10분, 미도스지선 5분)"/>
+    <textarea id="pmNote" class="inp" rows="2" placeholder="메모 · 팁"></textarea>
+    <div style="display:flex;gap:8px;margin-top:8px;">
+      <button class="act-btn" style="flex:1;justify-content:center;" onclick="closePlanModal()">취소</button>
+      <button class="act-btn map" style="flex:2;justify-content:center;" onclick="savePlanModal()">저장하기</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-bg" id="budgetModal">
   <div class="modal">
     <h3 style="margin:0 0 8px;color:var(--green);">시작 예산 수정 (엔화 ¥)</h3>
@@ -214,7 +229,7 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
 <script>
 const RATE = 8.49; // 100엔 = 849원
 const CATS = ['🍽️ 밥·카페','🎟️ 입장·체험','🚇 교통','🛍️ 쇼핑·굿즈','🏪 편의점·기타'];
-const DAYS = [
+const DEFAULT_DAYS = [
   {d:"11/28(토)", city:"난바", sub:"도착 · 신사이바시 · 미도스지", items:[
     {t:"15:25", name:"간사이공항(T1) 도착", gq:"Kansai International Airport Terminal 1, Osaka", move:"라피트 38분", segs:[{b:"라피트",l:"38분",w:4,c:"#1E5CA8"}], how:"간사이공항역 → 난카이선 특급 라피트 탑승 → 난카이 난바역 도착", note:"입국 수속 후 난카이선 라피트 탑승", warn:"비짓재팬웹 QR 2종 미리 캡처해 두세요(공항 와이파이 느림). 가는 편 라피트 사전 예매/QR 발권이 빠름!", lat:34.4320, lng:135.2304},
     {t:"16:30", name:"에스리드 호텔 난바 이스트 언넥스", gq:"Eslead Hotel Namba East Annex, Osaka", move:"도보 6분", segs:[{l:"도보 6분",w:3}], how:"난카이 난바역 남출구 → 닛폰바시 방면 직진 도보 6분", note:"체크인(M261028461660) · 짐 풀기", warn:"셀프 체크인 안내 메일·비밀번호 미리 확인! 구로몬 시장·편의점 도보 4분 거리.", img:"./img/hotel.jpg", lat:34.6612, lng:135.5061},
@@ -240,6 +255,8 @@ const DAYS = [
     {t:"11:00", name:"부산 김해공항행 출발 (12:30 도착)", gq:"Kansai International Airport Terminal 1, Osaka", move:"항공 QE7QB2", segs:[{b:"항공",l:"비행 90분",w:4,c:"#14493F"}], how:"T1 4층 국제선 출국 수속 → 셔틀트레인 탑승구 이동 → 김해공항 도착", note:"즐거운 여행 마무리 💛", warn:"출국 후 면세점(로이스·위스키)은 08:30~10:30 여유 쇼핑 · 보조배터리는 기내!", lat:34.4320, lng:135.2304}
   ]}
 ];
+let days = JSON.parse(localStorage.getItem('os_days_v1')||'null') || JSON.parse(JSON.stringify(DEFAULT_DAYS));
+let editPlanIdx = null;
 const CHECKS = [
   "비짓재팬웹 QR (입국·세관 2종 캡처)",
   "USJ 앱에 3명 입장권 QR 사전 등록",
@@ -396,10 +413,69 @@ function renderRouteBar(segs, how, prev, cur){
   return `<div class="route-box">${topRow}${txt}</div>`;
 }
 
+
+function syncOsPlan(){
+  localStorage.setItem('os_days_v1', JSON.stringify(days));
+  renderPlan();
+  if(mapObj) renderMap();
+}
+function moveOsItem(idx, dir){
+  const list = days[curDay].items;
+  const ni = idx + dir;
+  if(ni < 0 || ni >= list.length) return;
+  [list[idx], list[ni]] = [list[ni], list[idx]];
+  syncOsPlan();
+}
+function delOsItem(idx){
+  if(!confirm('이 일정을 삭제할까요? (지도에도 바로 반영됩니다)')) return;
+  days[curDay].items.splice(idx, 1);
+  syncOsPlan();
+}
+function resetOsDays(){
+  if(!confirm('오사카 일정을 처음 기본값으로 되돌릴까요?')) return;
+  localStorage.removeItem('os_days_v1');
+  days = JSON.parse(JSON.stringify(DEFAULT_DAYS));
+  renderPlan();
+  if(mapObj) renderMap();
+}
+function openPlanModal(idx){
+  editPlanIdx = idx;
+  const it = idx!==null ? days[curDay].items[idx] : {t:'',name:'',gq:'',move:'',note:''};
+  document.getElementById('pmTitle').textContent = idx!==null ? '일정 수정' : '새 일정 추가';
+  document.getElementById('pmTime').value = it.t || '';
+  document.getElementById('pmName').value = (it.name||'').replace(/&rarr;/g,'→');
+  document.getElementById('pmGq').value = it.gq || '';
+  document.getElementById('pmMove').value = it.move || '';
+  document.getElementById('pmNote').value = it.note || '';
+  document.getElementById('planModal').classList.add('open');
+}
+function closePlanModal(){ document.getElementById('planModal').classList.remove('open'); }
+function savePlanModal(){
+  const name = document.getElementById('pmName').value.trim() || '새 일정';
+  const gq = document.getElementById('pmGq').value.trim() || `${name}, Osaka`;
+  const move = document.getElementById('pmMove').value.trim() || '도보';
+  const prevIt = editPlanIdx!==null ? days[curDay].items[editPlanIdx] : {};
+  const item = {
+    ...prevIt,
+    t: document.getElementById('pmTime').value.trim() || '12:00',
+    name,
+    gq,
+    move,
+    note: document.getElementById('pmNote').value.trim(),
+    how: prevIt.how || `${move} 이동 → ${name}`,
+    lat: prevIt.lat || days[curDay].items[0]?.lat || 34.6612,
+    lng: prevIt.lng || days[curDay].items[0]?.lng || 135.5061
+  };
+  if(editPlanIdx!==null) days[curDay].items[editPlanIdx] = item;
+  else days[curDay].items.push(item);
+  closePlanModal();
+  syncOsPlan();
+}
+
 function renderPlan(){
-  document.getElementById('dayScroll').innerHTML = DAYS.map((x,i)=>`<div class="day-chip ${i===curDay?'active':''}" onclick="curDay=${i};renderPlan()"><div class="d1">DAY ${i+1}</div><div class="d2">${x.d}</div><div class="d3">${x.city}</div></div>`).join('');
-  const d = DAYS[curDay];
-  document.getElementById('dayBanner').innerHTML = `<div><h2>DAY ${curDay+1} · ${d.d} (${d.city})</h2><p>${d.sub}</p></div>`;
+  document.getElementById('dayScroll').innerHTML = days.map((x,i)=>`<div class="day-chip ${i===curDay?'active':''}" onclick="curDay=${i};renderPlan()"><div class="d1">DAY ${i+1}</div><div class="d2">${x.d}</div><div class="d3">${x.city}</div></div>`).join('');
+  const d = days[curDay];
+  document.getElementById('dayBanner').innerHTML = `<div><h2>DAY ${curDay+1} · ${d.d} (${d.city})</h2><p>${d.sub}</p></div><div style="display:flex;gap:5px;"><button class="act-btn" style="background:rgba(255,255,255,.16);color:#fff;" onclick="resetOsDays()">초기화</button><button class="act-btn" style="background:var(--gold);color:var(--green);font-weight:900;" onclick="openPlanModal(null)">+ 일정</button></div>`;
   document.getElementById('planList').innerHTML = d.items.map((it,idx)=>`
     <div class="item-card">
       <div><span class="time-badge">${it.t}</span><span class="move-badge">${it.move}</span></div>
@@ -411,7 +487,13 @@ function renderPlan(){
         ${it.img ? `<img class="item-thumb" src="${it.img}" alt=""/>` : ''}
       </div>
       ${renderRouteBar(it.segs, it.how, idx>0?d.items[idx-1]:(d.stay?{gq:d.stay}:null), it)}${it.warn ? `<div class="item-warn">⚠️ 꿀팁·주의: ${it.warn}</div>` : ''}
-      <div class="item-actions"><a class="act-btn map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(it.gq||it.name.replace(/<[^>]+>|&rarr;/g,' '))}">🧭 구글맵</a></div>
+      <div class="item-actions">
+        <a class="act-btn map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(it.gq||it.name.replace(/<[^>]+>|&rarr;/g,' '))}">🧭 구글맵</a>
+        <button class="act-btn" onclick="moveOsItem(${idx},-1)">▲</button>
+        <button class="act-btn" onclick="moveOsItem(${idx},1)">▼</button>
+        <button class="act-btn" onclick="openPlanModal(${idx})">✏️ 수정</button>
+        <button class="act-btn" onclick="delOsItem(${idx})">🗑️</button>
+      </div>
     </div>`).join('');
 }
 
@@ -440,21 +522,21 @@ function focusSeg(idx){
 }
 
 function renderMap(){
-  document.getElementById('mapDayScroll').innerHTML = DAYS.map((x,i)=>`<div class="day-chip ${i===mapDay?'active':''}" onclick="mapDay=${i};renderMap()"><div class="d1">DAY ${i+1}</div><div class="d2">${x.d}</div><div class="d3">${x.city}</div></div>`).join('');
+  document.getElementById('mapDayScroll').innerHTML = days.map((x,i)=>`<div class="day-chip ${i===mapDay?'active':''}" onclick="mapDay=${i};renderMap()"><div class="d1">DAY ${i+1}</div><div class="d2">${x.d}</div><div class="d3">${x.city}</div></div>`).join('');
   if(!mapObj){
     mapObj = L.map('mapBox');
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM'}).addTo(mapObj);
   }
   mapObj.eachLayer(l=>{ if(l instanceof L.Marker || l instanceof L.Polyline) mapObj.removeLayer(l); });
-  let pts = DAYS[mapDay].items;
-  if(DAYS[mapDay].stay){
-    pts = [{t:'아침 출발', name:'🏨 에스리드 호텔 난바 이스트 언넥스', gq:DAYS[mapDay].stay, move:'숙소 출발', lat:34.6612, lng:135.5061}, ...pts];
+  let pts = days[mapDay].items;
+  if(days[mapDay].stay){
+    pts = [{t:'아침 출발', name:'🏨 에스리드 호텔 난바 이스트 언넥스', gq:days[mapDay].stay, move:'숙소 출발', lat:34.6612, lng:135.5061}, ...pts];
   }
   const latlngs = []; segLayers = []; segMarkers = [];
   pts.forEach((p,idx)=>{
     const ll = [p.lat, p.lng]; latlngs.push(ll);
-    const icon = L.divIcon({className:'',html:`<div style="background:#14493F;color:#F2C879;border:2px solid #fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.35);">${p.move==='숙소 출발'?'🏨':(DAYS[mapDay].stay?idx:idx+1)}</div>`,iconSize:[28,28],iconAnchor:[14,14]});
-    const mk = L.marker(ll,{icon}).addTo(mapObj).bindPopup(`<b>${p.move==='숙소 출발'?'🏨':(DAYS[mapDay].stay?idx:idx+1)}. ${p.name}</b><br/>${p.t} · ${p.move}${p.how?`<br/><span style="color:#14493F;font-weight:700;">${p.how}</span>`:''}`);
+    const icon = L.divIcon({className:'',html:`<div style="background:#14493F;color:#F2C879;border:2px solid #fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.35);">${p.move==='숙소 출발'?'🏨':(days[mapDay].stay?idx:idx+1)}</div>`,iconSize:[28,28],iconAnchor:[14,14]});
+    const mk = L.marker(ll,{icon}).addTo(mapObj).bindPopup(`<b>${p.move==='숙소 출발'?'🏨':(days[mapDay].stay?idx:idx+1)}. ${p.name}</b><br/>${p.t} · ${p.move}${p.how?`<br/><span style="color:#14493F;font-weight:700;">${p.how}</span>`:''}`);
     segMarkers.push(mk);
     if(idx > 0){
       const prev = [pts[idx-1].lat, pts[idx-1].lng];
@@ -477,7 +559,7 @@ function renderMap(){
   } else if(uPts.length === 1){
     gBtn.innerHTML = `<a class="act-btn map" style="width:100%;justify-content:center;padding:12px;font-size:14px;border-radius:12px;" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${uPts[0].lat},${uPts[0].lng}">🧭 구글맵 앱으로 위치 열기</a>`;
   }
-  document.getElementById('mapLegend').innerHTML = `<h3>DAY ${mapDay+1} · ${DAYS[mapDay].city} 동선</h3>` + pts.map((p,i)=>`<div onclick="focusSeg(${i})" style="padding:9px 6px;border-bottom:1px solid #EFEADF;cursor:pointer;border-radius:10px;"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><div><b>${i+1}. ${p.name}</b> <span style="font-size:11px;color:var(--org);font-weight:700;">· 지도보기</span><br/><span style="font-size:12px;color:var(--sub);">${p.t} · ${p.move}</span></div><a class="act-btn map" onclick="event.stopPropagation()" target="_blank" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.gq||p.name.replace(/<[^>]+>|&rarr;/g,' '))}">구글맵</a></div>${renderRouteBar(p.segs, p.how, i>0?pts[i-1]:(mapDay>=0&&DAYS[mapDay].stay?{gq:DAYS[mapDay].stay}:null), p)}</div>`).join('');
+  document.getElementById('mapLegend').innerHTML = `<h3>DAY ${mapDay+1} · ${days[mapDay].city} 동선</h3>` + pts.map((p,i)=>`<div onclick="focusSeg(${i})" style="padding:9px 6px;border-bottom:1px solid #EFEADF;cursor:pointer;border-radius:10px;"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><div><b>${i+1}. ${p.name}</b> <span style="font-size:11px;color:var(--org);font-weight:700;">· 지도보기</span><br/><span style="font-size:12px;color:var(--sub);">${p.t} · ${p.move}</span></div><a class="act-btn map" onclick="event.stopPropagation()" target="_blank" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.gq||p.name.replace(/<[^>]+>|&rarr;/g,' '))}">구글맵</a></div>${renderRouteBar(p.segs, p.how, i>0?pts[i-1]:(mapDay>=0&&days[mapDay].stay?{gq:days[mapDay].stay}:null), p)}</div>`).join('');
 }
 
 function renderChecks(){
