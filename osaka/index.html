@@ -43,6 +43,7 @@ main{padding:12px 14px calc(env(safe-area-inset-bottom,16px) + 78px);max-width:6
 .item-note{font-size:13px;color:var(--sub);line-height:1.48;margin:0;}
 .item-body{display:flex;gap:11px;align-items:flex-start;}
 .item-thumb{width:74px;height:74px;border-radius:12px;object-fit:cover;flex-shrink:0;border:1px solid var(--line);margin-top:4px;}
+.item-warn{margin-top:8px;background:var(--orgbg);border-left:3.5px solid var(--org);border-radius:8px;padding:7px 10px;font-size:12.5px;color:#7A3214;line-height:1.45;font-weight:600;}
 .item-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
 .act-btn{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:9px;padding:7px 11px;font-size:12.5px;font-weight:700;text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;gap:4px;}
 .act-btn.map{background:var(--green);border-color:var(--green);color:#fff;}
@@ -199,28 +200,28 @@ const RATE = 8.49; // 100엔 = 849원
 const CATS = ['🍽️ 밥·카페','🎟️ 입장·체험','🚇 교통','🛍️ 쇼핑·굿즈','🏪 편의점·기타'];
 const DAYS = [
   {d:"11/28(토)", city:"난바", sub:"도착 · 신사이바시 · 미도스지", items:[
-    {t:"15:25", name:"간사이공항(T1) 도착", move:"라피트 38분", note:"비짓재팬웹 QR · 가는 편 라피트 예매/발권", lat:34.4320, lng:135.2304},
-    {t:"16:30", name:"에스리드 호텔 난바 이스트 언넥스", move:"도보 6분", note:"체크인(M261028461660) · 짐 풀기", img:"./img/hotel.jpg", lat:34.6612, lng:135.5061},
-    {t:"17:30", name:"난바파크스(단톤) · 빅카메라 · 신사이바시 PARCO", move:"도보/지하철", note:"토요일 가랑비 대비 실내 위주 쇼핑", lat:34.6746, lng:135.5011},
-    {t:"20:30", name:"미도스지 일루미네이션 야경", move:"도보 산책", note:"17:00~25:00 점등 · 저녁 식사 후 산책", img:"./img/xmas.jpg", lat:34.6780, lng:135.5005}
+    {t:"15:25", name:"간사이공항(T1) 도착", move:"라피트 38분", note:"입국 수속 후 난카이선 라피트 탑승", warn:"비짓재팬웹 QR 2종 미리 캡처해 두세요(공항 와이파이 느림). 가는 편 라피트 사전 예매/QR 발권이 빠름!", lat:34.4320, lng:135.2304},
+    {t:"16:30", name:"에스리드 호텔 난바 이스트 언넥스", move:"도보 6분", note:"체크인(M261028461660) · 짐 풀기", warn:"셀프 체크인 안내 메일·비밀번호 미리 확인! 구로몬 시장·편의점 도보 4분 거리.", img:"./img/hotel.jpg", lat:34.6612, lng:135.5061},
+    {t:"17:30", name:"난바파크스(단톤) · 빅카메라 · 신사이바시 PARCO", move:"도보/지하철", note:"토요일 가랑비 대비 실내 위주 쇼핑", warn:"단톤(B shop)은 사이즈 빨리 빠져서 첫날 먼저! 2026-11 개편 면세라 매장 정가 결제(여권 실물 필수).", lat:34.6746, lng:135.5011},
+    {t:"20:30", name:"미도스지 일루미네이션 야경", move:"도보 산책", note:"17:00~25:00 점등 · 저녁 식사 후 산책", warn:"난바~신사이바시 구간이 제일 예뻐요. 토요일 가랑비 대비 접이식 우산 휴대!", img:"./img/xmas.jpg", lat:34.6780, lng:135.5005}
   ]},
   {d:"11/29(일)", city:"미술관·우메다", sub:"맑음 0% · 나카노시마 미술관 필수!", items:[
-    {t:"10:00", name:"나카노시마 미술관", move:"사카이스지선", note:"월·화 휴관이라 일요일 필수 방문!", img:"./img/nakanoshima.jpg", lat:34.6917, lng:135.4918},
-    {t:"12:00", name:"기타하마 강변 카페 (마운트/브루클린)", move:"도보 8분", note:"브런치 & 리버뷰 커피", lat:34.6914, lng:135.5064},
-    {t:"14:00", name:"우메다 루쿠아(닌텐도) · 그르니에 · 잇신도", move:"미도스지선", note:"밀푀유 · 과일찹쌀떡", lat:34.7031, lng:135.4959},
-    {t:"17:30", name:"우메다 스카이빌딩 크리스마스 마켓", move:"도보 10분", note:"트리 쇼 18:00~ · 현금 준비!", img:"./img/umeda.jpg", lat:34.7053, lng:135.4897},
-    {t:"19:30", name:"(B안) 덴시바 크리스마스 마켓 / 하루카스 300", move:"미도스지선", note:"덴시바 21:30 마감", img:"./img/xmas.jpg", lat:34.6485, lng:135.5133}
+    {t:"10:00", name:"나카노시마 미술관", move:"사카이스지선", note:"백화요란전 관람", warn:"월·화 정기휴관이라 일요일 방문이 유일한 찬스! 짐/우산 코인락커 이용 가능.", img:"./img/nakanoshima.jpg", lat:34.6917, lng:135.4918},
+    {t:"12:00", name:"기타하마 강변 카페 (마운트/브루클린)", move:"도보 8분", note:"브런치 & 리버뷰 커피", warn:"강변 야외 테라스석이 사진 명당! 12시 전후에 가야 웨이팅 적어요.", lat:34.6914, lng:135.5064},
+    {t:"14:00", name:"우메다 루쿠아(닌텐도) · 그르니에 · 잇신도", move:"미도스지선", note:"쇼핑 · 밀푀유 · 과일찹쌀떡", warn:"그르니에 밀푀유·잇신도 과일찹쌀떡은 오후 늦으면 품절/줄 긺 → 14시 전후 공략!", lat:34.7031, lng:135.4959},
+    {t:"17:30", name:"우메다 스카이빌딩 크리스마스 마켓", move:"도보 10분", note:"12:00~22:00(LO 21:30)", warn:"18:00부터 대형 트리 쇼! 마켓 노점은 현금만 받는 곳이 많아 1,000엔권 필수.", img:"./img/umeda.jpg", lat:34.7053, lng:135.4897},
+    {t:"19:30", name:"(B안) 덴시바 크리스마스 마켓 / 하루카스 300", move:"미도스지선", note:"저녁 산책 & 야경", warn:"덴시바 마켓 21:30 마감! (아싯도라시누는 일·월 휴무라 이번 일정 패스)", img:"./img/xmas.jpg", lat:34.6485, lng:135.5133}
   ]},
   {d:"11/30(월)", city:"USJ", sub:"맑음 0% · 익스프레스4 · 닌텐도 12:40", items:[
-    {t:"09:15", name:"난바 출발 &rarr; 유니버설 시티", move:"한신+JR 25분", note:"모바일 이코카 태그", lat:34.6654, lng:135.4323},
-    {t:"10:15", name:"미니언 메이헴 · 죠스", move:"익스프레스4", note:"할리우드 드림 제외, 죠스 선택!", lat:34.6648, lng:135.4335},
-    {t:"12:40", name:"슈퍼 닌텐도 월드 · 동키콩 트램카", move:"재입장 불가!", note:"동키콩(12:40~13:10) → 마리오카트 → 포토스팟", lat:34.6673, lng:135.4306},
-    {t:"16:00", name:"해리포터 포비든 저니 · 호수 야경", move:"익스프레스4", note:"19:30 퇴장 → 난바 귀환", lat:34.6665, lng:135.4316}
+    {t:"09:15", name:"난바 출발 &rarr; 유니버설 시티", move:"한신+JR 25분", note:"니시쿠조역에서 JR 유메사키선 환승", warn:"모바일 이코카 잔액 ¥1,000+ 확인! USJ 앱에 3명 QR 미리 묶어 두세요.", lat:34.6654, lng:135.4323},
+    {t:"10:15", name:"미니언 메이헴 · 죠스", move:"익스프레스4", note:"적당 스릴 코스 집중", warn:"할리우드 드림 제외, 죠스 선택! 죠스는 배 왼쪽 끝 좌석이 상어가 가까워 제일 재밌어요.", lat:34.6648, lng:135.4335},
+    {t:"12:40", name:"슈퍼 닌텐도 월드 · 동키콩 트램카", move:"재입장 불가!", note:"동키콩(12:40~13:10) → 마리오카트 → 포토스팟", warn:"한 번 나오면 재입장 절대 불가! 동키콩·마리오카트·키노피오 카페·포토스팟까지 다 보고 퇴장!", lat:34.6673, lng:135.4306},
+    {t:"16:00", name:"해리포터 포비든 저니 · 호수 야경", move:"익스프레스4", note:"19:30 퇴장 → 난바 귀환", warn:"포비든 저니 타기 전 무료 락커에 가방/모자 보관 필수! 해 질 녘 호수 앞 성 야경 포토스팟!", lat:34.6665, lng:135.4316}
   ]},
   {d:"12/01(화)", city:"귀국", sub:"07:00 라피트 α 5호 · 수하물 전 세관 면세", items:[
-    {t:"06:30", name:"숙소 체크아웃 &rarr; 난카이 난바역", move:"도보 6~8분", note:"전날 밤 짐 싸기 완료", lat:34.6632, lng:135.5015},
-    {t:"07:00", name:"라피트 α 5호 &rarr; 간사이공항(T1)", move:"34분(예약완료)", note:"07:34 도착 → 수하물 위탁 전 세관 면세 확인!", lat:34.4320, lng:135.2304},
-    {t:"11:00", name:"부산 김해공항행 출발 (12:30 도착)", move:"항공 QE7QB2", note:"즐거운 여행 마무리 💛", lat:34.4320, lng:135.2304}
+    {t:"06:30", name:"숙소 체크아웃 &rarr; 난카이 난바역", move:"도보 6~8분", note:"전날 밤 짐 싸기 완료", warn:"면세 소모품(과자·화장품) 절대 개봉 금지! 위탁 캐리어 맨 위에 몰아 넣으세요.", lat:34.6632, lng:135.5015},
+    {t:"07:00", name:"라피트 α 5호 &rarr; 간사이공항(T1)", move:"34분(예약완료)", note:"07:34 공항 도착", warn:"수하물 부치기 전에!! 세관·면세 단말기에서 여권 + 미개봉 상품 확인부터 받기!", lat:34.4320, lng:135.2304},
+    {t:"11:00", name:"부산 김해공항행 출발 (12:30 도착)", move:"항공 QE7QB2", note:"즐거운 여행 마무리 💛", warn:"출국 후 면세점(로이스·위스키)은 08:30~10:30 여유 쇼핑 · 보조배터리는 기내!", lat:34.4320, lng:135.2304}
   ]}
 ];
 const CHECKS = [
@@ -355,6 +356,7 @@ function renderPlan(){
         </div>
         ${it.img ? `<img class="item-thumb" src="${it.img}" alt=""/>` : ''}
       </div>
+      ${it.warn ? `<div class="item-warn">⚠️ 꿀팁·주의: ${it.warn}</div>` : ''}
       <div class="item-actions"><a class="act-btn map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=${it.lat},${it.lng}">🧭 구글맵</a></div>
     </div>`).join('');
 }
