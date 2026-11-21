@@ -130,7 +130,7 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
     <div class="sec-card" style="border:2px solid var(--org);">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
         <h3 style="margin:0;color:var(--org);">💶 🇰🇷 이탈리아 통합 가계부</h3>
-        <button class="act-btn" onclick="editItBudget()">예산 수정</button>
+        <button class="act-btn" onclick="editItBudget()">환전·예산 수정</button>
       </div>
       <div id="itBudgetBar" style="margin-bottom:10px;"></div>
       <div id="itExpSum" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;"></div>
@@ -525,11 +525,11 @@ let itExps = JSON.parse(localStorage.getItem('it_exp_v1')||'[]').map(e=>({...e, 
 let itBudget = JSON.parse(localStorage.getItem('it_bud_v2')||'null') || {krwGoal:7000000, cash:500, card:1300};
 
 function editItBudget(){
-  const w = prompt('🇰🇷 사전 원화(₩) 목표 예산을 입력하세요 (예: 7000000)', itBudget.krwGoal);
+  const w = prompt('🇰🇷 한국돈(₩) 예산을 입력하세요 (항공·숙소 등 사전결제용, 예: 7000000)', itBudget.krwGoal);
   if(w===null) return;
-  const c = prompt('💶 현지 현금(€) 목표 예산을 입력하세요 (예: 500)', itBudget.cash);
+  const c = prompt('💶 환전한 유로 현금(€)을 입력하세요 (예: 500)', itBudget.cash);
   if(c===null) return;
-  const k = prompt('💳 현지 카드(€) 목표 예산을 입력하세요 (예: 1300)', itBudget.card);
+  const k = prompt('💳 환전(충전)한 유로 카드(€)를 입력하세요 (예: 1300)', itBudget.card);
   if(k===null) return;
   itBudget = {
     krwGoal: Math.max(0, parseInt(w)||0),
@@ -564,7 +564,7 @@ function renderItExp(){
   document.getElementById('itBudgetBar').innerHTML = `
     <div style="background:var(--green);color:#fff;border-radius:12px;padding:12px 13px;">
       <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--gold);font-weight:700;">
-        <span>전체 통합 지출 (목표 ${Math.round(totalGoalKrw/10000).toLocaleString()}만 원)</span>
+        <span>전체 통합 지출 (한국돈+환전 ${Math.round(totalGoalKrw/10000).toLocaleString()}만 원)</span>
         <span>${pct}% 사용</span>
       </div>
       <div style="font-size:20px;font-weight:900;margin-top:3px;">총 ${totalKrwEq.toLocaleString()}원 <span style="font-size:12.5px;font-weight:600;">(남음 ${totalLeftKrw.toLocaleString()}원)</span></div>
@@ -576,18 +576,18 @@ function renderItExp(){
 
   document.getElementById('itExpSum').innerHTML = `
     <div style="background:#FFFDF6;border:1.5px solid var(--line);border-radius:12px;padding:9px 10px;">
-      <div style="font-size:11px;color:var(--sub);font-weight:700;">💶 남은 유로 현금 (목표 €${itBudget.cash})</div>
+      <div style="font-size:11px;color:var(--sub);font-weight:700;">💶 남은 현금 (환전 €${itBudget.cash})</div>
       <div style="font-size:17px;font-weight:900;color:${cashLeft<0?'#B93222':'var(--green)'};margin-top:2px;">€${cashLeft.toLocaleString()}</div>
       <div style="font-size:11px;color:var(--sub);">사용 €${cashUsed.toLocaleString()}</div>
     </div>
     <div style="background:#FFFDF6;border:1.5px solid var(--line);border-radius:12px;padding:9px 10px;">
-      <div style="font-size:11px;color:var(--sub);font-weight:700;">💳 남은 유로 카드 (목표 €${itBudget.card})</div>
+      <div style="font-size:11px;color:var(--sub);font-weight:700;">💳 남은 카드 (환전 €${itBudget.card})</div>
       <div style="font-size:17px;font-weight:900;color:${cardLeft<0?'#B93222':'var(--org)'};margin-top:2px;">€${cardLeft.toLocaleString()}</div>
       <div style="font-size:11px;color:var(--sub);">사용 €${cardUsed.toLocaleString()}</div>
     </div>
     <div style="grid-column:span 2;background:#F6FBF8;border:1.5px solid #CBE3D7;border-radius:12px;padding:9px 11px;display:flex;justify-content:space-between;align-items:center;">
       <div>
-        <div style="font-size:11.5px;color:var(--green);font-weight:800;">🇰🇷 사전 원화 지출 (목표 ${Math.round(itBudget.krwGoal/10000).toLocaleString()}만 원)</div>
+        <div style="font-size:11.5px;color:var(--green);font-weight:800;">🇰🇷 한국돈(₩) 예산 (${Math.round(itBudget.krwGoal/10000).toLocaleString()}만 원)</div>
         <div style="font-size:11px;color:var(--sub);">💳 카드 ${krwCardUsed.toLocaleString()}원 · 💵 현금/이체 ${krwCashUsed.toLocaleString()}원</div>
       </div>
       <div style="text-align:right;">
