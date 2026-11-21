@@ -126,21 +126,43 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
     </div>
   </section>
 
-  <section id="tab-budget" class="hidden">
+  <section id="tab-wallet" class="hidden">
     <div class="sec-card" style="border:2px solid var(--org);">
-      <h3 style="color:var(--org);">💶 현지 유로(€) 가계부</h3>
-      <div id="itExpSum" style="background:var(--green);color:#fff;border-radius:12px;padding:11px 13px;margin-bottom:10px;"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <h3 style="margin:0;color:var(--org);">💶 🇰🇷 이탈리아 통합 가계부</h3>
+        <button class="act-btn" onclick="editItBudget()">예산 수정</button>
+      </div>
+      <div id="itBudgetBar" style="margin-bottom:10px;"></div>
+      <div id="itExpSum" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;"></div>
+      <div id="itCurPills" style="display:flex;gap:6px;margin-bottom:8px;"></div>
       <div id="itCatPills" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:7px;"></div>
       <div id="itPayPills" style="display:flex;gap:6px;margin-bottom:8px;"></div>
       <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
-        <input id="itAmt" type="number" step="0.5" placeholder="금액 (€ 유로)" oninput="updateItKrw()" style="flex:1;padding:10px;border:1.5px solid var(--line);border-radius:10px;font-size:15px;"/>
-        <span id="itKrwPre" style="font-size:12.5px;font-weight:700;color:var(--org);min-width:84px;text-align:right;">약 0원</span>
+        <input id="itAmt" type="number" step="any" placeholder="금액 입력" oninput="updateItKrw()" style="flex:1;padding:10px;border:1.5px solid var(--line);border-radius:10px;font-size:15px;"/>
+        <span id="itKrwPre" style="font-size:12.5px;font-weight:700;color:var(--org);min-width:96px;text-align:right;">약 0원</span>
       </div>
-      <input id="itMemo" placeholder="내용 (예: 트라스테베레 파스타, 주유 등)" style="width:100%;padding:10px;border:1.5px solid var(--line);border-radius:10px;font-size:14.5px;margin-bottom:8px;"/>
-      <button class="act-btn map" style="width:100%;justify-content:center;padding:10px;font-size:14px;" onclick="addItExp()">기록하기</button>
-      <div id="itExpCats" style="margin-top:10px;"></div>
-      <div id="itExpList" style="margin-top:8px;"></div>
+      <input id="itMemo" placeholder="내용 (예: 항공권, 숙소, 트라스테베레 파스타 등)" style="width:100%;padding:10px;border:1.5px solid var(--line);border-radius:10px;font-size:14.5px;margin-bottom:8px;"/>
+      <button class="act-btn map" style="width:100%;justify-content:center;padding:11px;font-size:14.5px;" onclick="addItExp()">➕ 지출 기록하기</button>
     </div>
+
+    <div class="sec-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <h3 style="margin:0;">📊 원화 · 유로 분류 & 카테고리 비교</h3>
+        <button class="act-btn map" onclick="copyItExp()">📋 내역 복사</button>
+      </div>
+      <div id="itExpCats"></div>
+    </div>
+
+    <div class="sec-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <h3 style="margin:0;">🧾 사용 내역</h3>
+        <div id="itListFilter" style="display:flex;gap:4px;"></div>
+      </div>
+      <div id="itExpList"></div>
+    </div>
+  </section>
+
+  <section id="tab-budget" class="hidden">
 
     <div class="sec-card" style="border:2px solid var(--green);">
       <h3>🎛️ 내 조합 시뮬레이터 (가격 · 동선 · 오류 경고)</h3>
@@ -183,6 +205,7 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
   <button class="tab active" onclick="goTab('plan',this)"><span class="ico">📋</span>일정</button>
   <button class="tab" onclick="goTab('map',this)"><span class="ico">🗺️</span>지도</button>
   <button class="tab" onclick="goTab('stay',this)"><span class="ico">🏨</span>숙소·스냅</button>
+  <button class="tab" onclick="goTab('wallet',this)"><span class="ico">💶</span>가계부</button>
   <button class="tab" onclick="goTab('budget',this)"><span class="ico">💰</span>예산·체크</button>
 </nav>
 
@@ -496,33 +519,150 @@ function renderSim(){
     </div>` : ''}`;
 }
 
-const IT_CATS = ['🍽️ 식비·카페','🎟️ 입장·투어','🚗 교통·주유','🛍️ 쇼핑','🏨 도시세·숙소'];
-let itCat = IT_CATS[0], itPay = 'card';
-let itExps = JSON.parse(localStorage.getItem('it_exp_v1')||'[]');
+const IT_CATS = ['✈️ 항공·교통','🏨 숙소·도시세','📸 스냅·입장','🍽️ 식비·카페','🛍️ 쇼핑·기타'];
+let itCur = 'EUR', itCat = IT_CATS[3], itPay = 'card', itFilter = 'ALL';
+let itExps = JSON.parse(localStorage.getItem('it_exp_v1')||'[]').map(e=>({...e, cur: e.cur||'EUR'}));
+let itBudget = JSON.parse(localStorage.getItem('it_bud_v2')||'null') || {krwGoal:7000000, cash:500, card:1300};
+
+function editItBudget(){
+  const w = prompt('🇰🇷 사전 원화(₩) 목표 예산을 입력하세요 (예: 7000000)', itBudget.krwGoal);
+  if(w===null) return;
+  const c = prompt('💶 현지 현금(€) 목표 예산을 입력하세요 (예: 500)', itBudget.cash);
+  if(c===null) return;
+  const k = prompt('💳 현지 카드(€) 목표 예산을 입력하세요 (예: 1300)', itBudget.card);
+  if(k===null) return;
+  itBudget = {
+    krwGoal: Math.max(0, parseInt(w)||0),
+    cash: Math.max(0, parseFloat(c)||0),
+    card: Math.max(0, parseFloat(k)||0)
+  };
+  localStorage.setItem('it_bud_v2', JSON.stringify(itBudget));
+  renderItExp();
+}
 
 function renderItExp(){
-  const cash = itExps.filter(e=>e.pay==='cash').reduce((a,b)=>a+b.amt,0);
-  const card = itExps.filter(e=>e.pay==='card').reduce((a,b)=>a+b.amt,0);
-  const tot = cash + card;
+  const eurExps = itExps.filter(e=>e.cur==='EUR');
+  const krwExps = itExps.filter(e=>e.cur==='KRW');
+  const cashUsed = eurExps.filter(e=>e.pay==='cash').reduce((a,b)=>a+b.amt,0);
+  const cardUsed = eurExps.filter(e=>e.pay==='card').reduce((a,b)=>a+b.amt,0);
+  const eurUsed = cashUsed + cardUsed;
+  const eurGoal = itBudget.cash + itBudget.card;
+  const krwUsed = krwExps.reduce((a,b)=>a+b.amt,0);
+  const krwCashUsed = krwExps.filter(e=>e.pay==='cash').reduce((a,b)=>a+b.amt,0);
+  const krwCardUsed = krwExps.filter(e=>e.pay==='card').reduce((a,b)=>a+b.amt,0);
+
+  const totalKrwEq = krwUsed + Math.round(eurUsed * 1650);
+  const totalGoalKrw = itBudget.krwGoal + Math.round(eurGoal * 1650);
+  const totalLeftKrw = totalGoalKrw - totalKrwEq;
+  const pct = totalGoalKrw > 0 ? Math.min(100, Math.round(totalKrwEq / totalGoalKrw * 100)) : 0;
+
+  const cashLeft = itBudget.cash - cashUsed;
+  const cardLeft = itBudget.card - cardUsed;
+  const krwLeft = itBudget.krwGoal - krwUsed;
   const toW = e => Math.round(e*1650).toLocaleString()+'원';
+
+  document.getElementById('itBudgetBar').innerHTML = `
+    <div style="background:var(--green);color:#fff;border-radius:12px;padding:12px 13px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--gold);font-weight:700;">
+        <span>전체 통합 지출 (목표 ${Math.round(totalGoalKrw/10000).toLocaleString()}만 원)</span>
+        <span>${pct}% 사용</span>
+      </div>
+      <div style="font-size:20px;font-weight:900;margin-top:3px;">총 ${totalKrwEq.toLocaleString()}원 <span style="font-size:12.5px;font-weight:600;">(남음 ${totalLeftKrw.toLocaleString()}원)</span></div>
+      <div style="font-size:11.5px;margin-top:3px;opacity:.9;">🇰🇷 원화 ${krwUsed.toLocaleString()}원 + 💶 유로 €${eurUsed.toLocaleString()} (${toW(eurUsed)})</div>
+      <div style="height:8px;background:rgba(255,255,255,.22);border-radius:99px;overflow:hidden;margin-top:7px;">
+        <div style="height:100%;width:${pct}%;background:${totalLeftKrw<0?'#FF7B6B':'#F2C879'};border-radius:99px;"></div>
+      </div>
+    </div>`;
+
   document.getElementById('itExpSum').innerHTML = `
-    <div style="font-size:12px;color:var(--gold);font-weight:700;">총 현지 지출 (€1 = 1,650원)</div>
-    <div style="font-size:21px;font-weight:900;margin-top:2px;">€${tot.toLocaleString()} <span style="font-size:13px;font-weight:600;">(약 ${toW(tot)})</span></div>
-    <div style="font-size:12px;margin-top:4px;opacity:.9;">💶 현금 €${cash.toLocaleString()} · 💳 카드 €${card.toLocaleString()}</div>`;
+    <div style="background:#FFFDF6;border:1.5px solid var(--line);border-radius:12px;padding:9px 10px;">
+      <div style="font-size:11px;color:var(--sub);font-weight:700;">💶 남은 유로 현금 (목표 €${itBudget.cash})</div>
+      <div style="font-size:17px;font-weight:900;color:${cashLeft<0?'#B93222':'var(--green)'};margin-top:2px;">€${cashLeft.toLocaleString()}</div>
+      <div style="font-size:11px;color:var(--sub);">사용 €${cashUsed.toLocaleString()}</div>
+    </div>
+    <div style="background:#FFFDF6;border:1.5px solid var(--line);border-radius:12px;padding:9px 10px;">
+      <div style="font-size:11px;color:var(--sub);font-weight:700;">💳 남은 유로 카드 (목표 €${itBudget.card})</div>
+      <div style="font-size:17px;font-weight:900;color:${cardLeft<0?'#B93222':'var(--org)'};margin-top:2px;">€${cardLeft.toLocaleString()}</div>
+      <div style="font-size:11px;color:var(--sub);">사용 €${cardUsed.toLocaleString()}</div>
+    </div>
+    <div style="grid-column:span 2;background:#F6FBF8;border:1.5px solid #CBE3D7;border-radius:12px;padding:9px 11px;display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="font-size:11.5px;color:var(--green);font-weight:800;">🇰🇷 사전 원화 지출 (목표 ${Math.round(itBudget.krwGoal/10000).toLocaleString()}만 원)</div>
+        <div style="font-size:11px;color:var(--sub);">💳 카드 ${krwCardUsed.toLocaleString()}원 · 💵 현금/이체 ${krwCashUsed.toLocaleString()}원</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:16px;font-weight:900;color:${krwLeft<0?'#B93222':'var(--green)'};">남음 ${Math.round(krwLeft/10000).toLocaleString()}만</div>
+        <div style="font-size:11px;color:var(--sub);">사용 ${krwUsed.toLocaleString()}원</div>
+      </div>
+    </div>`;
+
+  document.getElementById('itCurPills').innerHTML = `
+    <button onclick="itCur='EUR';updateItPlaceholder();renderItExp()" style="flex:1;border:2px solid ${itCur==='EUR'?'var(--org)':'var(--line)'};background:${itCur==='EUR'?'var(--orgbg)':'#fff'};color:${itCur==='EUR'?'var(--org)':'var(--ink)'};border-radius:10px;padding:8px;font-size:13px;font-weight:800;cursor:pointer;">💶 유로(€) 지출</button>
+    <button onclick="itCur='KRW';updateItPlaceholder();renderItExp()" style="flex:1;border:2px solid ${itCur==='KRW'?'var(--green)':'var(--line)'};background:${itCur==='KRW'?'#E4EFEA':'#fff'};color:${itCur==='KRW'?'var(--green)':'var(--ink)'};border-radius:10px;padding:8px;font-size:13px;font-weight:800;cursor:pointer;">🇰🇷 한국돈(₩) 지출</button>`;
+
   document.getElementById('itCatPills').innerHTML = IT_CATS.map(c=>`<button onclick="itCat='${c}';renderItExp()" style="border:1.5px solid ${itCat===c?'var(--green)':'var(--line)'};background:${itCat===c?'var(--green)':'#fff'};color:${itCat===c?'#fff':'var(--ink)'};border-radius:8px;padding:5px 9px;font-size:12px;font-weight:700;cursor:pointer;">${c}</button>`).join('');
   document.getElementById('itPayPills').innerHTML = `
-    <button onclick="itPay='card';renderItExp()" style="border:1.5px solid ${itPay==='card'?'var(--green)':'var(--line)'};background:${itPay==='card'?'var(--green)':'#fff'};color:${itPay==='card'?'#fff':'var(--ink)'};border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer;">💳 카드</button>
-    <button onclick="itPay='cash';renderItExp()" style="border:1.5px solid ${itPay==='cash'?'var(--green)':'var(--line)'};background:${itPay==='cash'?'var(--green)':'#fff'};color:${itPay==='cash'?'#fff':'var(--ink)'};border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer;">💶 현금</button>`;
-  const byC = {}; IT_CATS.forEach(c=>byC[c]=0);
-  itExps.forEach(e=>{ byC[e.cat]=(byC[e.cat]||0)+e.amt; });
-  document.getElementById('itExpCats').innerHTML = IT_CATS.filter(c=>byC[c]>0).map(c=>`<div class="row"><span>${c}</span><b>€${byC[c].toLocaleString()} (${toW(byC[c])})</b></div>`).join('');
-  document.getElementById('itExpList').innerHTML = itExps.slice().reverse().map(e=>`<div class="row"><div><b>${e.memo||e.cat}</b><br/><span style="font-size:11.5px;color:var(--sub);">${e.cat} · ${e.pay==='cash'?'현금':'카드'} · ${e.time}</span></div><div><b>€${e.amt}</b> <button class="act-btn" style="padding:2px 6px;" onclick="delItExp(${e.id})">✕</button></div></div>`).join('');
+    <button onclick="itPay='card';renderItExp()" style="flex:1;border:1.5px solid ${itPay==='card'?'var(--green)':'var(--line)'};background:${itPay==='card'?'var(--green)':'#fff'};color:${itPay==='card'?'#fff':'var(--ink)'};border-radius:8px;padding:7px 10px;font-size:12.5px;font-weight:700;cursor:pointer;">💳 카드</button>
+    <button onclick="itPay='cash';renderItExp()" style="flex:1;border:1.5px solid ${itPay==='cash'?'var(--green)':'var(--line)'};background:${itPay==='cash'?'var(--green)':'#fff'};color:${itPay==='cash'?'#fff':'var(--ink)'};border-radius:8px;padding:7px 10px;font-size:12.5px;font-weight:700;cursor:pointer;">💵 ${itCur==='EUR'?'현금':'현금·이체'}</button>`;
+
+  const byC = {}; IT_CATS.forEach(c=>byC[c]={eur:0,krw:0});
+  itExps.forEach(e=>{
+    if(!byC[e.cat]) byC[e.cat]={eur:0,krw:0};
+    if(e.cur==='KRW') byC[e.cat].krw += e.amt;
+    else byC[e.cat].eur += e.amt;
+  });
+  document.getElementById('itExpCats').innerHTML = IT_CATS.map(c=>{
+    const eq = byC[c].krw + Math.round(byC[c].eur*1650);
+    const p = totalKrwEq ? Math.round(eq/totalKrwEq*100) : 0;
+    const subTxt = [byC[c].krw?`${byC[c].krw.toLocaleString()}원`:'', byC[c].eur?`€${byC[c].eur.toLocaleString()}`:''].filter(Boolean).join(' + ') || '0원';
+    return `<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:3px;"><b>${c}</b><span>${subTxt} (총 ${eq.toLocaleString()}원)</span></div><div style="height:7px;background:#EFE8D8;border-radius:99px;overflow:hidden;"><div style="height:100%;width:${p}%;background:var(--org);"></div></div></div>`;
+  }).join('');
+
+  document.getElementById('itListFilter').innerHTML = [['ALL','전체'],['EUR','💶 유로'],['KRW','🇰🇷 원화']].map(([k,lbl])=>`<button onclick="itFilter='${k}';renderItExp()" style="border:1px solid ${itFilter===k?'var(--green)':'var(--line)'};background:${itFilter===k?'var(--green)':'#fff'};color:${itFilter===k?'#fff':'var(--ink)'};border-radius:7px;padding:3px 7px;font-size:11px;font-weight:700;cursor:pointer;">${lbl}</button>`).join('');
+
+  const filtered = itExps.filter(e=>itFilter==='ALL' || e.cur===itFilter);
+  document.getElementById('itExpList').innerHTML = filtered.length
+    ? filtered.slice().reverse().map(e=>`<div class="row"><div><b>${e.memo||e.cat}</b><br/><span style="font-size:11.5px;color:var(--sub);">${e.cur==='KRW'?'🇰🇷 원화':'💶 유로'} · ${e.cat} · ${e.pay==='cash'?'현금/이체':'카드'} · ${e.time}</span></div><div><b>${e.cur==='KRW'?e.amt.toLocaleString()+'원':'€'+e.amt}</b> <button class="act-btn" style="padding:2px 6px;" onclick="delItExp(${e.id})">✕</button></div></div>`).join('')
+    : '<div style="font-size:13px;color:var(--sub);padding:6px 0;">아직 기록이 없어요. 원화(₩)와 유로(€)를 골라 기록해 보세요!</div>';
+}
+function updateItPlaceholder(){
+  const inp = document.getElementById('itAmt');
+  inp.placeholder = itCur==='EUR' ? '금액 (€ 유로)' : '금액 (₩ 원화)';
+  updateItKrw();
 }
 function updateItKrw(){
   const v = parseFloat(document.getElementById('itAmt').value||'0');
-  document.getElementById('itKrwPre').textContent = '약 ' + Math.round(v*1650).toLocaleString() + '원';
+  document.getElementById('itKrwPre').textContent = itCur==='EUR'
+    ? '약 ' + Math.round(v*1650).toLocaleString() + '원'
+    : '약 €' + (v/1650).toFixed(1);
 }
 function addItExp(){
+  const amt = parseFloat(document.getElementById('itAmt').value||'0');
+  if(!amt||amt<=0) return alert('금액을 입력해 주세요!');
+  const memo = document.getElementById('itMemo').value.trim();
+  const d = new Date();
+  const time = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+  itExps.push({id:Date.now(),cur:itCur,cat:itCat,pay:itPay,amt,memo,time});
+  localStorage.setItem('it_exp_v1',JSON.stringify(itExps));
+  document.getElementById('itAmt').value=''; document.getElementById('itMemo').value='';
+  updateItKrw(); renderItExp();
+}
+function copyItExp(){
+  const eurExps = itExps.filter(e=>e.cur==='EUR');
+  const krwExps = itExps.filter(e=>e.cur==='KRW');
+  const cashUsed = eurExps.filter(e=>e.pay==='cash').reduce((a,b)=>a+b.amt,0);
+  const cardUsed = eurExps.filter(e=>e.pay==='card').reduce((a,b)=>a+b.amt,0);
+  const krwUsed = krwExps.reduce((a,b)=>a+b.amt,0);
+  const totalEq = krwUsed + Math.round((cashUsed+cardUsed)*1650);
+  const txt = `[🇮🇹 이탈리아 통합 가계부]\n총 지출(원화환산): ${totalEq.toLocaleString()}원\n🇰🇷 원화 지출: ${krwUsed.toLocaleString()}원 (남음 ${(itBudget.krwGoal-krwUsed).toLocaleString()}원)\n💶 유로 현금: 사용 €${cashUsed} / 남음 €${itBudget.cash-cashUsed}\n💳 유로 카드: 사용 €${cardUsed} / 남음 €${itBudget.card-cardUsed}\n\n` +
+    itExps.map(e=>`- ${e.time} | ${e.cur==='KRW'?'원화':'유로'} | ${e.pay==='cash'?'현금':'카드'} | ${e.memo||e.cat}: ${e.cur==='KRW'?e.amt.toLocaleString()+'원':'€'+e.amt}`).join('\n');
+  navigator.clipboard?.writeText(txt).then(()=>alert('통합 가계부 요약이 복사됐어요!')).catch(()=>prompt('복사해 주세요:', txt));
+}
+function updateItKrw_UNUSED(){
+  const v = parseFloat(document.getElementById('itAmt').value||'0');
+  document.getElementById('itKrwPre').textContent = '약 ' + Math.round(v*1650).toLocaleString() + '원';
+}
+function addItExp_UNUSED(){
   const amt = parseFloat(document.getElementById('itAmt').value||'0');
   if(!amt||amt<=0) return alert('유로 금액을 입력해 주세요!');
   const memo = document.getElementById('itMemo').value.trim();
