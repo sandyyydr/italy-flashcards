@@ -144,14 +144,20 @@ main{flex:1;padding:14px 16px calc(30px + env(safe-area-inset-bottom))}
   width:100%;background:#fff9ee;border:2px solid #f7e7cb;border-radius:14px;
   padding:9px 11px 10px;display:flex;flex-direction:column;gap:6px;text-align:left;
 }
-.relhead{font-size:10.5px;font-weight:800;color:#b0762a;letter-spacing:-.1px}
+.relhead{font-size:10.5px;font-weight:800;color:#b0762a;letter-spacing:-.1px;display:flex;align-items:baseline;gap:6px}
+.relhint{font-size:9.5px;font-weight:800;color:#c9a86a;letter-spacing:0}
 .relwrap{display:flex;flex-wrap:wrap;gap:5px}
 .relpill{
   display:inline-flex;align-items:baseline;gap:5px;background:#fff;border:1.5px solid #f0dcb8;
-  border-radius:999px;padding:4px 9px;font-size:12px;line-height:1.25;letter-spacing:-.2px;max-width:100%;
+  border-radius:999px;padding:5px 9px 5px 10px;font-family:inherit;text-align:left;cursor:pointer;
+  font-size:12px;line-height:1.25;letter-spacing:-.2px;max-width:100%;
+  -webkit-tap-highlight-color:transparent;transition:background .12s,border-color .12s,transform .08s;
 }
+.relpill:active{transform:scale(.97)}
+.relpill.on{background:#fff3dc;border-color:#e5b96a}
 .relpill b{font-weight:800;color:#8a5b12}
 .relpill i{font-style:normal;font-weight:700;color:#a9906a;font-size:11.5px}
+.relspk{font-size:10px;line-height:1;opacity:.85;margin-left:1px}
 
 /* 예시문 박스 */
 .exbox{
@@ -237,6 +243,12 @@ main{flex:1;padding:14px 16px calc(30px + env(safe-area-inset-bottom))}
 .qprompt.md{font-size:17px;line-height:1.45}
 .qprompt.sm{font-size:15px;line-height:1.5}
 .qsub{font-size:13px;font-weight:700;color:#9a9a9a;margin:0 0 10px;line-height:1.45}
+.qctx{
+  display:inline-block;font-size:11px;font-weight:800;color:#b0762a;background:#fff9ee;
+  border:1.5px solid #f7e7cb;border-radius:999px;padding:4px 10px;margin:0 0 8px;letter-spacing:-.1px;
+}
+.qhint{font-size:13px;font-weight:800;color:#6f9b3a;background:#f6fbef;border:1.5px solid #e6f0d8;
+  border-radius:12px;padding:7px 11px;margin:0 0 12px;line-height:1.4;letter-spacing:-.2px}
 .qstart .btn{width:100%;margin-top:10px;flex:0 0 auto}
 .audio-btn{
   display:inline-flex;align-items:center;gap:9px;background:var(--b-t);color:#0d7bb8;
@@ -825,12 +837,15 @@ function bdHTML(c){
       <div class="bdwrap">${b.map(p=>`<span class="bdpill"><b>${esc(p[0])}</b><i>${esc(p[1])}</i></span>`).join("")}</div>
     </div>`;
 }
+function relAudioIds(c){
+  return (c && c.related) ? c.related.map((p,i)=>c.id + "_rel" + i) : [];
+}
 function relHTML(c){
   const r = c && c.related;
   if(!r || !r.length) return "";
   return `<div class="relbox">
-      <div class="relhead">🔄 같이 외워요</div>
-      <div class="relwrap">${r.map(p=>`<span class="relpill"><b>${esc(p[0])}</b><i>${esc(p[1])}</i></span>`).join("")}</div>
+      <div class="relhead">🔄 같이 외워요 <span class="relhint">탭하면 발음 🔊</span></div>
+      <div class="relwrap">${r.map((p,i)=>`<button type="button" class="relpill" data-rel-say="${c.id}" data-rel-i="${i}" aria-label="${esc(p[0])} 발음 듣기"><b>${esc(p[0])}</b><i>${esc(p[1])}</i><span class="relspk" aria-hidden="true">🔊</span></button>`).join("")}</div>
     </div>`;
 }
 function bdLine(c){
@@ -903,7 +918,7 @@ function renderFlash(){
   const c = list[flashIdx];
   const st = cs(c.id);
   const nx = list[flashIdx+1] || {};
-  prefetchAudio([c.id, c.id+"_ex", nx.id, nx.id ? nx.id+"_ex" : ""]);
+  prefetchAudio([c.id, c.id+"_ex", ...relAudioIds(c), nx.id, nx.id ? nx.id+"_ex" : "", ...relAudioIds(nx)]);
   body.innerHTML = `
     <div class="card ${flipped?"flipped":""}" id="card" role="button" aria-label="카드 뒤집기">
       <div class="front">${frontHTML(c)}</div>
@@ -938,12 +953,38 @@ function jumpFlash(delta){
 /* =====================================================================
    6) 퀴즈 — 카드에서 문제를 자동 생성 + 상황 문제
    ===================================================================== */
+/* =====================================================================
+   6) 퀴즈 — 4가지 유형을 매번 새로 조합해 자동 생성 (고정 문제 은행 없음)
+      ① 🎧 듣고 고르기        원어민 MP3(카드·예시문·현지인 질문)를 듣고 뜻·대답 고르기
+      ② 💬 상황별 표현 고르기  한국어 상황·뜻을 보고 알맞은 이탈리아어·영어 표현 고르기
+      ③ 🧩 빈칸 채우기        문장의 핵심 단어 한 칸을 ( ___ )로 비우고 고르기
+      ④ 🔄 파생·단어 뜻       related 파생 표현 / 단어 카드의 뜻 맞히기
+      → Day 2, Day 3 … 카드만 추가하면 네 유형 문제가 자동으로 함께 늘어난다.
+      → '새 퀴즈'를 누를 때마다 문제·보기 순서가 새로 섞인다.
+   ===================================================================== */
+const GROUP_LABEL = {
+  listen: "🎧 듣고 고르기",
+  situation: "💬 상황별 표현 고르기",
+  blank: "🧩 빈칸 채우기",
+  related: "🔄 파생·단어 뜻"
+};
+const LETTER = "A-Za-zÀ-ÖØ-öø-ÿ";   /* 이탈리아어·영어 알파벳 (낱말 경계 판정용) */
+
+function uniqTexts(list){
+  const seen = {}, out = [];
+  (list || []).forEach(t=>{
+    const s = String(t == null ? "" : t).trim();
+    if(!s || seen[s]) return;
+    seen[s] = 1; out.push(s);
+  });
+  return out;
+}
 function pickDistractors(answer, pool, n){
-  const A = String(answer);
+  const A = String(answer == null ? "" : answer).trim();
   const L = A.length;
   const seen = {}; seen[A] = 1;
   const near = [], far = [];
-  shuffle(pool).forEach(t=>{
+  shuffle(uniqTexts(pool)).forEach(t=>{
     if(!t || seen[t]) return;
     seen[t] = 1;
     if(t.length >= L*0.45 - 2 && t.length <= L*1.8 + 8) near.push(t);
@@ -952,133 +993,269 @@ function pickDistractors(answer, pool, n){
   return near.concat(far).slice(0, n);
 }
 function mkOptions(correct, distractors){
-  return shuffle([{text:correct, correct:true}].concat(distractors.map(t=>({text:t, correct:false}))));
+  const c = String(correct).trim();
+  const d = uniqTexts(distractors).filter(t => t !== c);
+  return shuffle([{text:c, correct:true}].concat(d.slice(0,4).map(t=>({text:t, correct:false}))));
 }
-function kindLabel(q){
-  if(q.kind==="meaning") return "뜻 맞히기";
-  if(q.kind==="reverse") return "말해 보기";
-  if(q.kind==="listen") return "듣기";
-  if(q.kind==="qa") return "리스닝 · 대답";
-  return q.tag || "상황";
+function kindLabel(q){ return GROUP_LABEL[q.group] || q.tag || "문제"; }
+
+/* 문장 안에서 target이 '낱말 하나'로 들어 있는 자리 찾기 — l’aeroporto → aeroporto */
+function findWhole(sentence, target){
+  const t = String(target || "").trim();
+  if(!t) return null;
+  const escaped = t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  let re;
+  try{ re = new RegExp("(^|[^" + LETTER + "])(" + escaped + ")(?![" + LETTER + "])", "i"); }
+  catch(e){ return null; }
+  const m = re.exec(sentence);
+  if(!m) return null;
+  const start = m.index + m[1].length;
+  return {start: start, end: start + m[2].length, text: m[2]};
 }
+/* ③ 빈칸 후보 — 카드 앞면/예시문에 그대로 들어 있는 breakdown 낱말 하나를 비운다 */
+function makeBlank(c){
+  const ex = (c.example && c.example.exText) || "";
+  const cands = [];
+  (c.breakdown || []).forEach(p=>{
+    const w = String(p[0] == null ? "" : p[0]).trim();
+    if(w.length < 3) return;
+    [c.front, ex].forEach(s=>{
+      if(!s) return;
+      const hit = findWhole(s, w);
+      if(hit) cands.push({sentence: s, hit: hit});
+    });
+  });
+  if(!cands.length && c.type === "word" && ex){
+    const hit = findWhole(ex, String(c.front || "").replace(/[!.?,]+$/g, ""));
+    if(hit) cands.push({sentence: ex, hit: hit});
+  }
+  if(!cands.length) return null;
+  const long = cands.filter(x => x.hit.text.length >= 4);
+  const pick = shuffle(long.length ? long : cands)[0];
+  const word = pick.hit.text;
+  const isWordCard = c.type === "word" && String(c.front || "").trim().toLowerCase() === word.trim().toLowerCase();
+  const hint = isWordCard ? c.ko
+    : (pick.sentence !== c.front && c.example && c.example.exMeaning) ? c.example.exMeaning
+    : c.ko;
+  return {
+    sentence: pick.sentence,
+    word: word,
+    hint: hint,
+    masked: pick.sentence.slice(0, pick.hit.start) + "( ___ )" + pick.sentence.slice(pick.hit.end)
+  };
+}
+
 function buildPool(){
   const days = scopeDays();
   const cards = days.reduce((a,d)=>a.concat(d.cards.map(c=>Object.assign({day:d.day}, c))), []);
-  const qas = days.reduce((a,d)=>a.concat((d.qa||[]).map(q=>Object.assign({day:d.day}, q))), []);
-  const extras = days.reduce((a,d)=>a.concat((d.extra||[]).map(q=>Object.assign({day:d.day}, q))), []);
-  const qs = [];
-  const allKo = cards.map(c=>c.ko);
-  const koByType = {it:[], en:[], word:[]};
-  cards.forEach(c=>{ (koByType[c.type] || koByType.it).push(c.ko); });
-  const frontIt = cards.filter(c=>c.type==="it").map(c=>c.front);
-  const frontWord = cards.filter(c=>c.type==="word").map(c=>c.front);
-  const frontEn = cards.filter(c=>c.type==="en").map(c=>c.front);
+  const qas = days.reduce((a,d)=>a.concat((d.qa || []).map(q=>Object.assign({day:d.day}, q))), []);
+  const extras = days.reduce((a,d)=>a.concat((d.extra || []).map(q=>Object.assign({day:d.day}, q))), []);
 
+  /* ---- 보기 후보 풀 (언어별 · 뜻별) ---- */
+  const itWords = [], enWords = [], koPool = [], relKo = [], wordKo = [], exKo = [];
+  const frontIt = [], frontWord = [], frontEn = [], relIt = [], relEn = [];
   cards.forEach(c=>{
-    const base = {day:c.day, cardId:c.id, tag:c.tag, src:c};
-    /* 뜻 맞히기 */
+    koPool.push(c.ko);
+    if(c.type === "word"){ wordKo.push(c.ko); frontWord.push(c.front); itWords.push(c.front); }
+    if(c.type === "it") frontIt.push(c.front);
+    if(c.type === "en") frontEn.push(c.front);
+    if(c.example && c.example.exMeaning) exKo.push(c.example.exMeaning);
+    (c.breakdown || []).forEach(p=>{ if(p[0]) (c.type === "en" ? enWords : itWords).push(p[0]); });
+    (c.related || []).forEach(p=>{
+      if(p[0]){
+        (c.type === "en" ? enWords : itWords).push(p[0]);
+        (c.type === "en" ? relEn : relIt).push(p[0]);
+      }
+      if(p[1]) relKo.push(p[1]);
+    });
+  });
+  const koAll = uniqTexts(koPool), relKoAll = uniqTexts(relKo), exKoAll = uniqTexts(exKo), wordKoAll = uniqTexts(wordKo);
+  const shortKo = koAll.filter(t => t.length <= 12);
+
+  const qs = [];
+  cards.forEach(c=>{
+    const lang = cardLang(c);
+    const sameFronts = c.type === "en" ? frontEn : (c.type === "word" ? frontWord : frontIt);
+    const sameWords = c.type === "en" ? enWords : itWords;
+    const relSame = c.type === "en" ? relEn : relIt;
+    const base = {day: c.day, cardId: c.id, tag: c.tag, src: c};
+
+    /* ① 카드 본문을 듣고 뜻 고르기 */
     qs.push(Object.assign({}, base, {
-      kind:"meaning",
-      prompt:c.front,
-      audio:{text:c.front, lang:c.type==="en"?"en-US":"it-IT"},
-      ask:c.type==="word" ? "이 단어, 무슨 뜻일까요?" : "무슨 뜻일까요?",
-      options:mkOptions(c.ko, pickDistractors(c.ko, (koByType[c.type]||[]).concat(allKo), 3)),
-      explain:[].concat(
-        c.pron ? ["발음 · "+c.pron] : [],
-        (c.en && c.type!=="en") ? [c.en] : [],
-        bdLine(c),
-        c.tip ? [c.tip] : []
-      )
+      group: "listen", kind: "listenF",
+      ask: "듣고 뜻을 고르세요",
+      audio: {text: c.front, lang: lang},
+      options: mkOptions(c.ko, pickDistractors(c.ko, koAll, 3)),
+      explain: [].concat(
+        ["들린 표현 · " + c.front],
+        c.pron ? ["발음 · " + c.pron] : [],
+        (c.en && c.type !== "en") ? [c.en] : [],
+        bdLine(c), c.tip ? [c.tip] : []
+      ),
+      transcript: c.front,
+      ansAudio: {id: c.id, text: c.front, lang: lang}
     }));
-    /* 반대 방향 */
-    if(c.rev !== false){
-      const pool = c.type==="en" ? frontEn : (c.type==="word" ? frontWord : frontIt);
+
+    /* ① 예시문을 듣고 뜻 고르기 */
+    const ex = c.example;
+    if(ex && ex.exText && ex.exMeaning){
       qs.push(Object.assign({}, base, {
-        kind:"reverse",
-        prompt:c.ko,
-        ask:c.type==="en" ? "영어로 뭐라고 할까요?" : "이탈리아어로 뭐라고 할까요?",
-        options:mkOptions(c.front, pickDistractors(c.front, pool, 3)),
-        explain:[].concat(
-          c.pron ? ["발음 · "+c.pron] : [],
-          bdLine(c),
-          c.tip ? [c.tip] : []
+        group: "listen", kind: "listenEx",
+        ask: "예시문을 듣고 뜻을 고르세요",
+        audio: {text: ex.exText, lang: lang},
+        options: mkOptions(ex.exMeaning, pickDistractors(ex.exMeaning, exKoAll, 3)),
+        explain: [].concat(
+          ["들린 예시문 · " + ex.exText],
+          ex.exPron ? ["발음 · " + ex.exPron] : [],
+          [ex.exMeaning]
         ),
-        answerNote:c.front
+        transcript: ex.exText,
+        ansAudio: {id: c.id + "_ex", text: ex.exText, lang: lang}
       }));
     }
-    /* 듣기 */
-    qs.push(Object.assign({}, base, {
-      kind:"listen",
-      prompt:"",
-      audio:{text:c.front, lang:c.type==="en"?"en-US":"it-IT"},
-      ask:"듣고 뜻을 고르세요",
-      options:mkOptions(c.ko, pickDistractors(c.ko, (koByType[c.type]||[]).concat(allKo), 3)),
-      explain:[].concat(
-        ["들린 문장 · "+c.front],
-        c.pron ? ["발음 · "+c.pron] : [],
-        bdLine(c),
-        c.tip ? [c.tip] : []
-      ),
-      transcript:c.front
-    }));
+
+    /* ② 한국어 상황·뜻 → 알맞은 표현 고르기 */
+    if(c.rev !== false){
+      qs.push(Object.assign({}, base, {
+        group: "situation", kind: "reverse",
+        ctx: c.tag ? ("상황 · " + c.tag) : "",
+        ask: c.type === "en" ? "영어로 뭐라고 할까요?" : "이탈리아어로 뭐라고 할까요?",
+        prompt: c.ko,
+        options: mkOptions(c.front, pickDistractors(c.front, sameFronts, 3)),
+        ansAudio: {id: c.id, text: c.front, lang: lang},
+        explain: [].concat(
+          c.pron ? ["발음 · " + c.pron] : [],
+          bdLine(c), c.tip ? [c.tip] : []
+        )
+      }));
+    }
+
+    /* ③ 빈칸 채우기 */
+    const bk = makeBlank(c);
+    if(bk){
+      qs.push(Object.assign({}, base, {
+        group: "blank", kind: "blank",
+        ask: "빈칸에 알맞은 말은?",
+        prompt: bk.masked,
+        hint: bk.hint,
+        promptLang: lang,
+        options: mkOptions(bk.word, pickDistractors(bk.word, sameWords.concat(relSame), 3)),
+        ansAudio: {id: "", text: bk.word, lang: lang},
+        explain: [].concat(
+          ["완성 문장 · " + bk.sentence],
+          [bk.hint],
+          c.pron ? ["발음 · " + c.pron] : []
+        )
+      }));
+    }
+
+    /* ④ related 파생 표현 — 뜻 맞히기 / 한국어 → 표현 (매번 방향이 바뀐다) */
+    (c.related || []).forEach((p, i)=>{
+      if(!p[0] || !p[1]) return;
+      const rel = {id: c.id + "_rel" + i, text: p[0], lang: lang};
+      if(Math.random() < 0.5){
+        qs.push(Object.assign({}, base, {
+          group: "related", kind: "relMean",
+          ask: "이 표현, 무슨 뜻일까요?",
+          prompt: p[0], promptLang: lang,
+          options: mkOptions(p[1], pickDistractors(p[1], relKoAll.concat(wordKoAll), 3)),
+          ansAudio: rel,
+          explain: [].concat(["「" + c.front + "」 — " + c.ko], c.tip ? [c.tip] : [])
+        }));
+      }else{
+        qs.push(Object.assign({}, base, {
+          group: "related", kind: "relRev",
+          ctx: "🔄 같이 외워요",
+          ask: "이 뜻의 표현은?",
+          prompt: p[1],
+          options: mkOptions(p[0], pickDistractors(p[0], relSame.concat(sameWords), 3)),
+          ansAudio: rel,
+          explain: [].concat(["「" + c.front + "」 — " + c.ko], c.tip ? [c.tip] : [])
+        }));
+      }
+    });
+
+    /* ④ 단어 카드 뜻 맞히기 */
+    if(c.type === "word"){
+      let wd = pickDistractors(c.ko, wordKoAll, 3);
+      if(wd.length < 3) wd = wd.concat(pickDistractors(c.ko, shortKo, 3 - wd.length));
+      qs.push(Object.assign({}, base, {
+        group: "related", kind: "wordMean",
+        ask: "이 단어, 무슨 뜻일까요?",
+        prompt: c.front, promptLang: "it-IT",
+        options: mkOptions(c.ko, wd),
+        ansAudio: {id: c.id, text: c.front, lang: "it-IT"},
+        explain: [].concat(
+          c.pron ? ["발음 · " + c.pron] : [],
+          c.en ? [c.en] : [],
+          bdLine(c), c.tip ? [c.tip] : []
+        )
+      }));
+    }
   });
 
+  /* ① 현지인 질문을 듣고 알맞은 대답 고르기 */
   qas.forEach(q=>{
     qs.push({
-      day:q.day, cardId:"qa:"+q.id, tag:"리스닝", kind:"qa",
-      speaker:q.speaker,
-      audio:{text:q.q, lang:"it-IT"},
-      ask:"질문을 듣고 알맞은 대답을 고르세요",
-      options:mkOptions(q.a, pickDistractors(q.a, qas.map(x=>x.a).concat(frontIt), 3)),
-      explain:[
-        "«"+q.q+"» — "+q.qKo,
-        "«"+q.a+"» — "+q.aKo+" ("+q.aPron+")",
+      day: q.day, cardId: "qa:" + q.id, tag: "리스닝",
+      group: "listen", kind: "qa", speaker: q.speaker,
+      audio: {text: q.q, lang: "it-IT"},
+      ask: "질문을 듣고 알맞은 대답을 고르세요",
+      options: mkOptions(q.a, pickDistractors(q.a, qas.map(x=>x.a).concat(frontIt), 3)),
+      ansAudio: {id: String(q.id).replace(/^qa:/, "") + "a", text: q.a, lang: "it-IT"},
+      explain: [
+        "«" + q.q + "» — " + q.qKo,
+        "«" + q.a + "» — " + q.aKo + " (" + q.aPron + ")",
         q.tip
-      ],
-      qKo:q.qKo,
-      answerNote:q.a
+      ].filter(Boolean),
+      qKo: q.qKo,
+      transcript: q.q
     });
   });
 
+  /* ② 상황 문제 (extra) */
   extras.forEach(q=>{
     qs.push({
-      day:q.day, cardId:"ex:"+q.id, tag:q.tag||"상황", kind:"extra",
-      prompt:q.q, ask:"", audio:null,
-      options:shuffle(q.options.map((t,i)=>({text:t, correct:i===q.a}))),
-      explain:[q.explain]
+      day: q.day, cardId: "ex:" + q.id, tag: q.tag || "상황",
+      group: "situation", kind: "extra",
+      prompt: q.q, ask: "", audio: null,
+      options: shuffle(q.options.map((t,i)=>({text: t, correct: i === q.a}))),
+      explain: [q.explain],
+      ansAudio: null
     });
   });
 
-  return qs;
+  return qs.filter(q => q.options && q.options.length >= 2);
 }
+
+/* 한 판 고르기 — 네 유형을 번갈아(순서는 매번 랜덤) 뽑고, 같은 카드는 한 번만 */
 function pickRound(pool, n){
-  const groups = {}, order = [];
+  const groups = {};
   pool.forEach(q=>{
-    if(!groups[q.kind]){ groups[q.kind] = []; order.push(q.kind); }
-    groups[q.kind].push(q);
+    const g = q.group || "situation";
+    (groups[g] = groups[g] || []).push(q);
   });
-  order.forEach(k=>{ groups[k] = shuffle(groups[k]); });
-  const weights = {meaning:3, listen:3, reverse:2, qa:1, extra:1};
-  const cycle = [];
-  Object.keys(weights).forEach(k=>{
-    if(groups[k] && groups[k].length){ for(let w=0; w<weights[k]; w++) cycle.push(k); }
-  });
-  if(!cycle.length) return [];
-  const used = {}, out = [];
-  let i = 0, guard = 0;
-  while(out.length < n && guard++ < 400){
-    if(!cycle.some(k=>groups[k].length)) break;
-    const k = cycle[i++ % cycle.length];
+  const keys = shuffle(Object.keys(groups));
+  keys.forEach(k=>{ groups[k] = shuffle(groups[k]); });
+  const out = [], usedCard = {};
+  const take = function(k){
     const g = groups[k];
-    if(!g || !g.length) continue;
-    let idx = 0;
-    for(let j=0;j<g.length;j++){
-      const cid = g[j].cardId;
-      if(!cid || !used[cid]){ idx = j; break; }
-    }
-    const q = g.splice(idx,1)[0];
-    if(q.cardId) used[q.cardId] = 1;
+    if(!g || !g.length) return false;
+    const j = g.findIndex(q => !q.cardId || !usedCard[q.cardId]);
+    if(j === -1) return false;
+    const q = g.splice(j, 1)[0];
+    if(q.cardId) usedCard[q.cardId] = 1;
     out.push(q);
+    return true;
+  };
+  /* 1) 네 유형에서 한 문제씩 먼저 (있는 유형만) */
+  keys.forEach(k=>{ if(out.length < n) take(k); });
+  /* 2) 남는 자리는 유형을 번갈아 채우기 (순서 매번 랜덤) */
+  let guard = 0;
+  while(out.length < n && guard++ < 600){
+    let picked = false;
+    for(const k of shuffle(keys)){ if(take(k)){ picked = true; break; } }
+    if(!picked) break;
   }
   return shuffle(out);
 }
@@ -1096,15 +1273,15 @@ function renderQuizStart(){
     <div class="qstart qcenter">
       <div class="qemoji">⚡</div>
       <div class="qtitle">듀오링고처럼 10문제</div>
-      <div class="qdesc">${esc(scopeLabel)}에서 ${ROUND_SIZE}문제가 랜덤으로 나와요.<br>맞히면 콤보가 쌓이고, 틀린 문제만 다시 풀 수 있어요.</div>
+      <div class="qdesc">${esc(scopeLabel)}에서 ${ROUND_SIZE}문제가 매번 새로 나와요.<br>🎧 듣고 고르기 · 💬 상황별 · 🧩 빈칸 · 🔄 파생/단어를<br>번갈아 섞고, 보기 순서도 매번 달라져요.</div>
       <div class="qstats">
         <div class="qstat"><b>${q.answered}</b><span>푼 문제</span></div>
         <div class="qstat"><b>${acc}%</b><span>정답률</span></div>
         <div class="qstat"><b>${q.best||0}</b><span>최고 콤보</span></div>
       </div>
       <button class="btn known" id="startQuiz" style="width:100%">시작하기 · ${Math.min(ROUND_SIZE,pool.length)}문제</button>
-      <div class="mixline">한 판 구성 · 뜻 맞히기 3 · 듣기 3 · 말해 보기 2 · 대화 1 · 상황 1</div>
-      <div class="scope-note">문제 은행 ${pool.length}개 · Day가 늘면 자동으로 쌓여요</div>
+      <div class="mixline">매번 새로 섞여요 · 🎧 듣고 고르기 · 💬 상황별 · 🧩 빈칸 · 🔄 파생/단어</div>
+      <div class="scope-note">자동 생성 문제 ${pool.length}개 · Day가 늘면 새 카드 문제도 함께 늘어요</div>
     </div>`;
 }
 function startRound(list){
@@ -1133,17 +1310,20 @@ function renderQuestion(){
       <button class="audio-btn" data-audio="q">🔊 다시 듣기</button>
       <button class="peek" data-peek="1">한국어 뜻 보기</button>
       <div id="peekBox" class="qsub" style="display:none">“${esc(q.qKo||"")}”</div>`;
-  }else if(q.kind === "listen"){
+  }else if(q.kind === "listenF" || q.kind === "listenEx"){
     main = `
-      <div class="qprompt">🔊 잘 듣고 뜻을 고르세요</div>
+      <div class="qsub" style="font-weight:800;color:#8a8a8a">${esc(q.ask)}</div>
       <button class="audio-btn" data-audio="q">🔊 다시 듣기</button>`;
   }else{
-    const pc = q.prompt.length > 90 ? "sm" : q.prompt.length > 44 ? "md" : "";
-    const langAttr = (q.kind === "meaning" && q.src) ? ` lang="${q.src.type === "en" ? "en" : "it"}"` : "";
+    const prompt = q.prompt || "";
+    const pc = prompt.length > 90 ? "sm" : prompt.length > 44 ? "md" : "";
+    const langAttr = q.promptLang ? ` lang="${q.promptLang === "en-US" ? "en" : "it"}"` : "";
     main = `
+      ${q.ctx ? `<div class="qctx">${esc(q.ctx)}</div>` : ""}
       ${q.ask ? `<div class="qsub" style="font-weight:800;color:#8a8a8a">${esc(q.ask)}</div>` : ""}
-      <div class="qprompt ${pc}"${langAttr}>${esc(q.prompt)}</div>
-      ${q.kind === "meaning" ? `<button class="audio-btn" data-audio="q">🔊 ${q.src && q.src.type === "en" ? "영어로 듣기" : "발음 듣기"}</button>` : ""}`;
+      <div class="qprompt ${pc}"${langAttr}>${esc(prompt)}</div>
+      ${q.hint ? `<div class="qhint">뜻 · ${esc(q.hint)}</div>` : ""}
+      ${q.audio ? `<button class="audio-btn" data-audio="q">🔊 발음 듣기</button>` : ""}`;
   }
 
   const opts = q.options.map((o,i)=>
@@ -1194,8 +1374,8 @@ function checkAnswer(){
   }
 
   const correctText = q.options.find(o=>o.correct).text;
-  const ansId = q.src ? q.src.id : (q.kind === "qa" ? questionAudioId(q) + "a" : "");
-  quiz.ansAudio = ansId ? {id:ansId, text:q.src ? q.src.front : correctText, lang:q.src ? cardLang(q.src) : "it-IT"} : null;
+  quiz.ansAudio = ("ansAudio" in q) ? q.ansAudio
+    : (q.src ? {id:q.src.id, text:q.src.front, lang:cardLang(q.src)} : null);
   const last = quiz.idx >= quiz.list.length-1;
   const fb = $("#qFb");
   fb.className = "fb show " + (ok?"ok":"no");
@@ -1311,6 +1491,22 @@ $("#viewFlash").addEventListener("click", e=>{
     }
     return;
   }
+  /* 🔄 같이 외워요 칩 — audio/{id}_rel{i}.mp3 (없으면 TTS 폴백). 카드는 안 뒤집힘 */
+  const relSay = e.target.closest("[data-rel-say]");
+  if(relSay){
+    e.stopPropagation();
+    e.preventDefault();
+    const cid = relSay.getAttribute("data-rel-say");
+    const ri = Number(relSay.getAttribute("data-rel-i"));
+    const rc = allCards().find(x => x.id === cid);
+    const rp = rc && rc.related && rc.related[ri];
+    if(rp && rp[0]){
+      playAudio(cid + "_rel" + ri, rp[0], cardLang(rc), 1);
+      relSay.classList.add("on");
+      setTimeout(()=>relSay.classList.remove("on"), 700);
+    }
+    return;
+  }
   const card = e.target.closest("#card");
   if(card){
     flipped = !flipped;
@@ -1385,7 +1581,7 @@ $("#viewQuiz").addEventListener("click", e=>{
     return;
   }
   if(e.target.closest("#retryWrong")){
-    startRound(shuffle(quiz.wrong.slice()));
+    startRound(shuffle(quiz.wrong.map(w=>Object.assign({}, w, {options: shuffle(w.options)}))));
     return;
   }
   if(e.target.closest("#newRound")){
