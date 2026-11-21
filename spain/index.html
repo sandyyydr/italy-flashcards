@@ -598,10 +598,10 @@ function renderMap(){
   }
   mapObj.eachLayer(l=>{ if(l instanceof L.Marker || l instanceof L.Polyline) mapObj.removeLayer(l); });
   const pts = mapDay === -1
-    ? [{t:'9/29~10/1',name:'포르투 (두루강·와인셀러)',gq:'Porto, Portugal',move:'2박',lat:41.1496,lng:-8.6110},
-       {t:'10/1~10/4',name:'리스본 · 신트라',gq:'Lisbon, Portugal',move:'3박',lat:38.7223,lng:-9.1393},
-       {t:'10/4~10/7',name:'바르셀로나 (가우디)',gq:'Barcelona, Spain',move:'3박',lat:41.3874,lng:2.1686},
-       {t:'10/7~10/11',name:'마요르카 · 칼라 도르',gq:"Cala d'Or, Mallorca, Spain",move:'4박',lat:39.3736,lng:3.2282}]
+    ? [{t:'9/29~10/1',name:'포르투 (두루강·와인셀러)',gq:'Porto, Portugal',move:'2박',segM:'기차 2h50',lat:41.1496,lng:-8.6110},
+       {t:'10/1~10/4',name:'리스본 · 신트라',gq:'Lisbon, Portugal',move:'3박',segM:'기차 2h50',lat:38.7223,lng:-9.1393},
+       {t:'10/4~10/7',name:'바르셀로나 (가우디)',gq:'Barcelona, Spain',move:'3박',segM:'항공 1h50',lat:41.3874,lng:2.1686},
+       {t:'10/7~10/11',name:'마요르카 · 칼라 도르',gq:"Cala d'Or, Mallorca, Spain",move:'4박',segM:'항공 50분',lat:39.3736,lng:3.2282}]
     : days[mapDay].items.filter(i=>i.lat && i.lng);
   const latlngs = []; segLayers = []; segMarkers = [];
   pts.forEach((p,idx)=>{
@@ -612,7 +612,7 @@ function renderMap(){
     if(idx > 0){
       const prev = [pts[idx-1].lat, pts[idx-1].lng];
       if(prev[0]!==ll[0] || prev[1]!==ll[1]){
-        const sm = segMeta(p.move);
+        const sm = segMeta(p.segM || p.move);
         const pl = L.polyline([prev, ll],{color:sm.col,weight:4.5,opacity:0.85,dashArray:sm.dash}).addTo(mapObj);
         segLayers[idx-1] = pl;
         const mid = [(prev[0]+ll[0])/2, (prev[1]+ll[1])/2];
