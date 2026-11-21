@@ -1,4 +1,4 @@
-const CACHE = 'italy-planner-v1';
+const CACHE = 'italy-planner-v2';
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(['./', './index.html'])));
   self.skipWaiting();
