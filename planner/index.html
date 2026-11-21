@@ -360,6 +360,8 @@ function renderPlan(){
       ${renderRouteBar(it.segs, it.how, idx>0?d.items[idx-1]:(d.stay?{gq:d.stay}:null), it)}${it.warn ? `<div class="item-warn">⚠️ 챙길 것·주의: ${it.warn}</div>` : ''}
       <div class="item-actions">
         <a class="act-btn map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(it.name.replace(/<[^>]+>|&rarr;/g,' '))}">🧭 구글맵</a>
+        <button class="act-btn" onclick="moveItem(${idx},-1)">▲</button>
+        <button class="act-btn" onclick="moveItem(${idx},1)">▼</button>
         <button class="act-btn" onclick="openModal(${idx})">✏️ 수정</button>
         <button class="act-btn" onclick="delItem(${idx})">🗑️</button>
       </div>
@@ -371,11 +373,21 @@ function toggleDone(idx){
   localStorage.setItem('it_days_v4', JSON.stringify(days));
   renderPlan();
 }
+function moveItem(idx, dir){
+  const list = days[curDay].items;
+  const ni = idx + dir;
+  if(ni < 0 || ni >= list.length) return;
+  [list[idx], list[ni]] = [list[ni], list[idx]];
+  localStorage.setItem('it_days_v4', JSON.stringify(days));
+  renderPlan();
+  if(mapObj) renderMap();
+}
 function delItem(idx){
-  if(!confirm('이 일정을 삭제할까요?')) return;
+  if(!confirm('이 일정을 삭제할까요? (지도에도 바로 반영됩니다)')) return;
   days[curDay].items.splice(idx,1);
   localStorage.setItem('it_days_v4', JSON.stringify(days));
   renderPlan();
+  if(mapObj) renderMap();
 }
 function openModal(idx){
   editIdx = idx;
@@ -400,7 +412,7 @@ function saveModal(){
   if(editIdx!==null) days[curDay].items[editIdx] = {...days[curDay].items[editIdx], ...item};
   else days[curDay].items.push(item);
   localStorage.setItem('it_days_v4', JSON.stringify(days));
-  closeModal(); renderPlan();
+  closeModal(); renderPlan(); if(mapObj) renderMap();
 }
 
 
