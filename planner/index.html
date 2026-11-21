@@ -58,8 +58,8 @@ main{padding:12px 14px calc(env(safe-area-inset-bottom,16px) + 78px);max-width:6
 .p-g{background:var(--mint);color:var(--green);}
 .p-o{background:var(--orgbg);color:var(--org);}
 .calc-box{background:var(--green);color:#fff;border-radius:16px;padding:14px;margin-bottom:12px;}
-.calc-row{display:flex;gap:8px;margin-top:8px;}
-.calc-row input{flex:1;padding:10px 12px;border-radius:10px;border:none;font-size:16px;font-weight:700;}
+.calc-row{display:flex;gap:8px;margin-top:8px;align-items:center;}
+.calc-row input{flex:1;min-width:0;width:100%;padding:10px;border-radius:10px;border:none;font-size:15px;font-weight:700;}
 .chk-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #EFEADF;cursor:pointer;}
 .chk-row:last-child{border-bottom:none;}
 .chk-row input{width:20px;height:20px;accent-color:var(--green);margin-top:2px;flex-shrink:0;}
@@ -183,7 +183,7 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
     <div class="calc-box">
       <div style="font-size:13px;font-weight:700;color:var(--gold);">💶 유로 &harr; 원화 간편 계산기 (1€ = 1,650원)</div>
       <div class="calc-row">
-        <input type="number" id="eurIn" placeholder="유로 (€)" oninput="calcEur()"/>
+        <input type="text" inputmode="decimal" id="eurIn" placeholder="유로 (€)" oninput="formatAmtInput(this);calcEur()"/>
         <input type="text" id="krwOut" readonly value="0 원"/>
       </div>
     </div>
@@ -430,7 +430,7 @@ function renderChecks(){
 }
 
 function calcEur(){
-  const v = parseFloat(document.getElementById('eurIn').value || '0');
+  const v = parseAmtVal('eurIn');
   document.getElementById('krwOut').value = Math.round(v * 1650).toLocaleString() + ' 원';
 }
 
