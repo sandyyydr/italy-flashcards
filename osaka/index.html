@@ -369,9 +369,13 @@ function renderMap(){
   if(latlngs.length>1) L.polyline(latlngs,{color:'#C25A2A',weight:4,dashArray:'7,6'}).addTo(mapObj);
   mapObj.fitBounds(latlngs, {padding:[36,36]});
   setTimeout(()=>mapObj.invalidateSize(), 100);
-  const origin = `${pts[0].lat},${pts[0].lng}`, dest = `${pts[pts.length-1].lat},${pts[pts.length-1].lng}`;
-  const wp = pts.slice(1,-1).map(p=>`${p.lat},${p.lng}`).join('|');
-  document.getElementById('mapGoogleBtn').innerHTML = `<a class="act-btn map" style="width:100%;justify-content:center;padding:12px;font-size:14px;border-radius:12px;" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${dest}${wp?`&waypoints=${encodeURIComponent(wp)}`:''}">🧭 구글맵 앱으로 전체 동선 한 번에 열기 (${pts.length}곳)</a>`;
+  const uPts = pts.filter((p,i)=> i===0 || `${p.lat},${p.lng}` !== `${pts[i-1].lat},${pts[i-1].lng}`);
+  const gBtn = document.getElementById('mapGoogleBtn');
+  if(uPts.length >= 2){
+    gBtn.innerHTML = `<a class="act-btn map" style="width:100%;justify-content:center;padding:12px;font-size:14px;border-radius:12px;" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/${uPts.map(p=>`${p.lat},${p.lng}`).join('/')}">🧭 구글맵 앱으로 전체 동선 한 번에 열기 (${uPts.length}곳)</a>`;
+  } else if(uPts.length === 1){
+    gBtn.innerHTML = `<a class="act-btn map" style="width:100%;justify-content:center;padding:12px;font-size:14px;border-radius:12px;" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${uPts[0].lat},${uPts[0].lng}">🧭 구글맵 앱으로 위치 열기</a>`;
+  }
   document.getElementById('mapLegend').innerHTML = `<h3>DAY ${mapDay+1} · ${DAYS[mapDay].city} 동선</h3>` + pts.map((p,i)=>`<div class="row"><div><b>${i+1}. ${p.name}</b><br/><span style="font-size:12px;color:var(--sub);">${p.t} · ${p.move}</span></div><a class="act-btn map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}">구글맵</a></div>`).join('');
 }
 
