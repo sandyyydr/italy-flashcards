@@ -470,7 +470,7 @@ function renderRouteBar(segs, how, prev, cur){
   const url = routeDirUrl(prev, cur);
   const gbtn = url ? `<a class="act-btn map" onclick="event.stopPropagation()" target="_blank" rel="noopener" href="${url}" style="flex-shrink:0;padding:3px 8px;font-size:11px;border-radius:99px;">🧭 노선</a>` : '';
   const topRow = bar ? `<div style="display:flex;align-items:center;gap:6px;">${bar}${gbtn}</div>` : '';
-  const txt = how ? `<div class="r-txt">🚇 ${how}</div>` : '';
+  const txt = how ? `<div class="r-txt">${segMeta(cur && cur.move).ico} ${how}</div>` : '';
   return `<div class="route-box">${topRow}${txt}</div>`;
 }
 
