@@ -241,55 +241,55 @@ const DEFAULT_DAYS = [
     {t:"14:15", name:"로마 피우미치노(FCO) 착륙", gq:"Leonardo da Vinci–Fiumicino Airport, Rome", move:"32분", segs:[{l:"입국 90분",w:2},{b:"레",l:"32분",w:2,c:"#C25A2A"}], how:"FCO 공항역 → 레오나르도 익스프레스(€14·15분 간격) → 테르미니역", note:"16:15~16:45 열차 탑승 (90~120분 버퍼)", warn:"비행기 연착/수하물 지연 대비 90~120분 버퍼! 열차표 탑승 전 개찰기 펀칭", lat:41.8003, lng:12.2389},
     {t:"17:30", name:"숙소 체크인 · 트레비·스페인 광장", gq:"Trevi Fountain, Rome", move:"지하철 A선/도보", segs:[{b:"A",l:"5분",w:2,c:"#E5532D"},{l:"도보 5분",w:1}], how:"테르미니역 → 지하철 A선 Barberini/Spagna역 → 도보 5분", note:"몬티 지구 숙소 짐 풀고 가볍게 저녁 & 젤라또", warn:"소매치기 주의(크로스백 앞으로) · 도시세 현금(€4~7/인·박) 준비", img:"./img/rome.jpg", lat:41.9009, lng:12.4833}
   ]},
-  {d:"9/30(목)", city:"로마", sub:"바티칸 · 트라스테베레", items:[
+  {d:"9/30(목)", stay:"Monti, Rome", city:"로마", sub:"바티칸 · 트라스테베레", items:[
     {t:"09:30", name:"바티칸 박물관 & 성 베드로 대성당", gq:"Vatican Museums, Rome", move:"15분", segs:[{l:"도보 5분",w:1},{b:"A",l:"15분",w:3,c:"#E5532D"},{l:"도보 8분",w:1}], how:"테르미니 → 지하철 A선(Battistini행) Ottaviano역 하차 → 도보 8분", note:"D-60 (27-08-01) 공식 홈페이지 오픈런 필수!", warn:"민소매·짧은 반바지 입장 불가(어깨/무릎 가릴 것) · 실물 여권 지참!", img:"./img/vatican.jpg", lat:41.9065, lng:12.4536},
     {t:"16:00", name:"판테온 · 나보나 광장", gq:"Pantheon, Rome", move:"도보 18분", segs:[{l:"도보 18분",w:3}], how:"성 베드로 광장 → 천사의 성 다리 건너 도보 18분 (또는 40·62번 버스)", note:"타짜도르 커피 한 잔 후 천사의 성 야경", warn:"판테온 입장권(€5) 사전 예약 또는 현장 QR 줄 확인", img:"./img/rome.jpg", lat:41.8986, lng:12.4769},
     {t:"19:30", name:"트라스테베레 저녁", gq:"Trastevere, Rome", move:"도보/트램 8번", segs:[{l:"도보 15분",w:2},{b:"T8",l:"트램 8",w:2,c:"#1F8E4D"}], how:"나보나 광장 → 다리 건너 도보 15분 (복귀 시 트램 8번 Venezia역)", note:"유명 파스타집 · 웨이팅 있어 19시 전후 추천", warn:"이탈리아 식당 자릿세(코페르토 €2~3/인) 별도 확인", lat:41.8897, lng:12.4708}
   ]},
-  {d:"10/1(금)", city:"소렌토", sub:"콜로세움 → 나폴리 → 소렌토", items:[
+  {d:"10/1(금)", stay:"Monti, Rome", city:"소렌토", sub:"콜로세움 → 나폴리 → 소렌토", items:[
     {t:"09:50", name:"콜로세움 · 포로 로마노", gq:"Colosseum, Rome", move:"5분", segs:[{b:"B",l:"5분",w:2,c:"#1E5CA8"},{l:"도보 2분",w:1}], how:"몬티 숙소 도보 10분 또는 지하철 B선 Colosseo역 하차 바로 앞", note:"D-30 (27-09-01) 예약 · 테르미니 짐 보관", warn:"실물 여권 필수(이름 대조 엄격) · 큰 백팩/유리병 반입 금지", img:"./img/rome.jpg", lat:41.8902, lng:12.4922},
     {t:"13:25", name:"로마 테르미니 &rarr; 나폴리 중앙역", gq:"Napoli Centrale, Naples", move:"고속열차 1h10m", segs:[{b:"FR",l:"70분",w:4,c:"#B92929"}], how:"로마 테르미니역 → 프레차로사/이탈로 고속열차 → 나폴리 중앙역", note:"도착 후 지하 Napoli Garibaldi에서 사철 환승", warn:"짐칸 바로 뒤 좌석 예매 추천 · 나폴리역 소매치기 주의!", lat:40.8529, lng:14.2729},
     {t:"15:40", name:"소렌토 도착 · 체크인", gq:"Piazza Tasso, Sorrento", move:"사철 1h10m", segs:[{l:"지하환승 5분",w:1},{b:"사철",l:"70분",w:4,c:"#C25A2A"}], how:"나폴리 중앙역 지하 Garibaldi역 → 사철(Sorrento행) 종점 하차", note:"피아차 타소 산책 · 레몬 셔벗 & 해산물 저녁", warn:"일반 사철 Tap&Go(컨택리스 카드)로 빠른 탑승!", img:"./img/sorrento.jpg", lat:40.6263, lng:14.3758}
   ]},
-  {d:"10/2(토)", city:"카프리", sub:"카프리 섬 · 푸른 동굴", items:[
+  {d:"10/2(토)", stay:"Piazza Tasso, Sorrento", city:"카프리", sub:"카프리 섬 · 푸른 동굴", items:[
     {t:"09:30", name:"소렌토항 &rarr; 카프리섬", gq:"Marina Grande, Capri", move:"고속페리 25분", segs:[{l:"도보 10분",w:1},{b:"배",l:"페리 25분",w:3,c:"#0E86A8"}], how:"소렌토 숙소 → 소렌토항(Marina Piccola) → NLG/SNAV 고속페리 → 카프리항", note:"물놀이·수영 가능! 푸른 동굴은 파도 여부에 따라 결정", warn:"멀미약·아쿠아슈즈·수영복/수건 챙기기 · 배 결항 시 플랜B", img:"./img/sorrento.jpg", lat:40.5532, lng:14.2222},
     {t:"13:00", name:"아나카프리 1인 체어리프트", gq:"Monte Solaro Chairlift, Anacapri", move:"버스+리프트", segs:[{b:"버스",l:"15분",w:2,c:"#C25A2A"},{b:"리프트",l:"정상 12분",w:2,c:"#1F8E4D"}], how:"카프리항 → 아나카프리행 미니버스(15분) → 몬테 솔라로 체어리프트", note:"몬테 솔라로 정상 뷰 · 아우구스투스 정원", warn:"모자 날아감 주의 · 막차 페리 시간 꼭 체크 후 하산!", lat:40.5507, lng:14.2121}
   ]},
-  {d:"10/3(일)", city:"남부", sub:"포지타노 · 아말피 (페리만 3구간)", items:[
+  {d:"10/3(일)", stay:"Piazza Tasso, Sorrento", city:"남부", sub:"포지타노 · 아말피 (페리만 3구간)", items:[
     {t:"09:00", name:"소렌토 &rarr; 포지타노 &rarr; 아말피", gq:"Amalfi Harbour, Amalfi", move:"페리 35+20분", segs:[{b:"배",l:"포지타노 35분",w:3,c:"#0E86A8"},{b:"배",l:"아말피 20분",w:2,c:"#0E86A8"}], how:"소렌토항 → NLG/트래블마르 페리 → 포지타노 → 아말피 해로 이동", note:"SITA 버스 정체 없이 페리로만 이동! 수영·해변 여유", warn:"페리 티켓 미리 예매 권장 · 계단 많아 편한 샌들/운동화 필수", img:"./img/positano.jpg", lat:40.6281, lng:14.4850},
     {t:"16:55", name:"소렌토 복귀 · 마지막 밤", gq:"Sorrento Port, Sorrento", move:"직항페리 50분", segs:[{b:"배",l:"50분",w:4,c:"#0E86A8"},{l:"도보 10분",w:1}], how:"아말피항 → 소렌토항 직항 페리(약 50분) → 숙소 복귀", note:"레몬 첼로 쇼핑 · 저녁 식사", warn:"유리병(레몬첼로) 구매 시 10/4 이동 캐리어 완충 포장!", img:"./img/amalfi.jpg", lat:40.6263, lng:14.3758}
   ]},
-  {d:"10/4(월)", city:"피렌체", sub:"피렌체 입성 · 두오모 · 티본", items:[
+  {d:"10/4(월)", stay:"Piazza Tasso, Sorrento", city:"피렌체", sub:"피렌체 입성 · 두오모 · 티본", items:[
     {t:"10:30", name:"소렌토 &rarr; 나폴리 &rarr; 피렌체", gq:"Firenze Santa Maria Novella, Florence", move:"사철+고속열차", segs:[{b:"사철",l:"70분",w:2,c:"#C25A2A"},{l:"여유환승",w:1},{b:"FR",l:"3시간",w:4,c:"#B92929"}], how:"소렌토 사철(70분) → 나폴리 중앙역 환승(1h25m+ 버퍼) → 피렌체 SMN역", note:"환승 1시간 25분+ 여유 배정", warn:"월요일은 우피치 휴관일! 그래서 두오모·티본부터 배치했습니다.", lat:43.7764, lng:11.2479},
     {t:"16:00", name:"피렌체 두오모 & 쿠폴라", gq:"Cathedral of Santa Maria del Fiore, Florence", move:"도보 10분", segs:[{l:"도보 10분",w:3}], how:"피렌체 SMN역/숙소 → 구시가지 도보 10분 직진", note:"D-30 전(27-08-31) 브루넬레스키 패스 예약", warn:"쿠폴라 463계단 엘리베이터 없음 · 예약 시간 15분 전 도착!", img:"./img/firenze.jpg", lat:43.7731, lng:11.2560},
     {t:"20:00", name:"티본 스테이크 저녁", gq:"Mercato Centrale, Florence", move:"도보 8분", segs:[{l:"도보 8분",w:3}], how:"두오모 광장 → 중앙시장/산 로렌초 방면 도보 8분", note:"달오스테/트래토리아 자자 등 사전 예약 추천", warn:"기본 1kg(2인) 단위 주문 · 레어/미디엄레어 굽기 추천", lat:43.7760, lng:11.2535}
   ]},
-  {d:"10/5(화)", city:"피렌체", sub:"우피치 + 일몰 스냅", items:[
+  {d:"10/5(화)", stay:"Santa Maria Novella, Florence", city:"피렌체", sub:"우피치 + 일몰 스냅", items:[
     {t:"09:30", name:"우피치 미술관", gq:"Uffizi Gallery, Florence", move:"도보 12분", segs:[{l:"도보 12분",w:3}], how:"피렌체 숙소 → 시뇨리아 광장 지나 도보 12분", note:"비너스의 탄생 · 봄 핵심 2시간 집중 관람", warn:"15:00 스냅 헤메 시작 시 12시 전에 나와서 여유 있게 점심 먹기!", img:"./img/firenze.jpg", lat:43.7678, lng:11.2553},
     {t:"15:00", name:"스냅 헤메 & 환복 준비", gq:"Ponte Vecchio, Florence", move:"도보 10분", segs:[{l:"도보 10분",w:3}], how:"구시가지 샵(살롱반하 등) 도보 이동 · 드레스/수트 환복", note:"살롱반하 제휴 시 15시 전후 메이크업 시작", warn:"구두/드레스 착용 시 걷기 편한 슬리퍼 하나 챙겨 가세요!", lat:43.7715, lng:11.2530},
     {t:"17:15", name:"일몰 스냅 (17:15~19:15)", gq:"Piazzale Michelangelo, Florence", move:"도보+택시/버스", segs:[{l:"베키오다리 도보",w:2},{b:"택시",l:"10분",w:2,c:"#14493F"}], how:"베키오 다리 도보 → 미켈란젤로 언덕은 12/13번 버스 또는 택시(10분·€12)", note:"일몰 18:50 · 미켈란젤로 언덕 · 베키오 다리", warn:"10월 초 해 진 뒤 쌀쌀함 → 촬영 중 덮을 얇은 겉옷 지참!", img:"./img/snap.jpg", lat:43.7629, lng:11.2651}
   ]},
-  {d:"10/6(수)", city:"돌로미티", sub:"베로나 렌터카 픽업 → 오르티세이", items:[
+  {d:"10/6(수)", stay:"Santa Maria Novella, Florence", city:"돌로미티", sub:"베로나 렌터카 픽업 → 오르티세이", items:[
     {t:"08:30", name:"피렌체 &rarr; 베로나 포르타 누오바", gq:"Verona Porta Nuova, Verona", move:"프레차로사 1h35m", segs:[{b:"FR",l:"95분",w:4,c:"#B92929"}], how:"피렌체 SMN역 → 프레차로사(볼로냐 경유) → 베로나 포르타 누오바역", note:"베로나역 바로 앞 렌터카 사무실", warn:"여권 + 한국면허증 + 국제운전면허증 + 운전자 명의 신용카드(체크X) 4종 필수!", lat:45.4289, lng:10.9826},
     {t:"10:30", name:"렌터카(자동) 픽업 &rarr; 오르티세이", gq:"Ortisei, South Tyrol, Italy", move:"렌터카 2h15m", segs:[{l:"차량인수 20분",w:1},{b:"차",l:"2h15m",w:4,c:"#14493F"}], how:"베로나역 렌터카 인수 → A22 고속도로 북상(볼차노 방향) → Chiusa 출구 → 오르티세이", note:"10/10 밀라노 15:30~16:30 반납(101시간 5일 요금)", warn:"인수 시 외관 360도 동영상 촬영 · 오르티세이 숙소 진입로 좁음 주의", img:"./img/ortisei.jpg", lat:46.5750, lng:11.6710}
   ]},
-  {d:"10/7(목)", city:"돌로미티", sub:"세체다 능선", items:[
+  {d:"10/7(목)", stay:"Ortisei, South Tyrol, Italy", city:"돌로미티", sub:"세체다 능선", items:[
     {t:"09:30", name:"세체다 케이블카", gq:"Funivie Seceda, Ortisei", move:"도보+케이블카", segs:[{l:"도보 5분",w:1},{b:"곤돌라",l:"20분",w:3,c:"#C25A2A"}], how:"오르티세이 시내 도보 5분 → Furnes 곤돌라 + Seceda 대형 케이블카 환승", note:"날씨 맑은 날 우선 배치", warn:"산 위 체감온도 0~5℃! 경량패딩·바람막이·선글라스 필수 · 막차 시간 확인", img:"./img/seceda.jpg", lat:46.6004, lng:11.7244}
   ]},
-  {d:"10/8(금)", city:"돌로미티", sub:"알페 디 시우시 · 카레짜 호수", items:[
+  {d:"10/8(금)", stay:"Ortisei, South Tyrol, Italy", city:"돌로미티", sub:"알페 디 시우시 · 카레짜 호수", items:[
     {t:"09:30", name:"알페 디 시우시 (유럽 최대 고원)", gq:"Alpe di Siusi, South Tyrol, Italy", move:"곤돌라 15분", segs:[{l:"도보 6분",w:1},{b:"곤돌라",l:"15분",w:3,c:"#B92929"}], how:"오르티세이 시내 → Mont Sëuc 빨간 곤돌라 탑승 → 정상 하차", note:"오르티세이에서 곤돌라 이용", warn:"09:00~17:00 일반 차량 진입 통제(과태료 주의) → 반드시 곤돌라 이용!", img:"./img/alpe.jpg", lat:46.5446, lng:11.6168},
     {t:"15:00", name:"카레짜 호수 드라이브", gq:"Lago di Carezza, Italy", move:"렌터카 40분", segs:[{b:"차",l:"40분",w:4,c:"#14493F"}], how:"오르티세이 → SS242/SS241 도로(29km·40분) → 카레짜 호수 주차장", note:"에메랄드 빛 호수 산책", warn:"유료 주차장 정산기 동전/카드 사용 · 호수 둘레길 미끄럼 주의", img:"./img/ortisei.jpg", lat:46.4092, lng:11.5750}
   ]},
-  {d:"10/9(토)", city:"돌로미티", sub:"하프 드라이브 & 스파 힐링", items:[
+  {d:"10/9(토)", stay:"Ortisei, South Tyrol, Italy", city:"돌로미티", sub:"하프 드라이브 & 스파 힐링", items:[
     {t:"10:30", name:"하프 삼각 드라이브 (47km·66분)", gq:"Passo Gardena, Italy", move:"렌터카 66분", segs:[{b:"차",l:"47km · 66분",w:4,c:"#14493F"}], how:"오르티세이 → 파소 가르데나(전망대) → 파소 셀라 → 오르티세이 순환", note:"파소 가르데나 → 셀라 고개 (무료 · 2시간 내외)", warn:"꼬불꼬불 산길이라 멀미약 추천 · 무리한 풀루프(78km)보다 하프가 안전!", img:"./img/seceda.jpg", lat:46.5504, lng:11.8075},
     {t:"15:00", name:"스파 휴식 (ADLER 또는 마르 돌로미트)", gq:"ADLER Spa Resort DOLOMITI, Ortisei", move:"도보/차 5분", segs:[{l:"도보 5분",w:3}], how:"오르티세이 시내 도보 3~5분 (My Arbor 데이스파는 차 50분 브릭센)", note:"3+1박 플렉스 또는 My Arbor 데이 스파(주말 €100)", warn:"마르 돌로미트 사우나는 수영복 불가(누드존) · ADLER/My Arbor는 수영복 착용!", img:"./img/spa.jpg", lat:46.5742, lng:11.6730}
   ]},
-  {d:"10/10(일)", city:"밀라노", sub:"시르미오네 → 밀라노 반납 · 두오모", items:[
+  {d:"10/10(일)", stay:"Ortisei, South Tyrol, Italy", city:"밀라노", sub:"시르미오네 → 밀라노 반납 · 두오모", items:[
     {t:"09:00", name:"오르티세이 출발 &rarr; 시르미오네", gq:"Sirmione, Italy", move:"렌터카 2h10m", segs:[{b:"차",l:"2h10m",w:4,c:"#14493F"}], how:"오르티세이 → A22 고속도로 → Peschiera 출구 → 시르미오네 성 입구 주차장", note:"가르다 호수 산책 & 점심(약 2시간)", warn:"시르미오네 성 안쪽은 ZTL(차량통제)! 성 입구 밖 공영주차장에 주차하세요.", img:"./img/sirmione.jpg", lat:45.4975, lng:10.6061},
     {t:"15:30", name:"밀라노 첸트랄레 렌터카 반납", gq:"Milano Centrale, Milan", move:"렌터카 1h45m", segs:[{b:"차",l:"1h45m",w:3,c:"#14493F"},{l:"주유·반납",w:1}], how:"시르미오네 → A4 고속도로 → 밀라노 첸트랄레역 앞 주유 후 반납", note:"일요일 영업 확인(Hertz/Locauto 18시, Avis 17시)", warn:"반납 전 풀투풀(Full-to-Full) 주유 영수증 꼭 챙기기 · 일요일 Area C 무료!", lat:45.4859, lng:9.2043},
     {t:"17:30", name:"밀라노 두오모 지붕 & 비토리오 갤러리아", gq:"Duomo di Milano, Milan", move:"지하철 M3 10분", segs:[{b:"M3",l:"10분",w:3,c:"#E2A514"},{l:"도보 2분",w:1}], how:"밀라노 중앙역(Centrale) → 지하철 노란선(M3) Duomo역 하차 바로 앞", note:"일몰 야경 감상 · 저녁 식사", warn:"두오모 광장 팔찌 강매 사기꾼 주의(눈 마주치지 말기!)", img:"./img/milano.jpg", lat:45.4641, lng:9.1919}
   ]},
-  {d:"10/11(월)", city:"귀국", sub:"말펜사 공항 출국", items:[
+  {d:"10/11(월)", stay:"Milano Centrale, Milan", city:"귀국", sub:"말펜사 공항 출국", items:[
     {t:"09:55", name:"밀라노 중앙역 &rarr; 말펜사 T1", gq:"Milan Malpensa Airport Terminal 1", move:"공항철도 51분", segs:[{b:"MXP",l:"51분",w:4,c:"#C25A2A"}], how:"밀라노 중앙역(Centrale) → 말펜사 익스프레스(€13 · 51분) → T1 도착", note:"택스 리펀드(Global Blue/Planet) · 14:15 출발", warn:"택스 리펀드 물품은 수하물 부치기 전에 세관/단말기 확인! 3시간 전 공항 도착 권장", img:"./img/incheon.jpg", lat:45.6301, lng:8.7255}
   ]}
 ];
@@ -305,7 +305,7 @@ const DEFAULT_CHECKS = [
   "[27-09-10] 국제운전면허증 · ETIAS · 여행자보험"
 ];
 
-let days = JSON.parse(localStorage.getItem('it_days_v3') || 'null') || JSON.parse(JSON.stringify(DEFAULT_DAYS));
+let days = JSON.parse(localStorage.getItem('it_days_v4') || 'null') || JSON.parse(JSON.stringify(DEFAULT_DAYS));
 let checks = JSON.parse(localStorage.getItem('it_chks_v1') || 'null') || {};
 let curDay = 0, mapDay = 0, mapObj = null, editIdx = null;
 
@@ -357,7 +357,7 @@ function renderPlan(){
         </div>
         ${it.img ? `<img class="item-thumb" src="${it.img}" alt=""/>` : ''}
       </div>
-      ${renderRouteBar(it.segs, it.how, idx>0?d.items[idx-1]:null, it)}${it.warn ? `<div class="item-warn">⚠️ 챙길 것·주의: ${it.warn}</div>` : ''}
+      ${renderRouteBar(it.segs, it.how, idx>0?d.items[idx-1]:(d.stay?{gq:d.stay}:null), it)}${it.warn ? `<div class="item-warn">⚠️ 챙길 것·주의: ${it.warn}</div>` : ''}
       <div class="item-actions">
         <a class="act-btn map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(it.name.replace(/<[^>]+>|&rarr;/g,' '))}">🧭 구글맵</a>
         <button class="act-btn" onclick="openModal(${idx})">✏️ 수정</button>
@@ -368,13 +368,13 @@ function renderPlan(){
 
 function toggleDone(idx){
   days[curDay].items[idx].done = !days[curDay].items[idx].done;
-  localStorage.setItem('it_days_v3', JSON.stringify(days));
+  localStorage.setItem('it_days_v4', JSON.stringify(days));
   renderPlan();
 }
 function delItem(idx){
   if(!confirm('이 일정을 삭제할까요?')) return;
   days[curDay].items.splice(idx,1);
-  localStorage.setItem('it_days_v3', JSON.stringify(days));
+  localStorage.setItem('it_days_v4', JSON.stringify(days));
   renderPlan();
 }
 function openModal(idx){
@@ -399,7 +399,7 @@ function saveModal(){
   };
   if(editIdx!==null) days[curDay].items[editIdx] = {...days[curDay].items[editIdx], ...item};
   else days[curDay].items.push(item);
-  localStorage.setItem('it_days_v3', JSON.stringify(days));
+  localStorage.setItem('it_days_v4', JSON.stringify(days));
   closeModal(); renderPlan();
 }
 
@@ -473,7 +473,7 @@ function renderMap(){
 
   const title = mapDay === -1 ? '이탈리아 5도시 전체 루트 (12박)' : `DAY ${mapDay+1} · ${days[mapDay].city} 동선 (${pts.length}곳)`;
   document.getElementById('mapLegend').innerHTML = `<h3>${title}</h3>` +
-    pts.map((p,i)=>`<div onclick="focusSeg(${i})" style="padding:9px 6px;border-bottom:1px solid #EFEADF;cursor:pointer;border-radius:10px;"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><div><b>${i+1}. ${p.name}</b> <span style="font-size:11px;color:var(--org);font-weight:700;">· 지도보기</span><br/><span style="font-size:12px;color:var(--sub);">${p.t} · ${p.move}</span></div><a class="act-btn map" onclick="event.stopPropagation()" target="_blank" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.gq||p.name.replace(/<[^>]+>|&rarr;/g,' '))}">구글맵</a></div>${renderRouteBar(p.segs, p.how, i>0?pts[i-1]:null, p)}</div>`).join('');
+    pts.map((p,i)=>`<div onclick="focusSeg(${i})" style="padding:9px 6px;border-bottom:1px solid #EFEADF;cursor:pointer;border-radius:10px;"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><div><b>${i+1}. ${p.name}</b> <span style="font-size:11px;color:var(--org);font-weight:700;">· 지도보기</span><br/><span style="font-size:12px;color:var(--sub);">${p.t} · ${p.move}</span></div><a class="act-btn map" onclick="event.stopPropagation()" target="_blank" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.gq||p.name.replace(/<[^>]+>|&rarr;/g,' '))}">구글맵</a></div>${renderRouteBar(p.segs, p.how, i>0?pts[i-1]:(mapDay>=0&&days[mapDay].stay?{gq:days[mapDay].stay}:null), p)}</div>`).join('');
 }
 
 function renderChecks(){
@@ -495,7 +495,7 @@ function exportData(){
 }
 function resetData(){
   if(!confirm('직접 수정하신 메모·체크를 기본값으로 되돌릴까요?')) return;
-  localStorage.removeItem('it_days_v3'); localStorage.removeItem('it_chks_v1');
+  localStorage.removeItem('it_days_v4'); localStorage.removeItem('it_chks_v1');
   days = JSON.parse(JSON.stringify(DEFAULT_DAYS)); checks = {};
   renderPlan(); renderChecks();
 }
