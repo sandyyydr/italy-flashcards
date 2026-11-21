@@ -475,7 +475,7 @@ function savePlanModal(){
 function renderPlan(){
   document.getElementById('dayScroll').innerHTML = days.map((x,i)=>`<div class="day-chip ${i===curDay?'active':''}" onclick="curDay=${i};renderPlan()"><div class="d1">DAY ${i+1}</div><div class="d2">${x.d}</div><div class="d3">${x.city}</div></div>`).join('');
   const d = days[curDay];
-  document.getElementById('dayBanner').innerHTML = `<div><h2>DAY ${curDay+1} · ${d.d} (${d.city})</h2><p>${d.sub}</p></div><div style="display:flex;gap:5px;"><button class="act-btn" style="background:rgba(255,255,255,.16);color:#fff;" onclick="resetOsDays()">초기화</button><button class="act-btn" style="background:var(--gold);color:var(--green);font-weight:900;" onclick="openPlanModal(null)">+ 일정</button></div>`;
+  document.getElementById('dayBanner').innerHTML = `<div><h2>DAY ${curDay+1} · ${d.d} (${d.city})</h2><p>${d.sub}</p></div><div style="display:flex;gap:5px;"><button class="act-btn" style="background:#fff;color:var(--green);border:1px solid #C8D8CE;" onclick="resetOsDays()">초기화</button><button class="act-btn" style="background:var(--gold);color:var(--green);font-weight:900;" onclick="openPlanModal(null)">+ 일정</button></div>`;
   document.getElementById('planList').innerHTML = d.items.map((it,idx)=>`
     <div class="item-card">
       <div><span class="time-badge">${it.t}</span><span class="move-badge">${it.move}</span></div>
@@ -541,7 +541,7 @@ function renderMap(){
     if(idx > 0){
       const prev = [pts[idx-1].lat, pts[idx-1].lng];
       if(prev[0]!==ll[0] || prev[1]!==ll[1]){
-        const sm = segMeta(p.move);
+        const sm = (pts[idx-1].name.includes('간사이공항') ? segMeta('라피트') : segMeta(p.move));
         const pl = L.polyline([prev, ll],{color:sm.col,weight:4.5,opacity:0.85,dashArray:sm.dash}).addTo(mapObj);
         segLayers[idx-1] = pl;
         const mid = [(prev[0]+ll[0])/2, (prev[1]+ll[1])/2];

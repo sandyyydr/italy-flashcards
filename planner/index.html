@@ -460,7 +460,7 @@ function renderMap(){
     if(idx > 0){
       const prev = [pts[idx-1].lat, pts[idx-1].lng];
       if(prev[0]!==ll[0] || prev[1]!==ll[1]){
-        const sm = segMeta(p.move);
+        const sm = (pts[idx-1].name.includes('FCO') ? segMeta('공항철도') : segMeta(p.move));
         const pl = L.polyline([prev, ll],{color:sm.col,weight:4.5,opacity:0.85,dashArray:sm.dash}).addTo(mapObj);
         segLayers[idx-1] = pl;
         const mid = [(prev[0]+ll[0])/2, (prev[1]+ll[1])/2];
