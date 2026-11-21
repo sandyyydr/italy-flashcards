@@ -127,6 +127,15 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
   </section>
 
   <section id="tab-wallet" class="hidden">
+    <div class="calc-box" style="margin-bottom:10px;padding:11px 13px;">
+      <div style="font-size:12.5px;font-weight:800;color:var(--gold);margin-bottom:6px;">💱 유로 &harr; 원화 간편 계산기 (1€ = 1,650원)</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input id="wEur" type="text" inputmode="decimal" placeholder="€ 유로" oninput="formatAmtInput(this);calcWalletCur('eur')" style="flex:1;min-width:0;padding:8px 10px;border-radius:9px;border:none;font-size:14px;font-weight:700;"/>
+        <span style="color:var(--gold);font-weight:900;">&harr;</span>
+        <input id="wKrw" type="text" inputmode="numeric" placeholder="₩ 한국돈" oninput="formatAmtInput(this);calcWalletCur('krw')" style="flex:1;min-width:0;padding:8px 10px;border-radius:9px;border:none;font-size:14px;font-weight:700;"/>
+      </div>
+    </div>
+
     <div class="sec-card" style="border:2px solid var(--org);">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
         <h3 style="margin:0;color:var(--org);">💶 🇰🇷 이탈리아 통합 가계부</h3>
@@ -635,6 +644,15 @@ function formatAmtInput(el){
 }
 function parseAmtVal(id){
   return parseFloat((document.getElementById(id).value||'').replace(/,/g,'')) || 0;
+}
+function calcWalletCur(from){
+  if(from==='eur'){
+    const e = parseAmtVal('wEur');
+    document.getElementById('wKrw').value = e ? Math.round(e*1650).toLocaleString() : '';
+  } else {
+    const k = parseAmtVal('wKrw');
+    document.getElementById('wEur').value = k ? (k/1650).toFixed(1) : '';
+  }
 }
 function updateItPlaceholder(){
   const inp = document.getElementById('itAmt');

@@ -97,6 +97,15 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
 <main>
   <!-- 1. 가계부 (가장 많이 쓸 탭이라 상단/기본 접근 편리) -->
   <section id="tab-money">
+    <div style="background:var(--green);color:#fff;border-radius:14px;padding:11px 13px;margin-bottom:10px;">
+      <div style="font-size:12.5px;font-weight:800;color:var(--gold);margin-bottom:6px;">💱 엔화 &harr; 원화 간편 계산기 (100엔 = 849원)</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input id="wJpy" type="text" inputmode="numeric" placeholder="¥ 엔화" oninput="formatAmtInput(this);calcOsCur('jpy')" style="flex:1;min-width:0;padding:8px 10px;border-radius:9px;border:none;font-size:14px;font-weight:700;"/>
+        <span style="color:var(--gold);font-weight:900;">&harr;</span>
+        <input id="wOsKrw" type="text" inputmode="numeric" placeholder="₩ 한국돈" oninput="formatAmtInput(this);calcOsCur('krw')" style="flex:1;min-width:0;padding:8px 10px;border-radius:9px;border:none;font-size:14px;font-weight:700;"/>
+      </div>
+    </div>
+
     <div class="seg">
       <button id="segShared" class="active" onclick="wallet='shared';renderMoney()">👥 공금 (3인)</button>
       <button id="segPersonal" onclick="wallet='personal';renderMoney()">🙋‍♀️ 내 개인</button>
@@ -289,6 +298,15 @@ function renderMoney(){
     </div>`).join('') : '<div style="font-size:13px;color:var(--sub);">아직 입력된 내역이 없어요! 위에서 바로 추가해 보세요.</div>');
 }
 
+function calcOsCur(from){
+  if(from==='jpy'){
+    const j = parseFloat((document.getElementById('wJpy').value||'').replace(/,/g,''))||0;
+    document.getElementById('wOsKrw').value = j ? Math.round(j*8.49).toLocaleString() : '';
+  } else {
+    const k = parseFloat((document.getElementById('wOsKrw').value||'').replace(/,/g,''))||0;
+    document.getElementById('wJpy').value = k ? Math.round(k/8.49).toLocaleString() : '';
+  }
+}
 function formatAmtInput(el){
   const raw = el.value.replace(/[^0-9]/g, '');
   el.value = raw ? Number(raw).toLocaleString() : '';
