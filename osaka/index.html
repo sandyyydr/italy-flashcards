@@ -372,18 +372,30 @@ function exportExp(){
 }
 
 
-function renderRouteBar(segs, how){
+function routeDirUrl(prev, cur){
+  if(!cur || !cur.lat || !cur.lng) return '';
+  if(!prev || !prev.lat || !prev.lng || (prev.lat===cur.lat && prev.lng===cur.lng)){
+    return `https://www.google.com/maps/search/?api=1&query=${cur.lat},${cur.lng}`;
+  }
+  const m = (cur.move||'');
+  const mode = /렌터카|차|드라이브|택시/.test(m) ? 'driving' : (/도보/.test(m) && !/지하철|선|열차|라피트|트램|버스/.test(m) ? 'walking' : 'transit');
+  return `https://www.google.com/maps/dir/?api=1&origin=${prev.lat},${prev.lng}&destination=${cur.lat},${cur.lng}&travelmode=${mode}`;
+}
+function renderRouteBar(segs, how, prev, cur){
   if(!segs && !how) return '';
-  const bar = segs ? `<div class="route-bar">${segs.map(s=>`<div class="r-seg ${s.c?'':'r-walk'}" style="flex:${s.w||1};${s.c?`background:${s.c};color:#fff;`:''}">${s.b?`<span style="background:#fff;color:${s.c||'#333'};border-radius:99px;padding:0 4px;font-size:9.5px;line-height:14px;">${s.b}</span>`:''}<span>${s.l}</span></div>`).join('')}</div>` : '';
+  const bar = segs ? `<div class="route-bar" style="flex:1;min-width:0;">${segs.map(s=>`<div class="r-seg ${s.c?'':'r-walk'}" style="flex:${s.w||1};${s.c?`background:${s.c};color:#fff;`:''}">${s.b?`<span style="background:#fff;color:${s.c||'#333'};border-radius:99px;padding:0 4px;font-size:9.5px;line-height:14px;">${s.b}</span>`:''}<span>${s.l}</span></div>`).join('')}</div>` : '';
+  const url = routeDirUrl(prev, cur);
+  const gbtn = url ? `<a class="act-btn map" onclick="event.stopPropagation()" target="_blank" rel="noopener" href="${url}" style="flex-shrink:0;padding:3px 8px;font-size:11px;border-radius:99px;">🧭 노선</a>` : '';
+  const topRow = bar ? `<div style="display:flex;align-items:center;gap:6px;">${bar}${gbtn}</div>` : '';
   const txt = how ? `<div class="r-txt">🚇 ${how}</div>` : '';
-  return `<div class="route-box">${bar}${txt}</div>`;
+  return `<div class="route-box">${topRow}${txt}</div>`;
 }
 
 function renderPlan(){
   document.getElementById('dayScroll').innerHTML = DAYS.map((x,i)=>`<div class="day-chip ${i===curDay?'active':''}" onclick="curDay=${i};renderPlan()"><div class="d1">DAY ${i+1}</div><div class="d2">${x.d}</div><div class="d3">${x.city}</div></div>`).join('');
   const d = DAYS[curDay];
   document.getElementById('dayBanner').innerHTML = `<div><h2>DAY ${curDay+1} · ${d.d} (${d.city})</h2><p>${d.sub}</p></div>`;
-  document.getElementById('planList').innerHTML = d.items.map(it=>`
+  document.getElementById('planList').innerHTML = d.items.map((it,idx)=>`
     <div class="item-card">
       <div><span class="time-badge">${it.t}</span><span class="move-badge">${it.move}</span></div>
       <div class="item-body">
@@ -393,7 +405,7 @@ function renderPlan(){
         </div>
         ${it.img ? `<img class="item-thumb" src="${it.img}" alt=""/>` : ''}
       </div>
-      ${renderRouteBar(it.segs, it.how)}${it.warn ? `<div class="item-warn">⚠️ 꿀팁·주의: ${it.warn}</div>` : ''}
+      ${renderRouteBar(it.segs, it.how, idx>0?d.items[idx-1]:null, it)}${it.warn ? `<div class="item-warn">⚠️ 꿀팁·주의: ${it.warn}</div>` : ''}
       <div class="item-actions"><a class="act-btn map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=${it.lat},${it.lng}">🧭 구글맵</a></div>
     </div>`).join('');
 }
@@ -457,7 +469,7 @@ function renderMap(){
   } else if(uPts.length === 1){
     gBtn.innerHTML = `<a class="act-btn map" style="width:100%;justify-content:center;padding:12px;font-size:14px;border-radius:12px;" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${uPts[0].lat},${uPts[0].lng}">🧭 구글맵 앱으로 위치 열기</a>`;
   }
-  document.getElementById('mapLegend').innerHTML = `<h3>DAY ${mapDay+1} · ${DAYS[mapDay].city} 동선</h3>` + pts.map((p,i)=>`<div onclick="focusSeg(${i})" style="padding:9px 6px;border-bottom:1px solid #EFEADF;cursor:pointer;border-radius:10px;"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><div><b>${i+1}. ${p.name}</b> <span style="font-size:11px;color:var(--org);font-weight:700;">· 지도보기</span><br/><span style="font-size:12px;color:var(--sub);">${p.t} · ${p.move}</span></div><a class="act-btn map" onclick="event.stopPropagation()" target="_blank" href="https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}">구글맵</a></div>${renderRouteBar(p.segs, p.how)}</div>`).join('');
+  document.getElementById('mapLegend').innerHTML = `<h3>DAY ${mapDay+1} · ${DAYS[mapDay].city} 동선</h3>` + pts.map((p,i)=>`<div onclick="focusSeg(${i})" style="padding:9px 6px;border-bottom:1px solid #EFEADF;cursor:pointer;border-radius:10px;"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><div><b>${i+1}. ${p.name}</b> <span style="font-size:11px;color:var(--org);font-weight:700;">· 지도보기</span><br/><span style="font-size:12px;color:var(--sub);">${p.t} · ${p.move}</span></div><a class="act-btn map" onclick="event.stopPropagation()" target="_blank" href="https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}">구글맵</a></div>${renderRouteBar(p.segs, p.how, i>0?pts[i-1]:null, p)}</div>`).join('');
 }
 
 function renderChecks(){
