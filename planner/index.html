@@ -44,6 +44,14 @@ main{padding:12px 14px calc(env(safe-area-inset-bottom,16px) + 78px);max-width:6
 .item-body{display:flex;gap:11px;align-items:flex-start;}
 .item-thumb{width:76px;height:76px;border-radius:12px;object-fit:cover;flex-shrink:0;border:1px solid var(--line);margin-top:4px;}
 .item-warn{margin-top:8px;background:var(--orgbg);border-left:3.5px solid var(--org);border-radius:8px;padding:7px 10px;font-size:12.5px;color:#7A3214;line-height:1.45;font-weight:600;}
+.tips-card{background:#FFFBF1;border:1.5px solid #EBD8B7;border-radius:14px;padding:11px 13px;margin-bottom:10px;}
+.tips-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px;}
+.tips-head h4{margin:0;font-size:13px;font-weight:800;color:#8A4A1E;letter-spacing:-.01em;}
+.tips-head span{font-size:10.5px;font-weight:800;color:#A0703F;background:#F6E8D2;border-radius:99px;padding:2px 7px;white-space:nowrap;}
+.tip-row{display:flex;gap:8px;align-items:flex-start;padding:5px 0;font-size:12.5px;line-height:1.5;color:#4A3B2A;cursor:pointer;border-bottom:1px dashed #F1E5D2;}
+.tip-row:last-child{border-bottom:none;}
+.tip-row input{width:17px;height:17px;accent-color:var(--org);margin-top:2px;flex-shrink:0;}
+.tip-row.on span{text-decoration:line-through;color:#A79B8A;}
 .item-actions{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap;}
 .act-btn{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:9px;padding:7px 11px;font-size:12.5px;font-weight:700;text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;gap:4px;}
 .act-btn.map{background:var(--green);border-color:var(--green);color:#fff;}
@@ -195,6 +203,14 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
     </div>
 
     <div class="sec-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <h3 style="margin:0;">🌍 전 일정 공통 실전 팁</h3>
+        <span class="pill p-o" style="font-size:10.5px;">블로그 후기 9건 · 11/22</span>
+      </div>
+      <div id="commonTips"></div>
+    </div>
+
+    <div class="sec-card">
       <h3>☑️ 시기별 필수 체크리스트 (자동 저장)</h3>
       <div id="checkList"></div>
     </div>
@@ -261,7 +277,7 @@ const DEFAULT_DAYS = [
   ]},
   {d:"10/4(월)", stay:"Piazza Tasso, Sorrento", city:"피렌체", sub:"피렌체 입성 · 두오모 · 티본", items:[
     {t:"10:30", name:"소렌토 &rarr; 나폴리 &rarr; 피렌체", gq:"Firenze Santa Maria Novella, Florence", move:"사철+고속열차", segs:[{b:"사철",l:"70분",w:2,c:"#C25A2A"},{l:"여유환승",w:1},{b:"FR",l:"3시간",w:4,c:"#B92929"}], how:"소렌토 사철(70분) → 나폴리 중앙역 환승(1h25m+ 버퍼) → 피렌체 SMN역", note:"환승 1시간 25분+ 여유 배정", warn:"월요일은 우피치 휴관일! 그래서 두오모·티본부터 배치했습니다.", lat:43.7764, lng:11.2479},
-    {t:"16:00", name:"피렌체 두오모 & 쿠폴라", gq:"Cathedral of Santa Maria del Fiore, Florence", move:"도보 10분", segs:[{l:"도보 10분",w:3}], how:"피렌체 SMN역/숙소 → 구시가지 도보 10분 직진", note:"D-30 전(27-08-31) 브루넬레스키 패스 예약", warn:"쿠폴라 463계단 엘리베이터 없음 · 예약 시간 15분 전 도착!", img:"./img/firenze.jpg", lat:43.7731, lng:11.2560},
+    {t:"16:00", name:"피렌체 두오모 & 쿠폴라", gq:"Cathedral of Santa Maria del Fiore, Florence", move:"도보 10분", segs:[{l:"도보 10분",w:3}], how:"피렌체 SMN역/숙소 → 구시가지 도보 10분 직진", note:"D-90(27-06-26) 쿠폴라 예약 오픈 — 3개월 전 마감, 브루넬레스키 패스로 묶어 시간 지정 예약", warn:"쿠폴라 463계단 엘리베이터 없음 · 예약 시간 15분 전 도착! (스냅 전날엔 무리 — 외관·종탑 대안)", img:"./img/firenze.jpg", lat:43.7731, lng:11.2560},
     {t:"20:00", name:"티본 스테이크 저녁", gq:"Mercato Centrale, Florence", move:"도보 8분", segs:[{l:"도보 8분",w:3}], how:"두오모 광장 → 중앙시장/산 로렌초 방면 도보 8분", note:"달오스테/트래토리아 자자 등 사전 예약 추천", warn:"기본 1kg(2인) 단위 주문 · 레어/미디엄레어 굽기 추천", lat:43.7760, lng:11.2535}
   ]},
   {d:"10/5(화)", stay:"Santa Maria Novella, Florence", city:"피렌체", sub:"우피치 + 일몰 스냅", items:[
@@ -297,16 +313,75 @@ const DEFAULT_CHECKS = [
   "[1순위·지금] 오르티세이 3+1박 결정 후 무료취소 숙소 잡기",
   "[1순위·이번 주] 피렌체 일몰 스냅 문의 (포토로 × 살롱반하 / 벨로)",
   "[1순위·추적] 카타르 항공 다구간 209만 원 이하 특가 시 발권",
-  "여권 만료일 2028-03-12 이후인지 확인",
+  "여권 만료일 2028-03-12 이후인지 확인 (사본 2부·클라우드 저장)",
   "[27-03~04] 고속열차(프레차로사) · 베로나→밀라노 렌터카(자동)",
+  "[27-03~04] 2027 봄 페리 시간표 오픈 즉시 10/3 12:35 트래블마르·대안 NLG 13:10 재확인",
+  "[27-06 말] 피렌체 두오모 쿠폴라 예약 (3개월 전 오픈 · 브루넬레스키 패스)",
+  "[27-06] 판테온 사전예약 오픈 확인 (€5 · 이름 입력)",
   "[27-08-01] 바티칸 투어 예약 (D-60)",
-  "[27-08-31] 피렌체 두오모·우피치 예약 마감",
+  "[27-08-31] 우피치 예약 마감 (10/5 09:30)",
   "[27-09-01] 콜로세움 예약 (D-30)",
-  "[27-09-10] 국제운전면허증 · ETIAS · 여행자보험"
+  "[27-09-10] 국제운전면허증 · ETIAS · 여행자보험",
+  "[27-09-15] eSIM(TIM 망 포함) 설치 · 구글맵 이탈리아 오프라인 저장",
+  "[27-09-20] 소매치기 대비 세팅 — 가방 앞으로 · 폰 스트랩 · 여권 사본"
+];
+
+// 📝 네이버 블로그 후기 9건에서 뽑은 실전 팁 (2026-11-22 반영)
+const DAY_TIPS = {
+  "9/30(목)":[
+    "👗 성 베드로 대성당·판테온 복장 규정 — 어깨·무릎 가리기, 샌들·민소매 금지 → 얇은 가디건·큰 스카프 가방에 상비 (입구에서 돌려보내면 줄 처음부터)",
+    "🎫 판테온은 공식 사이트 사전예약 먼저 확인 — €5·이름 입력, 매진이면 16시 이후 현장 줄이 짧은 편",
+    "👟 바티칸은 3시간 이상 걷기 — 편한 신발, 물은 무료 식수대(nasoni)에서 받기"
+  ],
+  "10/2(토)":[
+    "🚌 카프리 섬 버스 줄이 매우 김 — 20분 이상이면 아나카프리행 택시 합승(€20~25/차)이 빠름",
+    "🏖️ 마리나 피콜라 무료 자갈해변 — 자갈이 날카로우니 아쿠아슈즈·비치타월 필수(선베드 구역과 구분)",
+    "🕳️ 블루 그로토를 15시에 넣으면 16:40 막배에 쫓김 — 파도·대기 보고 무리하지 않기(결항 잦음)"
+  ],
+  "10/3(일)":[
+    "⛴️ 12:35 트래블마르 편은 2027 봄 시간표 오픈 때 재확인 — 없으면 대안 NLG 13:10(아말피 13:35 도착)",
+    "⏰ 아말피 10월 막차 17:02 — 16:55 소렌토 복귀편은 사실상 막차, 16:35 편도 후보로 기억",
+    "🪑 루프탑 야외석은 10~15분 전 줄 서기 (예약해도 야외석은 선착순인 곳 많음)",
+    "✍️ 페리 예매 시 성이 2글자면 오류 — `Lee.`처럼 마침표 붙여 입력",
+    "🏖️ 포지타노 선베드 1인 €35~50(2인 €70~90) — 무료 구역은 9:30 전 만석, 돗자리·아쿠아슈즈 챙기면 무료 구역 가능",
+    "⛪ 아말피 두오모 62계단 — 성당 무료, 복합시설(클로이스터·박물관·크립트) €3~4 · 복장 규정 동일(어깨·무릎)",
+    "🍋 레몬 소르베 테이블석 €10~12(1인 1개 주문 조건) — 테이크아웃은 €5~7"
+  ],
+  "10/4(월)":[
+    "🎫 두오모 쿠폴라는 3개월 전(2027-06 말) 예약 오픈 — 브루넬레스키 패스로 묶어 시간 지정 예약",
+    "🪜 쿠폴라 463계단·엘리베이터 없음 — 스냅 전날(10/4)엔 무리, 외관+조토의 종탑/미켈란젤로 언덕 대안 권장",
+    "👗 두오모·산 조반니 복장 규정 — 어깨·무릎 가리기 (스냅 드레스로는 입장 거절될 수 있어 얇은 숄 준비)",
+    "💍 베키오 다리 위 보석상은 구경만 — 흥정 없음, 사진은 다리 위·아르노강 쪽이 잘 나옴",
+    "🎟️ 피렌체 트램·버스는 승차 전 티켓 펀칭 필수 (미펀칭 과태료 €40~60)"
+  ],
+  "10/5(화)":[
+    "👗 스냅 드레스로 두오모·산 조반니 들어갈 땐 얇은 숄로 어깨 가리기 — 입장 거절 없고 사진도 자연스러움",
+    "🎟️ 미켈란젤로 언덕 12/13번 버스는 승차 시 펀칭 — 촬영 시간 아끼려면 택시(€12~15·10분)가 확실",
+    "💶 화장실 €1 동전 — 카페에서 에스프레소(€1.2~1.5) 한 잔이면 화장실도 해결"
+  ],
+  "10/6(수)":[
+    "🚗 렌터카 인수 시 외관 360도 동영상 + 주유 정책(풀투풀) 확인 — 반납 때 영수증 필요",
+    "🧭 내비게이션 ZTL(차량통제구역) 경고 켜고, 오르티세이·볼차노 시내 진입 금지 경로는 종이에 적어 두기"
+  ],
+  "10/10(일)":[
+    "🅿️ 시르미오네 성 안쪽은 ZTL — 성 입구 밖 공영주차장에 주차하고 도보 진입",
+    "💶 일요일 밀라노 Area C 무료 · 렌터카 반납은 18시 마감 전 여유 있게"
+  ]
+};
+const COMMON_TIPS = [
+  "🎒 소매치기는 로마 지하철·나폴리역·피렌체 광장이 최다 — 가방은 앞으로, 폰은 스트랩, 여권 원본은 숙소 금고",
+  "📄 여권 사본 2부(종이+폰 사진) — 분실 시 영사관 처리 속도가 달라짐",
+  "📱 eSIM은 TIM 망 포함 상품으로 출발 전 설치 — 구글맵에 이탈리아 오프라인 지도 저장(데이터 없이도 길 찾기)",
+  "🚻 화장실은 대부분 €1 — €1·€0.5 동전 20개쯤 준비(관광지·역·바 Bar 이용 시 무료인 곳도 있음)",
+  "🚗 렌터카 ZTL 진입 금지 경로 서면 확인 — 위반은 몇 달 뒤 우편 과태료(€80~100)로 날아옴",
+  "🎫 트램·버스·기차 탑승 전 티켓 펀칭(개찰) — 안 찍으면 무임승차로 과태료",
+  "⛪ 성당 복장 규정 공통 — 어깨·무릎 가리기, 얇은 가디건·큰 스카프 하나면 모든 성당 해결",
+  "💳 유로 현금은 €50·€20 소액권 위주 — €100 이상은 잘 안 받고 잔돈도 안 줌"
 ];
 
 let days = JSON.parse(localStorage.getItem('it_days_v4') || 'null') || JSON.parse(JSON.stringify(DEFAULT_DAYS));
 let checks = JSON.parse(localStorage.getItem('it_chks_v1') || 'null') || {};
+let tips = JSON.parse(localStorage.getItem('it_tips_v1') || 'null') || {};
 let curDay = 0, mapDay = 0, mapObj = null, editIdx = null;
 
 function updateDday(){
@@ -345,7 +420,7 @@ function renderPlan(){
   const d = days[curDay];
   document.getElementById('dayBanner').innerHTML = `<div><h2>DAY ${curDay+1} · ${d.d} (${d.city})</h2><p>${d.sub}</p></div><button class="btn-add" onclick="openModal(null)">+ 일정</button>`;
   const stayBanner = d.stay ? `<div style="background:#EFF7F3;border:1.5px solid #CBE3D7;border-radius:14px;padding:10px 13px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:8px;"><div><div style="font-size:11px;font-weight:800;color:var(--green);">🏨 아침 출발 숙소 (임시 거점 · 확정 시 교체)</div><div style="font-size:13.5px;font-weight:800;color:var(--ink);">${d.stay}</div></div><a class="act-btn map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.stay)}">구글맵</a></div>` : '';
-  document.getElementById('planList').innerHTML = stayBanner + d.items.map((it,idx)=>`
+  document.getElementById('planList').innerHTML = stayBanner + renderDayTips(d) + d.items.map((it,idx)=>`
     <div class="item-card ${it.done?'done':''}">
       <div class="item-top">
         <div><span class="time-badge">${it.t}</span><span class="move-badge">${it.move||'이동'}</span></div>
@@ -367,6 +442,20 @@ function renderPlan(){
         <button class="act-btn" onclick="delItem(${idx})">🗑️</button>
       </div>
     </div>`).join('');
+}
+
+function renderDayTips(d){
+  const list = DAY_TIPS[d.d];
+  if(!list || !list.length) return '';
+  return `<div class="tips-card">
+    <div class="tips-head"><h4>⚠️ 챙길 것·주의 · 실전 팁</h4><span>블로그 후기 9건</span></div>
+    ${list.map((t,i)=>{const k=d.d+'#'+i;return `<label class="tip-row ${tips[k]?'on':''}"><input type="checkbox" ${tips[k]?'checked':''} onchange="tips['${k}']=this.checked;localStorage.setItem('it_tips_v1',JSON.stringify(tips));renderPlan()"/><span>${t}</span></label>`;}).join('')}
+  </div>`;
+}
+function renderCommonTips(){
+  const el = document.getElementById('commonTips');
+  if(!el) return;
+  el.innerHTML = COMMON_TIPS.map((t,i)=>{const k='common#'+i;return `<label class="tip-row ${tips[k]?'on':''}"><input type="checkbox" ${tips[k]?'checked':''} onchange="tips['${k}']=this.checked;localStorage.setItem('it_tips_v1',JSON.stringify(tips));renderCommonTips()"/><span>${t}</span></label>`;}).join('');
 }
 
 function toggleDone(idx){
@@ -508,9 +597,9 @@ function exportData(){
 }
 function resetData(){
   if(!confirm('직접 수정하신 메모·체크를 기본값으로 되돌릴까요?')) return;
-  localStorage.removeItem('it_days_v4'); localStorage.removeItem('it_chks_v1');
-  days = JSON.parse(JSON.stringify(DEFAULT_DAYS)); checks = {};
-  renderPlan(); renderChecks();
+  localStorage.removeItem('it_days_v4'); localStorage.removeItem('it_chks_v1'); localStorage.removeItem('it_tips_v1');
+  days = JSON.parse(JSON.stringify(DEFAULT_DAYS)); checks = {}; tips = {};
+  renderPlan(); renderChecks(); renderCommonTips();
 }
 
 function goTab(id, btn){
@@ -776,7 +865,7 @@ function delItExp(id){
   renderItExp();
 }
 
-updateDday(); renderPlan(); renderChecks(); renderSim(); renderItExp();
+updateDday(); renderPlan(); renderChecks(); renderCommonTips(); renderSim(); renderItExp();
 if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
 </script>
 </body>
