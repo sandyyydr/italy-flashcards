@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="토스카나 2027"/>
+<meta name="theme-color" content="#14493F"/>
+<link rel="manifest" href="./manifest.json"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%2314493F'/><text x='50' y='68' font-size='52' text-anchor='middle'>🍷</text></svg>"/>
+<title>토스카나 신혼여행 2027</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root{--bg:#FAF7F0;--card:#FFFDF7;--green:#14493F;--green2:#1E6356;--mint:#E4EFEA;--org:#C25A2A;--orgbg:#FBEEE5;--gold:#F2C879;--line:#E4DEC9;--ink:#1F2D27;--sub:#5B6B63;--ochre:#9A6B12;--ochrebg:#F7EEDA;--blue:#2C5866;--bluebg:#E1EBF0;}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;overscroll-behavior-y:contain;}
+.header{background:var(--green);color:#FAF7F0;padding:calc(env(safe-area-inset-top,14px) + 12px) 16px 14px;position:sticky;top:0;z-index:20;box-shadow:0 2px 10px rgba(20,73,63,.18);}
+.h-top{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.h-title{font-size:18px;font-weight:800;letter-spacing:-.02em;}
+.dday{background:var(--gold);color:var(--green);font-size:12px;font-weight:800;padding:4px 10px;border-radius:99px;white-space:nowrap;}
+.h-flight{margin-top:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:10px;padding:8px 11px;font-size:12px;line-height:1.45;color:#E7F0EC;}
+.h-flight b{color:var(--gold);}
+main{padding:12px 14px calc(env(safe-area-inset-bottom,16px) + 84px);max-width:680px;margin:0 auto;}
+.day-scroll{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none;}
+.day-scroll::-webkit-scrollbar{display:none;}
+.day-chip{flex:0 0 auto;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:8px 11px;text-align:center;min-width:70px;cursor:pointer;transition:.15s;}
+.day-chip.active{background:var(--green);border-color:var(--green);color:#fff;}
+.day-chip .d1{font-size:10.5px;font-weight:700;opacity:.8;}
+.day-chip .d2{font-size:13.5px;font-weight:800;margin-top:2px;}
+.day-chip .d3{font-size:10.5px;margin-top:1px;opacity:.85;}
+.day-banner{background:var(--mint);border-radius:14px;padding:12px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.day-banner h2{margin:0;font-size:15.5px;font-weight:800;color:var(--green);}
+.day-banner p{margin:3px 0 0;font-size:12.5px;color:var(--sub);}
+.btn-add{background:var(--green);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.item-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:0 2px 6px rgba(0,0,0,.03);transition:.15s;}
+.item-card.done{opacity:.58;background:#F4F1E8;}
+.item-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+.time-badge{display:inline-block;background:var(--orgbg);color:var(--org);font-size:12px;font-weight:800;padding:3px 8px;border-radius:7px;}
+.move-badge{display:inline-block;background:var(--mint);color:var(--green);font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:7px;margin-left:4px;}
+.item-title{font-size:16px;font-weight:800;margin:7px 0 4px;line-height:1.35;}
+.item-note{font-size:13.5px;color:var(--sub);line-height:1.5;margin:0;}
+.item-body{display:flex;gap:11px;align-items:flex-start;}
+.item-thumb{width:76px;height:76px;border-radius:12px;object-fit:cover;flex-shrink:0;border:1px solid var(--line);margin-top:4px;}
+.item-warn{margin-top:8px;background:var(--orgbg);border-left:3.5px solid var(--org);border-radius:8px;padding:7px 10px;font-size:12.5px;color:#7A3214;line-height:1.45;font-weight:600;}
+.tips-card{background:#FFFBF1;border:1.5px solid #EBD8B7;border-radius:14px;padding:11px 13px;margin-bottom:10px;}
+.tips-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px;}
+.tips-head h4{margin:0;font-size:13px;font-weight:800;color:#8A4A1E;letter-spacing:-.01em;}
+.tips-head span{font-size:10.5px;font-weight:800;color:#A0703F;background:#F6E8D2;border-radius:99px;padding:2px 7px;white-space:nowrap;}
+.tip-row{display:flex;gap:8px;align-items:flex-start;padding:5px 0;font-size:12.5px;line-height:1.5;color:#4A3B2A;cursor:pointer;border-bottom:1px dashed #F1E5D2;}
+.tip-row:last-child{border-bottom:none;}
+.tip-row input{width:17px;height:17px;accent-color:var(--org);margin-top:2px;flex-shrink:0;}
+.tip-row.on span{text-decoration:line-through;color:#A79B8A;}
+.item-actions{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap;}
+.act-btn{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:9px;padding:7px 11px;font-size:12.5px;font-weight:700;text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;gap:4px;}
+.act-btn.map{background:var(--green);border-color:var(--green);color:#fff;}
+.chk-btn{width:26px;height:26px;border-radius:8px;border:2px solid var(--green);background:#fff;color:#fff;font-size:14px;font-weight:900;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.item-card.done .chk-btn{background:var(--green);}
+#mapBox{height:380px;border-radius:16px;border:1.5px solid var(--line);overflow:hidden;margin-bottom:12px;}
+.sec-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px;}
+.sec-card h3{margin:0 0 8px;font-size:16px;font-weight:800;color:var(--green);}
+.row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #EFEADF;font-size:13.5px;gap:8px;}
+.row:last-child{border-bottom:none;}
+.pill{font-size:11.5px;font-weight:800;padding:3px 8px;border-radius:7px;white-space:nowrap;}
+.p-g{background:var(--mint);color:var(--green);}
+.p-o{background:var(--orgbg);color:var(--org);}
+.p-y{background:#FBF0C9;color:#7A6410;}
+.calc-box{background:var(--green);color:#fff;border-radius:16px;padding:14px;margin-bottom:12px;}
+.chk-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #EFEADF;cursor:pointer;}
+.chk-row:last-child{border-bottom:none;}
+.chk-row input{width:20px;height:20px;accent-color:var(--green);margin-top:2px;flex-shrink:0;}
+.chk-row.checked span{text-decoration:line-through;color:#8E9B94;}
+nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.97);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;padding:6px 2px calc(env(safe-area-inset-bottom,10px) + 4px);z-index:30;}
+.tab{flex:1;border:none;background:none;padding:6px 0;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;font-weight:700;color:var(--sub);cursor:pointer;}
+.tab.active{color:var(--green);}
+.tab .ico{font-size:18px;}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center;z-index:50;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--bg);width:100%;max-width:680px;border-radius:20px 20px 0 0;padding:18px 16px calc(env(safe-area-inset-bottom,16px) + 14px);max-height:88vh;overflow:auto;}
+.modal input,.modal textarea{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:15px;margin-top:8px;font-family:inherit;background:#fff;}
+.hidden{display:none;}
+.route-box{margin-top:8px;background:#F9F8F4;border:1px solid #E5E1D6;border-radius:10px;padding:8px 10px;}
+.route-bar{display:flex;height:22px;border-radius:99px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.04);overflow:hidden;background:#E9E6DE;font-size:10.5px;font-weight:800;line-height:22px;}
+.r-seg{display:flex;align-items:center;justify-content:center;gap:3px;white-space:nowrap;overflow:hidden;padding:0 4px;}
+.r-walk{background:#E8E6DF;color:#5C6360;}
+.r-txt{font-size:12px;color:#14493F;font-weight:700;margin-top:5px;line-height:1.4;}
+.stay-band{background:#EFF7F3;border:1.5px solid #CBE3D7;border-radius:14px;padding:10px 13px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.stay-band .k{font-size:11px;font-weight:800;color:var(--green);}
+.stay-band .v{font-size:13.5px;font-weight:800;color:var(--ink);}
+.hcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:10px;}
+.hcard .himg{width:100%;height:120px;object-fit:cover;border-radius:12px;border:1px solid var(--line);}
+.hcard .hn{font-size:16px;font-weight:800;color:var(--green);margin-top:9px;}
+.hcard .hm{font-size:12px;color:var(--sub);margin-top:2px;}
+.hcard .hp{font-size:15px;font-weight:800;color:var(--org);margin-top:7px;}
+.hcard .hd{font-size:12.5px;color:var(--sub);line-height:1.55;margin-top:6px;}
+.link-g{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-bottom:10px;}
+.link-g h3{margin:0 0 6px;font-size:14px;font-weight:800;color:var(--green);}
+.link-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #EFEADF;font-size:13.5px;text-decoration:none;color:var(--ink);}
+.link-row:last-child{border-bottom:none;}
+.link-row span.go{color:var(--blue);font-weight:700;font-size:12px;}
+.mag-top{background:var(--green);color:#fff;border-radius:16px;padding:14px;margin-bottom:10px;}
+.mag-top h3{margin:0;font-size:16px;color:var(--gold);}
+.mag-top p{margin:5px 0 0;font-size:12.5px;line-height:1.5;color:#DCE7E1;}
+.mag-btns{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap;}
+.mag-btns a{flex:1;min-width:120px;justify-content:center;background:#fff;color:var(--green);border:none;border-radius:11px;padding:11px;font-size:13.5px;font-weight:800;text-decoration:none;text-align:center;}
+.mag-btns a.ghost{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.35);}
+.pdfbox{width:100%;height:72vh;border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden;}
+.pdfbox iframe,.pdfbox embed{width:100%;height:100%;border:none;}
+.pdfnote{font-size:12px;color:var(--sub);line-height:1.5;margin-top:8px;}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="h-top">
+    <div class="h-title">🍷 승현 · 근호 토스카나</div>
+    <div class="dday" id="ddayBadge">D-...</div>
+  </div>
+  <div class="h-flight">
+    <b>가는 편</b> 27.09.28(화) 밤 인천 &rarr; 09.29 14:15 로마(FCO)<br/>
+    <b>오는 편</b> 27.10.11(월) 15:10 로마(FCO) &rarr; 10.12 18:10 인천
+  </div>
+</header>
+
+<main>
+  <section id="tab-plan">
+    <div class="day-scroll" id="dayScroll"></div>
+    <div class="day-banner" id="dayBanner"></div>
+    <div id="planList"></div>
+  </section>
+
+  <section id="tab-map" class="hidden">
+    <div class="day-scroll" id="mapDayScroll"></div>
+    <div id="mapBox"></div>
+    <div id="mapGoogleBtn" style="margin-bottom:10px;"></div>
+    <div class="sec-card" id="mapLegend"></div>
+  </section>
+
+  <section id="tab-stay" class="hidden">
+    <div class="sec-card" style="border:2px solid var(--green);">
+      <h3>🏨 12박 숙소 — 기본안 364만 원</h3>
+      <div class="row"><div><b>로마 2박</b> (9/29~10/1)<br/><span style="color:var(--sub);font-size:12px;">Suite Rione Monti · 60㎡ · 무료취소</span></div><span class="pill p-g">58.2만</span></div>
+      <div class="row"><div><b>소렌토 3박</b> (10/1~4)<br/><span style="color:var(--sub);font-size:12px;">Casa Astarita · 중심 400m · 조식</span></div><span class="pill p-g">64.1만</span></div>
+      <div class="row"><div><b>피렌체 2박</b> (10/4~6)<br/><span style="color:var(--sub);font-size:12px;">Le Tre Stanze · 두오모 500m · 무료취소</span></div><span class="pill p-g">53.2만</span></div>
+      <div class="row"><div><b>발도르차 4박</b> (10/6~10)<br/><span style="color:var(--sub);font-size:12px;">일 미라조 5성 · 스파·조식</span></div><span class="pill p-o">169.9만</span></div>
+      <div class="row"><div><b>로마 1박</b> (10/10~11)<br/><span style="color:var(--sub);font-size:12px;">테르미나 인근 · 1박 재조회 필요</span></div><span class="pill p-y">18.4만</span></div>
+    </div>
+
+    <div class="hcard">
+      <img class="himg" src="./img/palazzo.jpg" alt="팔라초 델 카피타노"/>
+      <div class="hn">팔라초 델 카피타노 <span class="pill p-o" style="margin-left:4px;">감성 1순위</span></div>
+      <div class="hm">9.1 (505) · 산 키리코 중심 100m · 4성</div>
+      <div class="hp">1,868,881원 <span style="font-size:12px;color:var(--sub);font-weight:600;">/ 4박 · 1박 46.7만</span></div>
+      <div class="hd">스몰 수영장 · 온수 스파 · 조식 포함 · 무료취소. 구시가지 도보 1분이라 저녁 산책이 최고. 가장 비쌈.</div>
+      <div class="item-actions"><a class="act-btn map" target="_blank" rel="noopener" href="https://www.booking.com/searchresults.ko.html?ss=Palazzo+del+Capitano+San+Quirico&checkin=2027-10-06&checkout=2027-10-10&group_adults=2&no_rooms=1&selected_currency=KRW&lang=ko">부킹닷컴에서 보기</a></div>
+    </div>
+    <div class="hcard">
+      <img class="himg" src="./img/miraggio.jpg" alt="일 미라조"/>
+      <div class="hn">일 미라조 인 발도르차 <span class="pill p-g" style="margin-left:4px;">기본안</span></div>
+      <div class="hm">9.4 (569) · 산 키리코 0.9km · 5성 리조트</div>
+      <div class="hp">1,699,490원 <span style="font-size:12px;color:var(--sub);font-weight:600;">/ 4박 · 1박 42.5만</span></div>
+      <div class="hd">스파 · 한증막 · 조식 포함. 포도밭 전망이라 방에서 일몰을 봅니다. 무료취소 표기는 없어 취소 규정 확인.</div>
+      <div class="item-actions"><a class="act-btn map" target="_blank" rel="noopener" href="https://www.booking.com/searchresults.ko.html?ss=Il+Miraggio+Val+d+Orcia&checkin=2027-10-06&checkout=2027-10-10&group_adults=2&no_rooms=1&selected_currency=KRW&lang=ko">부킹닷컴에서 보기</a></div>
+    </div>
+    <div class="hcard">
+      <img class="himg" src="./img/casanova.jpg" alt="카사노바 패밀리 레지던스"/>
+      <div class="hn">카사노바 패밀리 레지던스 <span class="pill p-y" style="margin-left:4px;">가성비</span></div>
+      <div class="hm">9.2 (204) · 산 키리코 450m</div>
+      <div class="hp">701,456원 <span style="font-size:12px;color:var(--sub);font-weight:600;">/ 4박 · 1박 17.5만</span></div>
+      <div class="hd">전망 좋은 수영장 · 온수 스파 · 무료취소 · 스튜디오 40㎡. 이걸로 바꾸면 총액 887만 원.</div>
+      <div class="item-actions"><a class="act-btn map" target="_blank" rel="noopener" href="https://www.booking.com/searchresults.ko.html?ss=Casanova+Family+Apartments+San+Quirico&checkin=2027-10-06&checkout=2027-10-10&group_adults=2&no_rooms=1&selected_currency=KRW&lang=ko">부킹닷컴에서 보기</a></div>
+    </div>
+
+    <div class="sec-card" style="border:2px solid var(--org);">
+      <h3>📸 피렌체 일몰 스냅 (10/5 · 17:15~19:15)</h3>
+      <div class="row"><div><b>포토로 × 살롱반하 3시간</b><br/><span style="color:var(--sub);font-size:12px;">60만 + 잔금 €350 · 일몰·야경</span></div><span class="pill p-o">1순위 · 취향</span></div>
+      <div class="row"><div><b>루체스냅 2시간</b><br/><span style="color:var(--sub);font-size:12px;">58만 · 원본 800 · 보정 20</span></div><span class="pill p-g">비교 옵션</span></div>
+      <div style="font-size:12px;color:var(--sub);margin-top:8px;line-height:1.5;">포토로 3시간으로 정하면 73만 원, 헤메 포함이면 100만 원대. 아직 미확정이라 예산표와 분리했습니다.</div>
+      <div class="item-actions">
+        <a class="act-btn map" target="_blank" rel="noopener" href="https://fotoro.kr/">포토로 홈페이지</a>
+        <a class="act-btn" target="_blank" rel="noopener" href="https://www.instagram.com/luce_snap/">루체스냅 인스타</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="tab-wallet" class="hidden">
+    <div class="calc-box" style="margin-bottom:10px;padding:11px 13px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <div style="font-size:12.5px;font-weight:800;color:var(--gold);">💱 유로 ↔ 원화 계산기</div>
+        <button onclick="editRate()" style="border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;border-radius:8px;padding:3px 8px;font-size:11px;font-weight:700;cursor:pointer;">환율 <span id="rateLbl">1,650</span>원 수정</button>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input id="wEur" type="text" inputmode="decimal" placeholder="€ 유로" oninput="formatAmtInput(this);calcWalletCur('eur')" style="flex:1;min-width:0;padding:8px 10px;border-radius:9px;border:none;font-size:14px;font-weight:700;"/>
+        <span style="color:var(--gold);font-weight:900;">↔</span>
+        <input id="wKrw" type="text" inputmode="numeric" placeholder="₩ 한국돈" oninput="formatAmtInput(this);calcWalletCur('krw')" style="flex:1;min-width:0;padding:8px 10px;border-radius:9px;border:none;font-size:14px;font-weight:700;"/>
+      </div>
+    </div>
+
+    <div class="sec-card" style="border:2px solid var(--org);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <h3 style="margin:0;color:var(--org);">💶 통합 가계부</h3>
+        <button class="act-btn" onclick="editItBudget()">환전·예산 수정</button>
+      </div>
+      <div id="itBudgetBar" style="margin-bottom:10px;"></div>
+      <div id="itExpSum" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;"></div>
+      <div id="itCurPills" style="display:flex;gap:6px;margin-bottom:8px;"></div>
+      <div id="itCatPills" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:7px;"></div>
+      <div id="itPayPills" style="display:flex;gap:6px;margin-bottom:8px;"></div>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+        <input id="itAmt" type="text" inputmode="decimal" placeholder="금액 입력" oninput="formatAmtInput(this);updateItKrw()" style="flex:1;padding:10px;border:1.5px solid var(--line);border-radius:10px;font-size:15px;"/>
+        <span id="itKrwPre" style="font-size:12.5px;font-weight:700;color:var(--org);min-width:96px;text-align:right;">약 0원</span>
+      </div>
+      <input id="itMemo" placeholder="내용 (예: 항공권, 숙소, 브루넬로 시음)" style="width:100%;padding:10px;border:1.5px solid var(--line);border-radius:10px;font-size:14.5px;margin-bottom:8px;"/>
+      <button class="act-btn map" style="width:100%;justify-content:center;padding:11px;font-size:14.5px;" onclick="addItExp()">➕ 지출 기록하기</button>
+    </div>
+
+    <div class="sec-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <h3 style="margin:0;">📊 카테고리 비교</h3>
+        <button class="act-btn map" onclick="copyItExp()">📋 내역 복사</button>
+      </div>
+      <div id="itExpCats"></div>
+    </div>
+
+    <div class="sec-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <h3 style="margin:0;">🧾 사용 내역</h3>
+        <div id="itListFilter" style="display:flex;gap:4px;"></div>
+      </div>
+      <div id="itExpList"></div>
+    </div>
+  </section>
+
+  <section id="tab-budget" class="hidden">
+    <div class="sec-card" style="border:2px solid var(--green);">
+      <h3>🎛️ 내 조합 시뮬레이터 (실시간 총액 · 1,000만 원 판정)</h3>
+      <div style="font-size:12.5px;color:var(--sub);margin-bottom:10px;">항공·발도르차 숙소·소렌토 숙소·스냅을 고르면 총액이 바로 계산됩니다.</div>
+      <div id="simControls"></div>
+      <div id="simResult" style="margin-top:12px;"></div>
+    </div>
+
+    <div class="sec-card">
+      <h3>💰 2인 총예산 요약 (12박 14일)</h3>
+      <div class="row"><div><b>기본안</b> · 일 미라조 5성</div><b>987만</b></div>
+      <div class="row"><div><b>가성비</b> · 카사노바 4박</div><b style="color:var(--green);">887만</b></div>
+      <div class="row"><div><b>감성</b> · 팔라초 4박</div><b style="color:var(--org);">1,003만 (3만 초과)</b></div>
+      <div style="font-size:12px;color:var(--sub);margin-top:8px;line-height:1.5;">스냅 57만 포함. 스냅을 빼면 930만 원입니다. 위 시뮬레이터에서 조합을 바꿔 보세요.</div>
+    </div>
+
+    <div class="sec-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <h3 style="margin:0;">🌍 남부·토스카나 실전 팁</h3>
+        <span class="pill p-o" style="font-size:10.5px;">인스타·후기 반영</span>
+      </div>
+      <div id="commonTips"></div>
+    </div>
+
+    <div class="sec-card">
+      <h3>☑️ 예약 캘린더 (자동 저장)</h3>
+      <div id="checkList"></div>
+    </div>
+
+    <div class="sec-card">
+      <h3>📤 백업 · 초기화</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="act-btn map" onclick="exportData()">일정 내보내기 (.json)</button>
+        <button class="act-btn" onclick="resetData()">기본값으로 되돌리기</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="tab-links" class="hidden">
+    <div class="sec-card" style="border:2px solid var(--blue);">
+      <h3 style="color:var(--blue);">🔗 한 번에 누르는 링크</h3>
+      <div style="font-size:12.5px;color:var(--sub);line-height:1.5;">날짜·인원이 채워진 예약 화면으로 열립니다. 항공·기차·페리부터.</div>
+    </div>
+    <div id="linkList"></div>
+  </section>
+
+  <section id="tab-mag" class="hidden">
+    <div class="mag-top">
+      <h3>📖 토스카나 매거진 · 27쪽</h3>
+      <p>일자별 14일 · 지도 2장 · 숙소 12박 · 브루넬로 · 스냅 · 렌터카 · 예산 · 예약 캘린더 · 링크 47개.<br/>PDF를 그대로 열람하거나 저장해 두고 봐도 됩니다.</p>
+      <div class="mag-btns">
+        <a id="magOpen" href="./magazine.pdf" target="_blank" rel="noopener">🔍 PDF 크게 열기</a>
+        <a id="magSave" class="ghost" href="./magazine.pdf" download="토스카나_신혼여행_매거진_2027.pdf">⬇️ PDF 저장</a>
+      </div>
+    </div>
+    <div class="pdfbox">
+      <iframe id="magFrame" src="./magazine.pdf#view=FitH&toolbar=1" title="토스카나 매거진 PDF"></iframe>
+    </div>
+    <div class="pdfnote">아이폰에서는 미리보기가 잘 안 뜰 수 있어요 — 위 <b>PDF 크게 열기</b>를 누르면 사파리 PDF 뷰어로 바로 열립니다.</div>
+  </section>
+</main>
+
+<nav class="tabbar">
+  <button class="tab active" onclick="goTab('plan',this)"><span class="ico">📋</span>일정</button>
+  <button class="tab" onclick="goTab('map',this)"><span class="ico">🗺️</span>지도</button>
+  <button class="tab" onclick="goTab('stay',this)"><span class="ico">🏨</span>숙소</button>
+  <button class="tab" onclick="goTab('wallet',this)"><span class="ico">💶</span>가계부</button>
+  <button class="tab" onclick="goTab('budget',this)"><span class="ico">💰</span>예산</button>
+  <button class="tab" onclick="goTab('links',this)"><span class="ico">🔗</span>링크</button>
+  <button class="tab" onclick="goTab('mag',this)"><span class="ico">📖</span>매거진</button>
+</nav>
+
+<div class="modal-bg" id="editModal">
+  <div class="modal">
+    <h3 id="mTitle" style="margin:0;color:var(--green);">일정 추가 / 수정</h3>
+    <input id="mTime" placeholder="시간 (예: 10:30)"/>
+    <input id="mName" placeholder="장소 / 일정명"/>
+    <input id="mMove" placeholder="이동수단 (예: 도보 10분 · 지하철)"/>
+    <textarea id="mNote" rows="3" placeholder="메모 · 예약 팁"></textarea>
+    <div style="display:flex;gap:8px;margin-top:12px;">
+      <button class="act-btn" style="flex:1;justify-content:center;" onclick="closeModal()">취소</button>
+      <button class="act-btn map" style="flex:2;justify-content:center;" onclick="saveModal()">저장하기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ───────── 일정 데이터 (올빼미형 · 매일 10:00 이후 출발) ───────── */
+const DEFAULT_DAYS = [
+  {d:"9/28(화)", city:"인천", sub:"밤 비행 · 22시 공항", stay:"인천 (집)", items:[
+    {t:"19:00", name:"김천 출발 · KTX → 공항철도", gq:"Incheon International Airport Terminal 1", move:"3시간 30분", segs:[{l:"KTX",w:2,c:"#1E5CA8"},{l:"공항철도",w:2,c:"#1E5CA8"}], how:"김천 → 서울역/인천공항 → T1 3층 출국장", note:"저녁은 공항에서. 낮에 미리 짐을 싸두면 밤 비행이 편합니다.", warn:"여권 만료일 2028-04-11 이후 · 보조배터리·라이터는 기내만 · 위탁 25kg", img:"./img/incheon.jpg", lat:37.4602, lng:126.4407},
+    {t:"22:00", name:"인천공항 T1 · 카타르 카운터", gq:"Incheon International Airport Terminal 1", move:"수속 1시간", segs:[{l:"위탁",w:1},{l:"면세",w:1}], how:"출발 3시간 전 도착 권장", note:"여권·e티켓은 몸에, 세면도구는 기내 가방에.", warn:"위탁 25kg 초과 금지 · 액체 100ml 규정", img:"./img/incheon.jpg", lat:37.4602, lng:126.4407},
+    {t:"00:20", name:"인천 출발 (카타르 · 도하 경유)", gq:"Incheon International Airport", move:"비행 18~20h", segs:[{b:"QR",l:"도하 1회",w:3,c:"#5C1D3B"},{l:"로마 14:15",w:2,c:"#5C1D3B"}], how:"ICN → DOH 환승 3시간 안팎 → FCO", note:"2027 스케줄 미정 — 2026-11 조회 기준 00:20~01:20 출발.", warn:"목베개·안대·슬리퍼를 기내 가방에", lat:37.4602, lng:126.4407}
+  ]},
+  {d:"9/29(수)", city:"로마", sub:"FCO 도착 → 몬티", stay:"Suite Rione Monti (몬티)", items:[
+    {t:"14:15", name:"로마 피우미치노(FCO) 착륙", gq:"Leonardo da Vinci–Fiumicino Airport, Rome", move:"입국 90~120분", segs:[{l:"입국 120분",w:3},{l:"수하물",w:1}], how:"EES 생체등록 시행(2026-04-10) — 지문·얼굴 등록", note:"이 여행에서 가장 긴 입국. 레오나르도 익스프레스는 15분 간격이라 늦어도 괜찮습니다.", warn:"입국 줄 대비 1시간 30분 · 짐 찾는 곳 소매치기", img:"./img/rome.jpg", lat:41.8003, lng:12.2389},
+    {t:"16:30", name:"레오나르도 익스프레스 → 테르미니", gq:"Roma Termini, Italy", move:"32분 · €14", segs:[{b:"LE",l:"32분",w:3,c:"#C25A2A"}], how:"FCO 공항역 → 테르미니역(15분 간격)", note:"짐이 늦으면 다음 편. 표는 개찰 전 펀칭.", warn:"€14 · 2인 28유로 · 자동발매기 카드 가능", img:"./img/rome.jpg", lat:41.9010, lng:12.5018},
+    {t:"17:30", name:"몬티 숙소 체크인", gq:"Suite Rione Monti, Rome", move:"지하철 A선/도보", segs:[{b:"A",l:"5분",w:2,c:"#E5532D"},{l:"도보 8분",w:2}], how:"테르미니 → A선 바르베리니 → 도보", note:"셀프 체크인 안내를 미리 받아두면 연착에 강합니다.", warn:"도시세 4성 €4~6/인·박 현장 결제", img:"./img/rome.jpg", lat:41.8960, lng:12.4900},
+    {t:"19:00", name:"판테온 · 나보나 광장 산책", gq:"Pantheon, Rome", move:"도보 15분", segs:[{l:"도보 15분",w:3}], how:"몬티 → 판테온 → 나보나", note:"첫날은 무리하지 않습니다. 판테온 입장은 €5·시간 지정.", warn:"판테온 마지막 입장 18:30(10월) — 외관만 봐도 충분", img:"./img/rome.jpg", lat:41.8986, lng:12.4769},
+    {t:"20:00", name:"첫 저녁 (예약 없이)", gq:"Trastevere, Rome", move:"도보/트램 8", segs:[{l:"도보 15분",w:2},{b:"T8",l:"트램",w:2,c:"#1F8E4D"}], how:"몬티 → 트라스테베레", note:"첫날은 예약하지 않습니다 — 연착 변수를 봅니다.", warn:"코페르토 €2~3/인 별도", lat:41.8897, lng:12.4708}
+  ]},
+  {d:"9/30(목)", city:"바티칸", sub:"바티칸 하루 + 콜로세움 야경", stay:"Suite Rione Monti (몬티)", items:[
+    {t:"08:45", name:"숙소 출발 · 지하철 A선", gq:"Vatican Museums, Rome", move:"25분", segs:[{b:"A",l:"25분",w:3,c:"#E5532D"},{l:"도보 8분",w:1}], how:"테르미니 → 오타비아노역 → 도보 8분", note:"이 날만 예약 시간에 맞춰 08:45 출발입니다.", warn:"물통 챙기기 — 성당 급수대에서 받기", img:"./img/vatican.jpg", lat:41.9065, lng:12.4536},
+    {t:"09:30", name:"바티칸 미술관 (시간 지정)", gq:"Vatican Museums, Rome", move:"관람 3시간", segs:[{l:"라파엘로",w:2},{l:"시스티나",w:2}], how:"€25(4.1만) · 60일 전 오픈(2027-07-31)", note:"입장은 시간 지정제 — 일찍 가도 못 들어갑니다.", warn:"어깨·무릎 가리기 · 큰 가방은 맡기기", img:"./img/vatican.jpg", lat:41.9065, lng:12.4536},
+    {t:"13:00", name:"성 베드로 대성당", gq:"St. Peter's Basilica, Vatican City", move:"도보 5분", segs:[{l:"보안검색",w:2}], how:"미술관 → 성당(무료)", note:"보안검색 20~40분. 돔은 551계단 — 오늘은 생략.", warn:"복장 규정 동일 · 무료지만 줄 깁니다", img:"./img/vatican.jpg", lat:41.9022, lng:12.4539},
+    {t:"15:30", name:"판테온 · 나보나 · 점심", gq:"Piazza Navona, Rome", move:"도보 18분", segs:[{l:"도보 18분",w:3}], how:"성 베드로 → 천사의 성 다리 → 나보나", note:"늦은 점심. 박물관 카페보다 판테온 쪽이 싸고 좋습니다.", warn:"타짜도르 커피 서서 마시면 €1.2", lat:41.8986, lng:12.4731},
+    {t:"17:30", name:"숙소 휴식", gq:"Suite Rione Monti, Rome", move:"도보", segs:[{l:"휴식 2시간",w:2}], how:"내일 짐 미리 싸기", note:"내일은 10:00 체크아웃.", lat:41.8960, lng:12.4900},
+    {t:"19:00", name:"콜로세움 외관 야경", gq:"Colosseum, Rome", move:"도보 10분", segs:[{l:"도보 10분",w:3}], how:"몬티 → 콜로세움 광장", note:"내부 관람을 원하면 9/30 17:30 늦은 입장(€18)이 유일한 자리.", warn:"내부는 마지막 입장 17:30 — 오늘은 외관만", img:"./img/rome.jpg", lat:41.8902, lng:12.4922},
+    {t:"20:00", name:"트라스테베레 저녁", gq:"Trastevere, Rome", move:"도보 15분", segs:[{l:"도보 15분",w:3}], how:"콜로세움 → 트라스테베레", note:"첫날과 같은 동네 — 예약 없이 20:00.", warn:"일요일 아님 · 월요일 휴무 식당 주의", lat:41.8897, lng:12.4708}
+  ]},
+  {d:"10/1(금)", city:"소렌토", sub:"로마 → 나폴리 → 소렌토", stay:"Casa Astarita (소렌토)", items:[
+    {t:"10:00", name:"체크아웃 · 테르미니로", gq:"Roma Termini, Italy", move:"도보/지하철", segs:[{l:"짐 정리",w:1},{b:"A",l:"10분",w:2,c:"#E5532D"}], how:"몬티 → 테르미니 · 10:20 역 도착", note:"짐 보관 대신 바로 이동합니다.", warn:"짐은 한 번에 — 계단 손잡이 잡기", img:"./img/rome.jpg", lat:41.9010, lng:12.5018},
+    {t:"11:00", name:"프레차로사 → 나폴리 중앙", gq:"Napoli Centrale, Naples", move:"73분", segs:[{b:"FR",l:"73분",w:4,c:"#B92929"}], how:"로마 테르미니 → 나폴리 중앙역(좌석 지정)", note:"짐칸 가까운 좌석으로. 2인 €40~60.", warn:"나폴리역 소매치기 최다 — 가방 앞으로", img:"./img/sorrento.jpg", lat:40.8529, lng:14.2729},
+    {t:"12:40", name:"사철 → 소렌토", gq:"Sorrento, Italy", move:"72분", segs:[{l:"환승 3분",w:1},{b:"EAV",l:"72분",w:4,c:"#C25A2A"}], how:"나폴리 Piazza Garibaldi 지하 → 소렌토 종점", note:"컨택리스 카드로 바로 탑승 가능.", warn:"표 개찰 필수 · 무임승차 과태료", img:"./img/sorrento.jpg", lat:40.6263, lng:14.3758},
+    {t:"13:52", name:"소렌토 도착 · 체크인", gq:"Casa Astarita, Sorrento", move:"도보 10분", segs:[{l:"도보 10분",w:3}], how:"소렌토역 → 코르소 이탈리아 67", note:"중심 400m — 캐리어 끌고 10분.", warn:"계단 있는 숙소는 피하세요 · 도시세 현장", img:"./img/sorrento.jpg", lat:40.6263, lng:14.3758},
+    {t:"15:00", name:"타소 광장 · 늦은 점심", gq:"Piazza Tasso, Sorrento", move:"도보 5분", segs:[{l:"도보 5분",w:2}], how:"광장 근처 트라토리아", note:"레몬 소르베 · 젤라또 한 컵.", warn:"관광지 값 — 메뉴판 가격 확인", lat:40.6263, lng:14.3758},
+    {t:"16:30", name:"마리나 그란데 산책", gq:"Marina Grande, Sorrento", move:"도보 15분", segs:[{l:"도보 15분",w:3}], how:"타소 광장 → 계단 내려가 항구", note:"바다 첫 인사 · 일몰 18:45.", warn:"내려간 계단은 올라와야 합니다 — 편한 신발", img:"./img/sorrento_porto.jpg", lat:40.6300, lng:14.3660},
+    {t:"19:30", name:"해산물 저녁", gq:"Marina Grande, Sorrento", move:"도보", segs:[{l:"도보",w:1}], how:"항구 쪽 식당 · 예약 권장", note:"내일 카프리 10:00 배.", warn:"", lat:40.6300, lng:14.3660}
+  ]},
+  {d:"10/2(토)", city:"카프리", sub:"카프리 섬 · 체어리프트 · 물놀이", stay:"Casa Astarita (소렌토)", items:[
+    {t:"09:30", name:"소렌토 항구 · 표 교환", gq:"Sorrento Port, Sorrento", move:"도보 10분", segs:[{l:"도보 10분",w:3}], how:"숙소 → 마리나 피콜라 항구", note:"2027 시즌표는 3~4월 오픈 — 그때 시간 재확인.", warn:"성 2글자면 예매 오류 — 'Lee.'처럼 마침표", img:"./img/sorrento_porto.jpg", lat:40.6263, lng:14.3758},
+    {t:"10:00", name:"소렌토 → 카프리 (페리)", gq:"Marina Grande, Capri", move:"20~25분", segs:[{b:"NLG",l:"25분",w:3,c:"#0E86A8"}], how:"NLG/Caremar 고속페리 · €20 안팎", note:"배 위에서 섬이 올라오는 각도가 좋습니다.", warn:"멀미약 · 아쿠아슈즈 챙기기", img:"./img/capri.jpg", lat:40.5532, lng:14.2222},
+    {t:"10:40", name:"마리나 그란데 · 섬버스", gq:"Anacapri, Capri", move:"버스 15분", segs:[{b:"버스",l:"15분",w:2,c:"#C25A2A"}], how:"카프리항 → 아나카프리행", note:"줄이 20분 넘으면 택시 합승(€20~25/차).", warn:"버스 만원 · 서서 가는 구간 있음", lat:40.5507, lng:14.2121},
+    {t:"11:30", name:"몬테 솔라로 체어리프트", gq:"Monte Solaro Chairlift, Anacapri", move:"리프트 12분", segs:[{b:"리프트",l:"12분",w:2,c:"#1F8E4D"}], how:"아나카프리 → 몬테 솔라로 정상(왕복 €14)", note:"맑은 날 필수. 정상에서 섬 전체가 보입니다.", warn:"모자 날아감 · 막차 시간 확인", img:"./img/capri.jpg", lat:40.5507, lng:14.2121},
+    {t:"13:00", name:"아나카프리 점심", gq:"Anacapri, Capri", move:"도보", segs:[{l:"도보 5분",w:2}], how:"미켈레 광장 근처", note:"관광지 값 — 2인 €50 안팎 예상.", warn:"", lat:40.5507, lng:14.2121},
+    {t:"14:30", name:"마리나 피콜라 물놀이", gq:"Marina Piccola, Capri", move:"버스 15분", segs:[{b:"버스",l:"15분",w:2,c:"#C25A2A"}], how:"아나카프리 → 마리나 피콜라", note:"자갈 해변 · 무료 구역 있음. 수건·아쿠아슈즈.", warn:"선베드 유료 · 귀중품은 몸에", img:"./img/capri_porto.jpg", lat:40.5555, lng:14.2230},
+    {t:"16:00", name:"카프리 → 소렌토", gq:"Sorrento Port, Sorrento", move:"25분", segs:[{b:"NLG",l:"25분",w:3,c:"#0E86A8"}], how:"막배 전 여유 있게", note:"17시 이후 배는 간격이 벌어집니다.", warn:"막배 시간 미리 확인", img:"./img/sorrento.jpg", lat:40.6263, lng:14.3758},
+    {t:"17:30", name:"숙소 풀 · 휴식", gq:"Casa Astarita, Sorrento", move:"도보", segs:[{l:"휴식",w:1}], how:"저녁은 19:30", note:"내일 아말피 — 배 표를 오늘 사두세요.", lat:40.6263, lng:14.3758}
+  ]},
+  {d:"10/3(일)", city:"아말피", sub:"포지타노 · 아말피 (배 3구간)", stay:"Casa Astarita (소렌토)", items:[
+    {t:"10:20", name:"소렌토 항구로", gq:"Sorrento Port, Sorrento", move:"도보 10분", segs:[{l:"도보 10분",w:3}], how:"숙소 → 항구", note:"일요일이라 도로가 더 막힙니다 — 배가 정답.", warn:"표는 전날 사두면 안전", img:"./img/sorrento_porto.jpg", lat:40.6263, lng:14.3758},
+    {t:"11:00", name:"소렌토 → 포지타노", gq:"Positano, Italy", move:"페리 40분", segs:[{b:"NLG",l:"40분",w:3,c:"#0E86A8"}], how:"해로 · €18~21.5", note:"바다에서 보는 포지타노가 제일 예쁩니다.", warn:"멀미 있으면 뒤쪽 좌석", img:"./img/positano.jpg", lat:40.6281, lng:14.4850},
+    {t:"11:45", name:"스피아자 그란데 · 점심", gq:"Spiaggia Grande, Positano", move:"도보 3분", segs:[{l:"도보 3분",w:2}], how:"해변가 식당", note:"선베드 €35~50/인 — 무료 구역은 돗자리.", warn:"선베드 값 흥정 없음 · 화장실 €1", img:"./img/positano.jpg", lat:40.6281, lng:14.4880},
+    {t:"12:30", name:"요트투어 2시간 (선택)", gq:"Positano, Italy", move:"보트 2시간", segs:[{b:"보트",l:"2시간",w:3,c:"#0E86A8"}], how:"포지타노 앞바다 · 인스타 꿀팁", note:"약 20만 원 · 전날 구글에서 업체 검색 후 왓츠앱 예약. 넣으면 아말피는 15:30 이후로.", warn:"예약 확정 전 결제 금지 · 구명조끼 확인", img:"./img/positano.jpg", lat:40.6270, lng:14.4900},
+    {t:"14:10", name:"포지타노 → 아말피", gq:"Amalfi, Italy", move:"페리 25분 / 버스 35분", segs:[{l:"버스면 Furore",w:1},{b:"NLG",l:"25분",w:3,c:"#0E86A8"}], how:"페리 또는 SITA 버스(피오르드 경유)", note:"버스로 가면 Furore 피오르드 다리에서 20분 내려다볼 수 있습니다.", warn:"버스는 만원·정체 — 페리가 안전", img:"./img/amalfi.jpg", lat:40.6340, lng:14.6027},
+    {t:"15:20", name:"아말피 두오모 · 골목", gq:"Duomo di Amalfi, Italy", move:"도보 5분", segs:[{l:"도보 5분",w:2}], how:"아말피 항구 → 두오모 62계단", note:"레몬 소르베는 IL Pieneta Del Gelato에서.", warn:"복장 규정(어깨·무릎) · 계단 많음", img:"./img/amalfi.jpg", lat:40.6340, lng:14.6027},
+    {t:"17:02", name:"아말피 → 소렌토", gq:"Sorrento Port, Sorrento", move:"페리 50분", segs:[{b:"NLG",l:"50분",w:3,c:"#0E86A8"}], how:"사실상 막차(2026 시즌)", note:"2027 시즌표가 열리면 이 편부터 확인하세요.", warn:"막배 놓치면 버스 1시간 30분", img:"./img/sorrento.jpg", lat:40.6263, lng:14.3758},
+    {t:"18:10", name:"숙소 복귀 · 저녁", gq:"Casa Astarita, Sorrento", move:"도보", segs:[{l:"도보 10분",w:2}], how:"짐 정리 · 내일 10:20 기차", note:"내일 이동 4시간 20분.", lat:40.6263, lng:14.3758}
+  ]},
+  {d:"10/4(월)", city:"피렌체", sub:"소렌토 → 피렌체 · 두오모", stay:"Le Tre Stanze (피렌체)", items:[
+    {t:"09:50", name:"체크아웃 · 소렌토역", gq:"Sorrento Station, Italy", move:"도보 10분", segs:[{l:"도보 10분",w:2}], how:"짐은 역까지 택시 €15~20도 방법", note:"10:20 사철.", warn:"사철 표 개찰", img:"./img/sorrento.jpg", lat:40.6263, lng:14.3758},
+    {t:"10:20", name:"사철 → 나폴리", gq:"Napoli Centrale, Naples", move:"72분", segs:[{b:"EAV",l:"72분",w:4,c:"#C25A2A"}], how:"소렌토 → 나폴리 Piazza Garibaldi", note:"2인 €8 안팎.", warn:"나폴리역 소매치기", lat:40.8529, lng:14.2729},
+    {t:"12:10", name:"프레차로사 → 피렌체 S.M.N.", gq:"Firenze Santa Maria Novella, Florence", move:"3시간", segs:[{b:"FR",l:"3시간",w:4,c:"#B92929"}], how:"나폴리 중앙 → 피렌체 S.M.N.", note:"환승 38분 여유. 좌석 지정.", warn:"짐칸 가까이 · 2인 €80~120", img:"./img/firenze_duomo.jpg", lat:43.7764, lng:11.2479},
+    {t:"15:10", name:"도착 · 숙소 체크인", gq:"Le Tre Stanze, Firenze", move:"도보 10분", segs:[{l:"도보 10분",w:2}], how:"S.M.N. → 두오모 500m", note:"짐 풀고 30분 휴식.", warn:"도시세 4성 €4~6/인·박", img:"./img/firenze_duomo.jpg", lat:43.7731, lng:11.2560},
+    {t:"16:30", name:"두오모 · 조토 종탑 외관", gq:"Cathedral of Santa Maria del Fiore, Florence", move:"도보 5분", segs:[{l:"도보 5분",w:2}], how:"광장 산책 · 쿠폴라는 오늘 넣지 않음", note:"월요일은 우피치 휴관 — 광장과 골목으로.", warn:"쿠폴라 463계단은 스냅 전날에 무리", img:"./img/firenze_duomo.jpg", lat:43.7731, lng:11.2560},
+    {t:"18:50", name:"아르노강 일몰 · 베키오 다리", gq:"Ponte Vecchio, Florence", move:"도보 8분", segs:[{l:"도보 8분",w:2}], how:"두오모 → 베키오 다리", note:"10월 초 피렌체 일몰 18:50.", warn:"다리 위 보석상은 구경만", img:"./img/firenze_view.jpg", lat:43.7680, lng:11.2531},
+    {t:"20:00", name:"티본 스테이크 저녁", gq:"Mercato Centrale, Florence", move:"도보 8분", segs:[{l:"도보 8분",w:2}], how:"중앙시장/산 로렌초 방면", note:"1kg 기본(2인) · 예약 권장.", warn:"레어/미디엄레어 추천 · 코페르토", lat:43.7760, lng:11.2535}
+  ]},
+  {d:"10/5(화)", city:"피렌체", sub:"우피치 + 일몰 스냅", stay:"Le Tre Stanze (피렌체)", items:[
+    {t:"09:00", name:"숙소 출발 · 시뇨리아 광장", gq:"Piazza della Signoria, Florence", move:"도보 12분", segs:[{l:"도보 12분",w:3}], how:"숙소 → 시뇨리아 → 우피치", note:"오전 우피치 2시간.", warn:"", img:"./img/firenze_view.jpg", lat:43.7696, lng:11.2558},
+    {t:"09:30", name:"우피치 미술관", gq:"Uffizi Gallery, Florence", move:"관람 2시간", segs:[{l:"비너스",w:2},{l:"봄",w:1}], how:"€25(4.1만) · 예약 필수", note:"시간 지정 입장. 2시간이면 핵심은 다 봅니다.", warn:"큰 가방 맡기기 · 사진 플래시 금지", img:"./img/firenze_view.jpg", lat:43.7678, lng:11.2553},
+    {t:"12:00", name:"점심 · 산타 크로체 골목", gq:"Basilica di Santa Croce, Florence", move:"도보 10분", segs:[{l:"도보 10분",w:2}], how:"우피치 → 산타 크로체", note:"스냅 전 과식 금지 — 가볍게.", warn:"", lat:43.7686, lng:11.2622},
+    {t:"14:00", name:"숙소 휴식 · 환복 준비", gq:"Le Tre Stanze, Firenze", move:"도보", segs:[{l:"휴식",w:2}], how:"드레스·구두·슬리퍼 준비", note:"헤메 15:00 시작 — 14:30에 샵 도착.", warn:"드레스 입고 두오모 들어갈 땐 얇은 숄", lat:43.7731, lng:11.2560},
+    {t:"15:00", name:"헤메 · 살롱반하", gq:"Salone Banha, Florence", move:"도보 10분", segs:[{l:"헤메 2시간",w:3}], how:"포토로 패키지면 촬영 3시간 전 시작", note:"촬영 17:15 — 헤메는 15:00~17:00.", warn:"메이크업 중 물·커피 조심", lat:43.7715, lng:11.2530},
+    {t:"17:15", name:"일몰 스냅 (2시간)", gq:"Piazzale Michelangelo, Florence", move:"택시 10분", segs:[{l:"베키오 다리",w:2},{b:"택시",l:"10분",w:2,c:"#14493F"}], how:"베키오 다리 → 미켈란젤로 언덕 → 두오모", note:"일몰 18:50. 3시간 패키지면 20:00까지.", warn:"해 진 뒤 15℃ — 얇은 겉옷 지참", img:"./img/snap.jpg", lat:43.7629, lng:11.2651},
+    {t:"19:30", name:"저녁 (가볍게)", gq:"Oltrarno, Florence", move:"택시/도보", segs:[{l:"도보 15분",w:2}], how:"올트라르노 쪽", note:"드레스 벗고 편한 식당 — 예약하지 않기.", warn:"", lat:43.7660, lng:11.2500},
+    {t:"21:00", name:"짐 정리", gq:"Le Tre Stanze, Firenze", move:"", segs:[{l:"짐",w:1}], how:"내일 렌터카 — 여권·면허·국제면허·카드", note:"렌터카 서류 4종을 한 파우치에.", warn:"운전자 명의 신용카드 필수", lat:43.7731, lng:11.2560}
+  ]},
+  {d:"10/6(수)", city:"발도르차", sub:"렌터카 픽업 → 산 키리코", stay:"발도르차 4박 (산 키리코)", items:[
+    {t:"09:30", name:"체크아웃 · 역으로", gq:"Firenze Santa Maria Novella, Florence", move:"택시 10분", segs:[{b:"택시",l:"10분",w:2,c:"#14493F"}], how:"숙소 → S.M.N. 인근 렌터카 사무실", note:"ZTL 밖에서 받습니다.", warn:"면허·여권·카드 미리 꺼내기", img:"./img/valdorcia.jpg", lat:43.7764, lng:11.2479},
+    {t:"10:00", name:"렌터카 인수", gq:"Florence, Italy", move:"서류 30분", segs:[{l:"서류",w:1},{l:"차량 점검",w:2}], how:"여권·한국면허·국제면허·운전자 명의 신용카드", note:"외관 360도 영상 · 연료 눈금 · 반납 장소 사진.", warn:"보증금은 카드 한도에 잡힘", lat:43.7760, lng:11.2480},
+    {t:"10:30", name:"출발 · Firenze–Siena 라카르도", gq:"San Quirico d'Orcia, Italy", move:"115km", segs:[{b:"차",l:"1시간 42분",w:4,c:"#14493F"}], how:"A1/SS2 경유 · 톨게이트 €8 안팎", note:"중간에 시에나를 스쳐 지나갑니다.", warn:"ZTL 경고 켜두기", img:"./img/valdorcia.jpg", lat:43.0570, lng:11.6040},
+    {t:"12:10", name:"산 키리코 도착", gq:"San Quirico d'Orcia, Italy", move:"주차", segs:[{l:"성 밖 P",w:2}], how:"성벽 밖 공영주차장", note:"체크인은 15:00 — 점심 먼저.", warn:"성 안은 ZTL", lat:43.0570, lng:11.6040},
+    {t:"12:30", name:"오르차 골목 점심", gq:"San Quirico d'Orcia, Italy", move:"도보 3분", segs:[{l:"도보 3분",w:2}], how:"콜레지아타 옆 트라토리아", note:"페코리노 · 피치 파스타.", warn:"13시 이후 붐빔", img:"./img/sanq.jpg", lat:43.0570, lng:11.6040},
+    {t:"15:00", name:"숙소 체크인 · 짐 풀기", gq:"San Quirico d'Orcia, Italy", move:"차 2분", segs:[{l:"짐",w:1}], how:"4박 — 이 여행의 유일한 긴 숙소", note:"아그리투리스모는 저녁을 미리 예약.", warn:"", lat:43.0570, lng:11.6040},
+    {t:"16:30", name:"산 키리코 마을 산책", gq:"Collegiata di San Quirico, Italy", move:"도보 5분", segs:[{l:"도보 5분",w:2}], how:"콜레지아타 · 성문 · Horti Leonini", note:"일몰 18:40 — 성벽 위가 좋습니다.", warn:"성문 계단 미끄럼", img:"./img/sanq.jpg", lat:43.0570, lng:11.6040},
+    {t:"19:30", name:"숙소 저녁", gq:"San Quirico d'Orcia, Italy", move:"", segs:[{l:"저녁",w:1}], how:"아그리투리스모 저녁(예약)", note:"내일 몬탈치노 10:30.", warn:"", lat:43.0570, lng:11.6040}
+  ]},
+  {d:"10/7(목)", city:"몬탈치노", sub:"브루넬로 와이너리 + 미쉐린", stay:"발도르차 4박 (산 키리코)", items:[
+    {t:"10:30", name:"숙소 출발 · SP14", gq:"Montalcino, Italy", move:"16분 · 14.2km", segs:[{b:"차",l:"16분",w:3,c:"#14493F"}], how:"산 키리코 → 몬탈치노", note:"포도밭 사이로 내려갑니다.", warn:"좁은 농로 — 서행", img:"./img/montalcino.jpg", lat:43.0560, lng:11.4890},
+    {t:"11:00", name:"포지오 안티코 투어 + 5와인", gq:"Poggio Antico, Montalcino", move:"1시간 30분", segs:[{l:"투어",w:2},{l:"시음",w:2}], how:"€50/인(4.1만) · 예약 필수 · 영어", note:"리저브 1병 포함. 45분 전 도착.", warn:"운전자는 시음만 — 뱉는 바 통", img:"./img/wine.jpg", lat:43.0450, lng:11.4700},
+    {t:"13:00", name:"몬탈치노 마을 산책", gq:"Montalcino, Italy", move:"도보", segs:[{l:"도보 5분",w:2}], how:"요새 · 에노테카", note:"브루넬로 한 잔은 요새 전망대에서.", warn:"", img:"./img/montalcino.jpg", lat:43.0560, lng:11.4890},
+    {t:"13:30", name:"본 디비노 점심 (미쉐린)", gq:"Boccon Divino, Montalcino", move:"도보 3분", segs:[{l:"도보 3분",w:2}], how:"시음 메뉴 €40 · 화요일 휴무", note:"포도밭 테라스 — 예약 권장.", warn:"목요일 영업 확인", img:"./img/wine.jpg", lat:43.0560, lng:11.4890},
+    {t:"15:30", name:"요새 전망대 · 커피", gq:"Fortezza di Montalcino, Italy", move:"도보 5분", segs:[{l:"도보 5분",w:2}], how:"요새 위 카페", note:"여기서 브루넬로 한 잔.", warn:"", lat:43.0560, lng:11.4890},
+    {t:"17:00", name:"숙소 복귀", gq:"San Quirico d'Orcia, Italy", move:"16분", segs:[{b:"차",l:"16분",w:3,c:"#14493F"}], how:"낮에 마신 와인은 저녁까지", note:"", warn:"", lat:43.0570, lng:11.6040},
+    {t:"18:40", name:"언덕 일몰 산책", gq:"San Quirico d'Orcia, Italy", move:"도보", segs:[{l:"도보",w:2}], how:"숙소 주변 포도밭", note:"이 여행의 대표 사진 후보.", warn:"", img:"./img/valdorcia.jpg", lat:43.0570, lng:11.6040},
+    {t:"20:00", name:"숙소 저녁", gq:"San Quirico d'Orcia, Italy", move:"", segs:[{l:"저녁",w:1}], how:"가벼운 파스타", note:"내일 피엔차 10:00.", lat:43.0570, lng:11.6040}
+  ]},
+  {d:"10/8(금)", city:"피엔차", sub:"피엔차 · 몬테풀치아노", stay:"발도르차 4박 (산 키리코)", items:[
+    {t:"10:00", name:"숙소 출발 · SS146", gq:"Pienza, Italy", move:"12분 · 9.6km", segs:[{b:"차",l:"12분",w:3,c:"#14493F"}], how:"산 키리코 → 피엔차", note:"사이프러스 길을 지나갑니다.", warn:"갓길 주차 금지 구간", img:"./img/pienza.jpg", lat:43.0766, lng:11.6783},
+    {t:"10:15", name:"피오 II 광장 · 두오모", gq:"Piazza Pio II, Pienza", move:"도보", segs:[{l:"도보",w:2}], how:"교황 피콜로미니의 이상도시", note:"광장 뒤 성벽에서 발도르차가 한눈에.", warn:"두오모 복장 규정", img:"./img/pienza_piazza.jpg", lat:43.0766, lng:11.6783},
+    {t:"11:00", name:"페코리노 · 올리브오일 시식", gq:"Pienza, Italy", move:"도보 3분", segs:[{l:"도보 3분",w:2}], how:"치즈 가게(오전이 한산)", note:"페코리노 디 피엔차 — 집에 가져갈 것.", warn:"진공 포장 요청", img:"./img/pienza.jpg", lat:43.0766, lng:11.6783},
+    {t:"12:30", name:"피엔차 점심", gq:"Pienza, Italy", move:"도보", segs:[{l:"도보 5분",w:2}], how:"페코리노 크레마 · 피치", note:"", warn:"", lat:43.0766, lng:11.6783},
+    {t:"13:30", name:"몬테풀치아노로", gq:"Montepulciano, Italy", move:"28분 · 22.9km", segs:[{b:"차",l:"28분",w:3,c:"#14493F"}], how:"SS146 → 몬테풀치아노", note:"성 밖 P에 주차하고 걸어 올라갑니다.", warn:"성 안 ZTL", img:"./img/montepulciano.jpg", lat:43.0966, lng:11.7860},
+    {t:"14:10", name:"몬테풀치아노 시내", gq:"Montepulciano, Italy", move:"도보", segs:[{l:"도보",w:2}], how:"비뇨라 · 광장 · 와인 상점", note:"비뇨라(Nobile) 한 잔.", warn:"오르막 골목 — 편한 신발", img:"./img/montepulciano.jpg", lat:43.0966, lng:11.7860},
+    {t:"16:00", name:"카페 · 돌아갈 준비", gq:"Montepulciano, Italy", move:"", segs:[{l:"카페",w:1}], how:"광장 카페", note:"내일 아침 사이프러스 길.", warn:"", lat:43.0966, lng:11.7860},
+    {t:"17:00", name:"숙소 복귀 · 수영장", gq:"San Quirico d'Orcia, Italy", move:"28분", segs:[{b:"차",l:"28분",w:3,c:"#14493F"}], how:"10월 초 오후 23℃", note:"", warn:"", lat:43.0570, lng:11.6040}
+  ]},
+  {d:"10/9(토)", city:"발도르차", sub:"사이프러스 길 · 쉬는 날", stay:"발도르차 4박 (산 키리코)", items:[
+    {t:"10:00", name:"숙소 출발", gq:"Strada Provinciale 146, Val d'Orcia", move:"차", segs:[{b:"차",l:"10분",w:2,c:"#14493F"}], how:"사진이 목적이면 08:30 출발로 바꿔도 좋습니다", note:"이 여행에서 유일하게 예약 없는 날.", warn:"", img:"./img/sp146.jpg", lat:43.0700, lng:11.6400},
+    {t:"10:20", name:"SP146 사이프러스 길", gq:"Cipressi di San Quirico d'Orcia", move:"도보 10분", segs:[{l:"촬영",w:2}], how:"산 키리코–피엔차 사이", note:"갓길에 세우고 비상등. 아침 안개가 명장면.", warn:"차도 — 뒤차 확인 필수", img:"./img/sp146.jpg", lat:43.0700, lng:11.6400},
+    {t:"11:00", name:"아그리투리스모 비그나이아 점심", gq:"Agriturismo Vigniaia, Val d'Orcia", move:"차 10분", segs:[{b:"차",l:"10분",w:2,c:"#14493F"}], how:"9.7점 · 예약", note:"자체 와이너리 — 여기서 시음하면 운전 부담 없음.", warn:"예약 필수", img:"./img/valdorcia.jpg", lat:43.0650, lng:11.6200},
+    {t:"13:30", name:"숙소 복귀 · 수영장", gq:"San Quirico d'Orcia, Italy", move:"차", segs:[{l:"휴식",w:2}], how:"10월 초 수온은 차갑습니다 — 짧게", note:"", warn:"", lat:43.0570, lng:11.6040},
+    {t:"15:30", name:"숙소 스파 · 휴식", gq:"San Quirico d'Orcia, Italy", move:"", segs:[{l:"스파",w:2}], how:"팔라초 델 카피타노는 온수 스파", note:"짐 미리 싸두기.", warn:"", lat:43.0570, lng:11.6040},
+    {t:"17:30", name:"포도밭 산책 · 일몰", gq:"San Quirico d'Orcia, Italy", move:"도보", segs:[{l:"도보",w:2}], how:"18:40", note:"이 여행의 대표 사진.", warn:"", img:"./img/valdorcia.jpg", lat:43.0570, lng:11.6040},
+    {t:"20:00", name:"마지막 발도르차 저녁", gq:"San Quirico d'Orcia, Italy", move:"", segs:[{l:"저녁",w:1}], how:"숙소 또는 마을", note:"내일 아침 로마로.", warn:"", lat:43.0570, lng:11.6040},
+    {t:"21:30", name:"짐 정리", gq:"San Quirico d'Orcia, Italy", move:"", segs:[{l:"짐",w:1}], how:"렌터카 반납 서류·주유 영수증", note:"만차로 반납.", warn:"", lat:43.0570, lng:11.6040}
+  ]},
+  {d:"10/10(일)", city:"로마", sub:"발도르차 → FCO 반납 → 로마", stay:"로마 1박 (몬티·테르미나)", items:[
+    {t:"10:00", name:"체크아웃 · 주유", gq:"San Quirico d'Orcia, Italy", move:"차", segs:[{l:"주유",w:1}], how:"만차로 반납 · 영수증 챙기기", note:"", warn:"주유소 일요일 영업 확인", img:"./img/valdorcia.jpg", lat:43.0570, lng:11.6040},
+    {t:"10:15", name:"산 키리코 출발", gq:"Fiumicino Airport, Rome", move:"218km · 2시간 22분", segs:[{b:"차",l:"2시간 22분",w:4,c:"#14493F"}], how:"A1 고속도로 · 톨게이트 €15 안팎", note:"중간에 시에나를 들러도 53분 추가.", warn:"일요일 귀경 정체 가능", lat:41.8003, lng:12.2389},
+    {t:"12:40", name:"FCO 도착 · 렌터카 반납", gq:"Fiumicino Airport, Rome", move:"반납 20분", segs:[{l:"반납",w:2}], how:"원웨이 수수료 5~15만(예약 시 확인)", note:"반납 후 셔틀/도보로 터미널.", warn:"연료·파손 사진 재확인", lat:41.8003, lng:12.2389},
+    {t:"13:40", name:"레오나르도 익스프레스", gq:"Roma Termini, Italy", move:"32분 · €14", segs:[{b:"LE",l:"32분",w:3,c:"#C25A2A"}], how:"FCO → 테르미니 14:15", note:"", warn:"표 펀칭", lat:41.9010, lng:12.5018},
+    {t:"14:40", name:"숙소 체크인", gq:"Monti, Rome", move:"도보 10분", segs:[{l:"도보 10분",w:2}], how:"1박 · 짐 두고 산책", note:"", warn:"도시세 현장", lat:41.8960, lng:12.4900},
+    {t:"16:00", name:"콜로세움 · 포로 로마노 외관", gq:"Colosseum, Rome", move:"도보 10분", segs:[{l:"도보 10분",w:2}], how:"내부는 시간상 생략", note:"마지막 로마.", warn:"", img:"./img/rome.jpg", lat:41.8902, lng:12.4922},
+    {t:"18:50", name:"일몰 · 몬티 골목", gq:"Monti, Rome", move:"도보", segs:[{l:"도보",w:2}], how:"", note:"", warn:"", lat:41.8960, lng:12.4900},
+    {t:"20:00", name:"마지막 저녁", gq:"Monti, Rome", move:"도보", segs:[{l:"도보",w:1}], how:"숙소 근처 · 예약 권장", note:"내일 택스 리펀드 서류 준비.", warn:"", lat:41.8960, lng:12.4900}
+  ]},
+  {d:"10/11(월)", city:"귀국", sub:"새벽 없이 · FCO 15:10 → 인천", stay:"기내", items:[
+    {t:"09:30", name:"체크아웃 · 테르미니", gq:"Roma Termini, Italy", move:"도보 10분", segs:[{l:"도보 10분",w:2}], how:"택시 5분도 가능", note:"새벽 기상 없이 여유롭게.", warn:"여권·지갑 확인", img:"./img/rome.jpg", lat:41.9010, lng:12.5018},
+    {t:"10:37", name:"레오나르도 익스프레스", gq:"Fiumicino Airport, Rome", move:"32분 · €14", segs:[{b:"LE",l:"32분",w:3,c:"#C25A2A"}], how:"테르미니 → FCO 11:10", note:"15분 간격.", warn:"", lat:41.8003, lng:12.2389},
+    {t:"11:15", name:"택스 리펀드 · 수속", gq:"Fiumicino Airport, Rome", move:"1시간", segs:[{l:"택스리펀드",w:2},{l:"수속",w:2}], how:"물품은 부치기 전 · 여권 지참", note:"12:00까지 오면 30분 안에 끝.", warn:"스탬프 없으면 환급 불가", lat:41.8003, lng:12.2389},
+    {t:"15:10", name:"로마(FCO) 출발", gq:"Fiumicino Airport, Rome", move:"비행 19h", segs:[{b:"QR",l:"도하 1회",w:3,c:"#5C1D3B"},{l:"인천 18:10",w:2,c:"#5C1D3B"}], how:"카타르 · 2026-11 조회 스케줄(2027 미정)", note:"새벽 출발편은 후보에서 제외.", warn:"위탁 25kg · 면세 한도", lat:41.8003, lng:12.2389},
+    {t:"10/12", name:"인천 18:10 도착", gq:"Incheon International Airport Terminal 1", move:"김천까지 3시간 30분", segs:[{b:"KTX",l:"3h30",w:3,c:"#1E5CA8"}], how:"공항철도 → 서울역 → KTX", note:"귀국 후 2일 휴가를 권합니다.", warn:"", img:"./img/incheon.jpg", lat:37.4602, lng:126.4407}
+  ]}
+];
+
+/* 일자별 실전 팁 (인스타·후기 반영) */
+const DAY_TIPS = {
+  "9/28(화)":[
+    "🛂 여권 만료일 2028-04-11 이후인지 확인 — 부족하면 지금 갱신",
+    "🔋 보조배터리는 기내 가방에만 (위탁 금지)",
+    "🧦 12박이라 기내 양말·목베개가 생각보다 중요합니다",
+    "✈️ 2027 항공 스케줄 미정 — 발권 전 00:20~01:20 출발편 재확인"
+  ],
+  "9/29(수)":[
+    "🛬 EES(2026-04-10 시행) 첫 입국 — 지문·얼굴 등록으로 90~120분",
+    "🚆 레오나르도 익스프레스 15분 간격 · €14 · 짐 늦으면 다음 편",
+    "🧳 몬티는 역에서 짐 끌고 15분 — 택시 €10~15도 방법",
+    "💶 로마 도시세 4성 €4~6/인·박 현장 결제"
+  ],
+  "9/30(목)":[
+    "🎟️ 바티칸 €25(4.1만) — 60일 전 오픈, 평일 4주 전 마감",
+    "👗 어깨·무릎 가리기 — 얇은 가디건 하나면 해결",
+    "🍝 점심은 15:30 — 박물관 카페보다 판테온 쪽이 싸고 좋아요",
+    "🏛️ 콜로세움 내부를 원하면 오늘 17:30 늦은 입장이 유일한 자리"
+  ],
+  "10/1(금)":[
+    "🚄 FR 로마→나폴리 73분 · 사철 72분 — 환승 28분 여유",
+    "👛 나폴리역 소매치기 최다 — 가방 앞으로, 폰은 스트랩",
+    "🎫 사철은 컨택리스 카드 가능 — 개찰 잊지 않기",
+    "🍋 소렌토 도착 후 레몬 소르베 한 컵"
+  ],
+  "10/2(토)":[
+    "⛴️ 소렌토→카프리 20~25분 · 30~60분 간격(2026 시즌)",
+    "🚌 섬버스 줄이 20분 넘으면 택시 합승(€20~25/차)이 빠름",
+    "🪑 몬테 솔라로 체어리프트 왕복 €14 — 맑은 날 필수",
+    "🏖️ 마리나 피콜라 무료 자갈해변 — 아쿠아슈즈·수건"
+  ],
+  "10/3(일)":[
+    "🛥️ 포지타노 2시간 요트투어 약 20만 원 — 전날 구글에서 업체 검색 후 왓츠앱 예약",
+    "🌊 Furore 피오르드 — 포지타노↔아말피 버스로 갈 때 다리 위에서 20분 내려다보는 해변 (페리는 지나침)",
+    "📸 포토스팟 6곳 — Via Cristoforo Colombo · Spiaggia Grande · Salvatore's Fruit Stand · Franco's Bar · Le Sirenuse Terrace · Scalinatelle",
+    "🍋 아말피 레몬 소르베는 IL Pieneta Del Gelato",
+    "⏰ 아말피 10월 막배 17:02 — 2027 시즌표 열리면 이 편부터 확인",
+    "🏖️ 선베드 1인 €35~50 — 무료 구역은 9:30 전 만석"
+  ],
+  "10/4(월)":[
+    "🚆 소렌토→나폴리 사철 72분 + FR 3시간 = 4시간 20분",
+    "🖼️ 월요일은 우피치 휴관 — 두오모·광장·티본으로",
+    "🪜 쿠폴라 463계단은 스냅 전날에 무리 — 외관·종탑 대안",
+    "🥩 티본 1kg 기본(2인) · 20:00 예약"
+  ],
+  "10/5(화)":[
+    "🎫 우피치 €25 — 시간 지정 예약 필수",
+    "💄 헤메는 촬영 3시간 전(15:00) 시작 · 살롱반하 제휴",
+    "🌅 일몰 18:50 — 미켈란젤로 언덕 17:15 도착",
+    "🧥 해 진 뒤 15℃ — 얇은 겉옷 하나"
+  ],
+  "10/6(수)":[
+    "🚗 렌터카 4종: 여권·한국면허·국제면허·운전자 명의 신용카드",
+    "📸 인수 시 360도 영상 + 연료 눈금 + 반납 장소 사진",
+    "🧭 ZTL 경고 켜기 — 위반은 몇 달 뒤 우편 과태료",
+    "⛽ 연료 정책(풀투풀) 확인"
+  ],
+  "10/7(목)":[
+    "🍷 포지오 안티코 €50/인 — 45분 전 도착, 예약 필수",
+    "🚫 운전자는 시음만 — 뱉는 통을 요청하세요",
+    "🍽️ 본 디비노 화요일 휴무 · 시음 메뉴 €40",
+    "🌇 일몰 18:40 — 요새 전망대에서 브루넬로 한 잔"
+  ],
+  "10/8(금)":[
+    "🧀 페코리노 디 피엔차는 진공 포장 요청 (기내 반입 가능)",
+    "🅿️ 피엔차·몬테풀치아노 성 안은 ZTL — 성 밖 P에 주차",
+    "🍷 몬테풀치아노 비뇨라 한 잔 — 광장 와인 상점",
+    "⏰ 시에나를 넣으려면 피엔차를 빼는 편이 낫습니다(왕복 1시간 46분)"
+  ],
+  "10/9(토)":[
+    "📷 SP146 사이프러스 길 — 아침 08:00~10:00 빛이 최고",
+    "🚗 갓길 주차 + 비상등, 곡선에서 뒤차 확인",
+    "🏊 10월 초 수온은 차갑습니다 — 수영은 짧게",
+    "🧳 밤에 짐 미리 — 내일 218km"
+  ],
+  "10/10(일)":[
+    "⛽ 만차 주유 + 영수증 (반납 때 필요)",
+    "🅿️ 원웨이 반납 수수료 5~15만 — 예약 화면에서 확인",
+    "🚆 익스프레스 13:40 → 테르미니 14:15",
+    "🏛️ 콜로세움 내부는 다음 기회로 — 오늘은 외관"
+  ],
+  "10/11(월)":[
+    "🧾 택스 리펀드 물품은 위탁 전에 — 여권 지참",
+    "✈️ FCO 15:10 출발(2026-11 조회) — 새벽 기상 없음",
+    "🕐 공항 3시간 전 도착 권장",
+    "💶 남은 유로 동전은 공항에서 다 쓰기"
+  ]
+};
+
+const COMMON_TIPS = [
+  "🎒 소매치기 최다: 나폴리역·로마 지하철 A선·피렌체 광장 — 가방은 앞으로, 폰은 스트랩",
+  "📄 여권 사본 2부(종이+폰 사진) — 원본은 숙소 금고",
+  "📱 eSIM은 출발 전 설치 + 구글맵 이탈리아 오프라인 지도 저장",
+  "💶 €50·€20 소액권 위주 — €100 이상은 잘 안 받습니다",
+  "🚗 렌터카는 발도르차 4박에만. 피렌체·피엔차 성 안은 ZTL",
+  "⛪ 성당 복장: 어깨·무릎 가리기 — 얇은 스카프 하나면 전부 해결",
+  "🚻 화장실 €0.5~1 — 카페 에스프레소 €1.2면 해결",
+  "🌅 10월 초 일몰: 피렌체 18:50 · 발도르차 18:40 · 소렌토 18:45",
+  "🍷 와이너리는 예약 없이 가면 문이 닫혀 있습니다",
+  "☎️ 응급 112 · 주이탈리아 한국대사관 +39-06-8024-6161"
+];
+
+const DEFAULT_CHECKS = [
+  "[지금] 국제선 로마 왕복 재조회·발권 (2026-11-20 207만 기준)",
+  "[지금] 발도르차 4박 3곳 중 1곳 무료취소로 잡기",
+  "[지금] 피렌체 스냅 두 곳(포토로·루체스냅)에 10/5 문의",
+  "[지금] 여권 만료일 2028-04-11 이후 확인",
+  "[27-03] 숙소 5곳 무료취소로 선점 (발도르차 재고 줄어듦)",
+  "[27-03~04] 렌터카 예약 (소형 자동·원웨이)",
+  "[27-03~04] NLG 2027 시즌 시간표 확인 (10/3 막배 17:02)",
+  "[27-06] 기차 FR·이탈로 10/1·10/4 표 (4개월 전 오픈)",
+  "[27-06] 피렌체 스냅 확정·예약",
+  "[27-07] 두오모 쿠폴라(외관만) · 3개월 전",
+  "[27-08-01] 바티칸 미술관 09:30 (60일 전)",
+  "[27-08] 우피치 09:30 · 콜로세움(선택)",
+  "[27-09-10] 여행자보험 · ETIAS 확인",
+  "[27-09-20] eSIM 설치 · 오프라인 지도 · 유로 환전"
+];
+
+let days = JSON.parse(localStorage.getItem('tus_days_v1') || 'null') || JSON.parse(JSON.stringify(DEFAULT_DAYS));
+let checks = JSON.parse(localStorage.getItem('tus_chks_v1') || 'null') || {};
+let tips = JSON.parse(localStorage.getItem('tus_tips_v1') || 'null') || {};
+let curDay = 0, mapDay = 0, mapObj = null, editIdx = null;
+
+function saveDays(){ localStorage.setItem('tus_days_v1', JSON.stringify(days)); }
+
+function updateDday(){
+  const diff = Math.ceil((new Date('2027-09-28T00:00:00+09:00') - new Date()) / 86400000);
+  document.getElementById('ddayBadge').textContent = diff > 0 ? `D-${diff}` : (diff === 0 ? 'D-DAY' : `D+${-diff}`);
+}
+
+function routeDirUrl(prev, cur){
+  if(!cur) return '';
+  const dstName = cur.gq || cur.name.replace(/<[^>]+>|&rarr;/g,' ').trim();
+  const dst = dstName || `${cur.lat},${cur.lng}`;
+  if(!prev || (prev.gq===cur.gq && prev.lat===cur.lat && prev.lng===cur.lng)){
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(dst)}`;
+  }
+  const srcName = prev.gq || prev.name.replace(/<[^>]+>|&rarr;/g,' ').trim();
+  const src = srcName || `${prev.lat},${prev.lng}`;
+  if(src === dst) return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(dst)}`;
+  const m = (cur.move||'');
+  const mode = /렌터카|차|드라이브|택시|보트|리프트/.test(m) ? (m.includes('보트')?'transit':'driving') : (/도보/.test(m) && !/지하철|선|열차|트램|버스|기차|페리|사철/.test(m) ? 'walking' : 'transit');
+  return `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(src)}&destination=${encodeURIComponent(dst)}&travelmode=${mode}`;
+}
+function renderRouteBar(segs, how, prev, cur){
+  if(!segs && !how) return '';
+  const bar = segs ? `<div class="route-bar" style="flex:1;min-width:0;">${segs.map(s=>`<div class="r-seg ${s.c?'':'r-walk'}" style="flex:${s.w||1};${s.c?`background:${s.c};color:#fff;`:''}">${s.b?`<span style="background:#fff;color:${s.c||'#333'};border-radius:99px;padding:0 4px;font-size:9.5px;line-height:14px;">${s.b}</span>`:''}<span>${s.l}</span></div>`).join('')}</div>` : '';
+  const url = routeDirUrl(prev, cur);
+  const gbtn = url ? `<a class="act-btn map" onclick="event.stopPropagation()" target="_blank" rel="noopener" href="${url}" style="flex-shrink:0;padding:3px 8px;font-size:11px;border-radius:99px;">🧭 노선</a>` : '';
+  const topRow = bar ? `<div style="display:flex;align-items:center;gap:6px;">${bar}${gbtn}</div>` : '';
+  const txt = how ? `<div class="r-txt">${segMeta(cur && cur.move).ico} ${how}</div>` : '';
+  return `<div class="route-box">${topRow}${txt}</div>`;
+}
+
+function renderPlan(){
+  const sc = document.getElementById('dayScroll');
+  sc.innerHTML = days.map((x,i)=>`<div class="day-chip ${i===curDay?'active':''}" onclick="curDay=${i};renderPlan()"><div class="d1">DAY ${i+1}</div><div class="d2">${x.d}</div><div class="d3">${x.city}</div></div>`).join('');
+  const d = days[curDay];
+  document.getElementById('dayBanner').innerHTML = `<div><h2>DAY ${curDay+1} · ${d.d} (${d.city})</h2><p>${d.sub}</p></div><button class="btn-add" onclick="openModal(null)">+ 일정</button>`;
+  const stayBanner = d.stay ? `<div class="stay-band"><div><div class="k">🏨 오늘의 숙소</div><div class="v">${d.stay}</div></div><a class="act-btn map" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.stay)}">구글맵</a></div>` : '';
+  document.getElementById('planList').innerHTML = stayBanner + renderDayTips(d) + d.items.map((it,idx)=>`
+    <div class="item-card ${it.done?'done':''}">
+      <div class="item-top">
+        <div><span class="time-badge">${it.t}</span><span class="move-badge">${it.move||'이동'}</span></div>
+        <button class="chk-btn" onclick="toggleDone(${idx})">${it.done?'✓':''}</button>
+      </div>
+      <div class="item-body">
+        <div style="flex:1;min-width:0;">
+          <div class="item-title">${it.name}</div>
+          <p class="item-note">${it.note||''}</p>
+        </div>
+        ${it.img ? `<img class="item-thumb" src="${it.img}" alt="" loading="lazy"/>` : ''}
+      </div>
+      ${renderRouteBar(it.segs, it.how, idx>0?d.items[idx-1]:(d.stay?{gq:d.stay}:null), it)}
+      ${it.warn ? `<div class="item-warn">⚠️ 챙길 것·주의: ${it.warn}</div>` : ''}
+      <div class="item-actions">
+        <a class="act-btn map" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(it.name.replace(/<[^>]+>|&rarr;/g,' '))}">🧭 구글맵</a>
+        <button class="act-btn" onclick="moveItem(${idx},-1)">▲</button>
+        <button class="act-btn" onclick="moveItem(${idx},1)">▼</button>
+        <button class="act-btn" onclick="openModal(${idx})">✏️ 수정</button>
+        <button class="act-btn" onclick="delItem(${idx})">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+function renderDayTips(d){
+  const list = DAY_TIPS[d.d];
+  if(!list || !list.length) return '';
+  return `<div class="tips-card">
+    <div class="tips-head"><h4>⚠️ 챙길 것·주의 · 실전 팁</h4><span>체크하면 저장</span></div>
+    ${list.map((t,i)=>{const k=d.d+'#'+i;return `<label class="tip-row ${tips[k]?'on':''}"><input type="checkbox" ${tips[k]?'checked':''} onchange="tips['${k}']=this.checked;localStorage.setItem('tus_tips_v1',JSON.stringify(tips));renderPlan()"/><span>${t}</span></label>`;}).join('')}
+  </div>`;
+}
+function renderCommonTips(){
+  const el = document.getElementById('commonTips');
+  if(!el) return;
+  el.innerHTML = COMMON_TIPS.map((t,i)=>{const k='common#'+i;return `<label class="tip-row ${tips[k]?'on':''}"><input type="checkbox" ${tips[k]?'checked':''} onchange="tips['${k}']=this.checked;localStorage.setItem('tus_tips_v1',JSON.stringify(tips));renderCommonTips()"/><span>${t}</span></label>`;}).join('');
+}
+
+function toggleDone(idx){ days[curDay].items[idx].done = !days[curDay].items[idx].done; saveDays(); renderPlan(); }
+function moveItem(idx, dir){
+  const list = days[curDay].items, ni = idx + dir;
+  if(ni < 0 || ni >= list.length) return;
+  [list[idx], list[ni]] = [list[ni], list[idx]];
+  saveDays(); renderPlan(); if(mapObj) renderMap();
+}
+function delItem(idx){
+  if(!confirm('이 일정을 삭제할까요? (지도에도 바로 반영됩니다)')) return;
+  days[curDay].items.splice(idx,1);
+  saveDays(); renderPlan(); if(mapObj) renderMap();
+}
+function openModal(idx){
+  editIdx = idx;
+  const it = idx!==null ? days[curDay].items[idx] : {t:'',name:'',move:'',note:''};
+  document.getElementById('mTitle').textContent = idx!==null ? '일정 수정' : '새 일정 추가';
+  document.getElementById('mTime').value = it.t;
+  document.getElementById('mName').value = (it.name||'').replace(/&rarr;/g,'→');
+  document.getElementById('mMove').value = it.move||'';
+  document.getElementById('mNote').value = it.note||'';
+  document.getElementById('editModal').classList.add('open');
+}
+function closeModal(){ document.getElementById('editModal').classList.remove('open'); }
+function saveModal(){
+  const item = {
+    t: document.getElementById('mTime').value || '12:00',
+    name: document.getElementById('mName').value || '새 일정',
+    move: document.getElementById('mMove').value || '도보',
+    note: document.getElementById('mNote').value || '',
+    lat: (days[curDay].items[0]||{}).lat || 43.05,
+    lng: (days[curDay].items[0]||{}).lng || 11.6
+  };
+  if(editIdx!==null) days[curDay].items[editIdx] = {...days[curDay].items[editIdx], ...item};
+  else days[curDay].items.push(item);
+  saveDays(); closeModal(); renderPlan(); if(mapObj) renderMap();
+}
+
+function segMeta(move){
+  const m = (move||'');
+  if(/페리|배|보트/.test(m)) return {ico:'⛴️', col:'#0E86A8', dash:'6,5'};
+  if(/프레차|고속|익스프레스|LE|공항철도|KTX|FR/.test(m)) return {ico:'🚆', col:'#B92929', dash:null};
+  if(/지하철|사철|트램|버스|EAV/.test(m)) return {ico:'🚇', col:'#E5532D', dash:null};
+  if(/렌터카|차|드라이브|택시/.test(m)) return {ico:'🚗', col:'#14493F', dash:null};
+  if(/리프트|체어/.test(m)) return {ico:'🚡', col:'#9A5B13', dash:'5,4'};
+  if(/비행|항공/.test(m)) return {ico:'✈️', col:'#5C1D3B', dash:'8,6'};
+  return {ico:'🚶', col:'#6B726E', dash:'4,5'};
+}
+let segLayers = [], segMarkers = [];
+function focusSeg(idx){
+  if(!mapObj || !segMarkers[idx]) return;
+  segLayers.forEach((l,i)=> l.setStyle({weight: i===idx-1?7:4, opacity: i===idx-1?1:0.55}));
+  if(idx > 0 && segLayers[idx-1]) mapObj.fitBounds(segLayers[idx-1].getBounds(), {padding:[55,55], maxZoom:15});
+  else mapObj.setView(segMarkers[idx].getLatLng(), 14);
+  segMarkers[idx].openPopup();
+  document.getElementById('mapBox').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function renderMap(){
+  const sc = document.getElementById('mapDayScroll');
+  sc.innerHTML = `<div class="day-chip ${mapDay===-1?'active':''}" onclick="mapDay=-1;renderMap()"><div class="d1">ALL</div><div class="d2">전체 루트</div><div class="d3">5거점</div></div>` +
+    days.map((x,i)=>`<div class="day-chip ${i===mapDay?'active':''}" onclick="mapDay=${i};renderMap()"><div class="d1">DAY ${i+1}</div><div class="d2">${x.d}</div><div class="d3">${x.city}</div></div>`).join('');
+  if(!mapObj){
+    mapObj = L.map('mapBox');
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM', maxZoom:19}).addTo(mapObj);
+  }
+  mapObj.eachLayer(l=>{ if(l instanceof L.Marker || l instanceof L.Polyline) mapObj.removeLayer(l); });
+  const pts = mapDay === -1
+    ? [{t:'9/29~10/1',name:'로마 (바티칸·콜로세움)',gq:'Rome, Italy',move:'2박',segM:'기차 2h47',lat:41.9028,lng:12.4964},
+       {t:'10/1~10/4',name:'소렌토 · 카프리 · 아말피',gq:'Sorrento, Italy',move:'3박',segM:'기차 4h20',lat:40.6263,lng:14.3758},
+       {t:'10/4~10/6',name:'피렌체 (우피치·일몰 스냅)',gq:'Florence, Italy',move:'2박',segM:'렌터카 1h42',lat:43.7731,lng:11.2560},
+       {t:'10/6~10/10',name:'발도르차 (브루넬로)',gq:"San Quirico d'Orcia, Italy",move:'4박',segM:'렌터카 2h22',lat:43.0570,lng:11.6040},
+       {t:'10/10~10/11',name:'로마 (마지막 밤)',gq:'Rome, Italy',move:'1박',segM:'공항철도',lat:41.9028,lng:12.4964}]
+    : days[mapDay].items.filter(i=>i.lat && i.lng);
+  const latlngs = []; segLayers = []; segMarkers = [];
+  pts.forEach((p,idx)=>{
+    const ll = [p.lat, p.lng]; latlngs.push(ll);
+    const icon = L.divIcon({className:'',html:`<div style="background:#14493F;color:#F2C879;border:2px solid #fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.35);">${idx+1}</div>`,iconSize:[28,28],iconAnchor:[14,14]});
+    const mk = L.marker(ll,{icon}).addTo(mapObj).bindPopup(`<b>${idx+1}. ${p.name}</b><br/>${p.t} · ${p.move}${p.how?`<br/><span style="color:#14493F;font-weight:700;">${p.how}</span>`:''}`);
+    segMarkers.push(mk);
+    if(idx > 0){
+      const prev = [pts[idx-1].lat, pts[idx-1].lng];
+      if(prev[0]!==ll[0] || prev[1]!==ll[1]){
+        const sm = segMeta(p.segM || p.move);
+        const pl = L.polyline([prev, ll],{color:sm.col,weight:4.5,opacity:0.85,dashArray:sm.dash}).addTo(mapObj);
+        segLayers[idx-1] = pl;
+        const mid = [(prev[0]+ll[0])/2, (prev[1]+ll[1])/2];
+        const mIcon = L.divIcon({className:'',html:`<div style="background:#fff;border:2px solid ${sm.col};border-radius:99px;padding:1px 5px;font-size:12px;box-shadow:0 2px 5px rgba(0,0,0,.22);white-space:nowrap;">${sm.ico}</div>`,iconSize:[28,22],iconAnchor:[14,11]});
+        L.marker(mid,{icon:mIcon}).addTo(mapObj).on('click', ()=>focusSeg(idx));
+      }
+    }
+  });
+  if(latlngs.length===1) mapObj.setView(latlngs[0], 14);
+  else if(latlngs.length>1) mapObj.fitBounds(latlngs, {padding:[36,36]});
+  setTimeout(()=>mapObj.invalidateSize(), 100);
+
+  const gBtn = document.getElementById('mapGoogleBtn');
+  const uPts = pts.filter((p,i)=> i===0 || `${p.lat},${p.lng}` !== `${pts[i-1].lat},${pts[i-1].lng}`);
+  if(uPts.length >= 2){
+    const path = uPts.map(p=>encodeURIComponent(p.gq||`${p.lat},${p.lng}`)).join('/');
+    gBtn.innerHTML = `<a class="act-btn map" style="width:100%;justify-content:center;padding:12px;font-size:14px;border-radius:12px;" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/${path}">🧭 구글맵으로 오늘 동선 한 번에 열기 (${uPts.length}곳)</a>`;
+  } else if(uPts.length === 1){
+    gBtn.innerHTML = `<a class="act-btn map" style="width:100%;justify-content:center;padding:12px;font-size:14px;border-radius:12px;" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${uPts[0].lat},${uPts[0].lng}">🧭 구글맵으로 위치 열기</a>`;
+  } else { gBtn.innerHTML = ''; }
+
+  const title = mapDay === -1 ? '토스카나 5거점 전체 루트 (12박)' : `DAY ${mapDay+1} · ${days[mapDay].city} 동선 (${pts.length}곳)`;
+  document.getElementById('mapLegend').innerHTML = `<h3>${title}</h3>` +
+    pts.map((p,i)=>`<div onclick="focusSeg(${i})" style="padding:9px 6px;border-bottom:1px solid #EFEADF;cursor:pointer;border-radius:10px;"><div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;"><div><b>${i+1}. ${p.name}</b> <span style="font-size:11px;color:var(--org);font-weight:700;">· 지도보기</span><br/><span style="font-size:12px;color:var(--sub);">${p.t} · ${p.move}</span></div><div style="display:flex;gap:4px;align-items:center;" onclick="event.stopPropagation()">${mapDay>=0?`<button class="act-btn" style="padding:3px 6px;" onclick="curDay=mapDay;moveItem(${i},-1)">▲</button><button class="act-btn" style="padding:3px 6px;" onclick="curDay=mapDay;moveItem(${i},1)">▼</button>`:''}<a class="act-btn map" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.gq||p.name)}">구글맵</a></div></div>${renderRouteBar(p.segs, p.how, i>0?pts[i-1]:(mapDay>=0&&days[mapDay].stay?{gq:days[mapDay].stay}:null), p)}</div>`).join('');
+}
+
+function renderChecks(){
+  document.getElementById('checkList').innerHTML = DEFAULT_CHECKS.map((c,i)=>`
+    <label class="chk-row ${checks[i]?'checked':''}">
+      <input type="checkbox" ${checks[i]?'checked':''} onchange="checks[${i}]=this.checked;localStorage.setItem('tus_chks_v1',JSON.stringify(checks));renderChecks()"/>
+      <span>${c}</span>
+    </label>`).join('');
+}
+
+function exportData(){
+  const blob = new Blob([JSON.stringify({days,checks,tips},null,2)],{type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'tuscany_2027_backup.json'; a.click();
+}
+function resetData(){
+  if(!confirm('직접 수정하신 메모·체크를 기본값으로 되돌릴까요?')) return;
+  ['tus_days_v1','tus_chks_v1','tus_tips_v1','tus_exp_v1','tus_sim_v1','tus_bud_v1'].forEach(k=>localStorage.removeItem(k));
+  days = JSON.parse(JSON.stringify(DEFAULT_DAYS)); checks = {}; tips = {};
+  simSel = {air:'qr', vdo:'miraggio', sor:'casa', snap:'luce'};
+  itExps = []; itBudget = {krwGoal:7000000, cash:500, card:1200}; rate = 1650;
+  renderPlan(); renderChecks(); renderCommonTips(); renderSim(); renderItExp();
+}
+
+function goTab(id, btn){
+  document.querySelectorAll('main > section').forEach(s=>s.classList.add('hidden'));
+  document.getElementById('tab-'+id).classList.remove('hidden');
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(id==='map') renderMap();
+}
+
+/* ───────── 예산 시뮬레이터 ───────── */
+const SIM_OPTS = [
+  {key:'air', label:'✈️ 국제선 항공 (2인)', opts:[
+    {id:'qr', name:'카타르 로마 왕복 207만', cost:2070000},
+    {id:'std', name:'카타르 기본 263만', cost:2632000, warn:'💳 하나카드 할인 조건·위탁 25kg 포함 여부를 발권 시 확인하세요.'},
+    {id:'open', name:'오픈조 270만 (예상)', cost:2700000, warn:'🌍 10/11 귀국편을 오픈조로 바꾸면 새벽 이동이 생길 수 있습니다.'}
+  ]},
+  {key:'vdo', label:'🍷 발도르차 4박 (10/6~10)', opts:[
+    {id:'miraggio', name:'일 미라조 5성 169.9만', cost:1699490},
+    {id:'palazzo', name:'팔라초 델 카피타노 186.9만', cost:1868881, warn:'💸 총액 1,003만 — 1,000만 원을 3만 원 넘습니다.'},
+    {id:'casanova', name:'카사노바 아파트 70.1만', cost:701456, warn:'🛏 스튜디오 40㎡ · 호텔 서비스 없음. 대신 총액 887만.'},
+    {id:'vignaia', name:'아그리투리스모 비그나이아 90.4만', cost:903969, warn:'🌿 수영장 없음 · 9.7점(137) · 아침 식사는 포함 여부 확인.'}
+  ]},
+  {key:'sor', label:'🍋 소렌토 3박 (10/1~4)', opts:[
+    {id:'casa', name:'Casa Astarita 64.1만 (환불불가)', cost:641245},
+    {id:'casa_free', name:'Casa Astarita 무료취소 90.1만', cost:900960, warn:'💸 +25.9만 — 1,000만 원을 12만 원 넘습니다.'},
+    {id:'akyra', name:'Akyra Suites 77.2만', cost:772189},
+    {id:'amici', name:'La Casa Degli Amici 76.6만', cost:766025, warn:'⭐ 후기 254건 9.9 — 소렌토 최고점.'}
+  ]},
+  {key:'snap', label:'📸 피렌체 스냅 (10/5)', opts:[
+    {id:'none', name:'없음 0원', cost:0},
+    {id:'luce', name:'루체스냅 2시간 58만', cost:580000},
+    {id:'fotoro', name:'포토로 3시간 73만', cost:730000, warn:'⏰ 3시간이면 17:00~20:00 — 그날 저녁은 예약하지 마세요.'},
+    {id:'fotoro_hm', name:'포토로 3시간 + 헤메 100만', cost:1000000, warn:'💄 헤메는 촬영 3시간 전(14:00) 시작.'}
+  ]}
+];
+let simSel = JSON.parse(localStorage.getItem('tus_sim_v1')||'null') || {air:'qr',vdo:'miraggio',sor:'casa',snap:'luce'};
+
+function renderSim(){
+  document.getElementById('simControls').innerHTML = SIM_OPTS.map(g=>`
+    <div style="margin-bottom:10px;">
+      <div style="font-size:12.5px;font-weight:800;color:var(--green);margin-bottom:5px;">${g.label}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        ${g.opts.map(o=>`<button onclick="simSel['${g.key}']='${o.id}';localStorage.setItem('tus_sim_v1',JSON.stringify(simSel));renderSim()" style="border:1.5px solid ${simSel[g.key]===o.id?'var(--green)':'var(--line)'};background:${simSel[g.key]===o.id?'var(--green)':'#fff'};color:${simSel[g.key]===o.id?'#fff':'var(--ink)'};border-radius:9px;padding:6px 10px;font-size:12px;font-weight:700;cursor:pointer;text-align:left;">${o.name}</button>`).join('')}
+      </div>
+    </div>`).join('');
+
+  // 고정: 로마2 58.2 + 피렌체2 53.2 + 로마1 18.4 + 이동 123.7 + 식비 120 + 관광·시음 65 + 보험·예비 31 + 도시세·교통 19
+  const FIXED_OTHER = 4885000;
+  let varSum = 0; const warns = [];
+  SIM_OPTS.forEach(g=>{
+    const picked = g.opts.find(o=>o.id===simSel[g.key]) || g.opts[0];
+    varSum += picked.cost;
+    if(picked.warn) warns.push(picked.warn);
+  });
+  const total = FIXED_OTHER + varSum;
+  const diff = total - 10000000;
+  let badge = '', boxBg = '', boxCol = '';
+  if(total <= 9900000){
+    badge = `🟢 예산 적정 — 1,000만 원보다 ${Math.round(-diff/10000).toLocaleString()}만 원 여유`;
+    boxBg = '#E4EFEA'; boxCol = '#14493F';
+  } else if(total <= 10300000){
+    badge = `🟡 예산 경계 — 1,000만 원보다 +${Math.round(diff/10000).toLocaleString()}만 원`;
+    boxBg = '#FFF4DC'; boxCol = '#8A5A00';
+  } else {
+    badge = `🚨 초과 +${Math.round(diff/10000).toLocaleString()}만 원 · 조합을 낮추세요`;
+    boxBg = '#FDE8E4'; boxCol = '#A82E1B';
+  }
+  const snapName = (SIM_OPTS[3].opts.find(o=>o.id===simSel.snap)||{}).name || '';
+  const routeTxt = `로마(2) → 소렌토(3) → 피렌체(2) → 발도르차(4) → 로마(1) · 스냅: ${snapName.split(' ')[0]}`;
+
+  document.getElementById('simResult').innerHTML = `
+    <div style="background:${boxBg};color:${boxCol};border-radius:12px;padding:12px;">
+      <div style="font-size:12px;font-weight:800;">${badge}</div>
+      <div style="font-size:22px;font-weight:900;margin-top:4px;">총 ${Math.round(total/10000).toLocaleString()}만 원 <span style="font-size:13px;font-weight:600;">(${total.toLocaleString()}원)</span></div>
+      <div style="font-size:12px;margin-top:6px;opacity:.9;"><b>동선</b>: ${routeTxt}</div>
+      <div style="font-size:11.5px;margin-top:4px;opacity:.85;">고정 지출 488.5만 (로마·피렌체 숙소·이동·식비·관광·보험·도시세)</div>
+    </div>
+    ${warns.length ? `<div style="margin-top:8px;background:#FFFDF6;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.55;">
+      <b style="color:var(--org);">⚠️ 선택한 조합의 주의</b><br/>
+      ${warns.map(w=>`• ${w}`).join('<br/>')}
+    </div>` : ''}`;
+}
+
+/* ───────── 가계부 ───────── */
+const IT_CATS = ['✈️ 항공·교통','🏨 숙소·도시세','📸 스냅·입장','🍽 식비·카페','🛍 쇼핑·기타'];
+let rate = parseFloat(localStorage.getItem('tus_rate')||'1650');
+let itCur = 'EUR', itCat = IT_CATS[3], itPay = 'card', itFilter = 'ALL';
+let itExps = JSON.parse(localStorage.getItem('tus_exp_v1')||'[]').map(e=>({...e, cur: e.cur||'EUR'}));
+let itBudget = JSON.parse(localStorage.getItem('tus_bud_v1')||'null') || {krwGoal:7000000, cash:500 , card:1200};
+
+function editRate(){
+  const r = prompt('적용할 환율 (1€ = ? 원)', rate);
+  if(r===null) return;
+  const v = parseFloat(r);
+  if(!v || v <= 0) return alert('숫자로 입력해 주세요.');
+  rate = v; localStorage.setItem('tus_rate', String(rate));
+  document.getElementById('rateLbl').textContent = Math.round(rate).toLocaleString();
+  calcWalletCur('eur'); renderItExp();
+}
+function editItBudget(){
+  const w = prompt('🇰🇷 한국돈(₩) 예산 — 항공·숙소 등 사전 결제분 (예: 7000000)', itBudget.krwGoal);
+  if(w===null) return;
+  const c = prompt('💶 환전한 유로 현금(€) (예: 500)', itBudget.cash);
+  if(c===null) return;
+  const k = prompt('💳 유로 카드/충전 잔액(€) (예: 1200)', itBudget.card);
+  if(k===null) return;
+  itBudget = {krwGoal: Math.max(0, parseInt(w.replace(/,/g,''))||0), cash: Math.max(0, parseFloat(c)||0), card: Math.max(0, parseFloat(k)||0)};
+  localStorage.setItem('tus_bud_v1', JSON.stringify(itBudget));
+  renderItExp();
+}
+
+function renderItExp(){
+  const eurExps = itExps.filter(e=>e.cur==='EUR');
+  const krwExps = itExps.filter(e=>e.cur==='KRW');
+  const cashUsed = eurExps.filter(e=>e.pay==='cash').reduce((a,b)=>a+b.amt,0);
+  const cardUsed = eurExps.filter(e=>e.pay==='card').reduce((a,b)=>a+b.amt,0);
+  const eurUsed = cashUsed + cardUsed;
+  const eurGoal = itBudget.cash + itBudget.card;
+  const krwUsed = krwExps.reduce((a,b)=>a+b.amt,0);
+  const krwCashUsed = krwExps.filter(e=>e.pay==='cash').reduce((a,b)=>a+b.amt,0);
+  const krwCardUsed = krwExps.filter(e=>e.pay==='card').reduce((a,b)=>a+b.amt,0);
+  const totalKrwEq = krwUsed + Math.round(eurUsed * rate);
+  const totalGoalKrw = itBudget.krwGoal + Math.round(eurGoal * rate);
+  const totalLeftKrw = totalGoalKrw - totalKrwEq;
+  const pct = totalGoalKrw > 0 ? Math.min(100, Math.round(totalKrwEq / totalGoalKrw * 100)) : 0;
+  const cashLeft = itBudget.cash - cashUsed;
+  const cardLeft = itBudget.card - cardUsed;
+  const krwLeft = itBudget.krwGoal - krwUsed;
+  const toW = e => Math.round(e*rate).toLocaleString()+'원';
+
+  document.getElementById('itBudgetBar').innerHTML = `
+    <div style="background:var(--green);color:#fff;border-radius:12px;padding:12px 13px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--gold);font-weight:700;">
+        <span>전체 지출 (예산 ${Math.round(totalGoalKrw/10000).toLocaleString()}만)</span><span>${pct}% 사용</span>
+      </div>
+      <div style="font-size:20px;font-weight:900;margin-top:3px;">총 ${totalKrwEq.toLocaleString()}원 <span style="font-size:12.5px;font-weight:600;">(남음 ${totalLeftKrw.toLocaleString()}원)</span></div>
+      <div style="font-size:11.5px;margin-top:3px;opacity:.9;">🇰🇷 원화 ${krwUsed.toLocaleString()}원 + 💶 유로 €${eurUsed.toLocaleString()} (${toW(eurUsed)})</div>
+      <div style="height:8px;background:rgba(255,255,255,.22);border-radius:99px;overflow:hidden;margin-top:7px;">
+        <div style="height:100%;width:${pct}%;background:${totalLeftKrw<0?'#FF7B6B':'#F2C879'};border-radius:99px;"></div>
+      </div>
+    </div>`;
+
+  document.getElementById('itExpSum').innerHTML = `
+    <div style="background:#FFFDF6;border:1.5px solid var(--line);border-radius:12px;padding:9px 10px;">
+      <div style="font-size:11px;color:var(--sub);font-weight:700;">💶 남은 현금 (환전 €${itBudget.cash})</div>
+      <div style="font-size:17px;font-weight:900;color:${cashLeft<0?'#B93222':'var(--green)'};margin-top:2px;">€${cashLeft.toLocaleString()}</div>
+      <div style="font-size:11px;color:var(--sub);">사용 €${cashUsed.toLocaleString()}</div>
+    </div>
+    <div style="background:#FFFDF6;border:1.5px solid var(--line);border-radius:12px;padding:9px 10px;">
+      <div style="font-size:11px;color:var(--sub);font-weight:700;">💳 남은 카드 (€${itBudget.card})</div>
+      <div style="font-size:17px;font-weight:900;color:${cardLeft<0?'#B93222':'var(--org)'};margin-top:2px;">€${cardLeft.toLocaleString()}</div>
+      <div style="font-size:11px;color:var(--sub);">사용 €${cardUsed.toLocaleString()}</div>
+    </div>
+    <div style="grid-column:span 2;background:#F6FBF8;border:1.5px solid #CBE3D7;border-radius:12px;padding:9px 11px;display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="font-size:11.5px;color:var(--green);font-weight:800;">🇰🇷 사전 결제 ₩ (${Math.round(itBudget.krwGoal/10000).toLocaleString()}만)</div>
+        <div style="font-size:11px;color:var(--sub);">💳 카드 ${krwCardUsed.toLocaleString()}원 · 💵 현금/이체 ${krwCashUsed.toLocaleString()}원</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:16px;font-weight:900;color:${krwLeft<0?'#B93222':'var(--green)'};">남음 ${Math.round(krwLeft/10000).toLocaleString()}만</div>
+        <div style="font-size:11px;color:var(--sub);">사용 ${krwUsed.toLocaleString()}원</div>
+      </div>
+    </div>`;
+
+  document.getElementById('itCurPills').innerHTML = `
+    <button onclick="itCur='EUR';updateItPlaceholder();renderItExp()" style="flex:1;border:2px solid ${itCur==='EUR'?'var(--org)':'var(--line)'};background:${itCur==='EUR'?'var(--orgbg)':'#fff'};color:${itCur==='EUR'?'var(--org)':'var(--ink)'};border-radius:10px;padding:8px;font-size:13px;font-weight:800;cursor:pointer;">💶 유로(€) 현지 지출</button>
+    <button onclick="itCur='KRW';updateItPlaceholder();renderItExp()" style="flex:1;border:2px solid ${itCur==='KRW'?'var(--green)':'var(--line)'};background:${itCur==='KRW'?'#E4EFEA':'#fff'};color:${itCur==='KRW'?'var(--green)':'var(--ink)'};border-radius:10px;padding:8px;font-size:13px;font-weight:800;cursor:pointer;">🇰🇷 한국돈(₩) 사전 지출</button>`;
+
+  document.getElementById('itCatPills').innerHTML = IT_CATS.map(c=>`<button onclick="itCat='${c}';renderItExp()" style="border:1.5px solid ${itCat===c?'var(--green)':'var(--line)'};background:${itCat===c?'var(--green)':'#fff'};color:${itCat===c?'#fff':'var(--ink)'};border-radius:8px;padding:5px 9px;font-size:12px;font-weight:700;cursor:pointer;">${c}</button>`).join('');
+  document.getElementById('itPayPills').innerHTML = `
+    <button onclick="itPay='card';renderItExp()" style="flex:1;border:1.5px solid ${itPay==='card'?'var(--green)':'var(--line)'};background:${itPay==='card'?'var(--green)':'#fff'};color:${itPay==='card'?'#fff':'var(--ink)'};border-radius:8px;padding:7px 10px;font-size:12.5px;font-weight:700;cursor:pointer;">💳 카드</button>
+    <button onclick="itPay='cash';renderItExp()" style="flex:1;border:1.5px solid ${itPay==='cash'?'var(--green)':'var(--line)'};background:${itPay==='cash'?'var(--green)':'#fff'};color:${itPay==='cash'?'#fff':'var(--ink)'};border-radius:8px;padding:7px 10px;font-size:12.5px;font-weight:700;cursor:pointer;">💵 ${itCur==='EUR'?'현금':'현금·이체'}</button>`;
+
+  const byC = {}; IT_CATS.forEach(c=>byC[c]={eur:0,krw:0});
+  itExps.forEach(e=>{
+    if(!byC[e.cat]) byC[e.cat]={eur:0,krw:0};
+    if(e.cur==='KRW') byC[e.cat].krw += e.amt; else byC[e.cat].eur += e.amt;
+  });
+  document.getElementById('itExpCats').innerHTML = IT_CATS.map(c=>{
+    const eq = byC[c].krw + Math.round(byC[c].eur*rate);
+    const p = totalKrwEq ? Math.round(eq/totalKrwEq*100) : 0;
+    const subTxt = [byC[c].krw?`${byC[c].krw.toLocaleString()}원`:'', byC[c].eur?`€${byC[c].eur.toLocaleString()}`:''].filter(Boolean).join(' + ') || '0원';
+    return `<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:3px;"><b>${c}</b><span>${subTxt} (총 ${eq.toLocaleString()}원)</span></div><div style="height:7px;background:#EFE8D8;border-radius:99px;overflow:hidden;"><div style="height:100%;width:${p}%;background:var(--org);"></div></div></div>`;
+  }).join('');
+
+  document.getElementById('itListFilter').innerHTML = [['ALL','전체'],['EUR','💶 유로'],['KRW','🇰🇷 원화']].map(([k,lbl])=>`<button onclick="itFilter='${k}';renderItExp()" style="border:1px solid ${itFilter===k?'var(--green)':'var(--line)'};background:${itFilter===k?'var(--green)':'#fff'};color:${itFilter===k?'#fff':'var(--ink)'};border-radius:7px;padding:3px 7px;font-size:11px;font-weight:700;cursor:pointer;">${lbl}</button>`).join('');
+
+  const filtered = itExps.filter(e=>itFilter==='ALL' || e.cur===itFilter);
+  document.getElementById('itExpList').innerHTML = filtered.length
+    ? filtered.slice().reverse().map(e=>`<div class="row"><div><b>${e.memo||e.cat}</b><br/><span style="font-size:11.5px;color:var(--sub);">${e.cur==='KRW'?'🇰🇷 원화':'💶 유로'} · ${e.cat} · ${e.pay==='cash'?'현금/이체':'카드'} · ${e.time}</span></div><div><b>${e.cur==='KRW'?e.amt.toLocaleString()+'원':'€'+e.amt.toLocaleString()}</b> <button class="act-btn" style="padding:2px 6px;" onclick="delItExp(${e.id})">✕</button></div></div>`).join('')
+    : '<div style="font-size:13px;color:var(--sub);padding:6px 0;">아직 기록이 없어요. 유로(현지 지출)와 원화(사전 결제)를 골라 기록해 보세요.</div>';
+}
+function formatAmtInput(el){
+  let raw = el.value.replace(/[^0-9.]/g, '');
+  const parts = raw.split('.');
+  if(parts.length > 2) raw = parts[0] + '.' + parts.slice(1).join('');
+  const [intP, decP] = raw.split('.');
+  el.value = (intP ? Number(intP).toLocaleString() : '') + (decP !== undefined ? '.' + decP : '');
+}
+function parseAmtVal(id){ return parseFloat((document.getElementById(id).value||'').replace(/,/g,'')) || 0; }
+function calcWalletCur(from){
+  if(from==='eur'){
+    const e = parseAmtVal('wEur');
+    document.getElementById('wKrw').value = e ? Math.round(e*rate).toLocaleString() : '';
+  } else {
+    const k = parseAmtVal('wKrw');
+    document.getElementById('wEur').value = k ? (k/rate).toFixed(1) : '';
+  }
+}
+function updateItPlaceholder(){
+  const inp = document.getElementById('itAmt');
+  inp.placeholder = itCur==='EUR' ? '금액 (€ 유로)' : '금액 (₩ 원화)';
+  updateItKrw();
+}
+function updateItKrw(){
+  const v = parseAmtVal('itAmt');
+  document.getElementById('itKrwPre').textContent = itCur==='EUR'
+    ? '약 ' + Math.round(v*rate).toLocaleString() + '원'
+    : '약 €' + (v/rate).toFixed(1);
+}
+function addItExp(){
+  const amt = parseAmtVal('itAmt');
+  if(!amt||amt<=0) return alert('금액을 입력해 주세요!');
+  const memo = document.getElementById('itMemo').value.trim();
+  const d = new Date();
+  const time = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+  itExps.push({id:Date.now(),cur:itCur,cat:itCat,pay:itPay,amt,memo,time});
+  localStorage.setItem('tus_exp_v1',JSON.stringify(itExps));
+  document.getElementById('itAmt').value=''; document.getElementById('itMemo').value='';
+  updateItKrw(); renderItExp();
+}
+function copyItExp(){
+  const eurExps = itExps.filter(e=>e.cur==='EUR');
+  const krwExps = itExps.filter(e=>e.cur==='KRW');
+  const cashUsed = eurExps.filter(e=>e.pay==='cash').reduce((a,b)=>a+b.amt,0);
+  const cardUsed = eurExps.filter(e=>e.pay==='card').reduce((a,b)=>a+b.amt,0);
+  const krwUsed = krwExps.reduce((a,b)=>a+b.amt,0);
+  const totalEq = krwUsed + Math.round((cashUsed+cardUsed)*rate);
+  const txt = `[🍷 토스카나 통합 가계부] 1€=${rate}원\n총 지출(원화환산): ${totalEq.toLocaleString()}원\n🇰🇷 원화 지출: ${krwUsed.toLocaleString()}원 (남음 ${(itBudget.krwGoal-krwUsed).toLocaleString()}원)\n💶 유로 현금: 사용 €${cashUsed} / 남음 €${itBudget.cash-cashUsed}\n💳 유로 카드: 사용 €${cardUsed} / 남음 €${itBudget.card-cardUsed}\n\n` +
+    itExps.map(e=>`- ${e.time} | ${e.cur==='KRW'?'원화':'유로'} | ${e.pay==='cash'?'현금':'카드'} | ${e.memo||e.cat}: ${e.cur==='KRW'?e.amt.toLocaleString()+'원':'€'+e.amt}`).join('\n');
+  navigator.clipboard?.writeText(txt).then(()=>alert('가계부 요약이 복사됐어요!')).catch(()=>prompt('복사해 주세요:', txt));
+}
+function delItExp(id){
+  itExps = itExps.filter(e=>e.id!==id);
+  localStorage.setItem('tus_exp_v1',JSON.stringify(itExps));
+  renderItExp();
+}
+
+/* ───────── 링크 모음 ───────── */
+const LINK_GROUPS = [
+  {t:'✈️ 항공', items:[
+    ['가는편 · 네이버 항공권','https://flight.naver.com/flights/international/ICN-FCO-20270928?adult=2&child=0&infant=0&fareType=Y'],
+    ['오는편 · 네이버 항공권','https://flight.naver.com/flights/international/FCO-ICN-20271011?adult=2&child=0&infant=0&fareType=Y'],
+    ['가는편 · 스카이스캐너','https://www.skyscanner.co.kr/transport/flights/icn/fco/270928/?adultsv2=2&cabinclass=economy&rtn=0'],
+    ['오는편 · 스카이스캐너','https://www.skyscanner.co.kr/transport/flights/fco/icn/271011/?adultsv2=2&cabinclass=economy&rtn=0'],
+    ['카타르항공','https://www.qatarairways.com/ko-kr/homepage.html']
+  ]},
+  {t:'🚆 기차 · ⛴️ 페리', items:[
+    ['트레니탈리아 (프레차로사)','https://www.trenitalia.com/en.html'],
+    ['이탈로','https://www.italotreno.it/en'],
+    ['NLG 페리 (소렌토·카프리·아말피)','https://www.nlg.it/en/'],
+    ['카프리 Caremar','https://www.caremar.it/en/'],
+    ['트래블마','https://www.travelmar.it/en/']
+  ]},
+  {t:'🚗 렌터카', items:[
+    ['DiscoverCars (피렌체 픽업·FCO 반납)','https://www.discovercars.com/'],
+    ['Rentalcars','https://www.rentalcars.com/'],
+    ['Locauto','https://www.locautorent.com/en/'],
+    ['Hertz 이탈리아','https://www.hertz.it/']
+  ]},
+  {t:'🏨 숙소', items:[
+    ['Suite Rione Monti (로마 2박)','https://www.booking.com/searchresults.ko.html?ss=Suite+Rione+Monti+Rome&checkin=2027-09-29&checkout=2027-10-01&group_adults=2&no_rooms=1&selected_currency=KRW&lang=ko'],
+    ['Casa Astarita (소렌토 3박)','https://www.booking.com/hotel/it/casa-astarita-b-b.ko.html?checkin=2027-10-01&checkout=2027-10-04&group_adults=2&no_rooms=1&selected_currency=KRW'],
+    ['Le Tre Stanze (피렌체 2박)','https://www.booking.com/searchresults.ko.html?ss=Le+Tre+Stanze+Firenze&checkin=2027-10-04&checkout=2027-10-06&group_adults=2&no_rooms=1&selected_currency=KRW&lang=ko'],
+    ['팔라초 델 카피타노 (발도르차 4박)','https://www.booking.com/searchresults.ko.html?ss=Palazzo+del+Capitano+San+Quirico&checkin=2027-10-06&checkout=2027-10-10&group_adults=2&no_rooms=1&selected_currency=KRW&lang=ko'],
+    ['일 미라조 (발도르차 4박)','https://www.booking.com/searchresults.ko.html?ss=Il+Miraggio+Val+d+Orcia&checkin=2027-10-06&checkout=2027-10-10&group_adults=2&no_rooms=1&selected_currency=KRW&lang=ko'],
+    ['카사노바 (발도르차 4박)','https://www.booking.com/searchresults.ko.html?ss=Casanova+Family+Apartments+San+Quirico&checkin=2027-10-06&checkout=2027-10-10&group_adults=2&no_rooms=1&selected_currency=KRW&lang=ko']
+  ]},
+  {t:'🍷 와이너리 · 식당', items:[
+    ['포지오 안티코','https://www.poggioantico.com/'],
+    ['치아치 피콜로미니','https://www.ciaccipiccolomini.com/'],
+    ['카스텔로 반피','https://www.castellobanfi.com/'],
+    ['본 디비노 (미쉐린)','https://guide.michelin.com/en/toscana/montalcino/restaurant/boccon-divino']
+  ]},
+  {t:'📸 스냅', items:[
+    ['포토로 (1순위)','https://fotoro.kr/'],
+    ['포토로 살롱반하 헤메','https://fotoro.kr/hairmakeup.html'],
+    ['루체스냅 인스타','https://www.instagram.com/luce_snap/']
+  ]},
+  {t:'🎫 입장권', items:[
+    ['바티칸 미술관','https://www.museivaticani.va/content/museivaticani/en.html'],
+    ['콜로세움','https://ticketing.colosseo.it/'],
+    ['우피치','https://www.uffizi.it/en/tickets'],
+    ['피렌체 두오모','https://duomo.firenze.it/en/plan-your-visit/tickets']
+  ]},
+  {t:'🗺️ 지도 · 기타', items:[
+    ['전체 동선 (로마→소렌토→피렌체→발도르차→FCO)','https://www.google.com/maps/dir/Roma+Termini/Sorrento/Firenze+Santa+Maria+Novella/San+Quirico+d%27Orcia/Roma+Fiumicino+Airport'],
+    ['발도르차 지도','https://www.google.com/maps/search/?api=1&query=San+Quirico+d%27Orcia'],
+    ['ETIAS 안내','https://travel-europe.europa.eu/etias'],
+    ['부킹닷컴','https://www.booking.com/'],
+    ['트립닷컴','https://www.trip.com/'],
+    ['마이리얼트립','https://www.myrealtrip.com/']
+  ]}
+];
+function renderLinks(){
+  document.getElementById('linkList').innerHTML = LINK_GROUPS.map(g=>`
+    <div class="link-g"><h3>${g.t}</h3>
+      ${g.items.map(([name,url])=>`<a class="link-row" href="${url}" target="_blank" rel="noopener"><span>${name}</span><span class="go">열기 ›</span></a>`).join('')}
+    </div>`).join('');
+}
+
+updateDday();
+document.getElementById('rateLbl').textContent = Math.round(rate).toLocaleString();
+renderPlan(); renderChecks(); renderCommonTips(); renderSim(); renderItExp(); renderLinks();
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body>
+</html>
