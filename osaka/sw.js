@@ -1,4 +1,4 @@
-const CACHE = 'osaka-planner-v4';
+const CACHE = 'osaka-planner-v5';
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(['./', './index.html'])));
   self.skipWaiting();
