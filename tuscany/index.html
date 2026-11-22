@@ -72,9 +72,9 @@ main{padding:12px 14px calc(env(safe-area-inset-bottom,16px) + 84px);max-width:6
 .chk-row input{width:20px;height:20px;accent-color:var(--green);margin-top:2px;flex-shrink:0;}
 .chk-row.checked span{text-decoration:line-through;color:#8E9B94;}
 nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.97);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;padding:6px 2px calc(env(safe-area-inset-bottom,10px) + 4px);z-index:30;}
-.tab{flex:1;border:none;background:none;padding:6px 0;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;font-weight:700;color:var(--sub);cursor:pointer;}
+.tab{flex:1 1 0;min-width:0;border:none;background:none;padding:6px 0;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9.8px;letter-spacing:-.2px;font-weight:700;color:var(--sub);cursor:pointer;white-space:nowrap;overflow:hidden;}
 .tab.active{color:var(--green);}
-.tab .ico{font-size:18px;}
+.tab .ico{font-size:17px;line-height:1;}
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center;z-index:50;}
 .modal-bg.open{display:flex;}
 .modal{background:var(--bg);width:100%;max-width:680px;border-radius:20px 20px 0 0;padding:18px 16px calc(env(safe-area-inset-bottom,16px) + 14px);max-height:88vh;overflow:auto;}
@@ -808,7 +808,7 @@ const SIM_OPTS = [
   ]},
   {key:'snap', label:'📸 피렌체 스냅 (10/5)', opts:[
     {id:'none', name:'없음 0원', cost:0},
-    {id:'luce', name:'루체스냅 2시간 58만', cost:580000},
+    {id:'luce', name:'루체스냅 2시간 58만', cost:570000},
     {id:'fotoro', name:'포토로 3시간 73만', cost:730000, warn:'⏰ 3시간이면 17:00~20:00 — 그날 저녁은 예약하지 마세요.'},
     {id:'fotoro_hm', name:'포토로 3시간 + 헤메 100만', cost:1000000, warn:'💄 헤메는 촬영 3시간 전(14:00) 시작.'}
   ]}
@@ -825,7 +825,7 @@ function renderSim(){
     </div>`).join('');
 
   // 고정: 로마2 58.2 + 피렌체2 53.2 + 로마1 18.4 + 이동 123.7 + 식비 120 + 관광·시음 65 + 보험·예비 31 + 도시세·교통 19
-  const FIXED_OTHER = 4885000;
+  const FIXED_OTHER = 4884809;
   let varSum = 0; const warns = [];
   SIM_OPTS.forEach(g=>{
     const picked = g.opts.find(o=>o.id===simSel[g.key]) || g.opts[0];
