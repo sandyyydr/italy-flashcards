@@ -156,6 +156,10 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
   <!-- 3. 지도 -->
   <section id="tab-map" class="hidden">
     <div class="day-scroll" id="mapDayScroll"></div>
+    <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
+      <button class="act-btn org" id="allPlBtn" onclick="toggleAllPlaces()">⭐ 추천 60곳 함께 보기</button>
+      <a class="act-btn map" href="./osaka_2026_all_places.kml" download>📥 KML</a>
+    </div>
     <div id="mapBox"></div>
     <div id="mapGoogleBtn" style="margin-bottom:10px;"></div>
     <div class="sec-card" id="mapLegend"></div>
@@ -176,6 +180,21 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
       <div class="row"><div><b>난바 · 신사이바시</b><br/><span style="font-size:12px;color:var(--sub);">빅카메라 · 단톤(B shop) · 나가노마켓 · 점프샵 · 라신반 · 타워레코드 · 울트라마켓 · 카와치야</span></div><a class="act-btn map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Shinsaibashi+PARCO+Osaka">지도</a></div>
       <div class="row"><div><b>기타하마 · 우메다</b><br/><span style="font-size:12px;color:var(--sub);">나카노시마 미술관 · 브루클린 로스팅 · 마운트 · 루쿠아(닌텐도) · 그르니에 · 잇신도 · 스카이빌딩 크리스마스</span></div><a class="act-btn map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Umeda+Sky+Building+Osaka">지도</a></div>
       <div class="row"><div><b>덴노지 · 미도스지</b><br/><span style="font-size:12px;color:var(--sub);">덴시바 크리스마스 마켓(21:30) · 하루카스 300 · 미도스지 일루미네이션(25:00)</span></div><a class="act-btn map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Tenshiba+Osaka">지도</a></div>
+    </div>
+    <div class="sec-card" style="border-color:var(--gold);">
+      <h3>🗺️ 추천 장소 전체 60곳 (지도·KML)</h3>
+      <div style="font-size:12.5px;color:var(--sub);line-height:1.55;margin-bottom:8px;">
+        지금까지 추천받은 곳을 전부 모은 목록이에요. 구글 마이맵스 <b>🇯🇵 오사카 2026 전체 추천 지도</b>와 같은 내용이고,
+        아래 <b>KML 내려받기</b>로 파일을 받아 두면 구글맵 앱 → <b>저장됨 → 지도</b>에서 바로 떠요.
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
+        <button class="act-btn org" id="pf0" onclick="filterPlaces(0)">전체 60</button>
+        <button class="act-btn" id="pf1" onclick="filterPlaces(1)">① 확정 일정 13</button>
+        <button class="act-btn" id="pf2" onclick="filterPlaces(2)">② 맛집·카페 36</button>
+        <button class="act-btn" id="pf3" onclick="filterPlaces(3)">③ 쇼핑·기타 11</button>
+      </div>
+      <a class="act-btn map" style="width:100%;justify-content:center;margin-bottom:10px;" href="./osaka_2026_all_places.kml" download>📥 KML 내려받기 (구글 마이맵스·구글맵용)</a>
+      <div id="placeList"></div>
     </div>
     <div class="sec-card">
       <h3>☑️ 출국 전 필수 체크리스트</h3>
@@ -234,6 +253,7 @@ const DEFAULT_DAYS = [
     {t:"15:25", name:"간사이공항(T1) 도착", gq:"Kansai International Airport Terminal 1, Osaka", move:"라피트 38분", segs:[{b:"라피트",l:"38분",w:4,c:"#1E5CA8"}], how:"간사이공항역 → 난카이선 특급 라피트 탑승 → 난카이 난바역 도착", note:"입국 수속 후 난카이선 라피트 탑승", warn:"비짓재팬웹 QR 2종 미리 캡처해 두세요(공항 와이파이 느림). 가는 편 라피트 사전 예매/QR 발권이 빠름!", lat:34.4320, lng:135.2304},
     {t:"16:30", name:"에스리드 호텔 난바 이스트 언넥스", gq:"Eslead Hotel Namba East Annex, Osaka", move:"도보 6분", segs:[{l:"도보 6분",w:3}], how:"난카이 난바역 남출구 → 닛폰바시 방면 직진 도보 6분", note:"체크인(M261028461660) · 짐 풀기", warn:"셀프 체크인 안내 메일·비밀번호 미리 확인! 구로몬 시장·편의점 도보 4분 거리.", img:"./img/hotel.jpg", lat:34.6612, lng:135.5061},
     {t:"17:30", name:"난바파크스(단톤) · 빅카메라 · 신사이바시 PARCO", gq:"Shinsaibashi PARCO, Osaka", move:"도보+지하철", segs:[{l:"도보 7분",w:2},{b:"M",l:"2분",w:2,c:"#D62828"}], how:"호텔 도보 7분(난바파크스·빅카메라) → 난바역 미도스지선(빨간선) 신사이바시역 1정거장", note:"토요일 가랑비 대비 실내 위주 쇼핑", warn:"단톤(B shop)은 사이즈 빨리 빠져서 첫날 먼저! 2026-11 개편 면세라 매장 정가 결제(여권 실물 필수).", lat:34.6746, lng:135.5011},
+    {t:"21:00", name:"돈키호테 난바센니치마에점 · 💊 파브론 비염 캡슐 Sα", gq:"Don Quijote Namba Sennichimae, Osaka", move:"도보 8분", segs:[{l:"도보 8분",w:3}], how:"미도스지 대로에서 난바 방면 → 난바센니치마에 상점가 → 돈키호테(24시간) 도보 8분", note:"3인 합산 33,000엔↑ 7% 쿠폰 · 첫 구매 한 번에 몰아서(면세+쿠폰)", warn:"💊 파브론 비염 캡슐 Sα(지정 제2류 의약품)는 약 코너 직원 상주 시간(21~22시 전)에만 판매! 면세 소모품은 미개봉 유지.", img:"./img/xmas.jpg", lat:34.6646517, lng:135.5030246},
     {t:"20:30", name:"미도스지 일루미네이션 야경", gq:"Midosuji, Chuo Ward, Osaka", move:"도보 산책", segs:[{l:"도보 15분",w:3}], how:"신사이바시 PARCO 앞 미도스지 대로 따라 난바 방면으로 야경 산책 → 호텔 도보 복귀", note:"17:00~25:00 점등 · 저녁 식사 후 산책", warn:"난바~신사이바시 구간이 제일 예뻐요. 토요일 가랑비 대비 접이식 우산 휴대!", img:"./img/xmas.jpg", lat:34.6780, lng:135.5005}
   ]},
   {d:"11/29(일)", city:"미술관·우메다", sub:"8~18°C · 맑음(0~3%) · 나카노시마 미술관 필수!", items:[
@@ -258,6 +278,68 @@ const DEFAULT_DAYS = [
     {t:"11:00", name:"부산 김해공항행 출발 (12:30 도착)", gq:"Kansai International Airport Terminal 1, Osaka", move:"항공 QE7QB2", segs:[{b:"항공",l:"비행 90분",w:4,c:"#14493F"}], how:"T1 4층 국제선 출국 수속 → 셔틀트레인 탑승구 이동 → 김해공항 도착", note:"즐거운 여행 마무리 💛", warn:"출국 후 면세점(로이스·위스키)은 08:30~10:30 여유 쇼핑 · 보조배터리는 기내!", lat:34.4320, lng:135.2304}
   ]}
 ];
+const PLACES = [
+  {n:"간사이국제공항 제1터미널",c:"공항",l:1,w:"11/28 15:25 도착 · 12/01 07:34 출발",la:34.434386,ln:135.242610},
+  {n:"에스리드 호텔 난바 이스트 언넥스 (숙소)",c:"숙소",l:1,w:"11/28 16:30 체크인 ~ 12/01 06:30 체크아웃",la:34.660737,ln:135.507316},
+  {n:"난바파크스",c:"쇼핑몰",l:1,w:"11/28 17:30 · 11/29 오후",la:34.661608,ln:135.501935},
+  {n:"빅카메라 난바",c:"가전·면세",l:1,w:"11/28 17:30",la:34.666673,ln:135.502583},
+  {n:"신사이바시 PARCO",c:"쇼핑몰",l:1,w:"11/28 17:30",la:34.673847,ln:135.500957},
+  {n:"미도스지 일루미네이션",c:"야경",l:1,w:"11/28 20:30",la:34.678351,ln:135.500301},
+  {n:"나카노시마 미술관",c:"미술관",l:1,w:"11/29 10:00 (백화요란전)",la:34.692446,ln:135.491392},
+  {n:"브루클린 로스팅 컴퍼니 기타하마",c:"카페",l:1,w:"11/29 12:00",la:34.691046,ln:135.509156},
+  {n:"LUCUA 오사카 (우메다)",c:"쇼핑몰",l:1,w:"11/29 14:00",la:34.702887,ln:135.495324},
+  {n:"우메다 스카이빌딩 (크리스마스 마켓)",c:"마켓·야경",l:1,w:"11/29 17:30",la:34.705287,ln:135.489653},
+  {n:"덴시바 (덴노지 공원 크리스마스 마켓)",c:"마켓·야경",l:1,w:"11/29 19:30 (B안)",la:34.648538,ln:135.511045},
+  {n:"유니버설 스튜디오 재팬 (USJ)",c:"테마파크",l:1,w:"11/30 09:15 출발 → 10:15 입장 · 19:30 퇴장",la:34.665677,ln:135.432319},
+  {n:"난카이 난바역",c:"역",l:1,w:"11/28 16:00 · 12/01 06:30",la:34.662933,ln:135.502295},
+  {n:"551 호라이 본점",c:"중화만두",l:2,w:"11/28 저녁 또는 숙소 야식",la:34.666405,ln:135.501346},
+  {n:"마구로야 쿠로긴",c:"참치·해산물",l:2,w:"11/29 아침 09:00 오픈런",la:34.664548,ln:135.506935},
+  {n:"규카츠 모토무라 난바점",c:"규카츠",l:2,w:"11/29 점심 (오픈런 10:50)",la:34.666617,ln:135.501974},
+  {n:"스시 아마토 우라난바",c:"스시오마카세",l:2,w:"11/29 저녁 (예약 필수)",la:34.666291,ln:135.505768},
+  {n:"오코노미야키 치토세",c:"오코노미야키",l:2,w:"11/29 늦은 점심 또는 11/30 이른 저녁",la:34.647525,ln:135.504666},
+  {n:"이즈모 난바 (장어덮밥)",c:"장어덮밥",l:2,w:"11/28 밤 또는 11/29 저녁",la:34.665848,ln:135.501304},
+  {n:"로쿠노미야 난바 도톤보리",c:"야키니쿠·이자카야",l:2,w:"11/30 USJ 후 야식",la:34.669256,ln:135.505860},
+  {n:"와덴야 오뎅바",c:"오뎅·이자카야",l:2,w:"11/28 밤 2차",la:34.668626,ln:135.505160},
+  {n:"만료(万両) 히고바시점",c:"야키니쿠",l:2,w:"11/29 저녁 대안 (우메다 이동)",la:34.690163,ln:135.492369},
+  {n:"세카이이치 히마나 라멘야",c:"라멘",l:2,w:"11/29 점심 대안 (나카노시마 신작)",la:34.692822,ln:135.493750},
+  {n:"와라야키야 오사카 키타신치",c:"짚불구이·이자카야",l:2,w:"11/28 저녁 대안 또는 11/30 저녁",la:34.697776,ln:135.496073},
+  {n:"히로시다이 Z (후쿠시마)",c:"해산물 이자카야",l:2,w:"일정 외 후보",la:34.696456,ln:135.486605},
+  {n:"키타신치 야키니쿠 마루",c:"야키니쿠",l:2,w:"일정 외 후보",la:34.697991,ln:135.497023},
+  {n:"간안 난바 (쿠시카츠)",c:"쿠시카츠·도미솥밥",l:2,w:"일정 외 후보",la:34.663920,ln:135.504930},
+  {n:"규슈라멘 키오 도톤보리",c:"라멘",l:2,w:"11/29 밤 야식 후보",la:34.668615,ln:135.499443},
+  {n:"야키니쿠 리키마루 센니치마에",c:"야키니쿠",l:2,w:"11/30 21:45 USJ 후",la:34.666755,ln:135.503472},
+  {n:"그릴 캐피탈 동양정 난바",c:"양식·함박",l:2,w:"일정 외 후보 (난바 다카시마야 7F)",la:34.664498,ln:135.501949},
+  {n:"아바톤 난바 쇼치쿠자점 (미소카츠)",c:"미소카츠",l:2,w:"일정 외 후보 (도톤보리)",la:34.668562,ln:135.500931},
+  {n:"스시 사카바 사치스",c:"스시·이자카야",l:2,w:"일정 외 후보 (난바워크)",la:34.698779,ln:135.499416},
+  {n:"와규카츠 반자이",c:"규카츠",l:2,w:"일정 외 후보",la:34.678866,ln:135.503324},
+  {n:"보타니카리 (한신 우메다)",c:"스파이스 카레",l:2,w:"11/29 우메다 쇼핑 중 점심 후보",la:34.701225,ln:135.498378},
+  {n:"쵸카소바 무겐 (후쿠시마 에비에)",c:"라멘",l:2,w:"일정 외 후보",la:34.696603,ln:135.472201},
+  {n:"토나카츠 켄야 (기타하마)",c:"돈카츠",l:2,w:"일정 외 후보 (기타하마)",la:34.690556,ln:135.509129},
+  {n:"다나카노 쵸카소바 (우조보리)",c:"라멘",l:2,w:"일정 외 후보",la:34.684216,ln:135.495035},
+  {n:"아워로그 커피 로스터스 (혼조)",c:"카페",l:2,w:"일정 외 후보",la:34.711104,ln:135.506876},
+  {n:"헨리스 피자 (다니마치)",c:"피자",l:2,w:"일정 외 후보",la:34.680597,ln:135.518475},
+  {n:"멘츠루 카미토라 히고바시",c:"라멘",l:2,w:"일정 외 후보",la:34.691743,ln:135.495573},
+  {n:"대중주장 산마 (텐마)",c:"이자카야",l:2,w:"일정 외 후보",la:34.706354,ln:135.511278},
+  {n:"원조 미스쿠스 우메다 본점",c:"주스 스탠드",l:2,w:"11/29 우메다 이동 중",la:34.701600,ln:135.498154},
+  {n:"우메키타 플로어 (그랜드프론트 오사카 북관 6F)",c:"푸드홀",l:2,w:"11/29 우메다 점심 후보",la:34.705169,ln:135.494640},
+  {n:"다카무라 와인&커피 로스터스",c:"와인·카페",l:2,w:"일정 외 후보 (나카노시마)",la:34.687283,ln:135.491105},
+  {n:"라멘 마코토야 신사이바시",c:"라멘",l:2,w:"일정 외 후보 (24시간)",la:34.670325,ln:135.500787},
+  {n:"아마토 마에다 (난바워크)",c:"스시",l:2,w:"일정 외 후보",la:34.667201,ln:135.505567},
+  {n:"마운트 키타하마 (카페)",c:"카페",l:2,w:"11/29 기타하마 후보",la:34.692253,ln:135.504819},
+  {n:"그르니에 (한큐 우메다)",c:"디저트",l:2,w:"11/29 14:00 우메다",la:34.703542,ln:135.499191},
+  {n:"잇신도 (한큐 우메다 과일찹쌀떡)",c:"디저트",l:2,w:"11/29 14:00 우메다",la:34.703124,ln:135.498562},
+  {n:"카와치야 본점 (신세카이 50엔 쿠시카츠)",c:"쿠시카츠",l:3,w:"11/28 21:30 야식 · 11/29 20:30 (B안)",la:34.651480,ln:135.506003},
+  {n:"컵누들 박물관 오사카 이케다점",c:"체험·박물관",l:3,w:"11/29 오후 대안 (우메다에서 한큐 20분)",la:34.817885,ln:135.426644},
+  {n:"돈키호테 난바센니치마에점",c:"면세 쇼핑",l:3,w:"11/28 21:00 (첫 구매)",la:34.664652,ln:135.503025},
+  {n:"나가노 마켓 (신사이바시 PARCO 5F)",c:"쇼핑",l:3,w:"11/28 17:30 신사이바시",la:34.673847,ln:135.500957},
+  {n:"점프샵 오사카 (다이마루 신사이바시 9F)",c:"굿즈",l:3,w:"11/28 17:30 신사이바시",la:34.673167,ln:135.501153},
+  {n:"라신반 오사카 닛폰바시 본점",c:"굿즈·중고",l:3,w:"11/28~29 닛폰바시",la:34.660547,ln:135.504613},
+  {n:"타워레코드 난바 (난바파크스 4F)",c:"음반",l:3,w:"11/28 17:30 난바파크스",la:34.661649,ln:135.502188},
+  {n:"울트라마켓 (닛폰바시 위스키)",c:"주류",l:3,w:"위시리스트",la:34.659747,ln:135.506023},
+  {n:"단톤 B shop (난바파크스 3F)",c:"패션",l:3,w:"11/28 17:30 첫날 먼저",la:34.662511,ln:135.502025},
+  {n:"하루카스 300 (아베노 하루카스 전망대)",c:"전망대",l:3,w:"11/29 저녁 (B안)",la:34.646306,ln:135.513309},
+  {n:"닌텐도 오사카 (루쿠아 13F)",c:"굿즈",l:3,w:"11/29 14:00 우메다",la:34.701789,ln:135.496576}
+];
 let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(JSON.stringify(DEFAULT_DAYS));
 let editPlanIdx = null;
 const CHECKS = [
@@ -266,7 +348,9 @@ const CHECKS = [
   "11/28 가는 편 라피트 3인 예매",
   "아이폰 애플지갑 모바일 이코카 충전(¥4,500)",
   "개인 현금 ¥15,000 환전 (1천엔 10장 + 5천엔 1장)",
-  "110V 돼지코 · 멀티탭 · 보조배터리(기내)"
+  "110V 돼지코 · 멀티탭 · 보조배터리(기내)",
+  "💊 파브론 비염 캡슐 Sα 구매 (돈키호테 약 코너 21~22시 전 방문 · 미개봉 면세)",
+  "🛍️ 돈키호테 3인 합산 33,000엔↑ 7% 쿠폰 · 여권 3개 준비"
 ];
 
 let wallet = 'shared', selCat = CATS[0], selPay = 'cash', curDay = 0, mapDay = 0, mapObj = null;
@@ -550,6 +634,13 @@ function renderMap(){
       }
     }
   });
+  if(showAllPlaces){
+    PLACES.forEach(p=>{
+      const mk = L.circleMarker([p.la,p.ln],{radius:6,color:'#fff',weight:1.5,fillColor:LAYER_COL[p.l],fillOpacity:0.95}).addTo(mapObj);
+      mk.bindPopup(`<b>${p.n}</b><br/><span style="color:#555">${LAYER_NAME[p.l]} · ${p.c}</span>${p.w?`<br/>${p.w}`:''}<br/><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=${p.la},${p.ln}">구글맵에서 열기</a>`);
+      latlngs.push([p.la,p.ln]);
+    });
+  }
   mapObj.fitBounds(latlngs, {padding:[36,36]});
   setTimeout(()=>mapObj.invalidateSize(), 100);
   const uPts = pts.filter((p,i)=> i===0 || `${p.lat},${p.lng}` !== `${pts[i-1].lat},${pts[i-1].lng}`);
@@ -562,6 +653,32 @@ function renderMap(){
   document.getElementById('mapLegend').innerHTML = `<h3>DAY ${mapDay+1} · ${days[mapDay].city} 동선</h3>` + pts.map((p,i)=>{const ri=i;return `<div onclick="focusSeg(${i})" style="padding:9px 6px;border-bottom:1px solid #EFEADF;cursor:pointer;border-radius:10px;"><div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;"><div><b>${p.move==='숙소 출발'?'🏨':i+1}. ${p.name}</b> <span style="font-size:11px;color:var(--org);font-weight:700;">· 지도보기</span><br/><span style="font-size:12px;color:var(--sub);">${p.t} · ${p.move}</span></div><div style="display:flex;gap:4px;align-items:center;" onclick="event.stopPropagation()">${ri>=0?`<button class="act-btn" style="padding:3px 6px;" onclick="curDay=mapDay;moveOsItem(${ri},-1)">▲</button><button class="act-btn" style="padding:3px 6px;" onclick="curDay=mapDay;moveOsItem(${ri},1)">▼</button><button class="act-btn" style="padding:3px 6px;" onclick="curDay=mapDay;openPlanModal(${ri})">✏️</button><button class="act-btn" style="padding:3px 6px;" onclick="curDay=mapDay;delOsItem(${ri})">🗑️</button>`:''}<a class="act-btn map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.gq||p.name.replace(/<[^>]+>|&rarr;/g,' '))}">구글맵</a></div></div>${renderRouteBar(p.segs, p.how, i>0?pts[i-1]:(mapDay>=0&&days[mapDay].stay?{gq:days[mapDay].stay}:null), p)}</div>`;}).join('');
 }
 
+let placeFilter = 0, showAllPlaces = false;
+const LAYER_NAME = {1:'① 확정 일정',2:'② 맛집·카페',3:'③ 쇼핑·기타'};
+const LAYER_COL = {1:'#14493F',2:'#C2721E',3:'#1E5CA8'};
+function filterPlaces(f){ placeFilter=f; renderPlaces(); }
+function renderPlaces(){
+  ['pf0','pf1','pf2','pf3'].forEach((id,i)=>{
+    const b=document.getElementById(id); if(!b) return;
+    b.className='act-btn '+(placeFilter===i?'org':'');
+  });
+  const list = PLACES.filter(p=>placeFilter===0||p.l===placeFilter);
+  document.getElementById('placeList').innerHTML = list.map(p=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;padding:7px 2px;border-bottom:1px solid #EFEADF;">
+      <div style="min-width:0;">
+        <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${LAYER_COL[p.l]};margin-right:5px;"></span>
+        <b style="font-size:13px;">${p.n}</b>
+        <div style="font-size:11.5px;color:var(--sub);padding-left:12px;">${p.c}${p.w?' · '+p.w:''}</div>
+      </div>
+      <a class="act-btn map" style="flex:0 0 auto;padding:4px 8px;" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${p.la},${p.ln}">지도</a>
+    </div>`).join('');
+}
+function toggleAllPlaces(){
+  showAllPlaces = !showAllPlaces;
+  const b=document.getElementById('allPlBtn');
+  b.textContent = showAllPlaces ? '⭐ 추천 60곳 숨기기' : '⭐ 추천 60곳 함께 보기';
+  renderMap();
+}
 function renderChecks(){
   document.getElementById('osakaChecks').innerHTML = CHECKS.map((c,i)=>`
     <label style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #EFEADF;cursor:pointer;">
@@ -578,7 +695,7 @@ function goTab(id, btn){
   if(id==='map') renderMap();
 }
 
-updateDday(); renderMoney(); renderPlan(); renderChecks();
+updateDday(); renderMoney(); renderPlan(); renderChecks(); renderPlaces();
 if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
 </script>
 </body>
