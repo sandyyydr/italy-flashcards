@@ -187,6 +187,17 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
       <div class="hd">전망 좋은 수영장 · 온수 스파 · 무료취소 · 스튜디오 40㎡. 이걸로 바꾸면 총액 887만 원.</div>
       <div class="item-actions"><a class="act-btn map" target="_blank" rel="noopener" href="https://www.booking.com/searchresults.ko.html?ss=Casanova+Family+Apartments+San+Quirico&checkin=2027-10-06&checkout=2027-10-10&group_adults=2&no_rooms=1&selected_currency=KRW&lang=ko">부킹닷컴에서 보기</a></div>
     </div>
+    <div class="hcard" style="border:2px solid var(--green);">
+      <img class="himg" src="./img/tenuta.jpg" alt="테누타 다르비아"/>
+      <div class="hn">테누타 다르비아 · 시에나 <span class="pill p-g" style="margin-left:4px;">신축 4성</span></div>
+      <div class="hm">9.8 / 10 · 2024년 오픈 · 10객실 · 몬테로니 다르비아 (크레테 세네시)</div>
+      <div class="hp">303.6만 <span style="font-size:12px;color:var(--sub);font-weight:600;">/ 4박 · Superior 35제곱미터 (오늘 환율 270만)</span></div>
+      <div class="hd">30m 온수 해수 인피니티풀 · 사우나·하맘·짐 · Osteria Le Castelline(조식·저녁) · 평점 9.8. 디럭스 45제곱미터(욕조)는 4박 348.5만.<br/><b>4박 통은 기본안 +134만</b> → 앞 2박만 여기서 묵고 10/8에 산 키리코 가성비로 옮기면 +17만(총 1,003만). 시에나 27분 · 몬탈치노 32분 · 피엔차 42분 · 피렌체 73분 · FCO 2시간 37분, 렌터카 필수(마지막 진입로 일부 비포장).</div>
+      <div class="item-actions">
+        <a class="act-btn map" target="_blank" rel="noopener" href="https://www.tenutadarbia.com/">공식 홈페이지</a>
+        <a class="act-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Tenuta+d%27Arbia,+Via+Lauretana+1253,+Monteroni+d%27Arbia">구글맵</a>
+      </div>
+    </div>
 
     <div class="sec-card" style="border:2px solid var(--org);">
       <h3>📸 피렌체 일몰 스냅 (10/5 · 17:15~19:15)</h3>
@@ -261,6 +272,7 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
       <div class="row"><div><b>기본안</b> · 일 미라조 5성</div><b>987만</b></div>
       <div class="row"><div><b>가성비</b> · 카사노바 4박</div><b style="color:var(--green);">887만</b></div>
       <div class="row"><div><b>감성</b> · 팔라초 4박</div><b style="color:var(--org);">1,003만 (3만 초과)</b></div>
+      <div class="row"><div><b>테누타 2박+2박</b> · 다르비아 → 카사노바</div><b style="color:var(--org);">1,003만 (3.5만 초과)</b></div>
       <div style="font-size:12px;color:var(--sub);margin-top:8px;line-height:1.5;">스냅 57만 포함. 스냅을 빼면 930만 원입니다. 위 시뮬레이터에서 조합을 바꿔 보세요.</div>
     </div>
 
@@ -294,11 +306,11 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
     <div id="linkList"></div>
   </section>
 
-  <!-- 📖 매거진 (27쪽 WebP 페이지 뷰어) -->
+  <!-- 📖 매거진 (28쪽 WebP 페이지 뷰어) -->
   <section id="tab-mag" class="hidden">
     <div class="mag-hero">
-      <div class="mt">📖 토스카나 신혼여행 매거진 · 27쪽</div>
-      <div class="ms">일자별 14일 · 지도 2장 · 숙소 12박 · 브루넬로 · 스냅 · 렌터카 · 예산 · 링크 47개<br/>2026-11-22 최신본 · 1800px 이미지</div>
+      <div class="mt">📖 토스카나 신혼여행 매거진 · 28쪽</div>
+      <div class="ms">일자별 14일 · 지도 2장 · 숙소 12박 · 브루넬로 · 스냅 · 렌터카 · 예산 · 링크 47개<br/>2026-11-23 최신본 · 28쪽 · 1800px 이미지</div>
       <div class="mag-btns">
         <a class="mag-btn" href="./magazine.pdf" target="_blank" rel="noopener">🔍 PDF 크게 열기</a>
         <a class="mag-btn out" href="./magazine.pdf" download="토스카나_신혼여행_매거진_2027.pdf">⬇️ PDF 저장</a>
@@ -816,7 +828,10 @@ const SIM_OPTS = [
     {id:'miraggio', name:'일 미라조 5성 169.9만', cost:1699490},
     {id:'palazzo', name:'팔라초 델 카피타노 186.9만', cost:1868881, warn:'💸 총액 1,003만 — 1,000만 원을 3만 원 넘습니다.'},
     {id:'casanova', name:'카사노바 아파트 70.1만', cost:701456, warn:'🛏 스튜디오 40㎡ · 호텔 서비스 없음. 대신 총액 887만.'},
-    {id:'vignaia', name:'아그리투리스모 비그나이아 90.4만', cost:903969, warn:'🌿 수영장 없음 · 9.7점(137) · 아침 식사는 포함 여부 확인.'}
+    {id:'vignaia', name:'아그리투리스모 비그나이아 90.4만', cost:903969, warn:'🌿 수영장 없음 · 9.7점(137) · 아침 식사는 포함 여부 확인.'},
+    {id:'tenuta2mix', name:'테누타 2박+카사노바 2박 186.9만', cost:1868728, warn:'🔀 10/6~8 테누타 다르비아(시에나 27분·온수 해수풀) → 10/8~10 산 키리코 카사노바. 짐 한 번 더 옮기지만 총액 1,003만.'},
+    {id:'tenuta4', name:'테누타 다르비아 4박 303.6만', cost:3036000, warn:'💸 총액 1,120만 — 1,000만 원을 120만 넘습니다. 4박 통보다 2박 쪼개기(186.9만)를 권합니다.'},
+    {id:'tenuta4d', name:'테누타 디럭스 4박 348.5만', cost:3484800, warn:'💸 총액 1,165만 · 욕조 있는 45제곱미터. 2박 쪼개기로 바꾸면 1,003만.'}
   ]},
   {key:'sor', label:'🍋 소렌토 3박 (10/1~4)', opts:[
     {id:'casa', name:'Casa Astarita 64.1만 (환불불가)', cost:641245},
@@ -1112,7 +1127,7 @@ document.getElementById('rateLbl').textContent = Math.round(rate).toLocaleString
 renderPlan(); renderChecks(); renderCommonTips(); renderSim(); renderItExp(); renderLinks();
 
 /* ───────── 📖 매거진 탭 로직 (WebP 페이지 뷰어) ───────── */
-const MAG = {pages:27, dir:'./pages/', file:'./magazine.pdf'};
+const MAG = {pages:28, dir:'./pages/', file:'./magazine.pdf'};
 let magReady = false, magIdx = 1, magZoom = 1;
 function magInit(){
   if(magReady) return; magReady = true;

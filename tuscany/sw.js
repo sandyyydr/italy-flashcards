@@ -1,4 +1,4 @@
-const CACHE = 'tuscany-planner-v3';
+const CACHE = 'tuscany-planner-v4';
 const PRECACHE = ['./', './index.html', './manifest.json', './magazine.pdf'];
 
 self.addEventListener('install', e => {
