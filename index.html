@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#58cc02">
-<title>이탈리아 회화 플래시카드 · Day 1</title>
+<title>이탈리아 회화 플래시카드 · Day 1~2</title>
 <style>
 :root{
   --g:#58cc02; --gd:#46a302; --g-t:#d7ffb8;
@@ -604,6 +604,135 @@ const DAYS_DATA = [
       {id:"d1ex6", tag:"상황", q:"택시 요금이 예상보다 많이 나왔어요. 영수증을 요청하는 말은?",
        options:["Could I get a receipt, please?","Is the meter running?","Do you take card?","Where is the taxi stand?"], a:0,
        explain:"receipt = 영수증(리체부타). 요금 분쟁·경비 정산에 꼭 필요해요."}
+    ]
+  },
+  {
+    day: 2,
+    title: "호텔 체크인 & 짐 보관",
+    short: "호텔 체크인",
+    sub: "예약 확인 · 허니문 룸 요청 · 도시세 · 체크아웃 짐 보관",
+    cards: [
+      /* ---------- 이탈리아어 ---------- */
+      {id:"d2it01", type:"it", tag:"체크인", chapter:"인사·체크인", front:"Ho una prenotazione.", pron:"오 우나 프레노타치오네", ko:"예약했어요", en:"I have a reservation",
+       breakdown:[["Ho","가지고 있어요"],["una","하나의"],["prenotazione","예약"]],
+       related:[["Ecco il passaporto.","여권 여기 있어요"],["Il mio nome è…","제 이름은…"]],
+       tip:"예약 확인서와 여권을 함께 내밀며 말하면 바로 체크인돼요.",
+       example:{exText:"Ho una prenotazione a nome Lee.", exPron:"오 우나 프레노타치오네 아 노메 리", exMeaning:"리 이름으로 예약했어요."}},
+      {id:"d2it02", type:"it", tag:"짐 보관", chapter:"인사·체크인", front:"Possiamo lasciare i bagagli?", pron:"포시아모 라샤레 이 바갈리", ko:"짐 맡겨도 될까요?", en:"Can we leave our bags?",
+       breakdown:[["Possiamo","~해도 될까요"],["lasciare","맡기다"],["i bagagli","짐들"]],
+       related:[["ritirare","찾다"],["deposito bagagli","짐 보관소"]],
+       tip:"체크인 전이나 체크아웃 후 시내를 돌 때 꼭 쓰는 표현이에요.",
+       example:{exText:"Possiamo lasciare qui le valigie?", exPron:"포시아모 라샤레 퀴 레 발리제", exMeaning:"여기에 캐리어 맡길 수 있나요?"}},
+      {id:"d2it03", type:"it", tag:"조식", chapter:"인사·체크인", front:"A che ora è la colazione?", pron:"아 케 오라 에 라 콜라치오네", ko:"조식은 몇 시예요?", en:"What time is breakfast?",
+       breakdown:[["A che ora","몇 시에"],["la colazione","아침 식사"]],
+       related:[["il check-out","체크아웃"],["è inclusa?","포함인가요?"]],
+       tip:"조식 시간과 포함 여부를 미리 확인해 두면 다음 날 아침이 여유로워요.",
+       example:{exText:"La colazione è inclusa?", exPron:"라 콜라치오네 에 인클루자", exMeaning:"조식이 포함인가요?"}},
+      {id:"d2it04", type:"it", tag:"와이파이", chapter:"인사·체크인", front:"Qual è la password del Wi-Fi?", pron:"퀄 에 라 패스워드 델 와이파이", ko:"와이파이 비번이 뭐예요?", en:"What is the Wi-Fi password?",
+       breakdown:[["Qual è","무엇인가요"],["del","~의"],["password","비밀번호"]],
+       related:[["la chiave","열쇠"],["l’ascensore","엘리베이터"]],
+       tip:"카드키 종이 케이스 안쪽에 비밀번호가 적혀 있는 경우도 많아요.",
+       example:{exText:"C’è il Wi-Fi in camera?", exPron:"체 일 와이파이 인 카메라", exMeaning:"방에 와이파이 되나요?"}},
+      {id:"d2it05", type:"it", tag:"복습·신혼", chapter:"인사·체크인", front:"Siamo in luna di miele!", pron:"쟈모 인 루나 디 미엘레", ko:"신혼여행이에요!", en:"We’re on our honeymoon!",
+       breakdown:[["siamo","우리는 ~이다"],["luna di miele","신혼여행"]],
+       related:[["camera silenziosa","조용한 방"],["vista","전망"]],
+       tip:"Day 1 복습! 체크인할 때 한 번 더 말하면 룸 업그레이드 확률이 올라가요.",
+       example:{exText:"È possibile un upgrade?", exPron:"에 포씨빌레 운 업그레이드", exMeaning:"업그레이드 가능한가요?"}},
+      {id:"d2it06", type:"it", tag:"대답", chapter:"인사·체크인", front:"Ecco i passaporti.", pron:"에코 이 파사포르티", ko:"여권 여기 있습니다", en:"Here are our passports",
+       breakdown:[["Ecco","여기 있어요"],["i passaporti","여권들"]],
+       related:[["il passaporto","여권(단수)"],["la carta","카드"]],
+       tip:"이탈리아 호텔은 법적으로 투숙객 2명 모두의 여권을 확인해요.",
+       example:{exText:"Ecco i nostri passaporti.", exPron:"에코 이 노스트리 파사포르티", exMeaning:"저희 여권 여기 있습니다."}},
+      {id:"d2it07", type:"it", tag:"대답", chapter:"인사·체크인", front:"Alle tre, grazie.", pron:"알레 트레, 그라찌에", ko:"3시에 돌아와요, 감사합니다", en:"At three, thank you",
+       breakdown:[["Alle","~시에"],["tre","3"],["grazie","감사합니다"]],
+       related:[["Alle dieci","10시에"],["Alle undici","11시에"]],
+       tip:"짐을 찾으러 돌아오는 시간을 말할 때 숫자만 바꿔 쓰면 돼요.",
+       example:{exText:"Torniamo alle tre.", exPron:"토르니아모 알레 트레", exMeaning:"3시에 돌아올게요."}},
+      {id:"d2it08", type:"it", tag:"대답", chapter:"인사·체크인", front:"Con vista, per favore.", pron:"콘 비스타, 뻬르 파보레", ko:"전망 좋은 방으로 부탁해요", en:"With a view, please",
+       breakdown:[["con","~이 있는"],["vista","전망"]],
+       related:[["piano alto","높은 층"],["letto matrimoniale","더블베드"]],
+       tip:"아말피·피렌체·밀라노 호텔에서 방을 고를 때 유용해요.",
+       example:{exText:"Una camera con vista, grazie.", exPron:"우나 카메라 콘 비스타, 그라찌에", exMeaning:"전망 좋은 방으로 주세요, 감사합니다."}},
+
+      /* ---------- 영어 ---------- */
+      {id:"d2en01", type:"en", tag:"체크인", chapter:"인사·체크인", front:"Hi, we have a reservation under Seunghyun Lee for three nights.",
+       ko:"안녕하세요, 이승현 이름으로 3박 예약했습니다.",
+       breakdown:[["reservation","예약"],["under ~","~ 이름으로"],["for three nights","3박 동안"]],
+       related:[["I’d like to check in.","체크인하고 싶어요."],["confirmation","예약 확인서"]],
+       tip:"이름과 숙박 일수를 한 번에 말하면 확인이 빨라요.",
+       example:{exText:"We have a reservation for tonight.", exPron:"", exMeaning:"오늘 밤 예약이 있어요."}},
+      {id:"d2en02", type:"en", tag:"허니문 룸 요청", chapter:"인사·체크인", front:"It’s our honeymoon — if a room with a nice view or a quiet high floor is available, we’d really appreciate it.",
+       ko:"신혼여행인데, 전망 좋거나 조용한 고층 방이 가능하면 정말 감사하겠습니다.",
+       breakdown:[["nice view","좋은 전망"],["quiet high floor","조용한 고층"],["appreciate","감사하다"]],
+       related:[["Could we get a quiet room?","조용한 방 주실 수 있나요?"],["Is an upgrade available?","업그레이드 가능한가요?"]],
+       tip:"부담스럽지 않게 정중히 요청하면 가능할 때 챙겨주는 호텔이 많아요.",
+       example:{exText:"Is a quiet high floor available?", exPron:"", exMeaning:"조용한 고층 방이 있나요?"}},
+      {id:"d2en03", type:"en", tag:"도시세 · 보증금", chapter:"인사·체크인", front:"Should we pay the city tax now or at check-out, and is there a deposit required?",
+       ko:"도시세는 지금 내나요, 체크아웃 때 내나요? 보증금도 필요한가요?",
+       breakdown:[["city tax","도시세"],["at check-out","체크아웃 때"],["deposit","보증금"]],
+       related:[["How much is the city tax?","도시세가 얼마인가요?"],["By card or cash?","카드로 내나요, 현금인가요?"]],
+       tip:"이탈리아 도시세(1인 1박 €3~7)는 대부분 현장 결제예요.",
+       example:{exText:"Can we pay the city tax now?", exPron:"", exMeaning:"도시세를 지금 내도 되나요?"}},
+      {id:"d2en04", type:"en", tag:"짐 보관", chapter:"인사·체크인", front:"Could we leave our luggage here for a few hours after check-out?",
+       ko:"체크아웃 후 몇 시간 동안 짐을 맡겨둘 수 있을까요?",
+       breakdown:[["leave our luggage","짐을 맡기다"],["for a few hours","몇 시간 동안"],["after check-out","체크아웃 후"]],
+       related:[["Where is the luggage room?","짐 보관실이 어디예요?"],["We’ll be back at three.","3시에 돌아올게요."]],
+       tip:"체크아웃 후 기차 시간 전까지 시내 구경할 때 필수 표현이에요.",
+       example:{exText:"Could we store our bags here?", exPron:"", exMeaning:"여기에 가방 보관할 수 있나요?"}},
+
+      /* ---------- 단어 ---------- */
+      {id:"d2w01", type:"word", tag:"단어", chapter:"인사·체크인", front:"prenotazione", pron:"프레노타치오네", ko:"예약", en:"reservation",
+       breakdown:[["prenotare","미리 적다·예약하다"],["-zione","명사형 → 예약"]],
+       related:[["conferma","예약 확인"],["cancellazione","취소"]],
+       tip:"호텔뿐만 아니라 식당·미술관 예약에도 똑같이 쓰여요.",
+       example:{exText:"Ho la prenotazione qui.", exPron:"오 라 프레노타치오네 퀴", exMeaning:"여기 예약 내역 있어요."}},
+      {id:"d2w02", type:"word", tag:"단어", chapter:"인사·체크인", front:"camera", pron:"카메라", ko:"방 · 객실", en:"room",
+       breakdown:[["camera","방 (사진기는 macchina fotografica)"]],
+       related:[["chiave","열쇠"],["bagno","화장실"]],
+       tip:"이탈리아어로 camera는 사진기가 아니라 ‘방’이에요.",
+       example:{exText:"La camera è pronta?", exPron:"라 카메라 에 프론타", exMeaning:"방이 준비됐나요?"}},
+      {id:"d2w03", type:"word", tag:"단어", chapter:"인사·체크인", front:"chiave", pron:"키아베", ko:"열쇠 · 카드키", en:"key",
+       breakdown:[["ch-","‘ㅋ’ 소리 → 키아베"]],
+       related:[["carta","카드키"],["porta","문"]],
+       tip:"ch는 영어 ‘ch’가 아니라 ‘ㅋ’ 발음이 나요.",
+       example:{exText:"Ecco la chiave della camera.", exPron:"에코 라 키아베 델라 카메라", exMeaning:"여기 객실 열쇠 있습니다."}},
+      {id:"d2w04", type:"word", tag:"단어", chapter:"인사·체크인", front:"colazione", pron:"콜라치오네", ko:"조식 · 아침", en:"breakfast",
+       breakdown:[["colazione","아침 식사"],["pranzo","점심"]],
+       related:[["cena","저녁"],["caffè","커피"]],
+       tip:"아침은 colazione, 점심은 pranzo, 저녁은 cena!",
+       example:{exText:"Dove si fa colazione?", exPron:"도베 시 파 콜라치오네", exMeaning:"조식은 어디서 먹나요?"}},
+      {id:"d2w05", type:"word", tag:"단어", chapter:"인사·체크인", front:"tassa di soggiorno", pron:"타싸 디 솟조르노", ko:"도시세", en:"city tax",
+       breakdown:[["tassa","세금"],["soggiorno","체류"]],
+       related:[["ricevuta","영수증"],["contanti","현금"]],
+       tip:"체류세(도시세)라는 뜻으로, 호텔 프런트에서 별도로 내요.",
+       example:{exText:"Quanto è la tassa?", exPron:"콴토 에 라 타싸", exMeaning:"도시세가 얼마예요?"}}
+    ],
+
+    qa: [
+      {id:"d2qa1", speaker:"🏨 리셉션", q:"Passaporti, per favore?", qPron:"파사포르티, 페르 파보레?", qKo:"여권 주시겠어요?",
+       a:"Ecco i passaporti.", aPron:"에코 이 파사포르티", aKo:"여권 여기 있습니다",
+       tip:"2명 모두 여권을 제시해야 체크인이 완료돼요."},
+      {id:"d2qa2", speaker:"🏨 리셉션", q:"A che nome?", qPron:"아 케 노메?", qKo:"누구 성함으로 예약하셨나요?",
+       a:"Seunghyun Lee.", aPron:"이승현", aKo:"이승현이에요",
+       tip:"여권을 함께 내밀면 스펠링 확인이 바로 끝나요."},
+      {id:"d2qa3", speaker:"🧳 짐 보관소", q:"A che ora tornate?", qPron:"아 케 오라 토르나테?", qKo:"몇 시에 돌아오세요?",
+       a:"Alle tre, grazie.", aPron:"알레 트레, 그라찌에", aKo:"3시에 돌아와요, 감사합니다",
+       tip:"1시(l’una)·2시(le due)·3시(le tre)만 알아도 충분해요."}
+    ],
+
+    extra: [
+      {id:"d2ex1", tag:"상황", q:"체크아웃 후 몇 시간 동안 짐을 맡기고 싶을 때 가장 자연스러운 말은?",
+       options:["Could we leave our luggage here for a few hours after check-out?",
+                "Should we pay the city tax now or at check-out?",
+                "A che ora è la colazione?",
+                "Ecco i passaporti."], a:0,
+       explain:"leave our luggage = 짐을 맡기다. 체크아웃 뒤 기차 시간까지 유용해요."},
+      {id:"d2ex2", tag:"단어", q:"이탈리아어로 ‘방 · 객실’을 뜻하는 단어는?",
+       options:["camera","chiave","colazione","prenotazione"], a:0,
+       explain:"camera = 방(객실). chiave는 열쇠, colazione는 조식이에요."},
+      {id:"d2ex3", tag:"상황", q:"직원이 “Passaporti, per favore?”라고 물었어요. 알맞은 대답은?",
+       options:["Ecco i passaporti.","Alle tre, grazie.","Con vista, per favore.","A che nome?"], a:0,
+       explain:"Ecco ~ = 여기 있어요. 2명 모두의 여권을 내밀면 돼요."}
     ]
   }
 ];
