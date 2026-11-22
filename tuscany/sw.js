@@ -1,4 +1,4 @@
-const CACHE = 'tuscany-planner-v1';
+const CACHE = 'tuscany-planner-v3';
 const PRECACHE = ['./', './index.html', './manifest.json', './magazine.pdf'];
 
 self.addEventListener('install', e => {
@@ -26,6 +26,7 @@ self.addEventListener('fetch', e => {
   const isDoc = e.request.mode === 'navigate' ||
                 url.pathname.endsWith('/') ||
                 url.pathname.endsWith('/index.html') ||
+                url.pathname.endsWith('/sw.js') ||
                 url.pathname.endsWith('/magazine.pdf');
 
   // 문서·PDF는 네트워크 우선(업데이트가 바로 반영), 오프라인이면 캐시
