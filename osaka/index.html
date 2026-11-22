@@ -87,6 +87,37 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
 .r-walk{background:#E8E6DF;color:#5C6360;}
 .r-txt{font-size:12px;color:#14493F;font-weight:700;margin-top:5px;line-height:1.4;}
 
+
+/* ───────── 📖 매거진 탭 ───────── */
+.mag-hero{background:var(--green);color:#FAF7F0;border-radius:16px;padding:14px 15px;margin-bottom:12px;}
+.mag-hero .mt{font-size:16.5px;font-weight:800;letter-spacing:-.2px;}
+.mag-hero .ms{font-size:12.5px;color:#CFE0D9;margin-top:5px;line-height:1.5;}
+.mag-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;}
+.mag-btn{display:flex;align-items:center;justify-content:center;gap:5px;padding:14px 4px;border-radius:12px;font-size:14px;font-weight:800;text-decoration:none;border:1.5px solid transparent;line-height:1.2;text-align:center;}
+.mag-btn.solid{background:var(--gold);color:#14493F;}
+.mag-btn.out{background:rgba(255,255,255,.13);color:#fff;border-color:rgba(255,255,255,.5);}
+.mag-note{font-size:11.5px;color:#CFE0D9;margin-top:9px;line-height:1.55;}
+.mag-jump{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none;}
+.mag-jump::-webkit-scrollbar{display:none;}
+.mag-jump button{flex:0 0 auto;min-width:36px;height:34px;border-radius:9px;border:1.5px solid var(--line);background:var(--card);font-size:12.5px;font-weight:800;color:var(--sub);cursor:pointer;padding:0 6px;}
+.mag-jump button.on{background:var(--green);border-color:var(--green);color:#fff;}
+.mag-page{position:relative;margin:0 0 10px;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#fff;box-shadow:0 1px 5px rgba(20,73,63,.07);scroll-margin-top:104px;}
+.mag-page img{display:block;width:100%;height:auto;cursor:zoom-in;}
+.mag-page .pgno{position:absolute;left:8px;top:8px;background:rgba(20,73,63,.85);color:#fff;font-size:11px;font-weight:800;padding:3px 8px;border-radius:99px;}
+.mag-page .zoomhint{position:absolute;right:8px;bottom:8px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;font-weight:700;padding:3px 8px;border-radius:99px;}
+.mag-ov{position:fixed;inset:0;background:#0E0E0E;z-index:70;display:none;flex-direction:column;}
+.mag-ov.open{display:flex;}
+.mag-ov-bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:calc(env(safe-area-inset-top,10px) + 9px) 12px 9px;background:#191919;color:#fff;font-size:13px;font-weight:800;}
+.mag-ov-bar button{background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:9px;padding:8px 11px;font-size:13px;font-weight:800;cursor:pointer;}
+.mag-ov-z{display:flex;align-items:center;gap:2px;}
+.mag-ov-z span{min-width:46px;text-align:center;font-size:12px;font-weight:800;}
+.mag-ov-scroll{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;}
+.mag-ov-scroll img{display:block;width:100%;height:auto;max-width:none;}
+.mag-ov-nav{display:flex;gap:8px;padding:8px 12px calc(env(safe-area-inset-bottom,10px) + 9px);background:#191919;}
+.mag-ov-nav a,.mag-ov-nav button{flex:1;text-align:center;background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:10px;padding:11px 4px;font-size:13px;font-weight:800;text-decoration:none;cursor:pointer;}
+.tabbar.tight .tab{font-size:10.5px;}
+.tabbar.tight .tab .ico{font-size:19px;}
+
 </style>
 </head>
 <body>
@@ -202,6 +233,25 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
       <div id="osakaChecks"></div>
     </div>
   </section>
+  <!-- 📖 매거진 (전체 일정 PDF) -->
+  <section id="tab-mag" class="hidden">
+    <div class="mag-hero">
+      <div class="mt">📖 오사카 3박 4일 매거진</div>
+      <div class="ms">전체 일정 한눈에 보기 · 11쪽 · 2026-11-21 최신본<br/>핵심 일정·지도·숙소·먹거리·면세까지 한 권에</div>
+      <div class="mag-btns">
+        <a class="mag-btn solid" target="_blank" rel="noopener" href="./magazine.pdf">🔍 PDF 크게 열기</a>
+        <a class="mag-btn out" href="./magazine.pdf" download="오사카_3박4일_매거진_2026.pdf">⬇️ PDF 저장</a>
+      </div>
+      <div class="mag-note">💡 아이폰은 <b>PDF 크게 열기</b>가 제일 편해요(두 손가락 확대·스크롤 자유). 저장하면 <b>파일 앱 → 다운로드</b>에 담겨요.</div>
+    </div>
+    <div class="mag-jump" id="magJump"></div>
+    <div id="magPages"></div>
+    <div class="sec-card">
+      <h3>📄 함께 보는 일정 PDF</h3>
+      <div class="row"><div><b>A안 · B안 하루 일정 비교</b><br/><span style="font-size:12px;color:var(--sub);">2쪽 요약본 · 11/19 작성</span></div><a class="act-btn map" target="_blank" rel="noopener" href="./osaka_ab_compare.pdf">PDF 열기</a></div>
+      <div class="row"><div><b>완전판 매거진</b><br/><span style="font-size:12px;color:var(--sub);">11쪽 · 위 페이지와 같은 파일</span></div><a class="act-btn" href="./magazine.pdf" download="오사카_3박4일_매거진_2026.pdf">⬇️ 저장</a></div>
+    </div>
+  </section>
 </main>
 
 <nav class="tabbar">
@@ -209,6 +259,7 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
   <button class="tab" onclick="goTab('plan',this)"><span class="ico">📋</span>일정</button>
   <button class="tab" onclick="goTab('map',this)"><span class="ico">🗺️</span>지도</button>
   <button class="tab" onclick="goTab('wish',this)"><span class="ico">🛍️</span>위시·체크</button>
+  <button class="tab" onclick="goTab('mag',this)"><span class="ico">📖</span>매거진</button>
 </nav>
 
 <div class="modal-bg" id="planModal">
@@ -694,10 +745,88 @@ function goTab(id, btn){
   document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   if(id==='map') renderMap();
+  if(id==='mag') magInit();
 }
 
 updateDday(); renderMoney(); renderPlan(); renderChecks(); renderPlaces();
 if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+const MAG = {pages:11, dir:'./mag/', file:'./magazine.pdf'};
+
+/* ───────── 📖 매거진 탭 로직 ───────── */
+let magReady = false, magIdx = 1, magZoom = 1;
+function magInit(){
+  if(magReady) return; magReady = true;
+  const jump = document.getElementById('magJump');
+  const box  = document.getElementById('magPages');
+  if(!jump || !box) return;
+  let jh = '', ph = '';
+  for(let i = 1; i <= MAG.pages; i++){
+    const n = String(i).padStart(2,'0');
+    jh += `<button type="button" data-p="${i}" onclick="magJumpTo(${i})">${i}</button>`;
+    ph += `<figure class="mag-page" id="magp-${i}">`
+        + `<span class="pgno">${i} / ${MAG.pages}</span>`
+        + `<img loading="lazy" decoding="async" width="1800" height="1273" alt="${i}쪽" src="${MAG.dir}p${n}.webp" onclick="magOpen(${i})">`
+        + `<span class="zoomhint">탭해서 확대</span></figure>`;
+  }
+  jump.innerHTML = jh;
+  box.innerHTML = ph;
+}
+function magJumpTo(i){
+  const el = document.getElementById('magp-'+i);
+  if(!el) return;
+  el.scrollIntoView({behavior:'smooth', block:'start'});
+  document.querySelectorAll('#magJump button').forEach(b=>b.classList.toggle('on', +b.dataset.p === i));
+}
+function magSetZoom(z){
+  magZoom = Math.min(3, Math.max(1, z));
+  document.getElementById('magOvImg').style.width = (magZoom*100)+'%';
+  document.getElementById('magOvZ').textContent = Math.round(magZoom*100)+'%';
+}
+function magOpen(i, keepZoom){
+  if(i < 1 || i > MAG.pages) return;
+  magIdx = i;
+  document.getElementById('magOvImg').src = MAG.dir + 'p' + String(i).padStart(2,'0') + '.webp';
+  document.getElementById('magOvNo').textContent = i + ' / ' + MAG.pages;
+  document.getElementById('magOv').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  if(!keepZoom){ magSetZoom(1); }
+  document.getElementById('magOvScroll').scrollTop = 0;
+  document.getElementById('magOvScroll').scrollLeft = 0;
+  document.querySelectorAll('#magJump button').forEach(b=>b.classList.toggle('on', +b.dataset.p === i));
+}
+function magOvStep(d){
+  const n = magIdx + d;
+  if(n < 1 || n > MAG.pages) return;
+  magOpen(n, true);
+}
+function magOvClose(){
+  document.getElementById('magOv').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e=>{
+  if(!document.getElementById('magOv') || !document.getElementById('magOv').classList.contains('open')) return;
+  if(e.key === 'Escape') magOvClose();
+  if(e.key === 'ArrowRight') magOvStep(1);
+  if(e.key === 'ArrowLeft') magOvStep(-1);
+});
 </script>
+
+<div class="mag-ov" id="magOv">
+  <div class="mag-ov-bar">
+    <button type="button" onclick="magOvClose()">✕ 닫기</button>
+    <span id="magOvNo">1 / 1</span>
+    <div class="mag-ov-z">
+      <button type="button" onclick="magSetZoom(magZoom-0.5)">−</button>
+      <span id="magOvZ">100%</span>
+      <button type="button" onclick="magSetZoom(magZoom+0.5)">＋</button>
+    </div>
+  </div>
+  <div class="mag-ov-scroll" id="magOvScroll"><img id="magOvImg" alt="매거진 페이지" src=""></div>
+  <div class="mag-ov-nav">
+    <button type="button" onclick="magOvStep(-1)">◀ 이전</button>
+    <a href="./magazine.pdf" target="_blank" rel="noopener">🔍 PDF로 보기</a>
+    <button type="button" onclick="magOvStep(1)">다음 ▶</button>
+  </div>
+</div>
 </body>
 </html>

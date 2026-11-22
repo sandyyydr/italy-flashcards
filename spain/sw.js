@@ -1,4 +1,4 @@
-const CACHE = 'iberia-planner-v2';
+const CACHE = 'iberia-planner-v3';
 const PRECACHE = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', e => {
