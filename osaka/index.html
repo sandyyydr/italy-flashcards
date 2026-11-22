@@ -351,7 +351,7 @@ const RATE = 8.49; // 100엔 = 849원
 const CATS = ['🍽️ 밥·카페','🎟️ 입장·체험','🚇 교통','🛍️ 쇼핑·굿즈','🏪 편의점·기타'];
 const DEFAULT_DAYS = [
   {d:"11/28(토)", city:"난바", sub:"10~19°C · 오후 소나기(Accu 75%·Apple 37%) · 실내 위주", items:[
-    {t:"15:25", name:"간사이공항(T1) 도착", gq:"Kansai International Airport Terminal 1, Osaka", move:"라피트 38분", segs:[{b:"라피트",l:"38분",w:4,c:"#1E5CA8"}], how:"간사이공항역 → 난카이선 특급 라피트 탑승 → 난카이 난바역 도착", note:"입국 수속 후 난카이선 라피트 탑승", warn:"비짓재팬웹 QR 2종 미리 캡처해 두세요(공항 와이파이 느림). 가는 편 라피트 사전 예매/QR 발권이 빠름!", lat:34.4320, lng:135.2304},
+    {t:"15:25", name:"간사이공항(T1) 도착", gq:"Kansai International Airport Terminal 1, Osaka", move:"공항급행 45분", segs:[{b:"공항급행",l:"45분",w:4,c:"#1E5CA8"}], how:"간사이공항역 1·2번 홈 → 난카이 공항급행(난바행) 탑승 → 난카이 난바역 도착 (약 45분)", note:"입국 수속 후 난카이 공항급행 · 970엔 · 모바일 이코카 찍고 탑승(예약 불필요)", warn:"비짓재팬웹 QR 2종 미리 캡처해 두세요(공항 와이파이 느림). 공항급행은 특급권 없이 모바일 이코카로 개찰 통과 — 잔액 ¥1,000+ 확인, 혼잡하면 서서 갈 수 있어요.", lat:34.4320, lng:135.2304},
     {t:"16:30", name:"에스리드 호텔 난바 이스트 언넥스", gq:"Eslead Hotel Namba East Annex, Osaka", move:"도보 6분", segs:[{l:"도보 6분",w:3}], how:"난카이 난바역 남출구 → 닛폰바시 방면 직진 도보 6분", note:"체크인(M261028461660) · 짐 풀기", warn:"셀프 체크인 안내 메일·비밀번호 미리 확인! 구로몬 시장·편의점 도보 4분 거리.", img:"./img/hotel.jpg", lat:34.6612, lng:135.5061},
     {t:"17:30", name:"난바파크스(단톤) · 빅카메라 · 신사이바시 PARCO", gq:"Shinsaibashi PARCO, Osaka", move:"도보+지하철", segs:[{l:"도보 7분",w:2},{b:"M",l:"2분",w:2,c:"#D62828"}], how:"호텔 도보 7분(난바파크스·빅카메라) → 난바역 미도스지선(빨간선) 신사이바시역 1정거장", note:"토요일 가랑비 대비 실내 위주 쇼핑", warn:"단톤(B shop)은 사이즈 빨리 빠져서 첫날 먼저! 2026-11 개편 면세라 매장 정가 결제(여권 실물 필수).", lat:34.6746, lng:135.5011},
     {t:"20:30", name:"미도스지 일루미네이션 야경", gq:"Midosuji, Chuo Ward, Osaka", move:"도보 산책", segs:[{l:"도보 15분",w:3}], how:"신사이바시 PARCO 앞 미도스지 대로 따라 난바 방면으로 야경 산책 → 호텔 도보 복귀", note:"17:00~25:00 점등 · 저녁 식사 후 산책", warn:"난바~신사이바시 구간이 제일 예뻐요. 토요일 가랑비 대비 접이식 우산 휴대!", img:"./img/xmas.jpg", lat:34.6780, lng:135.5005},
@@ -442,11 +442,23 @@ const PLACES = [
   {n:"닌텐도 오사카 (루쿠아 13F)",c:"굿즈",l:3,w:"11/29 14:00 우메다",la:34.701789,ln:135.496576}
 ];
 let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(JSON.stringify(DEFAULT_DAYS));
+// v8: 기기에 남아 있는 예전 저장본의 '11/28 가는 편 라피트'를 난카이 공항급행으로 치환 (12/01 귀국 라피트는 그대로)
+(function migrateGoingLeg(){
+  let changed = false;
+  (days||[]).forEach(d=>(d.items||[]).forEach(it=>{
+    if(it.name==='간사이공항(T1) 도착' && /라피트/.test((it.move||'')+' '+(it.how||'')+' '+(it.note||'')+' '+(it.warn||''))){
+      const src = DEFAULT_DAYS[0].items[0];
+      it.move = src.move; it.segs = JSON.parse(JSON.stringify(src.segs)); it.how = src.how; it.note = src.note; it.warn = src.warn;
+      changed = true;
+    }
+  }));
+  if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
+})();
 let editPlanIdx = null;
 const CHECKS = [
   "비짓재팬웹 QR (입국·세관 2종 캡처)",
   "USJ 앱에 3명 입장권 QR 사전 등록",
-  "11/28 가는 편 라피트 3인 예매",
+  "11/28 가는 편 난카이 공항급행 3인 (970엔 · 모바일 이코카 찍고 탑승)",
   "아이폰 애플지갑 모바일 이코카 충전(¥4,500)",
   "개인 현금 ¥15,000 환전 (1천엔 10장 + 5천엔 1장)",
   "110V 돼지코 · 멀티탭 · 보조배터리(기내)",
@@ -689,7 +701,7 @@ function renderPlan(){
 function segMeta(move){
   const m = (move||'');
   if(/페리|배/.test(m)) return {ico:'⛴️', col:'#0E86A8', dash:'6,5'};
-  if(/프레차|고속|라피트|공항철도|JR/.test(m)) return {ico:'🚆', col:'#B92929', dash:null};
+  if(/프레차|고속|라피트|공항급행|공항철도|JR/.test(m)) return {ico:'🚆', col:'#B92929', dash:null};
   if(/지하철|사철|트램|미도스지|사카이스지|한신/.test(m)) return {ico:'🚇', col:'#E5532D', dash:null};
   if(/렌터카|차|드라이브|택시/.test(m)) return {ico:'🚗', col:'#14493F', dash:null};
   if(/곤돌라|케이블카|리프트/.test(m)) return {ico:'🚡', col:'#9A5B13', dash:'5,4'};
@@ -726,7 +738,7 @@ function renderMap(){
     if(idx > 0){
       const prev = [pts[idx-1].lat, pts[idx-1].lng];
       if(prev[0]!==ll[0] || prev[1]!==ll[1]){
-        const sm = (pts[idx-1].name.includes('간사이공항') ? segMeta('라피트') : segMeta(p.move));
+        const sm = (pts[idx-1].name.includes('간사이공항') ? segMeta(pts[idx-1].move || '공항급행') : segMeta(p.move));
         const pl = L.polyline([prev, ll],{color:sm.col,weight:4.5,opacity:0.85,dashArray:sm.dash}).addTo(mapObj);
         segLayers[idx-1] = pl;
         const mid = [(prev[0]+ll[0])/2, (prev[1]+ll[1])/2];
