@@ -277,7 +277,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
   <section id="tab-map" class="hidden">
     <div class="day-scroll" id="mapDayScroll"></div>
     <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
-      <button class="act-btn org" id="allPlBtn" onclick="toggleAllPlaces()">⭐ 추천 60곳 함께 보기</button>
+      <button class="act-btn org" id="allPlBtn" onclick="toggleAllPlaces()">⭐ 추천 65곳 함께 보기</button>
       <a class="act-btn map" href="./osaka_2026_all_places.kml" download>📥 KML</a>
     </div>
     <div id="mapBox"></div>
@@ -303,16 +303,16 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
       <div class="row"><div><b>덴노지 · 미도스지</b><br/><span style="font-size:12px;color:var(--sub);">덴시바 크리스마스 마켓(21:30) · 하루카스 300 · 미도스지 일루미네이션(25:00)</span></div><a class="act-btn map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Tenshiba+Osaka">지도</a></div>
     </div>
     <div class="sec-card" style="border-color:var(--gold);">
-      <h3>🗺️ 추천 장소 전체 60곳 (지도·KML)</h3>
+      <h3>🗺️ 추천 장소 전체 65곳 (지도·KML)</h3>
       <div style="font-size:12.5px;color:var(--sub);line-height:1.55;margin-bottom:8px;">
         지금까지 추천받은 곳을 전부 모은 목록이에요. 구글 마이맵스 <b>🇯🇵 오사카 2026 전체 추천 지도</b>와 같은 내용이고,
         아래 <b>KML 내려받기</b>로 파일을 받아 두면 구글맵 앱 → <b>저장됨 → 지도</b>에서 바로 떠요.
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-        <button class="act-btn org" id="pf0" onclick="filterPlaces(0)">전체 60</button>
+        <button class="act-btn org" id="pf0" onclick="filterPlaces(0)">전체 65</button>
         <button class="act-btn" id="pf1" onclick="filterPlaces(1)">① 확정 일정 13</button>
-        <button class="act-btn" id="pf2" onclick="filterPlaces(2)">② 맛집·카페 36</button>
-        <button class="act-btn" id="pf3" onclick="filterPlaces(3)">③ 쇼핑·기타 11</button>
+        <button class="act-btn" id="pf2" onclick="filterPlaces(2)">② 맛집·카페 40</button>
+        <button class="act-btn" id="pf3" onclick="filterPlaces(3)">③ 쇼핑·기타 12</button>
       </div>
       <a class="act-btn org" style="width:100%;justify-content:center;margin-bottom:6px;" target="_blank" rel="noopener" href="https://www.google.com/maps/d/view?mid=1d8qKSSFk_9lc4__nbFN7xX_U8MHXoRo">🗺️ 구글 마이맵스 「오사카 2026 전체 추천 지도」 열기</a>
       <a class="act-btn map" style="width:100%;justify-content:center;margin-bottom:10px;" href="./osaka_2026_all_places.kml" download>📥 KML 내려받기 (구글 마이맵스·구글맵용)</a>
@@ -613,7 +613,12 @@ const PLACES = [
   {n:"울트라마켓 (닛폰바시 위스키)",c:"주류",l:3,w:"위시리스트",la:34.659747,ln:135.506023},
   {n:"단톤 B shop (난바파크스 3F)",c:"패션",l:3,w:"11/28 17:30 첫날 먼저",la:34.662511,ln:135.502025},
   {n:"하루카스 300 (아베노 하루카스 전망대)",c:"전망대",l:3,w:"11/29 저녁 (B안)",la:34.646306,ln:135.513309},
-  {n:"닌텐도 오사카 (루쿠아 13F)",c:"굿즈",l:3,w:"11/29 14:00 우메다",la:34.701789,ln:135.496576}
+  {n:"닌텐도 오사카 (루쿠아 13F)",c:"굿즈",l:3,w:"11/29 14:00 우메다",la:34.701789,ln:135.496576},
+  {n:"타코우메 도톤보리 본점",c:"오뎅·야식",l:2,w:"180년 전통 오뎅 · 16:00~22:30 · 야식 포장 OK",la:34.668807,ln:135.505277},
+  {n:"스시 사카바 사시스 난바점",c:"스시·참치",l:2,w:"난바워크 3번가 · 11:00~22:00 · 참치 스시",la:34.666963,ln:135.505142},
+  {n:"&ISLAND 앤드아일랜드 (기타하마)",c:"강변 카페",l:2,w:"나카노시마 강변 뷰 · 11:00~22:00(일 21:00)",la:34.692215,ln:135.504154},
+  {n:"살롱 드 아만토 (나카자키초)",c:"카페·지브리 감성",l:2,w:"나카자키초 소품샵 거리 · 12:00~22:00",la:34.708071,ln:135.504399},
+  {n:"GAP 신사이바시 (OSAKA 티셔츠)",c:"패션",l:3,w:"도톤보리점 없음 → 신사이바시 1-9-6 · 10:00~22:00",la:34.674423,ln:135.501298}
 ];
 let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(JSON.stringify(DEFAULT_DAYS));
 // v8: 기기에 남아 있는 예전 저장본의 '11/28 가는 편 라피트'를 난카이 공항급행으로 치환 (12/01 귀국 라피트는 그대로)
@@ -969,7 +974,7 @@ function renderPlaces(){
 function toggleAllPlaces(){
   showAllPlaces = !showAllPlaces;
   const b=document.getElementById('allPlBtn');
-  b.textContent = showAllPlaces ? '⭐ 추천 60곳 숨기기' : '⭐ 추천 60곳 함께 보기';
+  b.textContent = showAllPlaces ? '⭐ 추천 65곳 숨기기' : '⭐ 추천 65곳 함께 보기';
   renderMap();
 }
 function renderChecks(){
@@ -1025,7 +1030,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v17';
+const SW_CACHE = 'osaka-planner-v18';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;

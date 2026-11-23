@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2"><Document>
 <name>🇯🇵 오사카 2026 전체 추천 지도</name>
-<description><![CDATA[이승현 님 오사카 3박 4일(2026.11.28~12.01) 추천 장소 전체 지도.<br/>① 확정 일정 ② 맛집·카페(최근호 님 매거진 기준) ③ 쇼핑·기타.<br/>좌표는 2026-11-22 Google Maps 기준 확인. 만든 날 2026-11-22.]]></description>
+<description><![CDATA[이승현 님 오사카 3박 4일(2026.11.28~12.01) 추천 장소 전체 지도.<br/>① 확정 일정 ② 맛집·카페(최근호 님 매거진 + 유저 추가 핫플) ③ 쇼핑·기타.<br/>좌표는 2026-11-22 Google Maps 기준 확인. 만든 날 2026-11-22 · 핫플 5곳 추가 2026-11-24.]]></description>
 <Style id="ly1"><IconStyle><color>ffffffff</color><scale>1.0</scale><Icon><href>http://maps.google.com/mapfiles/kml/paddle/red-circle.png</href></Icon></IconStyle><LabelStyle><scale>0.85</scale></LabelStyle></Style>
 <Style id="ly2"><IconStyle><color>ffffffff</color><scale>1.0</scale><Icon><href>http://maps.google.com/mapfiles/kml/paddle/orange-circle.png</href></Icon></IconStyle><LabelStyle><scale>0.85</scale></LabelStyle></Style>
 <Style id="ly3"><IconStyle><color>ffffffff</color><scale>1.0</scale><Icon><href>http://maps.google.com/mapfiles/kml/paddle/blu-circle.png</href></Icon></IconStyle><LabelStyle><scale>0.85</scale></LabelStyle></Style>
@@ -98,7 +98,7 @@
 <Point><coordinates>135.502295,34.662933,0</coordinates></Point>
 </Placemark>
 </Folder>
-<Folder><name>2. 맛집·카페</name><description>최근호 님 오사카 맛집 매거진(13쪽) 카드 13곳 + 표 후보 23곳</description><open>1</open>
+<Folder><name>2. 맛집·카페</name><description>최근호 님 오사카 맛집 매거진(13쪽) 카드 40곳 + 표 후보 23곳</description><open>1</open>
 <Placemark>
 <name>551 호라이 본점</name>
 <styleUrl>#ly2</styleUrl>
@@ -351,8 +351,36 @@
 <ExtendedData><Data name="구분"><value>디저트</value></Data><Data name="일정"><value>11/29 14:00 우메다</value></Data><Data name="주소"><value>〒530-0017 Osaka, Kita Ward, Kakudachō, 8−７ 阪急うめだ本店 B１F</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=3078132907549391501&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
 <Point><coordinates>135.498562,34.703124,0</coordinates></Point>
 </Placemark>
+<Placemark>
+<name>타코우메 도톤보리 본점</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>오뎅·야식</b><br/><span style='color:#666'>타코우메 도톤보리 본점</span><br/>🗓 추천 · 180년 전통 오뎅 (야식 포장)<br/>⭐ 3.7 / 5 (610리뷰)<br/>영업 16:00~22:30 (매일). 도톤보리 입구, 숙소 도보 15분. 성시경 「먹을텐데」 소개.<br/>📍 1-chōme-1-8 Dōtonbori, Chuo Ward, Osaka, 542-0071<br/><a href='https://maps.google.com/?cid=5675327647209572366&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>오뎅·야식</value></Data><Data name="일정"><value>추천 · 180년 전통 오뎅 (야식 포장)</value></Data><Data name="주소"><value>1-chōme-1-8 Dōtonbori, Chuo Ward, Osaka, 542-0071</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=5675327647209572366&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
+<Point><coordinates>135.505277,34.668807,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>스시 사카바 사시스 난바점</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>스시·참치</b><br/><span style='color:#666'>스시 사카바 사시스 난바점</span><br/>🗓 추천 · 난바 점심·저녁<br/>⭐ 4.3 / 5 (2,666리뷰)<br/>영업 11:00~22:00 (매일). 난바워크 지하상가 안, 숙소 도보 10분. 참치 스시 인기.<br/>📍 〒542-0074 Osaka, Chuo Ward, Sennichimae, 1-chōme−4 (난바워크 3번가)<br/><a href='https://maps.google.com/?cid=17374332037517770750&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>스시·참치</value></Data><Data name="일정"><value>추천 · 난바 점심·저녁</value></Data><Data name="주소"><value>〒542-0074 Osaka, Chuo Ward, Sennichimae, 1-chōme−4 (난바워크 3번가)</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=17374332037517770750&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
+<Point><coordinates>135.505142,34.666963,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>&amp;ISLAND 앤드아일랜드 (기타하마)</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>강변 카페</b><br/><span style='color:#666'>&ISLAND 앤드아일랜드 (기타하마)</span><br/>🗓 추천 · 나카노시마·우메다 동선<br/>⭐ 3.9 / 5 (685리뷰)<br/>영업 11:00~22:00 (일요일 21:00까지). 나카노시마 강변 뷰 카페. 나카노시마 미술관에서 도보 10분.<br/>📍 2-chōme-1-23 Kitahama, Chuo Ward, Osaka, 541-0041<br/><a href='https://maps.google.com/?cid=8890414694056790447&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>강변 카페</value></Data><Data name="일정"><value>추천 · 나카노시마·우메다 동선</value></Data><Data name="주소"><value>2-chōme-1-23 Kitahama, Chuo Ward, Osaka, 541-0041</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=8890414694056790447&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
+<Point><coordinates>135.504154,34.692215,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>살롱 드 아만토 (나카자키초)</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>카페·지브리 감성</b><br/><span style='color:#666'>살롱 드 아만토 (나카자키초)</span><br/>🗓 추천 · 우메다 옆 나카자키초<br/>⭐ 3.7 / 5 (607리뷰)<br/>영업 12:00~22:00 (매일). 지브리 감성 인테리어, 나카자키초 소품샵 거리 한복판. 우메다에서 도보 12분.<br/>📍 1-chōme-7-26 Nakazakinishi, Kita Ward, Osaka, 530-0015<br/><a href='https://maps.google.com/?cid=15027777494711305633&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>카페·지브리 감성</value></Data><Data name="일정"><value>추천 · 우메다 옆 나카자키초</value></Data><Data name="주소"><value>1-chōme-7-26 Nakazakinishi, Kita Ward, Osaka, 530-0015</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=15027777494711305633&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
+<Point><coordinates>135.504399,34.708071,0</coordinates></Point>
+</Placemark>
 </Folder>
-<Folder><name>3. 쇼핑·기타</name><description>쇼핑·체험·전망대 · 11곳</description><open>1</open>
+<Folder><name>3. 쇼핑·기타</name><description>쇼핑·체험·전망대 · 12곳</description><open>1</open>
 <Placemark>
 <name>카와치야 본점 (신세카이 50엔 쿠시카츠)</name>
 <styleUrl>#ly3</styleUrl>
@@ -429,6 +457,13 @@
 <description><![CDATA[<b>굿즈</b><br/><span style='color:#666'>Nintendo OSAKA</span><br/>🗓 11/29 14:00 우메다<br/>⭐ 4.4 / 5 (1,297리뷰)<br/>LUCUA 13F 공식 스토어. 한큐·루쿠아 연결 통로.<br/>📍 ルクア サウス, 13F, 3-chōme-1-1 Umeda, Kita Ward, Osaka, 530-8202<br/><a href='https://maps.google.com/?cid=10144986234021347845&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA'>구글맵에서 열기</a>]]></description>
 <ExtendedData><Data name="구분"><value>굿즈</value></Data><Data name="일정"><value>11/29 14:00 우메다</value></Data><Data name="주소"><value>ルクア サウス, 13F, 3-chōme-1-1 Umeda, Kita Ward, Osaka, 530-8202</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=10144986234021347845&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
 <Point><coordinates>135.496576,34.701789,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>GAP 신사이바시 (OSAKA 티셔츠)</name>
+<styleUrl>#ly3</styleUrl>
+<description><![CDATA[<b>패션</b><br/><span style='color:#666'>GAP 신사이바시 (OSAKA 티셔츠)</span><br/>🗓 추천 · 11/28 신사이바시 쇼핑<br/>⭐ 3.9 / 5 (383리뷰)<br/>영업 10:00~22:00 (매일). GAP 도톤보리점은 현재 없음 → 가장 가까운 신사이바시점(도톤보리에서 도보 8분). OSAKA 로고 티셔츠는 매장 재고 확인.<br/>📍 〒542-0085 Osaka, Chuo Ward, Shinsaibashisuji, 1-chōme−9−6 心斎橋MGビル<br/><a href='https://maps.google.com/?cid=11641388750629567930&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>패션</value></Data><Data name="일정"><value>추천 · 11/28 신사이바시 쇼핑</value></Data><Data name="주소"><value>〒542-0085 Osaka, Chuo Ward, Shinsaibashisuji, 1-chōme−9−6 心斎橋MGビル</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=11641388750629567930&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
+<Point><coordinates>135.501298,34.674423,0</coordinates></Point>
 </Placemark>
 </Folder>
 </Document></kml>
