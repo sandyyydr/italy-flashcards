@@ -1,6 +1,7 @@
-const CACHE = 'osaka-planner-v9';
+const CACHE = 'osaka-planner-v10';
+const PRE = ['./', './index.html', './kix_t1_taxfree_map.webp', './kix_t1_kiosk_zoom.webp'];
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(['./', './index.html'])));
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(PRE)).catch(()=>{}));
   self.skipWaiting();
 });
 self.addEventListener('activate', e => {

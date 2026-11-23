@@ -132,6 +132,41 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
 .tabbar.tight .tab{font-size:10.5px;}
 .tabbar.tight .tab .ico{font-size:19px;}
 
+/* ───────── 🧾 면세 환급 탭 ───────── */
+.tax-hero{background:linear-gradient(150deg,#14493F 0%,#226B5B 100%);color:#FAF7F0;border-radius:16px;padding:15px 16px 13px;margin-bottom:12px;box-shadow:0 2px 10px rgba(20,73,63,.16);}
+.tax-hero .tt{font-size:17px;font-weight:900;letter-spacing:-.3px;line-height:1.35;}
+.tax-hero .ts{font-size:12.5px;color:#CFE0D9;margin-top:6px;line-height:1.55;}
+.tax-hero .ts b{color:#F2C879;}
+.tax-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;}
+.tax-chip{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.26);border-radius:8px;padding:4px 8px;font-size:11px;font-weight:800;color:#EAF3EF;}
+.tax-chip.hot{background:var(--gold);color:#14493F;border-color:var(--gold);}
+.step-card{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--green);border-radius:14px;padding:13px 14px 12px;margin-bottom:0;}
+.step-h{display:flex;align-items:center;gap:8px;}
+.step-n{width:27px;height:27px;border-radius:9px;background:var(--green);color:#fff;font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step-t{font-size:14.5px;font-weight:900;color:var(--green);letter-spacing:-.2px;}
+.step-place{font-size:10.5px;font-weight:800;color:var(--org);background:var(--orgbg);padding:3px 7px;border-radius:6px;margin-left:auto;white-space:nowrap;}
+.step-body{font-size:13px;line-height:1.55;color:var(--ink);margin-top:9px;}
+.step-body ul{margin:0;padding-left:17px;}
+.step-body li{margin-bottom:5px;}
+.step-body li:last-child{margin-bottom:0;}
+.arrow-down{text-align:center;color:#9FB8AE;font-size:15px;line-height:1;margin:5px 0;}
+.imp{background:var(--orgbg);border-left:3.5px solid var(--org);border-radius:9px;padding:9px 11px;font-size:12.5px;color:#7A3214;line-height:1.5;font-weight:600;margin-top:10px;}
+.ok{background:var(--mint);border-left:3.5px solid var(--green);border-radius:9px;padding:9px 11px;font-size:12.5px;color:#14493F;line-height:1.5;font-weight:600;margin-top:10px;}
+.tip{background:#FFF7E3;border:1px dashed #D9B25C;border-radius:10px;padding:9px 11px;font-size:12.5px;line-height:1.55;color:#6B4C12;margin-top:10px;}
+.tip b{color:#5A3A05;}
+table.tbl{width:100%;border-collapse:collapse;font-size:11.5px;line-height:1.4;}
+table.tbl th{background:var(--mint);color:var(--green);font-size:11px;font-weight:900;padding:7px 6px;text-align:left;border-bottom:1.5px solid #CFE0D9;}
+table.tbl td{padding:8px 6px;border-bottom:1px solid #EFEADF;vertical-align:top;}
+table.tbl tr:last-child td{border-bottom:none;}
+table.tbl td.s{font-weight:900;color:var(--ink);width:36%;}
+table.tbl td.a{color:var(--sub);width:26%;font-weight:700;}
+table.tbl .fee0{color:#0F6B33;font-weight:900;}
+table.tbl .fee1{color:var(--org);font-weight:900;}
+.tax-fig{margin:0 0 10px;border-radius:13px;overflow:hidden;border:1px solid var(--line);background:#fff;}
+.tax-fig img{display:block;width:100%;height:auto;cursor:zoom-in;}
+.tax-fig figcaption{font-size:11px;color:var(--sub);padding:6px 10px;border-top:1px solid #EFEADF;background:#F9F7F1;line-height:1.45;}
+.tax-label{font-size:12px;font-weight:900;color:var(--org);margin:12px 0 6px;}
+
 </style>
 </head>
 <body>
@@ -219,6 +254,7 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
         • <b>나카노시마 미술관</b>은 월·화 휴관 → 11/29(일) 필수!<br/>
         • <b>USJ 닌텐도 월드</b>(12:40)는 재입장 불가!
       </div>
+      <a class="act-btn org" style="width:100%;justify-content:center;margin-top:10px;text-decoration:none;" onclick="goTab('tax',document.querySelector('.tab:nth-child(4)'));return false;" href="#tax-map">🧾 면세 환급 4단계 순서도 · T1 지도 보기 →</a>
     </div>
     <div class="sec-card">
       <h3>🛍️ 구역별 위시리스트 19곳</h3>
@@ -247,6 +283,122 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
       <div id="osakaChecks"></div>
     </div>
   </section>
+  <!-- 5. 🧾 면세 환급 순서도 -->
+  <section id="tab-tax" class="hidden">
+    <div class="tax-hero">
+      <div class="tt">🧾 일본 면세 환급, 이 순서만 지키면 끝</div>
+      <div class="ts">2026-11-01 구매분부터 <b>리펀드 방식</b> — 매장에서 10% 빼주지 않아요. <b>세금 포함으로 결제</b>하고, 출국 때 <b>공항 세관 확인</b>을 받은 뒤에 돌려받아요.</div>
+      <div class="tax-chips">
+        <span class="tax-chip">같은 날·같은 매장 세전 ¥5,000↑</span>
+        <span class="tax-chip">세금 포함 ¥5,500↑</span>
+        <span class="tax-chip">구매일~90일 내 출국</span>
+        <span class="tax-chip hot">★ 짐 부치기 전 세관 확인</span>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-h"><div class="step-n">1</div><div class="step-t">출국 전 · 집에서</div><div class="step-place">11/27(금)까지</div></div>
+      <div class="step-body">
+        <ul>
+          <li><b>Visit Japan Web</b> 가입 → 여권 정보 + <b>입국·세관 QR 2종</b> 미리 등록</li>
+          <li>QR·여권 화면은 <b>캡처 저장</b> (공항·매장에서 데이터 안 터질 때 대비)</li>
+          <li><b>여권 원본</b> 필수 — 여권 사진·캡처로는 매장 결제가 안 돼요</li>
+          <li>환급받을 <b>본인 명의 VISA·Mastercard</b> 하나 정해두기</li>
+        </ul>
+        <div class="tip">💡 <b>J-TaxRefund 계정</b>은 미리 만들어도 되지만, <b>여권 인증은 첫 면세 결제 뒤</b>에 하세요. 구매 내역이 없는 상태에서 여권 인증을 누르면 실패가 떠요.</div>
+      </div>
+    </div>
+    <div class="arrow-down">▼</div>
+
+    <div class="step-card">
+      <div class="step-h"><div class="step-n">2</div><div class="step-t">오사카 매장에서 결제</div><div class="step-place">11/28~11/30</div></div>
+      <div class="step-body">
+        <ul>
+          <li>계산 전 <b>여권 제시</b> → <b>세금 포함 정가</b>로 결제 (면세 카운터에서 환급 수단 등록)</li>
+          <li><b>세전 ¥5,000</b> 이상 (세금 포함 ¥5,500). 같은 날·같은 매장 <b>합산 OK</b> — 일반·소모품 구분 없어졌어요</li>
+          <li><b>먹을 것·바로 쓸 화장품은 따로 계산!</b> 한 영수증 물건 중 하나라도 없거나 뜯으면 <b>그 영수증 전체</b>가 환급 제외</li>
+          <li>여권·결제 카드·환급 카드 <b>모두 같은 사람 명의</b> (Amex는 등록 불가 → VISA·Mastercard)</li>
+        </ul>
+        <div class="imp">⭐ 결제 직후 <b>영수증 하단 QR</b>을 찍어 매장별 환급 대행사에 <b>카드/계좌 등록</b> + 영수증 사진 백업! 검색해서 찾은 사이트 말고 <b>영수증 QR</b>로만 들어가세요.</div>
+        <div class="tip">💡 J-TaxRefund는 인증 3단계(<b>이메일 → 여권 → 카드</b>). 가입은 <b>Gmail</b>이 잘 되고, 가입 후 <b>[J-TaxRefund] 계정이 생성되었습니다</b> 메일의 <b>전용 아이디</b>를 저장하세요 — 조회는 이메일이 아니라 그 아이디로 로그인해요.</div>
+      </div>
+    </div>
+    <div class="arrow-down">▼</div>
+
+    <div class="step-card" style="border-left-color:var(--org);">
+      <div class="step-h"><div class="step-n" style="background:var(--org);">3</div><div class="step-t">간사이공항 T1 · 귀국 당일</div><div class="step-place">12/01(화)</div></div>
+      <div class="step-body">
+        <ul>
+          <li><b>★ 위탁수하물 부치기 전 ★</b> 4층 출발 로비 <b>B·C 사이</b> 또는 <b>F·G 사이</b> 키오스크(각 12대)에 <b>여권 스캔</b></li>
+          <li>또는 로비 <b>전용 Wi-Fi</b> 연결 → Visit Japan Web <b>면세구입·환급수속 → 상륙허가증 등록 → 환급수속</b></li>
+          <li>확인 끝난 뒤에 항공사 카운터에서 <b>짐 위탁</b> → 보안검색·출국</li>
+        </ul>
+        <div class="ok">✅ 초록불 <b>Completed and Approved</b> → 수속 완료. 바로 짐 부치러 가면 돼요.</div>
+        <div class="imp">🔴 빨간불 <b>Not Completed</b> → 옆 <b>세관 검사장</b>에서 면세품 실물 확인받고 나서 짐 부치기.</div>
+        <div style="font-size:11.5px;color:var(--sub);margin-top:8px;line-height:1.5;">🕖 12/01 라피트 α 5호 <b>07:34 간사이 도착</b> → 키오스크 → 체크인 → <b>11:00 출발</b>. 도착하자마자 4층으로 올라가세요.</div>
+      </div>
+    </div>
+    <div class="arrow-down">▼</div>
+
+    <div class="step-card">
+      <div class="step-h"><div class="step-n">4</div><div class="step-t">귀국 후 입금 확인</div><div class="step-place">12/1 이후</div></div>
+      <div class="step-body">
+        <ul>
+          <li>대행사 계정에서 <b>환급 처리중 → 환급 완료</b> 확인</li>
+          <li>보통 3~5일(Global Blue) ~ 몇 주, 길면 <b>최대 2개월</b></li>
+          <li>2개월이 지나도 안 들어오면 <b>매장·대행사</b>에 문의 (세관은 환급금을 주지 않아요)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sec-card" style="margin-top:14px;">
+      <h3>💸 매장별 환급 대행사 · 수수료</h3>
+      <table class="tbl">
+        <tr><th>매장</th><th>대행사</th><th>환급 수수료</th></tr>
+        <tr><td class="s">돈키호테<br/><span style="font-size:10.5px;color:var(--sub);font-weight:700;">PPIH 그룹</span></td><td class="a">J-TaxRefund</td><td><span class="fee0">0엔</span><br/><span style="font-size:10.5px;color:var(--sub);">공항 현금 수령만 수수료</span></td></tr>
+        <tr><td class="s">빅카메라</td><td class="a">회사 부담</td><td><span class="fee0">0엔</span><br/><span style="font-size:10.5px;color:var(--sub);">현금 수령은 공항 수수료</span></td></tr>
+        <tr><td class="s">유니클로 · GU<br/>무인양품</td><td class="a">J-TaxRefund</td><td><span class="fee1">약 1~1.3%</span><br/><span style="font-size:10.5px;color:var(--sub);">유니클로 공식 환급액의 약 10%(≈세전 1%)</span></td></tr>
+        <tr><td class="s">다이마루 · 한큐<br/><span style="font-size:10.5px;color:var(--sub);font-weight:700;">백화점</span></td><td class="a">Global Blue</td><td><span class="fee1">최대 2.3%</span><br/><span style="font-size:10.5px;color:var(--sub);">한큐는 비율 미공개(2%대) · 5% 외국인 쿠폰 먼저</span></td></tr>
+        <tr><td class="s">다카시마야</td><td class="a">Global Blue</td><td><span class="fee1">세액의 23%</span><br/><span style="font-size:10.5px;color:var(--sub);">10% 품목이면 ≈2.3%</span></td></tr>
+        <tr><td class="s">3COINS · 시마무라</td><td class="a">JPrefund</td><td><span class="fee1">320엔 정액</span><br/><span style="font-size:10.5px;color:var(--sub);">1~2개월 소요</span></td></tr>
+      </table>
+      <div style="font-size:11.5px;color:var(--sub);line-height:1.55;margin-top:9px;">
+        세전 <b>¥10,000</b>(세금 ¥1,000) 기준 → 돈키호테·빅카메라는 <b style="color:#0F6B33;">¥1,000</b>, 백화점은 수수료 떼고 <b style="color:var(--org);">약 ¥770</b> 환급.<br/>
+        수수료·대행사는 매장이 정하고 예고 없이 바뀌어요. <b>영수증 QR</b>에 뜬 사이트·금액이 최종이에요. 공항에서 <b>현금</b>으로 받으면 어느 매장이든 수수료가 더 붙어요(10% 수준).
+      </div>
+    </div>
+
+    <div class="sec-card" id="tax-map">
+      <h3>🗺️ 간사이 T1 4층 — 키오스크 위치</h3>
+      <div style="font-size:12.5px;color:var(--sub);line-height:1.55;margin-bottom:9px;">
+        국제선 출발 로비(보안검색 <b>전</b>). <b>B·C 사이</b>와 <b>F·G 사이</b>에 면세 수속 키오스크가 각 12대, 세관 직원이 상주해요. 빨간 테두리 안이 <b>전용 Wi-Fi 연결 구역</b>(Visit Japan Web 온라인 수속용)이에요.
+      </div>
+      <figure class="tax-fig">
+        <img loading="lazy" decoding="async" width="1900" height="1191" alt="간사이국제공항 제1터미널 4층 면세 수속 키오스크·세관 검사 장소·전용 Wi-Fi 구역 지도" src="./kix_t1_taxfree_map.webp" onclick="imgOpen('./kix_t1_taxfree_map.webp','간사이 T1 4층 지도')">
+        <figcaption>일본 세관 공식 안내 P3 · 제1터미널 4층 · 탭하면 확대</figcaption>
+      </figure>
+      <div class="tax-label">📍 확대 — 키오스크가 있는 자리</div>
+      <figure class="tax-fig">
+        <img loading="lazy" decoding="async" width="1000" height="1788" alt="B·C 카운터 사이와 F·G 카운터 사이 키오스크 위치 확대" src="./kix_t1_kiosk_zoom.webp" onclick="imgOpen('./kix_t1_kiosk_zoom.webp','키오스크 위치 확대')">
+        <figcaption>① B·C 사이 ② F·G 사이 — 둘 중 가까운 쪽에 여권을 올리면 끝</figcaption>
+      </figure>
+      <a class="act-btn" style="width:100%;justify-content:center;" target="_blank" rel="noopener" href="./kix_tax_refund_kr.pdf">📄 일본 세관 공식 안내 PDF (한국어 4쪽)</a>
+    </div>
+
+    <div class="sec-card">
+      <h3>☑️ 12/01 출국 당일 3줄</h3>
+      <div id="taxChecks"></div>
+    </div>
+
+    <div class="sec-card" style="border-color:var(--gold);background:#FFFBEF;">
+      <h3 style="color:#8A6414;">🧠 한 줄 요약</h3>
+      <div style="font-size:13px;line-height:1.6;color:#5A4410;">
+        <b>세금 포함으로 사고 → 영수증 QR로 카드 등록 → 짐 부치기 전에 4층 키오스크 → 귀국 후 입금 확인.</b><br/>
+        이 네 개만 하면 10%를 다 돌려받아요. 하나라도 빠지면 0원이에요.
+      </div>
+    </div>
+  </section>
+
   <!-- 📖 매거진 (전체 일정 · 맛집 · 쇼핑 PDF) -->
   <section id="tab-mag" class="hidden">
     <div class="mag-tabs">
@@ -303,10 +455,11 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
   </section>
 </main>
 
-<nav class="tabbar">
+<nav class="tabbar tight">
   <button class="tab active" onclick="goTab('money',this)"><span class="ico">💴</span>가계부</button>
   <button class="tab" onclick="goTab('plan',this)"><span class="ico">📋</span>일정</button>
   <button class="tab" onclick="goTab('map',this)"><span class="ico">🗺️</span>지도</button>
+  <button class="tab" onclick="goTab('tax',this)"><span class="ico">🧾</span>면세</button>
   <button class="tab" onclick="goTab('wish',this)"><span class="ico">🛍️</span>위시·체크</button>
   <button class="tab" onclick="goTab('mag',this)"><span class="ico">📖</span>매거진</button>
 </nav>
@@ -800,6 +953,50 @@ function renderChecks(){
     </label>`).join('');
 }
 
+/* ───────── 🧾 면세 환급 탭 ───────── */
+const TAXCHK = [
+  '면세품은 전부 캐리어에 (아직 위탁 안 함) — 여권과 영수증은 손가방에',
+  '4층 출발 로비 B·C 사이 또는 F·G 사이 키오스크에 여권 스캔',
+  '초록불(Completed and Approved) 확인 → 그다음 체크인·수하물 위탁',
+  '빨간불(Not Completed)이면 세관 검사장에서 실물 확인 먼저'
+];
+let taxState = [];
+try{ taxState = JSON.parse(localStorage.getItem('os_tax_v1')||'[]'); }catch(e){ taxState = []; }
+function renderTaxChecks(){
+  const box = document.getElementById('taxChecks');
+  if(!box) return;
+  box.innerHTML = TAXCHK.map((c,i)=>`
+    <label style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid #EFEADF;cursor:pointer;font-size:13px;line-height:1.45;">
+      <input type="checkbox" ${taxState[i]?'checked':''} style="width:19px;height:19px;accent-color:var(--green);flex-shrink:0;margin-top:1px;" onchange="taxState[${i}]=this.checked;localStorage.setItem('os_tax_v1',JSON.stringify(taxState));renderTaxChecks()"/>
+      <span style="${taxState[i]?'text-decoration:line-through;color:#8E9B94;':''}">${c}</span>
+    </label>`).join('');
+}
+let imgZoom = 1;
+function imgOpen(src, label){
+  document.getElementById('imgOvImg').src = src;
+  document.getElementById('imgOvNo').textContent = label || '지도';
+  document.getElementById('imgOv').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  imgZoom = 1;
+  document.getElementById('imgOvImg').style.width = '100%';
+  document.getElementById('imgOvZ').textContent = '100%';
+  document.getElementById('imgOvScroll').scrollTop = 0;
+  document.getElementById('imgOvScroll').scrollLeft = 0;
+}
+function imgSetZoom(z){
+  imgZoom = Math.min(3, Math.max(1, z));
+  document.getElementById('imgOvImg').style.width = (imgZoom*100)+'%';
+  document.getElementById('imgOvZ').textContent = Math.round(imgZoom*100)+'%';
+}
+function imgOvClose(){
+  document.getElementById('imgOv').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e=>{
+  if(!document.getElementById('imgOv') || !document.getElementById('imgOv').classList.contains('open')) return;
+  if(e.key === 'Escape') imgOvClose();
+});
+
 function goTab(id, btn){
   document.querySelectorAll('main > section').forEach(s=>s.classList.add('hidden'));
   document.getElementById('tab-'+id).classList.remove('hidden');
@@ -809,7 +1006,7 @@ function goTab(id, btn){
   if(id==='mag') magInit();
 }
 
-updateDday(); renderMoney(); renderPlan(); renderChecks(); renderPlaces();
+updateDday(); renderMoney(); renderPlan(); renderChecks(); renderPlaces(); renderTaxChecks();
 if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
 const MAG = {pages:11, dir:'./mag/', file:'./magazine.pdf'};
 const MAGS = {
@@ -907,6 +1104,19 @@ document.addEventListener('keydown', e=>{
     <a id="magOvPdf" href="./magazine.pdf" target="_blank" rel="noopener">🔍 PDF로 보기</a>
     <button type="button" onclick="magOvStep(1)">다음 ▶</button>
   </div>
+</div>
+
+<div class="mag-ov" id="imgOv">
+  <div class="mag-ov-bar">
+    <button type="button" onclick="imgOvClose()">✕ 닫기</button>
+    <span id="imgOvNo">지도</span>
+    <div class="mag-ov-z">
+      <button type="button" onclick="imgSetZoom(imgZoom-0.5)">−</button>
+      <span id="imgOvZ">100%</span>
+      <button type="button" onclick="imgSetZoom(imgZoom+0.5)">＋</button>
+    </div>
+  </div>
+  <div class="mag-ov-scroll" id="imgOvScroll"><img id="imgOvImg" alt="간사이국제공항 제1터미널 4층 면세 수속 지도" src=""></div>
 </div>
 </body>
 </html>
