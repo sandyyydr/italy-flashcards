@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="서울 12/11">
+<meta name="theme-color" content="#14493F"/>
+<link rel="manifest" href="./manifest.json"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%2314493F'/><text x='50' y='68' font-size='52' text-anchor='middle'>💍</text></svg>"/>
+<title>12/11~12 서울 · 결혼식 & 반지 투어</title>
+<link rel="stylesheet" href="./vendor/leaflet/leaflet.css"/>
+<script src="./vendor/leaflet/leaflet.js"></script>
+<style>
+:root{--bg:#FAF7F0;--card:#FFFDF7;--green:#14493F;--mint:#E4EFEA;--org:#C25A2A;--orgbg:#FBEEE5;--gold:#F2C879;--line:#E4DEC9;--ink:#1F2D27;--sub:#5B6B63;--rose:#A8495D;--rosebg:#F8E9EC;}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;overscroll-behavior-y:contain;}
+.header{background:var(--green);color:#FAF7F0;padding:calc(env(safe-area-inset-top,14px) + 12px) 16px 14px;position:sticky;top:0;z-index:20;box-shadow:0 2px 10px rgba(20,73,63,.18);}
+.h-top{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.h-title{font-size:19px;font-weight:800;letter-spacing:-.3px;}
+.dday{background:var(--gold);color:var(--green);font-size:12px;font-weight:800;padding:4px 10px;border-radius:99px;white-space:nowrap;}
+.h-flight{margin-top:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:10px;padding:8px 11px;font-size:12px;line-height:1.5;color:#E7F0EC;}
+.h-flight b{color:var(--gold);}
+.off-bar{display:flex;align-items:center;gap:7px;margin-top:8px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.2);border-radius:9px;padding:7px 10px;font-size:11.5px;font-weight:700;color:#E7F0EC;cursor:pointer;}
+.off-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0;}
+.off-bar.ok .off-dot{background:#6EE7A8;box-shadow:0 0 0 3px rgba(110,231,168,.22);}
+.off-bar b{color:var(--gold);}
+.off-bar.ok b{color:#9AF0C2;}
+.off-panel{display:none;margin-top:6px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:10px 11px;font-size:11.5px;line-height:1.55;color:#DCEAE4;}
+.off-panel.open{display:block;}
+.off-panel .op-t{font-size:12px;font-weight:900;color:var(--gold);margin-bottom:5px;}
+.off-btn{margin-top:8px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.34);color:#fff;border-radius:8px;padding:6px 10px;font-size:11.5px;font-weight:800;font-family:inherit;cursor:pointer;}
+.off-toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,14px) + 74px);transform:translateX(-50%);background:rgba(20,73,63,.95);color:#fff;font-size:12.5px;font-weight:700;padding:9px 14px;border-radius:99px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none;max-width:88%;text-align:center;line-height:1.4;}
+.off-toast.show{opacity:1;}
+main{padding:12px 14px calc(env(safe-area-inset-bottom,16px) + 78px);max-width:680px;margin:0 auto;}
+.sum{display:flex;gap:7px;margin-bottom:12px;}
+.sum div{flex:1;background:var(--card);border:1px solid var(--line);border-radius:13px;padding:9px 6px;text-align:center;}
+.sum b{display:block;font-size:17px;font-weight:900;color:var(--green);line-height:1.15;}
+.sum span{font-size:11px;color:var(--sub);font-weight:700;}
+.day-scroll{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none;}
+.day-scroll::-webkit-scrollbar{display:none;}
+.day-chip{flex:0 0 auto;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:8px 13px;text-align:center;min-width:84px;cursor:pointer;font-family:inherit;color:var(--ink);}
+.day-chip.active{background:var(--green);border-color:var(--green);color:#fff;}
+.day-chip .d1{font-size:11px;font-weight:700;opacity:.8;}
+.day-chip .d2{font-size:14.5px;font-weight:800;margin-top:2px;}
+.day-chip .d3{font-size:11px;margin-top:1px;opacity:.85;}
+.day-banner{background:var(--mint);border-radius:14px;padding:11px 14px;margin-bottom:12px;}
+.day-banner h2{margin:0;font-size:15.5px;font-weight:800;color:var(--green);letter-spacing:-.2px;}
+.day-banner p{margin:4px 0 0;font-size:12.5px;color:var(--sub);line-height:1.5;}
+.item-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 13px;margin-bottom:10px;}
+.it-head{display:flex;gap:9px;align-items:flex-start;}
+.it-no{width:25px;height:25px;flex-shrink:0;border-radius:50%;background:var(--green);color:#fff;font-size:12.5px;font-weight:900;display:flex;align-items:center;justify-content:center;margin-top:2px;}
+.it-no.sm{width:21px;height:21px;font-size:11px;background:#7B8A82;}
+.it-main{flex:1;min-width:0;}
+.it-time{font-size:15px;font-weight:900;color:var(--org);letter-spacing:-.2px;}
+.it-title{font-size:15.5px;font-weight:800;margin:3px 0 5px;line-height:1.35;letter-spacing:-.2px;}
+.it-note{font-size:13px;color:var(--sub);line-height:1.5;margin:0;}
+.it-note b{color:#33473D;}
+.it-warn{margin-top:8px;background:var(--orgbg);border-left:3.5px solid var(--org);border-radius:8px;padding:7px 10px;font-size:12.5px;color:#7A3214;line-height:1.45;font-weight:600;}
+.pill{font-size:11.5px;font-weight:800;padding:3px 8px;border-radius:7px;white-space:nowrap;flex-shrink:0;}
+.p-g{background:#D8EDE2;color:#0F6244;}
+.p-o{background:var(--orgbg);color:var(--org);}
+.p-r{background:var(--rosebg);color:var(--rose);}
+.p-b{background:#E5EBF4;color:#33517B;}
+.p-n{background:#EEEAE0;color:#6B6350;}
+.route-box{margin-top:9px;background:#F6F4EC;border:1px solid #E5E1D6;border-radius:10px;padding:7px 9px 8px;}
+.route-bar{display:flex;height:21px;border-radius:99px;overflow:hidden;background:#E9E6DE;font-size:10.5px;font-weight:800;line-height:21px;}
+.r-seg{display:flex;align-items:center;justify-content:center;white-space:nowrap;overflow:hidden;padding:0 3px;min-width:26px;}
+.r-walk{background:#E3E0D7;color:#5C6360;}
+.r-sub{background:#2D6FD0;color:#fff;}
+.r-bus{background:#1E8A57;color:#fff;}
+.r-taxi{background:#E39A34;color:#3F2A0C;}
+.r-train{background:#0E7C86;color:#fff;}
+.r-txt{font-size:11.5px;color:var(--green);font-weight:700;margin-top:5px;line-height:1.4;}
+.it-actions{display:flex;gap:7px;margin-top:9px;flex-wrap:wrap;}
+.act-btn{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:9px;padding:7px 11px;font-size:12.5px;font-weight:700;text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;gap:4px;font-family:inherit;line-height:1.2;}
+.act-btn.map{background:var(--green);border-color:var(--green);color:#fff;}
+.act-btn.org{background:var(--org);border-color:var(--org);color:#fff;}
+.act-btn.gold{background:var(--gold);border-color:var(--gold);color:#14493F;}
+.act-btn.rose{background:var(--rose);border-color:var(--rose);color:#fff;}
+.act-btn.wide{flex:1;justify-content:center;}
+.sec-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:13px 14px;margin-bottom:12px;}
+.sec-card h3{margin:0 0 9px;font-size:15px;font-weight:800;color:var(--green);letter-spacing:-.2px;}
+.sec-card h3 .sub{font-size:11.5px;font-weight:700;color:var(--sub);margin-left:4px;}
+.row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #EFEADF;font-size:13.5px;gap:8px;}
+.row:last-child{border-bottom:none;}
+.row b{font-weight:800;}
+.seg{display:flex;background:#EAE4D3;border-radius:12px;padding:4px;margin-bottom:12px;}
+.seg button{flex:1;border:none;background:none;padding:9px 4px;border-radius:9px;font-size:13.5px;font-weight:800;color:var(--sub);cursor:pointer;font-family:inherit;}
+.seg button.active{background:var(--green);color:#fff;}
+.seg.ab button.active{background:var(--rose);}
+.hint{font-size:12px;color:var(--sub);line-height:1.55;margin:6px 0 0;}
+.cmp{width:100%;border-collapse:collapse;font-size:12.5px;}
+.cmp th,.cmp td{border-bottom:1px solid #EFEADF;padding:8px 5px;text-align:left;vertical-align:top;line-height:1.45;}
+.cmp th{font-size:11.5px;color:var(--sub);font-weight:800;background:#F6F3E9;}
+.cmp tr:last-child td{border-bottom:none;}
+.cmp td:first-child{white-space:nowrap;font-weight:800;color:#3B4A42;font-size:12px;}
+.cmp .a{color:#146A5B;} .cmp .b{color:#7A4B8E;}
+.chip-scroll{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none;}
+.chip-scroll::-webkit-scrollbar{display:none;}
+.cpill{flex:0 0 auto;border:1.5px solid var(--line);background:var(--card);border-radius:99px;padding:7px 13px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit;color:var(--sub);}
+.cpill.active{background:var(--green);border-color:var(--green);color:#fff;}
+.food-card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:12px 13px;margin-bottom:9px;}
+.food-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+.food-name{font-size:15px;font-weight:800;letter-spacing:-.2px;line-height:1.3;}
+.food-cat{font-size:10.5px;font-weight:800;color:var(--sub);background:#F0ECE0;border-radius:6px;padding:2px 6px;white-space:nowrap;flex-shrink:0;margin-top:2px;}
+.food-meta{font-size:12.5px;color:var(--sub);line-height:1.5;margin-top:5px;}
+.food-meta b{color:#33473D;}
+.food-price{font-size:12.5px;font-weight:800;color:var(--org);margin-top:5px;line-height:1.45;}
+.star-row{display:flex;gap:6px;align-items:center;font-size:11.5px;font-weight:800;color:var(--green);margin-top:5px;}
+.pinlist{display:grid;grid-template-columns:1fr;gap:6px;}
+.pinrow{display:flex;align-items:center;gap:8px;font-size:12.6px;padding:6px 2px;border-bottom:1px solid #F0ECE2;cursor:pointer;}
+.pinrow:last-child{border-bottom:none;}
+.pindot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+#mapBox{height:420px;border-radius:16px;border:1.5px solid var(--line);overflow:hidden;margin-bottom:10px;background:#DCE7EA;}
+.leaflet-pin{display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;color:#fff;font-size:11px;font-weight:900;border:2px solid #FFFDF7;box-shadow:0 1px 4px rgba(0,0,0,.35);}
+.leaflet-popup-content{font-size:12.5px;line-height:1.5;}
+.leaflet-popup-content b{font-size:13px;}
+.map-tools{display:flex;gap:7px;margin-bottom:9px;flex-wrap:wrap;}
+.tool{border:1.5px solid var(--line);background:var(--card);border-radius:9px;padding:7px 11px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit;color:var(--sub);}
+.tool.on{background:var(--green);border-color:var(--green);color:#fff;}
+.mapimg{border-radius:14px;border:1px solid var(--line);overflow:hidden;background:#fff;}
+.mapimg img{display:block;width:100%;height:auto;cursor:zoom-in;}
+.chk-row{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #EFEADF;}
+.chk-row:last-child{border-bottom:none;}
+.chk-btn{width:25px;height:25px;border-radius:8px;border:2px solid var(--green);background:#fff;color:#fff;font-size:14px;font-weight:900;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:0;font-family:inherit;}
+.chk-row.done .chk-btn{background:var(--green);}
+.chk-txt{flex:1;font-size:13.5px;line-height:1.5;font-weight:700;}
+.chk-row.done .chk-txt{text-decoration:line-through;color:#9A968A;font-weight:600;}
+.chk-sub{display:block;font-size:11.5px;color:var(--sub);font-weight:600;margin-top:2px;}
+.prog{height:9px;border-radius:99px;background:#EAE4D3;overflow:hidden;margin:2px 0 9px;}
+.prog i{display:block;height:100%;background:var(--green);border-radius:99px;transition:width .25s;}
+.mag-hero{background:var(--green);color:#FAF7F0;border-radius:16px;padding:14px 15px;margin-bottom:12px;}
+.mag-hero .mt{font-size:16.5px;font-weight:800;letter-spacing:-.2px;}
+.mag-hero .ms{font-size:12.5px;color:#CFE0D9;margin-top:5px;line-height:1.55;}
+.mag-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px;}
+.mag-btn{display:flex;align-items:center;justify-content:center;gap:5px;padding:13px 4px;border-radius:11px;font-size:13.5px;font-weight:800;text-decoration:none;border:1.5px solid transparent;line-height:1.2;text-align:center;}
+.mag-btn.solid{background:var(--gold);color:#14493F;}
+.mag-btn.out{background:rgba(255,255,255,.13);color:#fff;border-color:rgba(255,255,255,.5);}
+.mag-note{font-size:11.5px;color:#CFE0D9;margin-top:9px;line-height:1.55;}
+.mag-jump{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none;}
+.mag-jump::-webkit-scrollbar{display:none;}
+.mag-jump button{flex:0 0 auto;min-width:36px;height:34px;border-radius:9px;border:1.5px solid var(--line);background:var(--card);font-size:12.5px;font-weight:800;color:var(--sub);cursor:pointer;padding:0 7px;font-family:inherit;}
+.mag-jump button.on{background:var(--green);border-color:var(--green);color:#fff;}
+.mag-page{position:relative;margin:0 0 10px;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#fff;box-shadow:0 1px 5px rgba(20,73,63,.07);scroll-margin-top:104px;}
+.mag-page img{display:block;width:100%;height:auto;cursor:zoom-in;}
+.mag-page .pgno{position:absolute;left:8px;top:8px;background:rgba(20,73,63,.85);color:#fff;font-size:11px;font-weight:800;padding:3px 8px;border-radius:99px;}
+.mag-ov{position:fixed;inset:0;background:#0E0E0E;z-index:70;display:none;flex-direction:column;}
+.mag-ov.open{display:flex;}
+.mag-ov-bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:calc(env(safe-area-inset-top,10px) + 9px) 12px 9px;background:#191919;color:#fff;font-size:13px;font-weight:800;}
+.mag-ov-bar #magOvNo{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mag-ov-bar button{background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:9px;padding:8px 11px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;}
+.mag-ov-z{display:flex;align-items:center;gap:2px;}
+.mag-ov-z span{min-width:46px;text-align:center;font-size:12px;font-weight:800;}
+.mag-ov-scroll{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;display:flex;align-items:flex-start;justify-content:center;}
+.mag-ov-scroll img{display:block;width:100%;height:auto;max-width:none;margin:auto;}
+.mag-ov-foot{display:flex;gap:6px;padding:8px 10px calc(env(safe-area-inset-bottom,10px) + 8px);background:#191919;}
+.mag-ov-foot button,.mag-ov-foot a{flex:1;text-align:center;background:rgba(255,255,255,.14);color:#fff;border:none;border-radius:10px;padding:11px 4px;font-size:13px;font-weight:800;text-decoration:none;font-family:inherit;}
+.map-ov{position:fixed;inset:0;background:#0E0E0E;z-index:72;display:none;flex-direction:column;}
+.map-ov.open{display:flex;}
+.map-ov .mag-ov-scroll img{width:100%;max-width:none;}
+.map-ov .mag-ov-scroll.z img{width:200%;}
+nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;padding:6px 4px calc(env(safe-area-inset-bottom,10px) + 4px);z-index:30;}
+.tab{flex:1;border:none;background:none;padding:6px 0;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:800;color:var(--sub);cursor:pointer;font-family:inherit;}
+.tab.active{color:var(--green);}
+.tab .ico{font-size:19px;line-height:1;}
+.hidden{display:none;}
+a.tel{color:var(--green);font-weight:800;text-decoration:none;}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="h-top">
+    <div class="h-title">💍 12/11~12 서울 여행</div>
+    <div class="dday" id="ddayBadge">D-…</div>
+  </div>
+  <div class="h-flight">
+    <b>KTX 가는 편</b> 12/11(금) 김천구미 11:44 → 서울역 13:11 · 2매 예매 완료<br/>
+    <b>숙소</b> 트래디업 호텔 (12/11 15:00 ~ 12/12 12:00) · <b>본식</b> 12/12(토) 14:30 로얄호텔서울
+  </div>
+  <div class="off-bar" id="offBar" onclick="toggleOffPanel()">
+    <span class="off-dot" id="offDot"></span>
+    <span id="offBadge">📥 오프라인 저장 준비 중…</span>
+    <span style="margin-left:auto;font-size:10px;opacity:.7;" id="offChev">▾</span>
+  </div>
+  <div class="off-panel" id="offPanel">
+    <div class="op-t">📴 지하철·비행기에서 쓰는 법</div>
+    <div id="offPanelBody">와이파이에서 이 앱을 <b>한 번만 열어두면</b> 일정·반지 비교·맛집·위성지도·매거진 9쪽까지 인터넷 없이 열립니다.<div id="offStatus" style="margin-top:6px;color:#9AF0C2;font-weight:800;"></div></div>
+    <button class="off-btn" onclick="event.stopPropagation();ensureOffline(true)">🔄 지금 다시 저장</button>
+  </div>
+</header>
+
+<main>
+  <!-- 🗓️ 일정 -->
+  <section id="tab-plan">
+    <div class="sum">
+      <div><b>6</b><span>확정</span></div>
+      <div><b>4</b><span>예약 전</span></div>
+      <div><b>2</b><span>두 사람이 정할 것</span></div>
+    </div>
+    <div class="day-scroll">
+      <button class="day-chip active" id="chipD1" onclick="pickDay(1,this)"><div class="d1">12/11</div><div class="d2">금요일</div><div class="d3">반지 4곳</div></button>
+      <button class="day-chip" id="chipD2" onclick="pickDay(2,this)"><div class="d1">12/12</div><div class="d2">토요일</div><div class="d3">본식 · A/B</div></button>
+    </div>
+
+    <div id="day1">
+      <div class="day-banner">
+        <h2>12/11(금) — 김천 → 서울 → 반지 4곳</h2>
+        <p>11:44 KTX → 13:29 호텔 짐 보관 → 14:30 원골드 → 15:30 존폴 → 17:00 공방301(확정) → 18:30 새미 → 저녁 → 21:00 체크인</p>
+      </div>
+      <div id="tl1"></div>
+      <div class="sec-card">
+        <h3>🏨 숙소 <span class="sub">12/11~12 · 1박</span></h3>
+        <div class="row"><div><b>트래디업 호텔 바이 더 디자이너스</b><br/><span style="font-size:12px;color:var(--sub);">종로구 삼일대로26길 7 · 디럭스 트윈 · 조식 포함 · 주차 불가</span></div><span class="pill p-g">확정</span></div>
+        <div class="row"><div>체크인 12/11 <b>15:00</b> · 체크아웃 12/12 <b>12:00</b><br/><span style="font-size:12px;color:var(--sub);">짐은 13:29에 미리 맡겨두고 15:00 이후 체크인</span></div></div>
+        <div class="row"><div>기존 <b>북촌애 한옥</b>은 취소 완료</div><span class="pill p-n">취소 완료</span></div>
+        <div class="row"><div>프런트 <a class="tel" href="tel:027633196">02-763-3196</a></div><a class="act-btn map" target="_blank" rel="noopener" href="http://place.map.kakao.com/1186497591">카카오맵</a></div>
+      </div>
+      <div class="sec-card">
+        <h3>🎄 12/11 밤 — 연말 축제 <span class="sub">무료 · 하나만 골라도 충분</span></h3>
+        <div class="row"><div><b>2026 서울빛초롱축제 개막일</b><br/><span style="font-size:12px;color:var(--sub);">청계천 삼일교~청계광장 · 18:00~23:00 · 호텔 도보 12분</span></div><a class="act-btn map" target="_blank" rel="noopener" href="http://place.map.kakao.com/11512319">지도</a></div>
+        <div class="row"><div><b>2026 광화문 마켓 개막일</b><br/><span style="font-size:12px;color:var(--sub);">광화문광장 · 17:30~22:30 · 산타마을·대형 트리</span></div><a class="act-btn map" target="_blank" rel="noopener" href="http://place.map.kakao.com/8193961">지도</a></div>
+        <p class="hint">둘 다 12/11(금)이 첫날이에요. 저녁 식사 후 청계천 산책이면 호텔까지 걸어서 12분이라 부담 없어요.</p>
+      </div>
+    </div>
+
+    <div id="day2" class="hidden">
+      <div class="day-banner">
+        <h2>12/12(토) — 두 갈래로 움직여 14:30에 만납니다</h2>
+        <p>08:30 조식 → 10:30 짐 맡기기 → 승현 11:05 출발·12:00 리우 → 14:30 본식 → 16:30 종료 → A안(해방촌) / B안(서촌)</p>
+      </div>
+      <div id="tl2"></div>
+
+      <div class="sec-card" style="border-color:#E2C3CB;background:#FFFBFB;">
+        <h3 style="color:var(--rose);">🅰️🅱️ 예식 후 — 아직 두 사람이 정할 것</h3>
+        <p class="hint" style="margin-top:0;">호텔 밤 짐 픽업(20~21시)이 확정되면 <b>A안</b>, 아니면 <b>B안</b>이 안전해요. 정하면 바로 귀가 KTX를 예매하면 됩니다.</p>
+        <div class="seg ab" style="margin:11px 0 11px;">
+          <button class="active" id="segA" onclick="pickAB('A')">🅰️ A안 · 해방촌</button>
+          <button id="segB" onclick="pickAB('B')">🅱️ B안 · 서촌</button>
+        </div>
+        <div id="abA"></div>
+        <div id="abB" class="hidden"></div>
+      </div>
+
+      <div class="sec-card">
+        <h3>⚖️ 한 줄 비교</h3>
+        <table class="cmp">
+          <tr><th></th><th class="a">A안 · 해방촌</th><th class="b">B안 · 서촌</th></tr>
+          <tr><td>사진</td><td>즉석 2장 + 인화 1장<br/><b>30,000원</b></td><td>포토부스 1~2곳<br/><b>5,000~12,000원</b></td></tr>
+          <tr><td>귀가</td><td>22:08 KTX · 23:32 김천구미</td><td>19:35 KTX · 20:57 김천구미</td></tr>
+          <tr><td>리스크</td><td>호텔 밤 짐 픽업 확인 필요</td><td>캐리어를 들고 다님</td></tr>
+          <tr><td>매력</td><td>남산 일몰 17:14 · 시장 저녁</td><td>골목·전시·카페 · 집에 일찍</td></tr>
+        </table>
+      </div>
+
+      <div class="sec-card">
+        <h3>🚄 귀가 KTX <span class="sub">A/B 정한 뒤 예매 · 전부 미예매</span></h3>
+        <div class="row"><div><b>19:35 → 20:57</b> KTX-산천 69<br/><span style="font-size:12px;color:var(--sub);">B안 · 서촌 18:51 버스</span></div><span class="pill p-b">B안</span></div>
+        <div class="row"><div><b>20:58 → 22:27</b> KTX 075<br/><span style="font-size:12px;color:var(--sub);">A안 빠른 귀가 · 해방촌 19:50 출발</span></div><span class="pill p-o">A안</span></div>
+        <div class="row"><div><b>22:08 → 23:32</b> KTX-산천 229<br/><span style="font-size:12px;color:var(--sub);">A안 여유 · 해방촌 20:45 출발</span></div><span class="pill p-o">A안</span></div>
+        <div class="row"><div><b>22:58 → 00:32</b> KTX 137<br/><span style="font-size:12px;color:var(--sub);">놓쳤을 때 마지막 수단 · 코레일톡에서 확인</span></div><span class="pill p-n">예비</span></div>
+        <p class="hint">오는 편 3개 모두 아직 예매 전이에요(2026-11-01 개정 시간표).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 💍 반지·체크 -->
+  <section id="tab-ring" class="hidden">
+    <div class="sec-card" style="background:var(--green);border-color:var(--green);color:#FAF7F0;">
+      <h3 style="color:var(--gold);margin-bottom:6px;">12/11(금) 반지 4곳 — 금 색감·가성비 순</h3>
+      <div style="font-size:13px;line-height:1.65;color:#DFEDE7;">
+        14:30 <b style="color:#fff;">원골드</b> → 15:30 <b style="color:#fff;">존폴쥬얼리</b> → 17:00 <b style="color:#fff;">공방301</b>(확정) → 18:30 <b style="color:#fff;">새미쥬얼리</b><br/>
+        나비드주얼리는 이번엔 <b style="color:var(--gold);">제외</b>했어요(18:00 마감 · 새미와 겹침).
+      </div>
+    </div>
+
+    <div class="sec-card">
+      <h3>💛 취향 · 예산</h3>
+      <div class="row"><div><b>취향</b></div><div style="text-align:right;font-size:13px;">샴페인골드 · 세로결 · 밀그레인<br/><span style="color:var(--sub);font-size:12px;">흰주얼리는 제외</span></div></div>
+      <div class="row"><div><b>예산</b></div><div style="text-align:right;font-size:13px;">한 쌍 <b>150~250만 원</b></div></div>
+      <div class="row"><div><b>물어볼 것</b></div><div style="text-align:right;font-size:13px;">예약금·취소 규정<br/>평일 예약 할인·상품권 적용 여부</div></div>
+    </div>
+
+    <div class="sec-card">
+      <h3>📋 4곳 비교 <span class="sub">시간·가성비·취소·특징</span></h3>
+      <table class="cmp">
+        <tr><th></th><th>원골드</th><th>존폴</th><th>공방301</th><th>새미</th></tr>
+        <tr><td>시간</td><td><b>14:30</b></td><td><b>15:30</b></td><td><b>17:00</b></td><td><b>18:30</b></td></tr>
+        <tr><td>가격대</td><td>80~170만</td><td>190~250만</td><td>160~230만</td><td>230~280만</td></tr>
+        <tr><td>가성비</td><td>1위</td><td>3위</td><td>2위</td><td>4위</td></tr>
+        <tr><td>금 색감</td><td>3위</td><td>2위</td><td><b>1위</b></td><td>4위</td></tr>
+        <tr><td>취소</td><td>당일도 무료</td><td>12/10까지</td><td><b>환불 불가</b></td><td>당일도 무료</td></tr>
+      </table>
+      <p class="hint">가성비 = 한 쌍 가격대 순 · 금 색감 = 11/23 정리한 색감·세공 순위</p>
+    </div>
+
+    <div id="ringCards"></div>
+
+    <div class="sec-card">
+      <h3>🔁 취소 규정 3단 정리</h3>
+      <div class="row"><div><b>취소 자유</b><br/><span style="font-size:12px;color:var(--sub);">원골드 · 새미 — 예약금 0원, 그 자리에서 정리해도 손해 없음</span></div><span class="pill p-g">안전</span></div>
+      <div class="row"><div><b>12/10(목)까지</b><br/><span style="font-size:12px;color:var(--sub);">존폴 — 그 뒤엔 예약금 2만 원이 날아감</span></div><span class="pill p-o">주의</span></div>
+      <div class="row"><div><b>취소 불가</b><br/><span style="font-size:12px;color:var(--sub);">공방301 — 취소·미계약·15분 이상 지연이면 예약금 2만 원 환불 불가</span></div><span class="pill p-r">고정</span></div>
+      <p class="hint">마음에 드는 곳이 14:30~15:30에 나오면, 뒤 매장은 그 자리에서 정리해도 예약금 손실이 없어요.</p>
+    </div>
+
+    <div class="sec-card">
+      <h3>✅ 출발 전 체크리스트 <span class="sub" id="chkProg"></span></h3>
+      <div class="prog"><i id="chkBar" style="width:0%"></i></div>
+      <div id="chkList"></div>
+      <p class="hint">체크한 건 이 휴대폰에 저장돼요(앱을 껐다 켜도 유지).</p>
+    </div>
+
+    <div class="sec-card">
+      <h3>☎️ 당일 연락처</h3>
+      <div class="row"><div><b>로얄호텔서울</b> (예식)<br/><span style="font-size:12px;color:var(--sub);">명동길 61</span></div><a class="act-btn map" href="tel:027561112">02-756-1112</a></div>
+      <div class="row"><div><b>트래디업 호텔</b> (짐)<br/><span style="font-size:12px;color:var(--sub);">삼일대로26길 7</span></div><a class="act-btn map" href="tel:027633196">02-763-3196</a></div>
+      <div class="row"><div><b>리우 메이크업</b><br/><span style="font-size:12px;color:var(--sub);">성수일로4가길 7 · 카톡만</span></div><a class="act-btn" href="tel:07077777582">070-7777-7582</a></div>
+      <div class="row"><div><b>지름길 사진관</b><br/><span style="font-size:12px;color:var(--sub);">소월로20길 36</span></div><a class="act-btn" href="tel:01084312368">010-8431-2368</a></div>
+      <div class="row"><div><b>공방301 종로점</b><br/><span style="font-size:12px;color:var(--sub);">예약번호 1414646049</span></div><a class="act-btn" target="_blank" rel="noopener" href="http://place.map.kakao.com/1616862769">지도</a></div>
+    </div>
+
+    <div class="sec-card">
+      <h3>⏱️ 밀렸을 때</h3>
+      <div class="row"><div><b>예식 인사가 길면</b><br/><span style="font-size:12px;color:var(--sub);">A안은 지름길 사진관 17:00만, B안은 포토부스 1곳만 찍고 골목 30분</span></div></div>
+      <div class="row"><div><b>사진관 대기 길면</b><br/><span style="font-size:12px;color:var(--sub);">일몰 17:14를 먼저 보고 내려와 촬영 · 순서를 바꿔도 됨</span></div></div>
+      <div class="row"><div><b>택시가 안 잡히면</b><br/><span style="font-size:12px;color:var(--sub);">해방촌 → 서울역 버스 402 (20:56 → 21:10) · 단 호텔 짐은 못 찾음</span></div></div>
+      <div class="row"><div><b>KTX를 놓치면</b><br/><span style="font-size:12px;color:var(--sub);">22:58 KTX 137 → 00:32 김천구미</span></div></div>
+    </div>
+  </section>
+
+  <!-- 🍽️ 맛집·카페 -->
+  <section id="tab-food" class="hidden">
+    <div class="day-banner" style="background:#FBEEE5;">
+      <h2 style="color:var(--org);">🍽️ 전부 선택이에요</h2>
+      <p>12/11은 카페 1 + 저녁 1이면 충분하고, <b>예약이 필요한 건 스타 셰프 3곳</b>뿐이에요. 카드를 누르면 지도·예약으로 바로 갑니다.</p>
+    </div>
+    <div class="chip-scroll" id="foodChips"></div>
+    <div id="foodList"></div>
+  </section>
+
+  <!-- 🗺️ 지도 -->
+  <section id="tab-map" class="hidden">
+    <div class="map-tools">
+      <button class="tool on" id="lyrOsm" onclick="setLayer('osm')">🗺️ 기본 지도</button>
+      <button class="tool" id="lyrSat" onclick="setLayer('sat')">🛰️ 위성 지도</button>
+      <button class="tool" onclick="fitAll()">📍 전체 핀 보기</button>
+    </div>
+    <div id="mapBox"></div>
+    <div class="sec-card">
+      <h3>핀 목록 <span class="sub">누르면 지도에서 그 자리로</span></h3>
+      <div class="pinlist" id="pinList"></div>
+      <p class="hint" style="margin-top:8px;">색: <b style="color:#1F8A5B;">반지·호텔</b> · <b style="color:#2D6FD0;">12/12 오전</b> · <b style="color:#C25A2A;">A안 해방촌</b> · <b style="color:#7A4B8E;">B안 서촌</b> · <b style="color:#8C8A80;">카페·맛집</b> · <b style="color:#B03A3A;">축제</b></p>
+    </div>
+    <div class="sec-card">
+      <h3>🛰️ 전체 동선 위성지도 <span class="sub">A/B 둘 다 표시</span></h3>
+      <div class="mapimg" onclick="openMapOv()"><img src="./img/route_map_small.webp" alt="12/11~12 서울 전체 동선 위성지도"/></div>
+      <div class="it-actions" style="margin-top:10px;">
+        <button class="act-btn map wide" onclick="openMapOv()">🔍 크게 보기</button>
+        <a class="act-btn wide" href="./img/route_map.webp" target="_blank" rel="noopener" download="서울_동선_위성지도.webp">⬇️ 저장</a>
+      </div>
+      <p class="hint">카카오맵 좌표 기준 · 자세한 시각은 일정 탭, 사진 크게 보기는 매거진 9쪽에도 있어요.</p>
+    </div>
+  </section>
+
+  <!-- 📖 매거진 -->
+  <section id="tab-mag" class="hidden">
+    <div class="mag-hero">
+      <div class="mt">📖 서울 가이드 9쪽</div>
+      <div class="ms">결혼식 & 반지 투어 통합본 · 세로형 큰 글씨 · 2026-11-24 기준 확정본</div>
+      <div class="mag-btns">
+        <a class="mag-btn solid" href="./magazine.pdf" target="_blank" rel="noopener">🔍 PDF로 보기</a>
+        <a class="mag-btn out" href="./magazine.pdf" download="1211_1212_서울_결혼식_반지투어.pdf">⬇️ 저장</a>
+      </div>
+      <div class="mag-note">지하철·비행기처럼 인터넷이 없을 때는 아래 이미지 뷰가 바로 열려요.</div>
+    </div>
+    <div style="background:var(--orgbg);border-left:3.5px solid var(--org);border-radius:10px;padding:9px 11px;font-size:12.5px;line-height:1.55;color:#7A3214;font-weight:600;margin-bottom:10px;">
+      매거진 2·3쪽은 반지 <b>5곳(나비드 포함)</b>으로 만들어진 인쇄본이에요. 확정은 <b>이 앱 일정·반지 탭의 4곳</b>(나비드 제외 · 새미 18:30) 기준입니다.
+    </div>
+    <div class="mag-jump" id="magJump"></div>
+    <div id="magPages"></div>
+  </section>
+</main>
+
+<nav class="tabbar">
+  <button class="tab active" onclick="goTab('plan',this)"><span class="ico">🗓️</span>일정</button>
+  <button class="tab" onclick="goTab('ring',this)"><span class="ico">💍</span>반지·체크</button>
+  <button class="tab" onclick="goTab('food',this)"><span class="ico">🍽️</span>맛집·카페</button>
+  <button class="tab" onclick="goTab('map',this)"><span class="ico">🗺️</span>지도</button>
+  <button class="tab" onclick="goTab('mag',this)"><span class="ico">📖</span>매거진</button>
+</nav>
+
+<div class="mag-ov" id="magOv">
+  <div class="mag-ov-bar">
+    <button type="button" onclick="magOvClose()">✕ 닫기</button>
+    <span id="magOvNo">1 / 9</span>
+    <div class="mag-ov-z">
+      <button type="button" onclick="magOvZoom(-1)">−</button>
+      <span id="magOvZ">100%</span>
+      <button type="button" onclick="magOvZoom(1)">+</button>
+    </div>
+  </div>
+  <div class="mag-ov-scroll" id="magOvScroll"><img id="magOvImg" alt="매거진 페이지" src=""/></div>
+  <div class="mag-ov-foot">
+    <button type="button" onclick="magOvStep(-1)">◀ 이전</button>
+    <a id="magOvPdf" href="./magazine.pdf" target="_blank" rel="noopener">PDF로 보기</a>
+    <button type="button" onclick="magOvStep(1)">다음 ▶</button>
+  </div>
+</div>
+
+<div class="map-ov" id="mapOv">
+  <div class="mag-ov-bar">
+    <button type="button" onclick="closeMapOv()">✕ 닫기</button>
+    <span>전체 동선 위성지도</span>
+    <button type="button" onclick="document.getElementById('mapOv').querySelector('.mag-ov-scroll').classList.toggle('z')">🔍 확대</button>
+  </div>
+  <div class="mag-ov-scroll"><img id="mapOvImg" src="./img/route_map.webp" alt="전체 동선 위성지도"/></div>
+</div>
+
+<script>
+/* ───────── 기본 유틸 ───────── */
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const kq = s => encodeURIComponent(s);
+const kakaoSearch = n => 'https://map.kakao.com/link/search/' + kq(n);
+const naverSearch = n => 'https://map.naver.com/p/search/' + kq(n);
+function kakaoRoute(from, to){
+  return 'https://map.kakao.com/link/from/' + kq(from.name) + ',' + from.lat + ',' + from.lng +
+         '/to/' + kq(to.name) + ',' + to.lat + ',' + to.lng;
+}
+function dday(){
+  const now = new Date();
+  const t = new Date(2026,11,11,0,0,0);
+  const d = Math.ceil((t - new Date(now.getFullYear(),now.getMonth(),now.getDate()))/86400000);
+  $('ddayBadge').textContent = d > 0 ? 'D-' + d : (d === 0 ? 'D-DAY' : 'D+' + (-d));
+}
+
+/* 장소 좌표 (카카오맵 기준) */
+const P = {
+  seoulStn:{name:'서울역', lat:37.55407, lng:126.97070},
+  hotel:{name:'트래디업 호텔 바이 더 디자이너스', lat:37.57326, lng:126.98857},
+  onegold:{name:'원골드', lat:37.57556, lng:126.99044},
+  johnpaul:{name:'존폴쥬얼리', lat:37.57233, lng:126.99186},
+  gongbang:{name:'공방301 종로점', lat:37.57546, lng:126.99590},
+  saemi:{name:'새미쥬얼리', lat:37.57065, lng:126.99100},
+  riu:{name:'리우 메이크업 by 성수', lat:37.54190, lng:127.05463},
+  royal:{name:'로얄호텔서울', lat:37.56426, lng:126.98560},
+  shinheung:{name:'신흥시장 (해방촌)', lat:37.54531, lng:126.98499},
+  jireumgil:{name:'지름길 사진관', lat:37.54501, lng:126.98518},
+  otophotoSh:{name:'오토포토 신흥시장', lat:37.54515, lng:126.98520},
+  namsan:{name:'남산 전망 덱', lat:37.54752, lng:126.98434},
+  seochon:{name:'서촌 (자하문로 일대)', lat:37.57910, lng:126.97020},
+  automatico:{name:'오토마티코 서촌', lat:37.57937, lng:126.96947},
+  otophotoSc:{name:'오토포토 서촌', lat:37.57956, lng:126.97110},
+  youngchive:{name:'영카이브 서촌', lat:37.58033, lng:126.96850},
+  daerim:{name:'대림미술관', lat:37.57754, lng:126.97336},
+  taylor:{name:'테일러커피 서촌경복궁', lat:37.57719, lng:126.97385},
+  stationfix:{name:'스태픽스', lat:37.57748, lng:126.96791},
+  mmm:{name:'국립현대미술관 서울', lat:37.57863, lng:126.98010},
+  tmari:{name:'카페 트마리', lat:37.57497, lng:126.99158},
+  dongbaek:{name:'동백양과점 익선점', lat:37.57340, lng:126.98960},
+  highway:{name:'하이웨스트 익선', lat:37.57312, lng:126.99067},
+  meongseok:{name:'멍석집 종로3가점', lat:37.57283, lng:126.99033},
+  songam:{name:'송암온반', lat:37.57400, lng:126.99004},
+  cheonggye:{name:'청계광장 (빛초롱축제)', lat:37.56907, lng:126.97759},
+  gwanghwamun:{name:'광화문광장 (광화문 마켓)', lat:37.57260, lng:126.97692},
+  douroum:{name:'도우룸 광화문', lat:37.57215, lng:126.97779},
+  euljiroboseok:{name:'을지로보석', lat:37.56514, lng:126.98925},
+  doryang:{name:'도량', lat:37.57797, lng:126.97250}
+};
+
+/* ───────── 이동 막대바 ───────── */
+const MODE = {walk:['도보','r-walk'], sub:['지하철','r-sub'], bus:['버스','r-bus'], taxi:['택시','r-taxi'], train:['KTX','r-train']};
+function routeBar(segs, totalTxt){
+  if(!segs || !segs.length) return '';
+  const total = segs.reduce((a,s)=>a+s.m,0);
+  const parts = segs.map(s=>{
+    const w = Math.max(9, Math.round(s.m/total*100));
+    const cls = MODE[s.k][1];
+    const label = (s.m >= 4 || segs.length < 3) ? esc(s.t) + ' ' + s.m + '분' : esc(s.t);
+    return '<div class="r-seg ' + cls + '" style="flex:' + s.m + ' 1 0;">' + label + '</div>';
+  }).join('');
+  const txt = totalTxt || ('총 ' + total + '분');
+  return '<div class="route-box"><div class="route-bar">' + parts + '</div><div class="r-txt">' + esc(txt) + '</div></div>';
+}
+
+/* ───────── 일정 데이터 ───────── */
+const DAY1 = [
+  {t:'11:44 → 13:11', title:'김천구미 → 서울역', pill:['확정','p-g'],
+   note:'KTX-산천 182 · <b>2매 예매 완료</b> · 도착하면 지하 1호선으로 바로 내려가면 돼요.',
+   move:[{k:'train',t:'KTX-산천',m:87}], total:'KTX-산천 1시간 27분',
+   acts:[['서울역 지도', P.seoulStn, 'map']]},
+  {t:'13:11 → 13:29', title:'서울역 → 트래디업 호텔 (짐 보관)', pill:['짐 보관','p-b'],
+   note:'1호선 3정거장 15분 · 종로3가역 → 삼일대로26길 7<br/>15:00 체크인 전이라 프런트에 캐리어만 맡겨요.',
+   move:[{k:'walk',t:'도보',m:4},{k:'sub',t:'1호선',m:6},{k:'walk',t:'도보',m:5}], total:'도보 4 + 1호선 6 + 도보 5 = 15분',
+   acts:[['길찾기', kakaoRoute(P.seoulStn,P.hotel),'map',1],['호텔 지도', P.hotel,'map']]},
+  {t:'14:30 → 15:20', title:'원골드 — 샴페인골드 실착', pill:['취소 자유','p-g'],
+   note:'호텔에서 <b>도보 7분</b> · 14:15 출발 · 돈화문로 79 지유빌딩 3층<br/>예약금 0원 · 당일 취소 무료 · 매주 수 휴무 · 예약 시 최대 6만 원 할인',
+   price:'80~170만 원 · 가성비 1위',
+   move:[{k:'walk',t:'도보',m:7}], total:'도보 7분 (14:15 출발)',
+   acts:[['카카오맵', P.onegold,'map'],['길찾기', kakaoRoute(P.hotel,P.onegold),'map',1]]},
+  {t:'15:30 → 16:30', title:'존폴쥬얼리 — 무도금 샴페인골드', pill:['12/10까지','p-o'],
+   note:'도보 6분 · 15:22 출발 · 돈화문로10길 2 쥬얼리타운 4층<br/>예약금 2만 원(방문 시 환불) · <b>12/10(목)까지 100% 환불</b> · 그 뒤엔 2만 원 손실',
+   price:'190~250만 원 · 금 색감 2위',
+   move:[{k:'walk',t:'도보',m:6}], total:'도보 6분 (15:22 출발)',
+   acts:[['카카오맵', P.johnpaul,'map'],['길찾기', kakaoRoute(P.onegold,P.johnpaul),'map',1]]},
+  {t:'17:00 → 18:00', title:'공방301 종로점 — 확정', pill:['확정','p-g'],
+   note:'도보 10분 · 16:45 출발 · 동순라길 108 · 예약번호 <b>1414646049</b><br/>자체 공방 5색 금 컬러를 자연광 창가에서 비교',
+   price:'160~230만 원 · 금 색감 1위',
+   warn:'15분 이상 늦으면 예약금 2만 원 환불 불가 — 16:45엔 무조건 나가기',
+   move:[{k:'walk',t:'도보',m:10}], total:'도보 10분 (16:45 출발)',
+   acts:[['카카오맵', P.gongbang,'map'],['길찾기', kakaoRoute(P.johnpaul,P.gongbang),'map',1]]},
+  {t:'18:30 → 19:00', title:'새미쥬얼리 — 탄탄한 세공', pill:['예약 전','p-n'],
+   note:'도보 11분 · 18:15 출발 · 종로 121-1 1층 · <b>19:00 마감</b><br/>예약금 0원 · 평일 예약 시 5만 원 백화점 상품권',
+   price:'230~280만 원 · 가장 높은 가격대',
+   warn:'19:00 마감이라 실제로는 30분 — 보고 싶은 반지를 미리 정해 가면 빨라요',
+   move:[{k:'walk',t:'도보',m:11}], total:'도보 11분 (18:15 출발)',
+   acts:[['카카오맵', P.saemi,'map'],['길찾기', kakaoRoute(P.gongbang,P.saemi),'map',1]]},
+  {t:'19:40 → 21:00', title:'저녁 → 호텔 체크인', pill:['선택','p-n'],
+   note:'서순라길·익선동 <b>도보 12분</b> · 스타 셰프(도우룸·을지로보석)도 가능<br/>저녁은 19:40부터, 21:00 전후면 체크인 충분해요.',
+   move:[{k:'walk',t:'도보',m:12}], total:'도보 12분',
+   acts:[['멍석집', P.meongseok,'map'],['길찾기', kakaoRoute(P.saemi,P.hotel),'map',1]]}
+];
+
+const DAY2 = [
+  {t:'08:30 → 10:30', title:'호텔 조식 & 예식 준비', pill:['여유','p-g'],
+   note:'조식 포함 · 12/11에 반지를 다 봤으니 오전은 비워 뒀어요 · 옷과 소지품 정리',
+   move:[], total:'', acts:[['호텔 지도', P.hotel,'map']]},
+  {t:'10:30 → 11:05', title:'체크아웃 · 프런트에 짐 보관', pill:['짐','p-b'],
+   note:'공식 체크아웃은 12:00인데 11:05에 나가야 해서 미리 정리해요.<br/>A안이면 밤 20~21시에 찾고, <b>B안이면 캐리어를 로얄호텔 프런트로</b> 옮겨 16:05에 찾아요.',
+   move:[], total:'', acts:[['호텔 지도', P.hotel,'map']]},
+  {t:'11:05 → 11:47', title:'승현 — 호텔 → 리우 메이크업', pill:['출발','p-o'],
+   note:'5호선+2호선 또는 420번+2호선 <b>42분</b> · 늦어도 11:05 출발<br/>놓치면 11:19 출발로도 12:00 시작에 맞출 수 있어요.',
+   move:[{k:'walk',t:'도보',m:6},{k:'sub',t:'5호선',m:12},{k:'sub',t:'2호선',m:19},{k:'walk',t:'도보',m:5}], total:'대중교통 42분',
+   acts:[['길찾기', kakaoRoute(P.hotel,P.riu),'map']]},
+  {t:'12:00 → 13:30', title:'리우 메이크업 by 성수', pill:['확정','p-g'],
+   note:'성수일로4가길 7 · <b>28만 원</b> · 카톡으로 "남자분 12:50~13:00 먼저 완료" 확인된 상태',
+   warn:'전화 문의 금지 — 카톡으로만 확인해요',
+   move:[], total:'1시간 30분', acts:[['지도', P.riu,'map'],['길찾기', kakaoRoute(P.hotel,P.riu),'map',1]]},
+  {t:'13:00 → 13:30', title:'근호 님(혼주) — 호텔 → 로얄호텔', pill:['혼주','p-r'],
+   note:'충무로에서 4호선 1정거장 <b>30분</b> · 13시 택시는 정체로 40분<br/>가족과 먼저 합류해요.',
+   move:[{k:'walk',t:'도보',m:8},{k:'sub',t:'4호선',m:7},{k:'walk',t:'도보',m:5}], total:'도보+4호선 30분',
+   acts:[['길찾기', kakaoRoute(P.hotel,P.royal),'map']]},
+  {t:'13:32 → 14:02', title:'승현 — 리우 → 로얄호텔', pill:['28분 전','p-b'],
+   note:'2호선 성수→을지로입구 16분 + 도보 5분 · <b>예식 28분 전 도착</b><br/>토요일 13시대는 차보다 지하철이 정시에 유리해요.',
+   move:[{k:'walk',t:'도보',m:8},{k:'sub',t:'2호선',m:16},{k:'walk',t:'도보',m:5}], total:'2호선 16분 + 도보 = 29분',
+   acts:[['길찾기', kakaoRoute(P.riu,P.royal),'map']]},
+  {t:'14:30 → 16:30', title:'로얄호텔서울 본식 (혼주)', pill:['확정','p-g'],
+   note:'명동길 61 · <b>02-756-1112</b> · 16:30 종료<br/>인사는 예식 안에서 마치고 곧바로 예식 후 코스로 움직여요.',
+   move:[], total:'2시간', acts:[['호텔 지도', P.royal,'map']]}
+];
+
+const ABA = [
+  {t:'16:30 → 16:44', title:'예식 종료 → 해방촌 신흥시장', note:'택시 14~16분(4.0km) · 16:44 신흥시장 입구', move:[{k:'taxi',t:'택시',m:15}], total:'택시 14~16분',
+   acts:[['길찾기', kakaoRoute(P.royal,P.shinheung),'map']]},
+  {t:'16:50 → 17:00', title:'오토포토 신흥시장 — 즉석 2컷', note:'소월로20길 32 · 5,000원대 · 셀프 부스라 10분이면 끝나요', move:[{k:'walk',t:'도보',m:2}], total:'도보 2분',
+   acts:[['카카오맵', P.otophotoSh,'map']]},
+  {t:'17:00 → 17:14', title:'지름길 사진관 — 2인 30,000원', pill:['미예약','p-n'],
+   note:'소월로20길 36 · 2인 20,000 + 보정·인화 10,000 = <b>30,000원</b> · 토 11:00~20:00<br/>네이버 예약으로 17:00 미리 잡아두면 좋아요.',
+   warn:'아직 예약 전 — 네이버지도에서 17:00 예약해 주세요',
+   move:[{k:'walk',t:'도보',m:1}], total:'도보 1분 (오토포토와 35m)',
+   acts:[['카카오맵', P.jireumgil,'map'],['네이버 예약', naverSearch('지름길 사진관'),'map',1]]},
+  {t:'17:14 → 18:30', title:'남산 전망 덱 — 일몰 17:14', note:'도보 5분 · 해방촌오거리 윗길(소월로) · <b>12/12 일몰 17:14</b><br/>대기 길면 일몰 먼저 보고 내려와 촬영해도 돼요.',
+   move:[{k:'walk',t:'도보',m:5}], total:'도보 5분', acts:[['카카오맵', P.namsan,'map']]},
+  {t:'18:30 → 20:30', title:'신흥시장 저녁 (선택)', note:'시장 골목 식당 · 해방촌오거리 도보 3분 · 시간 남으면 한 시간', move:[{k:'walk',t:'도보',m:3}], total:'도보 3분',
+   acts:[['신흥시장 지도', P.shinheung,'map']]},
+  {t:'20:45 → 21:35', title:'해방촌 → 호텔 짐 픽업 → 서울역', note:'택시 26분 → 21:11 짐 픽업 → 21:35 서울역 · 호텔 밤 20~21시 픽업 확인 필요(02-763-3196)',
+   move:[{k:'taxi',t:'택시',m:26},{k:'walk',t:'도보',m:4},{k:'taxi',t:'택시',m:24}], total:'택시 26 + 짐 + 택시 24 = 50분',
+   acts:[['길찾기', kakaoRoute(P.shinheung,P.hotel),'map']]},
+  {t:'22:08 → 23:32', title:'KTX-산천 229 → 김천구미', pill:['미예매','p-n'],
+   note:'A/B 정한 뒤 코레일톡에서 예매 · 20:58 열차는 해방촌 <b>19:50 출발</b>이어야 타요.',
+   move:[{k:'train',t:'KTX-산천 229',m:84}], total:'1시간 24분', acts:[]}
+];
+
+const ABB = [
+  {t:'16:30 → 16:45', title:'예식 종료 → 서촌', note:'버스 7022 등 29분 · 16:45 서촌<br/>캐리어는 로얄호텔 프런트에서 16:05에 찾아 함께 이동',
+   move:[{k:'bus',t:'버스 7022',m:29}], total:'버스 29분', acts:[['길찾기', kakaoRoute(P.royal,P.seochon),'map']]},
+  {t:'16:45 → 17:30', title:'서촌 포토부스 1~2곳', note:'오토마티코 6,000원(1순위) · 오토포토 5,000원대 · 영카이브 24시간 무인<br/>15~30분이면 끝나요.',
+   move:[{k:'walk',t:'도보',m:5}], total:'골목 도보 5분', acts:[['오토마티코', P.automatico,'map']]},
+  {t:'17:00 → 18:30', title:'대림미술관(무료) 또는 테일러커피', note:'대림미술관 30주년 소장품전 · <b>입장마감 17:00</b> · 오토마티코 도보 9분<br/>시간이 빠듯하면 테일러커피에서 쉬어요.',
+   warn:'미술관 입장 마감이 17:00 — 16:45에 도착해야 들어갈 수 있어요',
+   move:[{k:'walk',t:'도보',m:9}], total:'도보 9분', acts:[['대림미술관', P.daerim,'map'],['테일러커피', P.taylor,'map']]},
+  {t:'18:51 → 19:05', title:'서촌 → 서울역', note:'버스 1711 21분 · 19:05 도착 · 여기서 30분 여유', move:[{k:'bus',t:'버스 1711',m:21}], total:'버스 21분',
+   acts:[['길찾기', kakaoRoute(P.seochon,P.seoulStn),'map']]},
+  {t:'19:35 → 20:57', title:'KTX-산천 69 → 김천구미', pill:['미예매','p-n'], note:'A/B 정한 뒤 코레일톡에서 예매 · 서울역 도착 후 30분 여유', move:[{k:'train',t:'KTX-산천 69',m:82}], total:'1시간 22분', acts:[]}
+];
+
+/* ───────── 반지 카드 ───────── */
+const RINGS = [
+  {n:1, time:'14:30', name:'원골드', pill:['취소 자유','p-g'], addr:'돈화문로 79 지유빌딩 3층 · 도보 7분',
+   price:'80~170만 원', tag:'가성비 1위',
+   note:'예약금 0원 · 당일 취소 무료 · 수 휴무 · 예약 시 최대 6만 원 할인<br/>샴페인골드 실착 후기가 많고 여러 톤을 한 번에 비교할 수 있어요.',
+   acts:[['카카오맵', P.onegold,'map'],['길찾기', kakaoRoute(P.hotel,P.onegold),'map',1]]},
+  {n:2, time:'15:30', name:'존폴쥬얼리', pill:['12/10까지','p-o'], addr:'돈화문로10길 2 쥬얼리타운 4층 · 도보 6분',
+   price:'190~250만 원', tag:'금 색감 2위',
+   note:'예약금 2만 원(방문 시 환불) · 12/10(목)까지 100% 환불<br/>도금 없이 합금 자체로 색을 내는 무도금 샴페인골드·내추럴골드 · 10년 무상 A/S',
+   acts:[['카카오맵', P.johnpaul,'map'],['길찾기', kakaoRoute(P.onegold,P.johnpaul),'map',1]]},
+  {n:3, time:'17:00', name:'공방301 종로점', pill:['확정','p-g'], addr:'동순라길 108 · 도보 10분 · 예약 1414646049',
+   price:'160~230만 원', tag:'금 색감 1위',
+   note:'취소·미계약·15분 이상 지연이면 예약금 2만 원 환불 불가<br/>자체 공방에서 5가지 금 컬러(내추럴 화이트·브라운골드 등)를 직접 연구 · 자연광 창가 비교 · 직영이라 중간마진 없음',
+   warn:'15분 이상 늦으면 2만 원 환불 불가 — 16:45엔 나가기',
+   acts:[['카카오맵', P.gongbang,'map'],['길찾기', kakaoRoute(P.johnpaul,P.gongbang),'map',1]]},
+  {n:4, time:'18:30', name:'새미쥬얼리', pill:['예약 전','p-n'], addr:'종로 121-1 1층 · 도보 11분 · 19:00 마감',
+   price:'230~280만 원', tag:'세공 마감 탄탄',
+   note:'예약금 0원 · 평일 예약 시 5만 원 백화점 상품권 · 19:00 마감<br/>가격대는 가장 높지만 골드·백금 세공 마감이 깔끔해요.',
+   warn:'19:00 마감 — 18:30에 도착하면 30분뿐이에요',
+   acts:[['카카오맵', P.saemi,'map'],['길찾기', kakaoRoute(P.gongbang,P.saemi),'map',1]]}
+];
+
+/* ───────── 체크리스트 ───────── */
+const CHECKS = [
+  ['AB', '예식 후 A안/B안 정하기', '정하면 바로 귀가 KTX 예매 (A 22:08 / B 19:35)'],
+  ['KTX', '귀가 KTX 예매하기', '코레일톡 · A/B 정한 뒤 19:35 · 20:58 · 22:08 중 선택'],
+  ['사진', '지름길 사진관 17:00 예약', 'A안 조건 · 네이버지도 · 2인 20,000 + 인화 10,000'],
+  ['반지', '원골드 14:30 · 존폴 15:30 · 새미 18:30 예약', '근호 님 쪽에서 진행 중 · 예약금은 존폴 2만 원만'],
+  ['짐', '호텔 밤 20~21시 짐 픽업 확인', '02-763-3196 · A안 조건이에요'],
+  ['카톡', '리우 카톡 재확인', '남자분 12:50~13:00 완료 · 13:30 종료 (전화 금지)'],
+  ['짐2', 'B안이면 예식 전 로얄호텔 프런트 짐 보관', '16:05에 찾아 캐리어와 함께 서촌으로'],
+  ['예산', '반지 예산 150~250만 · 흰주얼리 제외 확인', '상담 때 예약금·취소 규정도 함께 물어보기'],
+  ['교통', '교통카드 충전 · 12/12 택시비', '명동 → 해방촌 약 4km']
+];
+
+/* ───────── 맛집·카페 데이터 ───────── */
+const FOODS = [
+  {cat:'star', name:'도우룸 광화문', tag:'스타 셰프', meta:'세종대로 178 2층 · 광화문역 2번 출구<br/>금·토 11:30~14:30 / 17:30~22:00 · 라스트오더 20:30',
+   price:'생면 파스타 2.9~4.2만 · 2인 쉐어코스 15.4만', note:'이준 셰프 · 미쉐린 2스타. 12/11 반지가 19:40에 끝나도 22:00까지라 시간 여유.', acts:[['카카오맵', P.douroum,'map'],['캐치테이블', 'https://app.catchtable.co.kr/','gold',1]]},
+  {cat:'star', name:'을지로보석', tag:'스타 셰프', meta:'마른내로 11-10 3층 (을지로3가) · 호텔 도보 10분대<br/>금 18:30~24:00 (토·일 휴무)',
+   price:'한식 안주 코스 + 주류 인당 7만 원대', note:'조서형 셰프. 인스타 DM으로 예약해요.', acts:[['카카오맵', P.euljiroboseok,'map'],['인스타 DM', 'https://www.instagram.com/euljiro_boseok/','rose',1]]},
+  {cat:'star', name:'도량', tag:'스타 셰프', meta:'자하문로6길 6 · 경복궁역 3번 출구<br/>금·토 17:00~21:30 (월 휴무)',
+   price:'동파육 4만 · 어향가지 3만', note:'임태훈 셰프. 홀은 16:30 현장 태블릿 웨이팅, 룸은 매월 25일 18:00 캐치테이블 오픈.', acts:[['카카오맵', P.doryang,'map'],['캐치테이블', 'https://app.catchtable.co.kr/','gold',1]]},
+  {cat:'cafe', name:'카페 트마리', tag:'카페', meta:'서순라길 107-1 · 금 11:00~23:00 · 4.5★', price:'', note:'종묘 돌담 뷰 한옥 카페. 반지 투어 끝나고 저녁 전에 딱이에요.', acts:[['카카오맵', P.tmari,'map'],['네이버지도', naverSearch('트마리'),'']]},
+  {cat:'cafe', name:'동백양과점 익선점', tag:'카페', meta:'수표로28길 17-24 · 09:00~22:00', price:'수플레·드립', note:'한옥 처마 밑 전구 감성. 익선동 골목이라 저녁 식사와 묶기 좋아요.', acts:[['카카오맵', P.dongbaek,'map'],['네이버지도', naverSearch('동백양과점 익선'),'']]},
+  {cat:'cafe', name:'하이웨스트 익선', tag:'카페', meta:'돈화문로11다길 18 · 09:00~22:00', price:'테디 스콘 · 크리스마스 케이크', note:'12월 한정 크리스마스 케이크가 있는 집. 호텔에서 가까워요.', acts:[['카카오맵', P.highway,'map'],['네이버지도', naverSearch('하이웨스트 익선'),'']]},
+  {cat:'cafe', name:'테일러커피 서촌경복궁점', tag:'카페', meta:'효자로 15 · 08:00~21:00', price:'겨울 케이크', note:'B안용 · 경복궁 돌담길 뷰. 포토부스 사이에 쉬기 좋아요.', acts:[['카카오맵', P.taylor,'map'],['네이버지도', naverSearch('테일러커피 서촌경복궁'),'']]},
+  {cat:'cafe', name:'스태픽스', tag:'카페', meta:'사직로9길 22 · 10:00~20:30', price:'', note:'B안용 · 마당과 크리스마스 트리 감성.', acts:[['카카오맵', P.stationfix,'map'],['네이버지도', naverSearch('스태픽스 서촌'),'']]},
+  {cat:'dinner', name:'멍석집 종로3가점', tag:'저녁', meta:'돈화문로11다길 7 · 12:00~23:30 · 4.9★', price:'', note:'호텔 도보 4분. 반지 투어 끝나고 가장 가까운 저녁 후보.', acts:[['카카오맵', P.meongseok,'map'],['네이버지도', naverSearch('멍석집 종로3가'),'']]},
+  {cat:'dinner', name:'송암온반', tag:'저녁', meta:'돈화문로11나길 31-3 · 11:30~15:30 / 17:00~22:00 · 4.9★', price:'', note:'익선동 골목의 온반집. 저녁 19:40 이후에도 열려 있어요.', acts:[['카카오맵', P.songam,'map'],['네이버지도', naverSearch('송암온반'),'']]},
+  {cat:'festival', name:'2026 서울빛초롱축제 (개막일)', tag:'축제', meta:'청계천 삼일교~청계광장 · 18:00~23:00 · 무료', price:'무료', note:'12/11이 첫날! 호텔 도보 12분이라 저녁 후 산책 코스로 딱이에요.', acts:[['카카오맵', P.cheonggye,'map']]},
+  {cat:'festival', name:'2026 광화문 마켓 (개막일)', tag:'축제', meta:'광화문광장 · 17:30~22:30 · 무료', price:'무료', note:'산타마을·대형 트리·포토존. 도우룸 광화문과 이어서 보기 좋아요.', acts:[['카카오맵', P.gwanghwamun,'map']]},
+  {cat:'festival', name:'대림미술관 30주년 소장품전', tag:'전시', meta:'자하문로4길 21 · 무료 · <b>입장마감 17:00</b>', price:'무료', note:'피카소·백남준. 오토마티코 도보 9분이라 B안이면 묶어서 볼 수 있어요.', acts:[['카카오맵', P.daerim,'map']]},
+  {cat:'festival', name:'국립현대미술관 서울', tag:'전시', meta:'삼청로 30 · 토 야간개장 18:00~21:00 무료', price:'무료', note:'이번 일정엔 시간상 어려워요. 참고만 해두세요.', acts:[['카카오맵', P.mmm,'map']]},
+  {cat:'photo', name:'오토마티코 서촌 (1순위)', tag:'포토부스', meta:'자하문로9길 33-1 · 11:00~21:00', price:'6,000원', note:'1988년 미국 아날로그 부스 복원 · 보정 없이 암실 현상으로 2~3분 만에 1장. B안 1순위예요.', acts:[['카카오맵', P.automatico,'map'],['네이버지도', naverSearch('오토마티코 서촌'),'']]},
+  {cat:'photo', name:'오토포토 서촌 (2순위)', tag:'포토부스', meta:'자하문로 39 · 24시간', price:'5,000원대', note:'흑백 통로 감성. 오토마티코 줄이 길면 여기로.', acts:[['카카오맵', P.otophotoSc,'map']]},
+  {cat:'photo', name:'영카이브 서촌 (대안)', tag:'포토부스', meta:'필운대로 47 · 24시간 무인', price:'5,000원대', note:'줄 길 때 쓰는 대안. 무인이라 시간 제약이 없어요.', acts:[['카카오맵', P.youngchive,'map']]},
+  {cat:'photo', name:'오토포토 신흥시장', tag:'포토부스', meta:'소월로20길 32 · 셀프 즉석', price:'5,000원대', note:'A안용 · 지름길 사진관과 35m. 예식 끝나고 바로 2컷 찍기 좋아요.', acts:[['카카오맵', P.otophotoSh,'map']]},
+  {cat:'photo', name:'지름길 사진관', tag:'사진관', meta:'소월로20길 36 · 토 11:00~20:00', price:'2인 20,000 + 보정·인화 10,000 = 30,000원', note:'A안 핵심 · 아직 예약 전이에요. 네이버 예약으로 17:00을 잡아두세요.', acts:[['카카오맵', P.jireumgil,'map'],['네이버 예약', naverSearch('지름길 사진관 용산'),'map',1]]},
+  {cat:'photo', name:'남산 전망 덱', tag:'일몰', meta:'해방촌오거리 윗길(소월로) · 지름길 도보 5분', price:'무료', note:'12/12 일몰 <b>17:14</b>. 사진관과 순서를 바꿔도 돼요.', acts:[['카카오맵', P.namsan,'map']]},
+  {cat:'photo', name:'신흥시장 저녁', tag:'저녁', meta:'시장 골목 식당 · 18:30~ · 해방촌오거리 도보 3분', price:'', note:'A안 마무리 코스. 시장이라 가격 부담이 없어요.', acts:[['신흥시장 지도', P.shinheung,'map']]}
+];
+const CATS = [['all','전체'],['star','⭐ 스타 셰프'],['cafe','☕ 카페'],['dinner','🍽️ 저녁'],['festival','🎄 축제·전시'],['photo','📸 포토부스·사진']];
+
+/* ───────── 렌더: 일정 ───────── */
+function itemHTML(it, i, small){
+  const pill = it.pill ? '<span class="pill ' + it.pill[1] + '">' + esc(it.pill[0]) + '</span>' : '';
+  const price = it.price ? '<div class="food-price" style="margin-top:6px;">💛 ' + esc(it.price) + '</div>' : '';
+  const warn = it.warn ? '<div class="it-warn">⏰ ' + esc(it.warn) + '</div>' : '';
+  const acts = (it.acts || []).map(a=>{
+    const [label, target, cls, isRoute] = a;
+    const href = typeof target === 'string' ? target : (isRoute ? target : kakaoSearch(target.name));
+    return '<a class="act-btn ' + (cls||'') + '" target="_blank" rel="noopener" href="' + href + '">' + esc(label) + '</a>';
+  }).join('');
+  return '<div class="item-card">' +
+    '<div class="it-head"><div class="it-no' + (small?' sm':'') + '">' + (i+1) + '</div><div class="it-main">' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">' +
+        '<div class="it-time">' + esc(it.t) + '</div>' + pill +
+      '</div>' +
+      '<div class="it-title">' + esc(it.title) + '</div>' +
+      '<p class="it-note">' + it.note + '</p>' + price + warn +
+      (it.move && it.move.length ? routeBar(it.move, it.total) : '') +
+      (acts ? '<div class="it-actions">' + acts + '</div>' : '') +
+    '</div></div></div>';
+}
+function renderPlan(){
+  $('tl1').innerHTML = DAY1.map((it,i)=>itemHTML(it,i)).join('');
+  $('tl2').innerHTML = DAY2.map((it,i)=>itemHTML(it,i)).join('');
+  $('abA').innerHTML = ABA.map((it,i)=>itemHTML(it,i,true)).join('');
+  $('abB').innerHTML = ABB.map((it,i)=>itemHTML(it,i,true)).join('');
+}
+function pickDay(n, btn){
+  document.querySelectorAll('.day-chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  $('day1').classList.toggle('hidden', n !== 1);
+  $('day2').classList.toggle('hidden', n !== 2);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function pickAB(k){
+  $('segA').classList.toggle('active', k === 'A');
+  $('segB').classList.toggle('active', k === 'B');
+  $('abA').classList.toggle('hidden', k !== 'A');
+  $('abB').classList.toggle('hidden', k !== 'B');
+}
+
+/* ───────── 렌더: 반지 ───────── */
+function renderRings(){
+  $('ringCards').innerHTML = RINGS.map(r=>{
+    const acts = r.acts.map(a=>'<a class="act-btn ' + (a[2]||'') + '" target="_blank" rel="noopener" href="' + (a[3]?a[1]:(typeof a[1]==='string'?a[1]:kakaoSearch(a[1].name))) + '">' + esc(a[0]) + '</a>').join('');
+    return '<div class="item-card">' +
+      '<div class="it-head"><div class="it-no">' + r.n + '</div><div class="it-main">' +
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">' +
+          '<div class="it-time">' + esc(r.time) + '</div><span class="pill ' + r.pill[1] + '">' + esc(r.pill[0]) + '</span>' +
+        '</div>' +
+        '<div class="it-title">' + esc(r.name) + '</div>' +
+        '<p class="it-note">' + r.addr + '</p>' +
+        '<div class="food-price">💛 ' + esc(r.price) + ' · ' + esc(r.tag) + '</div>' +
+        '<p class="it-note" style="margin-top:6px;">' + r.note + '</p>' +
+        (r.warn ? '<div class="it-warn">⏰ ' + esc(r.warn) + '</div>' : '') +
+        '<div class="it-actions">' + acts + '</div>' +
+      '</div></div></div>';
+  }).join('');
+}
+
+/* ───────── 렌더: 체크리스트 ───────── */
+const CHK_KEY = 'seoul1211_checks_v1';
+let chkState = {};
+try{ chkState = JSON.parse(localStorage.getItem(CHK_KEY) || '{}'); }catch(e){ chkState = {}; }
+function renderChecks(){
+  $('chkList').innerHTML = CHECKS.map((c,i)=>{
+    const done = !!chkState[i];
+    return '<div class="chk-row' + (done?' done':'') + '" onclick="toggleChk(' + i + ')">' +
+      '<button class="chk-btn" aria-label="체크">' + (done?'✓':'') + '</button>' +
+      '<div class="chk-txt">' + esc(c[1]) + '<span class="chk-sub">' + esc(c[2]) + '</span></div></div>';
+  }).join('');
+  const done = CHECKS.filter((_,i)=>chkState[i]).length;
+  $('chkProg').textContent = done + ' / ' + CHECKS.length + ' 완료';
+  $('chkBar').style.width = Math.round(done / CHECKS.length * 100) + '%';
+}
+function toggleChk(i){
+  chkState[i] = !chkState[i];
+  try{ localStorage.setItem(CHK_KEY, JSON.stringify(chkState)); }catch(e){}
+  renderChecks();
+}
+
+/* ───────── 렌더: 맛집 ───────── */
+let foodCat = 'all';
+function renderFood(){
+  $('foodChips').innerHTML = CATS.map(c=>'<button class="cpill' + (foodCat===c[0]?' active':'') + '" onclick="setFood(\'' + c[0] + '\')">' + c[1] + '</button>').join('');
+  const list = FOODS.filter(f=>foodCat==='all' || f.cat===foodCat);
+  $('foodList').innerHTML = list.map(f=>{
+    const acts = f.acts.map(a=>'<a class="act-btn ' + (a[2]||'') + '" target="_blank" rel="noopener" href="' + a[1] + '">' + esc(a[0]) + '</a>').join('');
+    return '<div class="food-card">' +
+      '<div class="food-top"><div class="food-name">' + esc(f.name) + '</div><span class="food-cat">' + esc(f.tag) + '</span></div>' +
+      '<div class="food-meta">' + f.meta + '</div>' +
+      (f.price ? '<div class="food-price">💛 ' + f.price + '</div>' : '') +
+      '<div class="food-meta" style="margin-top:5px;">' + f.note + '</div>' +
+      '<div class="it-actions">' + acts + '</div></div>';
+  }).join('');
+}
+function setFood(c){ foodCat = c; renderFood(); }
+
+/* ───────── 지도 ───────── */
+let MAP = null, LYR = 'osm', osmLayer = null, satLayer = null, markers = [];
+const PINS = [
+  {p:P.seoulStn, g:'start', n:'1', t:'서울역', d:'12/11 13:11 도착 · 12/12 22:08 출발'},
+  {p:P.hotel, g:'ring', n:'2', t:'트래디업 호텔', d:'숙소 · 짐 보관 · 02-763-3196'},
+  {p:P.onegold, g:'ring', n:'3', t:'원골드', d:'14:30 · 80~170만 · 취소 자유'},
+  {p:P.johnpaul, g:'ring', n:'4', t:'존폴쥬얼리', d:'15:30 · 190~250만 · 12/10까지 환불'},
+  {p:P.gongbang, g:'ring', n:'5', t:'공방301', d:'17:00 확정 · 160~230만 · 취소 불가'},
+  {p:P.saemi, g:'ring', n:'6', t:'새미쥬얼리', d:'18:30 · 230~280만 · 19:00 마감'},
+  {p:P.riu, g:'morning', n:'7', t:'리우 메이크업', d:'12/12 12:00~13:30 · 28만'},
+  {p:P.royal, g:'morning', n:'8', t:'로얄호텔서울', d:'12/12 14:30 본식 · 02-756-1112'},
+  {p:P.shinheung, g:'A', n:'A', t:'신흥시장 (해방촌)', d:'A안 · 오토포토·지름길·시장 저녁'},
+  {p:P.jireumgil, g:'A', n:'A', t:'지름길 사진관', d:'A안 17:00 · 2인 30,000원 · 미예약'},
+  {p:P.namsan, g:'A', n:'A', t:'남산 전망 덱', d:'A안 · 일몰 17:14 · 도보 5분'},
+  {p:P.automatico, g:'B', n:'B', t:'오토마티코 서촌', d:'B안 1순위 · 6,000원'},
+  {p:P.otophotoSc, g:'B', n:'B', t:'오토포토 서촌', d:'B안 2순위 · 5,000원대 · 24시간'},
+  {p:P.youngchive, g:'B', n:'B', t:'영카이브 서촌', d:'B안 대안 · 24시간 무인'},
+  {p:P.daerim, g:'B', n:'B', t:'대림미술관', d:'B안 · 무료 · 입장마감 17:00'},
+  {p:P.taylor, g:'food', t:'테일러커피 서촌경복궁', d:'B안 카페 · 08:00~21:00'},
+  {p:P.stationfix, g:'food', t:'스태픽스', d:'B안 카페 · 10:00~20:30'},
+  {p:P.doryang, g:'food', t:'도량', d:'스타 셰프 · 17:00~21:30'},
+  {p:P.tmari, g:'food', t:'카페 트마리', d:'카페 · 서순라길 · 11:00~23:00'},
+  {p:P.dongbaek, g:'food', t:'동백양과점 익선점', d:'카페 · 09:00~22:00'},
+  {p:P.highway, g:'food', t:'하이웨스트 익선', d:'카페 · 09:00~22:00'},
+  {p:P.meongseok, g:'food', t:'멍석집 종로3가', d:'저녁 · 호텔 도보 4분'},
+  {p:P.songam, g:'food', t:'송암온반', d:'저녁 · 17:00~22:00'},
+  {p:P.douroum, g:'food', t:'도우룸 광화문', d:'스타 셰프 · 캐치테이블 예약'},
+  {p:P.euljiroboseok, g:'food', t:'을지로보석', d:'스타 셰프 · 인스타 DM'},
+  {p:P.cheonggye, g:'fest', t:'청계광장 (빛초롱축제)', d:'12/11 18:00~23:00 · 무료'},
+  {p:P.gwanghwamun, g:'fest', t:'광화문광장 (마켓)', d:'12/11 17:30~22:30 · 무료'},
+  {p:P.mmm, g:'food', t:'국립현대미술관 서울', d:'토 야간개장 18:00~21:00 · 무료'}
+];
+const GCOLOR = {start:'#14493F', ring:'#1F8A5B', morning:'#2D6FD0', A:'#C25A2A', B:'#7A4B8E', food:'#8C8A80', fest:'#B03A3A'};
+const GNAME = {start:'출발·도착', ring:'12/11 반지·호텔', morning:'12/12 오전·본식', A:'A안 해방촌', B:'B안 서촌', food:'카페·맛집·전시', fest:'축제'};
+function initMap(){
+  if(MAP) return;
+  MAP = L.map('mapBox', {zoomControl:true, scrollWheelZoom:true}).setView([37.5670,126.9890], 13);
+  osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap'
+  });
+  satLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    maxZoom: 19,
+    attribution: 'Esri World Imagery'
+  });
+  osmLayer.addTo(MAP);
+  PINS.forEach(pin=>{
+    const col = GCOLOR[pin.g];
+    const label = pin.n || '';
+    const icon = L.divIcon({className:'', html:'<div class="leaflet-pin" style="background:' + col + ';width:' + (label?24:14) + 'px;height:' + (label?24:14) + 'px;font-size:' + (label?11:0) + 'px;">' + label + '</div>', iconSize:[label?24:14, label?24:14], iconAnchor:[label?12:7, label?12:7]});
+    const m = L.marker([pin.p.lat, pin.p.lng], {icon:icon, title:pin.t});
+    m.bindPopup('<b>' + esc(pin.t) + '</b><br/>' + esc(pin.d) + '<br/><a href="' + kakaoSearch(pin.p.name) + '" target="_blank" rel="noopener">카카오맵에서 열기</a>');
+    m.addTo(MAP);
+    m.__pin = pin;
+    markers.push(m);
+  });
+  fitAll();
+  renderPinList();
+}
+function setLayer(k){
+  LYR = k;
+  if(!MAP) return;
+  if(k === 'sat'){ MAP.removeLayer(osmLayer); satLayer.addTo(MAP); }
+  else { MAP.removeLayer(satLayer); osmLayer.addTo(MAP); }
+  $('lyrOsm').classList.toggle('on', k === 'osm');
+  $('lyrSat').classList.toggle('on', k === 'sat');
+}
+function fitAll(){
+  if(!MAP) return;
+  const b = L.latLngBounds(PINS.map(p=>[p.p.lat, p.p.lng]));
+  MAP.fitBounds(b, {padding:[26,26]});
+}
+function renderPinList(){
+  $('pinList').innerHTML = PINS.map((p,i)=>'<div class="pinrow" onclick="focusPin(' + i + ')">' +
+    '<span class="pindot" style="background:' + GCOLOR[p.g] + '"></span><span style="flex:1;">' + esc(p.t) + '</span>' +
+    '<span style="color:var(--sub);font-size:11px;">' + esc(GNAME[p.g]) + '</span></div>').join('');
+}
+function focusPin(i){
+  if(!MAP) return;
+  const m = markers[i]; if(!m) return;
+  MAP.setView(m.getLatLng(), 16, {animate:true});
+  m.openPopup();
+  document.getElementById('mapBox').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+/* ───────── 매거진 ───────── */
+const MAG_PAGES = 9;
+function magInit(){
+  if($('magPages').dataset.done) return;
+  $('magPages').dataset.done = '1';
+  $('magJump').innerHTML = Array.from({length:MAG_PAGES}, (_,i)=>'<button onclick="magGo(' + (i+1) + ')">' + (i+1) + '</button>').join('');
+  $('magPages').innerHTML = Array.from({length:MAG_PAGES}, (_,i)=>{
+    const n = i+1;
+    return '<div class="mag-page" id="magp' + n + '"><span class="pgno">' + n + ' / ' + MAG_PAGES + '</span>' +
+      '<img loading="lazy" src="./mag/p' + n + '.webp" alt="서울 가이드 ' + n + '쪽" onclick="magOpen(' + n + ')"/></div>';
+  }).join('');
+}
+function magGo(n){
+  const el = $('magp' + n);
+  if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+let magNo = 1, magZoomPct = 100;
+function magOpen(n){
+  magNo = n;
+  $('magOvImg').src = './mag/p' + magNo + '.webp';
+  $('magOvNo').textContent = magNo + ' / ' + MAG_PAGES;
+  $('magOv').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  magZoomPct = 100;
+  $('magOvImg').style.width = '100%';
+  $('magOvZ').textContent = '100%';
+  $('magOvScroll').scrollTop = 0;
+}
+function magOvStep(d){
+  magNo = Math.min(MAG_PAGES, Math.max(1, magNo + d));
+  $('magOvImg').src = './mag/p' + magNo + '.webp';
+  $('magOvNo').textContent = magNo + ' / ' + MAG_PAGES;
+  $('magOvScroll').scrollTop = 0;
+}
+function magOvZoom(d){
+  magZoomPct = Math.min(300, Math.max(100, magZoomPct + d * 25));
+  $('magOvImg').style.width = magZoomPct + '%';
+  $('magOvZ').textContent = magZoomPct + '%';
+}
+function magOvClose(){ $('magOv').classList.remove('open'); document.body.style.overflow = ''; }
+function openMapOv(){ $('mapOv').classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closeMapOv(){ $('mapOv').classList.remove('open'); document.body.style.overflow = ''; }
+
+/* ───────── 탭 ───────── */
+function goTab(id, btn){
+  document.querySelectorAll('main > section').forEach(s=>s.classList.add('hidden'));
+  $('tab-' + id).classList.remove('hidden');
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(id === 'map'){ setTimeout(()=>{ initMap(); if(MAP) MAP.invalidateSize(); }, 60); }
+  if(id === 'mag') magInit();
+  window.scrollTo({top:0});
+}
+
+/* ───────── 오프라인 ───────── */
+const SW_CACHE = 'seoul-1211-v1';
+let offList = null, offBusy = false;
+function isOffline(){ return !navigator.onLine; }
+function offToast(msg){
+  const t = document.querySelector('.off-toast');
+  if(!t){ const d = document.createElement('div'); d.className = 'off-toast'; document.body.appendChild(d); d.textContent = msg; d.classList.add('show'); setTimeout(()=>d.classList.remove('show'), 2200); return; }
+  t.textContent = msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 2200);
+}
+async function countCached(){
+  if(!('caches' in window)) return {n:0, total:0};
+  try{
+    const c = await caches.open(SW_CACHE);
+    const keys = await c.keys();
+    if(!offList){ try{ offList = await (await fetch('./offline-manifest.json', {cache:'no-store'})).json(); }catch(e){ offList = []; } }
+    return {n:keys.length, total:offList.length};
+  }catch(e){ return {n:0, total:0}; }
+}
+async function updateOffBadge(){
+  const bar = document.getElementById('offBar');
+  const badge = document.getElementById('offBadge');
+  const st = document.getElementById('offStatus');
+  if(!bar) return;
+  const {n, total} = await countCached();
+  const off = isOffline();
+  if(off){
+    bar.classList.toggle('ok', n > 0);
+    badge.innerHTML = '📴 오프라인 · <b>' + n + '</b>개 저장됨';
+    if(st) st.innerHTML = '와이파이에 연결되면 나머지를 자동으로 받아요.';
+  } else if(n >= (total || 1) * 0.9 && n > 0){
+    bar.classList.add('ok');
+    badge.innerHTML = '📥 오프라인 저장 완료 · <b>' + n + '</b>개';
+    if(st) st.innerHTML = '인터넷 없이도 일정·지도·매거진이 열립니다.';
+  } else {
+    bar.classList.remove('ok');
+    badge.innerHTML = '📥 오프라인 저장 <b>' + n + '/' + (total||'…') + '</b> — 탭해서 받기';
+    if(st) st.innerHTML = '';
+  }
+}
+async function ensureOffline(force){
+  if(offBusy) return;
+  if(!('caches' in window)){ offToast('이 브라우저는 오프라인 저장을 지원하지 않아요'); return; }
+  offBusy = true; updateOffBadge();
+  if(!offList){
+    try{ offList = await (await fetch('./offline-manifest.json', {cache:'no-store'})).json(); }
+    catch(e){ offBusy = false; offToast('목록을 불러오지 못했어요 — 와이파이 확인 후 다시'); updateOffBadge(); return; }
+  }
+  let c;
+  try{ c = await caches.open(SW_CACHE); }catch(e){ offBusy = false; return; }
+  const queue = offList.slice();
+  let done = 0, added = 0;
+  const worker = async ()=>{
+    while(queue.length){
+      const u = queue.shift(); done++;
+      try{
+        const alwaysFresh = /(\/|\.html|\.json|\.js)$/.test(u);
+        if(!force && !alwaysFresh && await c.match(u, {ignoreSearch:true})){}
+        else{
+          const r = await fetch(u, {cache:'reload'});
+          if(r && r.status === 200){ await c.put(u, r); added++; }
+        }
+      }catch(e){}
+      if(done % 4 === 0) updateOffBadge();
+    }
+  };
+  await Promise.all([worker(), worker(), worker(), worker()]);
+  offBusy = false;
+  await updateOffBadge();
+  if(added > 0) offToast('오프라인 저장 완료 · ' + offList.length + '개 파일');
+  else offToast('이미 오프라인 저장되어 있어요');
+}
+function toggleOffPanel(){
+  const p = document.getElementById('offPanel');
+  if(!p) return;
+  p.classList.toggle('open');
+  document.getElementById('offChev').textContent = p.classList.contains('open') ? '▴' : '▾';
+  updateOffBadge();
+}
+
+/* 키보드 */
+document.addEventListener('keydown', e=>{
+  if(!$('magOv').classList.contains('open')) return;
+  if(e.key === 'Escape') magOvClose();
+  if(e.key === 'ArrowRight') magOvStep(1);
+  if(e.key === 'ArrowLeft') magOvStep(-1);
+});
+
+/* 시작 */
+dday();
+renderPlan(); renderRings(); renderChecks(); renderFood();
+updateOffBadge(); setTimeout(updateOffBadge, 2500); setTimeout(updateOffBadge, 7000);
+if(!isOffline()) setTimeout(()=>ensureOffline(false), 1500);
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').then(reg=>{
+  setTimeout(()=>{ try{ reg.update(); }catch(e){} }, 4000);
+  setInterval(()=>{ try{ reg.update(); }catch(e){} }, 30*60*1000);
+}).catch(()=>{});
+window.addEventListener('online', updateOffBadge);
+window.addEventListener('offline', updateOffBadge);
+</script>
+</body>
+</html>
