@@ -143,6 +143,25 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
 .tabbar.tight .tab{font-size:10.5px;}
 .tabbar.tight .tab .ico{font-size:19px;}
 
+/* ───────── 📖 매거진 챕터 뷰어 ───────── */
+.mr-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:2px 0 8px;}
+.mr-tt{font-size:15px;font-weight:900;color:var(--green);letter-spacing:-.2px;}
+.mr-ss{font-size:11.5px;color:var(--sub);font-weight:700;}
+.mr-chips{display:flex;gap:5px;overflow-x:auto;padding:0 0 9px;scrollbar-width:none;}
+.mr-chips::-webkit-scrollbar{display:none;}
+.mr-chip{flex:0 0 auto;border:1.5px solid var(--line);background:var(--card);border-radius:9px;padding:6px 9px;font-size:11.5px;font-weight:800;color:var(--sub);cursor:pointer;font-family:inherit;white-space:nowrap;}
+.mr-chip.on{background:var(--green);border-color:var(--green);color:#fff;}
+.mr-stage{position:relative;background:#EDE9DC;border:1px solid var(--line);border-radius:14px;padding:6px;display:flex;align-items:center;justify-content:center;min-height:220px;}
+.mr-stage img{display:block;width:100%;height:auto;max-height:calc(100vh - 330px);max-height:calc(100dvh - 330px);object-fit:contain;border-radius:10px;background:#fff;cursor:zoom-in;}
+.mr-nav{position:absolute;top:50%;transform:translateY(-50%);width:32px;height:54px;border-radius:10px;border:none;background:rgba(20,73,63,.68);color:#fff;font-size:22px;font-weight:900;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0 0 3px;}
+.mr-nav.l{left:8px;}
+.mr-nav.r{right:8px;}
+.mr-count{position:absolute;bottom:12px;right:12px;background:rgba(20,73,63,.85);color:#fff;font-size:11px;font-weight:800;padding:3px 9px;border-radius:99px;}
+.mr-bar{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-top:8px;}
+.mr-bar button,.mr-bar a{border:1.5px solid var(--line);background:var(--card);border-radius:10px;padding:10px 2px;font-size:12.5px;font-weight:800;color:var(--ink);font-family:inherit;text-decoration:none;cursor:pointer;text-align:center;display:flex;align-items:center;justify-content:center;}
+.mr-bar a{background:var(--green);border-color:var(--green);color:#fff;}
+.mr-tip{font-size:11.5px;color:var(--sub);line-height:1.5;background:#F7F5EE;border-radius:10px;padding:8px 10px;margin-top:8px;}
+
 /* ───────── 🧾 면세 환급 탭 ───────── */
 .tax-hero{background:linear-gradient(150deg,#14493F 0%,#226B5B 100%);color:#FAF7F0;border-radius:16px;padding:15px 16px 13px;margin-bottom:12px;box-shadow:0 2px 10px rgba(20,73,63,.16);}
 .tax-hero .tt{font-size:17px;font-weight:900;letter-spacing:-.3px;line-height:1.35;}
@@ -421,55 +440,36 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
   </section>
 
   <!-- 📖 매거진 (전체 일정 · 맛집 · 쇼핑 PDF) -->
+  <!-- 📖 매거진 · 챕터별 1장 뷰어 -->
   <section id="tab-mag" class="hidden">
     <div class="mag-tabs">
-      <button type="button" id="mtab-main" class="on" onclick="magGoto('main')">📖 일정 11</button>
-      <button type="button" id="mtab-food" onclick="magGoto('food')">🍜 맛집 13</button>
-      <button type="button" id="mtab-shop" onclick="magGoto('shop')">🛍️ 쇼핑 16</button>
+      <button type="button" id="mtab-main" class="on" onclick="magPick('main')">📖 일정 11</button>
+      <button type="button" id="mtab-food" onclick="magPick('food')">🍜 맛집 13</button>
+      <button type="button" id="mtab-shop" onclick="magPick('shop')">🛍️ 쇼핑 16</button>
     </div>
-
-    <div class="mag-hero mag-sec" id="magsec-main">
-      <div class="mt">📖 오사카 3박 4일 매거진</div>
-      <div class="ms">전체 일정 한눈에 보기 · 11쪽 · 2026-11-21 최신본<br/>핵심 일정·지도·숙소·먹거리·면세까지 한 권에</div>
-      <div class="mag-btns">
-        <a class="mag-btn solid" target="_blank" rel="noopener" href="./magazine.pdf">🔍 PDF 크게 열기</a>
-        <a class="mag-btn out" href="./magazine.pdf" download="오사카_3박4일_매거진_2026.pdf">⬇️ PDF 저장</a>
-      </div>
-      <div class="mag-note">💡 아이폰은 <b>PDF 크게 열기</b>가 제일 편해요(두 손가락 확대·스크롤 자유). 저장하면 <b>파일 앱 → 다운로드</b>에 담겨요.</div>
+    <div class="mr-head">
+      <div class="mr-tt" id="mrTitle">📖 오사카 3박 4일 매거진</div>
+      <div class="mr-ss" id="mrSub"></div>
     </div>
-    <div class="mag-jump" id="magJump"></div>
-    <div id="magPages"></div>
-
-    <div class="mag-sp">🍜 맛집 매거진 <span>13쪽 · 35곳 정리 · 2026-11-22 최근호 님 발송본</span></div>
-    <div class="mag-hero food mag-sec" id="magsec-food">
-      <div class="mt">🍜 오사카 맛집 매거진</div>
-      <div class="ms">먼저 갈 8곳 · 동선별 35곳 · 예약·휴무 체크리스트 · 13쪽<br/>11/28~12/1 일정 순서에 맞춰 정리된 맛집 지도까지</div>
-      <div class="mag-btns">
-        <a class="mag-btn solid" target="_blank" rel="noopener" href="./food_magazine.pdf">🔍 크게 열기</a>
-        <a class="mag-btn out" href="./food_magazine.pdf" download="오사카_맛집_매거진_2026.pdf">⬇️ 저장</a>
-      </div>
-      <div class="mag-note">💡 4쪽 <b>먼저 갈 8곳</b>만 봐도 저녁은 정해져요. 카드를 누르면 구글맵이 바로 열립니다.</div>
+    <div class="mr-chips" id="mrChips"></div>
+    <div class="mr-stage" id="mrStage">
+      <img id="mrImg" alt="매거진 페이지" src="./mag/p01.webp" onclick="magOpenCur()">
+      <button type="button" class="mr-nav l" id="mrPrev" onclick="magStep(-1)" aria-label="이전 페이지">‹</button>
+      <button type="button" class="mr-nav r" id="mrNext" onclick="magStep(1)" aria-label="다음 페이지">›</button>
+      <div class="mr-count" id="mrCount">1 / 11</div>
     </div>
-    <div class="mag-jump" id="foodJump"></div>
-    <div id="foodPages"></div>
-
-    <div class="mag-sp">🛍️ 돈키호테 신박템 <span>16쪽 v2 · 사진 확인 23개 · TOP 10 · 면세·수하물·예산</span></div>
-    <div class="mag-hero shop mag-sec" id="magsec-shop">
-      <div class="mt">🛍️ 돈키호테 신박템 매거진 v2</div>
-      <div class="ms">사진으로 확인한 23개 · 5개 카테고리 · 16쪽<br/>먼저 살 10개 표·뺀 3개 품목·면세 제도(2026-11-01 변경)·수하물·33,000엔 예산 계산</div>
-      <div class="mag-btns">
-        <a class="mag-btn solid" target="_blank" rel="noopener" href="./shopping_magazine.pdf">🔍 크게 열기</a>
-        <a class="mag-btn out" href="./shopping_magazine.pdf" download="오사카_돈키호테_신박템_매거진_2026_v2.pdf">⬇️ 저장</a>
-      </div>
-      <div class="mag-note">💡 면세가 <b>출국 후 환급</b>으로 바뀌었어요(3쪽). 계산대에서 10% 빼주지 않습니다.</div>
+    <div class="mr-bar">
+      <button type="button" onclick="magStep(-1)">◀ 이전</button>
+      <button type="button" onclick="magOpenCur()">🔍 확대</button>
+      <a id="mrPdf" href="./magazine.pdf" target="_blank" rel="noopener">📄 PDF</a>
+      <button type="button" onclick="magStep(1)">다음 ▶</button>
     </div>
-    <div class="mag-jump" id="shopJump"></div>
-    <div id="shopPages"></div>
+    <div class="mr-tip" id="mrTip"></div>
 
-    <div class="sec-card">
+    <div class="sec-card" style="margin-top:12px;">
       <h3>📄 함께 보는 PDF</h3>
       <div class="row"><div><b>A안 · B안 하루 일정 비교</b><br/><span style="font-size:12px;color:var(--sub);">2쪽 요약본 · 11/19 작성</span></div><a class="act-btn map" target="_blank" rel="noopener" href="./osaka_ab_compare.pdf">PDF 열기</a></div>
-      <div class="row"><div><b>완전판 일정 매거진</b><br/><span style="font-size:12px;color:var(--sub);">11쪽 · 맨 위 페이지와 같은 파일</span></div><a class="act-btn" href="./magazine.pdf" download="오사카_3박4일_매거진_2026.pdf">⬇️ 저장</a></div>
+      <div class="row"><div><b>완전판 일정 매거진</b><br/><span style="font-size:12px;color:var(--sub);">11쪽 · 위 뷰어와 같은 파일</span></div><a class="act-btn" href="./magazine.pdf" download="오사카_3박4일_매거진_2026.pdf">⬇️ 저장</a></div>
       <div class="row"><div><b>오사카 맛집 매거진</b><br/><span style="font-size:12px;color:var(--sub);">13쪽 · 35곳</span></div><a class="act-btn" href="./food_magazine.pdf" download="오사카_맛집_매거진_2026.pdf">⬇️ 저장</a></div>
       <div class="row"><div><b>돈키호테 신박템 매거진 v2</b><br/><span style="font-size:12px;color:var(--sub);">16쪽 · 사진 확인 23개</span></div><a class="act-btn" href="./shopping_magazine.pdf" download="오사카_돈키호테_신박템_매거진_2026_v2.pdf">⬇️ 저장</a></div>
     </div>
@@ -1025,7 +1025,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v11';
+const SW_CACHE = 'osaka-planner-v12';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
@@ -1126,10 +1126,7 @@ document.addEventListener('click', e=>{
   if(href.indexOf('kix_tax_refund') >= 0) return;
   e.preventDefault();
   const key = href.indexOf('food') >= 0 ? 'food' : (href.indexOf('shopping') >= 0 ? 'shop' : 'main');
-  try{
-    magGoto(key);
-    setTimeout(()=>{ const el = document.getElementById(MAGS[key].box); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }, 80);
-  }catch(err){}
+  try{ magInit(); magPick(key); }catch(err){}
   offToast('비행기 모드예요 — 앱 안 페이지 뷰로 열었어요 (PDF는 인터넷 필요)');
 });
 
@@ -1147,67 +1144,88 @@ updateOffBadge(); setTimeout(updateOffBadge, 2500); setTimeout(updateOffBadge, 7
 if(!isOffline()) setTimeout(()=>ensureOffline(false), 1500);
 if(FORCE_OFFLINE) setTimeout(()=>{ syncOnlineLayer(); offToast('오프라인 모드로 열었어요 (저장된 지도만 표시)'); }, 1200);
 if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').then(()=>{
-  navigator.serviceWorker.addEventListener('controllerchange', ()=>updateOffBadge());
+  navigator.serviceWorker.addEventListener('controllerchange', ()=>{
+    updateOffBadge();
+    try{
+      if(sessionStorage.getItem('os_sw_reload')) return;
+      sessionStorage.setItem('os_sw_reload','1');
+      location.reload();
+    }catch(e){}
+  });
 }).catch(()=>{});
-const MAG = {pages:11, dir:'./mag/', file:'./magazine.pdf'};
 const MAGS = {
-  main: {pages:11, dir:'./mag/', file:'./magazine.pdf', name:'오사카 3박 4일 매거진', short:'📖 일정', w:1800, h:1273, jump:'magJump', box:'magPages', px:'magp'},
-  food: {pages:13, dir:'./pages_food/', file:'./food_magazine.pdf', name:'오사카 맛집 매거진', short:'🍜 맛집', w:1500, h:1060, jump:'foodJump', box:'foodPages', px:'foodp'},
-  shop: {pages:16, dir:'./pages_shop/', file:'./shopping_magazine.pdf', name:'돈키호테 신박템 매거진 v2', short:'🛍️ 쇼핑', w:1500, h:1061, jump:'shopJump', box:'shopPages', px:'shopp'}
+  main:{pages:11, dir:'./mag/', file:'./magazine.pdf', name:'오사카 3박 4일 매거진', short:'📖 일정',
+        title:'📖 오사카 3박 4일 매거진', sub:'11쪽 · 2026-11-21 최신본',
+        note:'💡 일정·지도·숙소·먹거리·면세까지 11쪽. 위 챕터 버튼을 누르면 그 페이지로 바로 가요.'},
+  food:{pages:13, dir:'./pages_food/', file:'./food_magazine.pdf', name:'오사카 맛집 매거진', short:'🍜 맛집',
+        title:'🍜 오사카 맛집 매거진', sub:'13쪽 · 35곳 · 2026-11-22 최근호 님 발송본',
+        note:'💡 4~6쪽 「먼저 갈 8곳」만 봐도 저녁은 정해져요. 지면의 카드를 누르면 구글맵이 열립니다.'},
+  shop:{pages:16, dir:'./pages_shop/', file:'./shopping_magazine.pdf', name:'돈키호테 신박템 매거진 v2', short:'🛍️ 쇼핑',
+        title:'🛍️ 돈키호테 신박템 매거진 v2', sub:'16쪽 · 사진 확인 23개 · 2026-11-23',
+        note:'💡 3쪽 「2026-11-01 면세 제도」부터 보세요. 계산대에서 10%를 빼주지 않습니다.'}
 };
+const MAG_CH = {
+  main:[{p:1,n:'표지'},{p:2,n:'목차·날씨'},{p:3,n:'구역지도'},{p:4,n:'Day1~2'},{p:5,n:'USJ'},{p:6,n:'귀국·면세'},{p:7,n:'숙소·교통'},{p:8,n:'위시'},{p:9,n:'준비'},{p:10,n:'휴무·링크'},{p:11,n:'예산'}],
+  food:[{p:1,n:'표지'},{p:2,n:'동선 타임라인'},{p:3,n:'도보 지도'},{p:4,n:'먼저 갈 8곳 ①'},{p:5,n:'먼저 갈 8곳 ②'},{p:6,n:'먼저 갈 8곳 ③'},{p:7,n:'우메다·나카노시마'},{p:8,n:'동선에 끼우기'},{p:9,n:'맛집 표 1/2'},{p:10,n:'맛집 표 2/2'},{p:11,n:'예약·휴무'},{p:12,n:'링크'},{p:13,n:'출처'}],
+  shop:[{p:1,n:'표지'},{p:2,n:'한눈에'},{p:3,n:'면세 제도'},{p:4,n:'베스트 10'},{p:5,n:'뷰티'},{p:6,n:'의약·피로'},{p:7,n:'주방·생활'},{p:8,n:'식품'},{p:9,n:'기념품'},{p:10,n:'예산'},{p:11,n:'동선'},{p:12,n:'채널 비교'},{p:13,n:'주의'},{p:14,n:'수하물'},{p:15,n:'링크'},{p:16,n:'출처'}]
+};
+let magReady = false, magZoom = 1, magCur = 'main', magIdx = 1;
+const magPos = {main:1, food:1, shop:1};
 
-/* ───────── 📖 매거진 탭 로직 (일정 · 맛집 · 쇼핑 3종) ───────── */
-let magReady = false, magIdx = 1, magZoom = 1, magCur = 'main';
-function magInit(){
-  if(magReady) return; magReady = true;
-  Object.keys(MAGS).forEach(k => magBuild(k));
+function magInit(){ if(magReady) return; magReady = true; magPick(magCur, magPos[magCur]); }
+
+function magPick(k, p){
+  if(!MAGS[k]) return;
+  magCur = k;
+  const m = MAGS[k];
+  document.querySelectorAll('.mag-tabs button').forEach(b => b.classList.toggle('on', b.id === 'mtab-' + k));
+  document.getElementById('mrTitle').innerHTML = m.title;
+  document.getElementById('mrSub').innerHTML = m.sub;
+  document.getElementById('mrTip').innerHTML = m.note;
+  document.getElementById('mrPdf').href = m.file;
+  document.getElementById('mrChips').innerHTML = MAG_CH[k].map(c => `<button type="button" class="mr-chip" onclick="magGo(${c.p})">${c.n}</button>`).join('');
+  magShow(p || magPos[k] || 1);
 }
-function magBuild(key){
-  const m = MAGS[key];
+function magGoto(k){ magPick(k); }        /* 구버전 호환 */
+function magGo(p){ magShow(p); }
+function magShow(p){
+  const m = MAGS[magCur];
   if(!m) return;
-  const jump = document.getElementById(m.jump);
-  const box  = document.getElementById(m.box);
-  if(!jump || !box) return;
-  let jh = '', ph = '';
-  for(let i = 1; i <= m.pages; i++){
-    const n = String(i).padStart(2,'0');
-    jh += `<button type="button" data-p="${i}" onclick="magJumpTo('${key}',${i})">${i}</button>`;
-    ph += `<figure class="mag-page" id="${m.px}-${i}">`
-        + `<span class="pgno">${i} / ${m.pages}</span>`
-        + `<img loading="lazy" decoding="async" width="${m.w}" height="${m.h}" alt="${m.name} ${i}쪽" src="${m.dir}p${n}.webp" onclick="magOpen('${key}',${i})">`
-        + `<span class="zoomhint">탭해서 확대</span></figure>`;
-  }
-  jump.innerHTML = jh;
-  box.innerHTML = ph;
+  p = Math.max(1, Math.min(m.pages, parseInt(p, 10) || 1));
+  magIdx = p; magPos[magCur] = p;
+  const img = document.getElementById('mrImg');
+  const src = m.dir + 'p' + String(p).padStart(2, '0') + '.webp';
+  if(img.getAttribute('src') !== src) img.src = src;
+  img.alt = m.name + ' ' + p + '쪽';
+  document.getElementById('mrCount').textContent = p + ' / ' + m.pages;
+  const chips = document.querySelectorAll('#mrChips .mr-chip');
+  let ci = 0;
+  MAG_CH[magCur].forEach((c, i) => { if(c.p <= p) ci = i; });
+  chips.forEach((b, i) => b.classList.toggle('on', i === ci));
+  if(chips[ci] && chips[ci].scrollIntoView) chips[ci].scrollIntoView({block:'nearest', inline:'center'});
+  document.getElementById('mrPrev').style.opacity = p <= 1 ? .3 : 1;
+  document.getElementById('mrNext').style.opacity = p >= m.pages ? .3 : 1;
+  ['p' + String(p - 1).padStart(2, '0'), 'p' + String(p + 1).padStart(2, '0')].forEach(n => {
+    if(n !== 'p00' && n !== 'p' + String(m.pages + 1).padStart(2, '0')) { const pre = new Image(); pre.src = m.dir + n + '.webp'; }
+  });
 }
-function magGoto(key){
-  const sec = document.getElementById('magsec-' + key);
-  if(sec) sec.scrollIntoView({behavior:'smooth', block:'start'});
-  document.querySelectorAll('.mag-tabs button').forEach(b => b.classList.toggle('on', b.id === 'mtab-' + key));
-}
-function magJumpTo(key, i){
-  const m = MAGS[key];
-  if(!m) return;
-  const el = document.getElementById(m.px + '-' + i);
-  if(!el) return;
-  el.scrollIntoView({behavior:'smooth', block:'start'});
-  document.querySelectorAll('#' + m.jump + ' button').forEach(b=>b.classList.toggle('on', +b.dataset.p === i));
-}
+function magStep(d){ magShow(magIdx + d); }
+function magOpenCur(){ magOpen(magCur, magIdx); }
 function magSetZoom(z){
   magZoom = Math.min(3, Math.max(1, z));
-  document.getElementById('magOvImg').style.width = (magZoom*100)+'%';
-  document.getElementById('magOvZ').textContent = Math.round(magZoom*100)+'%';
+  document.getElementById('magOvImg').style.width = (magZoom * 100) + '%';
+  document.getElementById('magOvZ').textContent = Math.round(magZoom * 100) + '%';
 }
 function magOpen(key, i, keepZoom){
   const m = MAGS[key];
   if(!m || i < 1 || i > m.pages) return;
   magCur = key; magIdx = i;
-  document.getElementById('magOvImg').src = m.dir + 'p' + String(i).padStart(2,'0') + '.webp';
+  document.getElementById('magOvImg').src = m.dir + 'p' + String(i).padStart(2, '0') + '.webp';
   document.getElementById('magOvNo').textContent = m.short + '  ' + i + ' / ' + m.pages;
   document.getElementById('magOvPdf').href = m.file;
   document.getElementById('magOv').classList.add('open');
   document.body.style.overflow = 'hidden';
-  if(!keepZoom){ magSetZoom(1); }
+  if(!keepZoom) magSetZoom(1);
   document.getElementById('magOvScroll').scrollTop = 0;
   document.getElementById('magOvScroll').scrollLeft = 0;
 }
@@ -1220,13 +1238,35 @@ function magOvStep(d){
 function magOvClose(){
   document.getElementById('magOv').classList.remove('open');
   document.body.style.overflow = '';
+  if(magCur) magShow(magIdx);
 }
-document.addEventListener('keydown', e=>{
-  if(!document.getElementById('magOv') || !document.getElementById('magOv').classList.contains('open')) return;
-  if(e.key === 'Escape') magOvClose();
-  if(e.key === 'ArrowRight') magOvStep(1);
-  if(e.key === 'ArrowLeft') magOvStep(-1);
+document.addEventListener('keydown', e => {
+  const ov = document.getElementById('magOv');
+  if(ov && ov.classList.contains('open')){
+    if(e.key === 'Escape') magOvClose();
+    if(e.key === 'ArrowRight') magOvStep(1);
+    if(e.key === 'ArrowLeft') magOvStep(-1);
+    return;
+  }
+  const sec = document.getElementById('tab-mag');
+  if(sec && !sec.classList.contains('hidden')){
+    if(e.key === 'ArrowRight') magStep(1);
+    if(e.key === 'ArrowLeft') magStep(-1);
+  }
 });
+/* 좌우 스와이프로 페이지 넘기기 */
+(function(){
+  const st = document.getElementById('mrStage');
+  if(!st) return;
+  let sx = null, sy = null;
+  st.addEventListener('touchstart', e => { const t = e.touches[0]; sx = t.clientX; sy = t.clientY; }, {passive:true});
+  st.addEventListener('touchend', e => {
+    if(sx === null) return;
+    const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+    sx = null;
+    if(Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.4) magStep(dx < 0 ? 1 : -1);
+  }, {passive:true});
+})();
 </script>
 
 <div class="mag-ov" id="magOv">
