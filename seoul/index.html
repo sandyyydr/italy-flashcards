@@ -352,6 +352,7 @@ a.tel{color:var(--green);font-weight:800;text-decoration:none;}
       <button class="tool" onclick="fitAll()">📍 전체 핀 보기</button>
     </div>
     <div id="mapBox"></div>
+    <p class="hint" style="margin:-2px 0 10px;">핀이 겹쳐 보이면 아래 <b>핀 목록</b>에서 골라 주세요 — 그 자리로 확대돼요.</p>
     <div class="sec-card">
       <h3>핀 목록 <span class="sub">누르면 지도에서 그 자리로</span></h3>
       <div class="pinlist" id="pinList"></div>
@@ -802,7 +803,7 @@ function initMap(){
   PINS.forEach(pin=>{
     const col = GCOLOR[pin.g];
     const label = pin.n || '';
-    const icon = L.divIcon({className:'', html:'<div class="leaflet-pin" style="background:' + col + ';width:' + (label?24:14) + 'px;height:' + (label?24:14) + 'px;font-size:' + (label?11:0) + 'px;">' + label + '</div>', iconSize:[label?24:14, label?24:14], iconAnchor:[label?12:7, label?12:7]});
+    const icon = L.divIcon({className:'', html:'<div class="leaflet-pin" style="background:' + col + ';width:' + (label?22:13) + 'px;height:' + (label?22:13) + 'px;font-size:' + (label?10.5:0) + 'px;">' + label + '</div>', iconSize:[label?22:13, label?22:13], iconAnchor:[label?11:6, label?11:6]});
     const m = L.marker([pin.p.lat, pin.p.lng], {icon:icon, title:pin.t});
     m.bindPopup('<b>' + esc(pin.t) + '</b><br/>' + esc(pin.d) + '<br/><a href="' + kmap(pin.p) + '" target="_blank" rel="noopener">지도에서 열기</a>');
     m.addTo(MAP);
@@ -823,7 +824,7 @@ function setLayer(k){
 function fitAll(){
   if(!MAP) return;
   const b = L.latLngBounds(PINS.map(p=>[p.p.lat, p.p.lng]));
-  MAP.fitBounds(b, {padding:[26,26]});
+  MAP.fitBounds(b, {padding:[16,16]});
 }
 function renderPinList(){
   $('pinList').innerHTML = PINS.map((p,i)=>'<div class="pinrow" onclick="focusPin(' + i + ')">' +
