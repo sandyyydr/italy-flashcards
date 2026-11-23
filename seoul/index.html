@@ -100,8 +100,7 @@ main{padding:12px 14px calc(env(safe-area-inset-bottom,16px) + 78px);max-width:6
 .cmp tr:last-child td{border-bottom:none;}
 .cmp td:first-child{white-space:nowrap;font-weight:800;color:#3B4A42;font-size:12px;}
 .cmp .a{color:#146A5B;} .cmp .b{color:#7A4B8E;}
-.chip-scroll{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none;}
-.chip-scroll::-webkit-scrollbar{display:none;}
+.chip-scroll{display:flex;flex-wrap:wrap;gap:6px;padding:2px 0 10px;}
 .cpill{flex:0 0 auto;border:1.5px solid var(--line);background:var(--card);border-radius:99px;padding:7px 13px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit;color:var(--sub);}
 .cpill.active{background:var(--green);border-color:var(--green);color:#fff;}
 .food-card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:12px 13px;margin-bottom:9px;}
@@ -429,7 +428,9 @@ const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>
 const kq = s => encodeURIComponent(s);
 const kakaoSearch = n => 'https://map.kakao.com/link/search/' + kq(n);
 const naverSearch = n => 'https://map.naver.com/p/search/' + kq(n);
-const kmap = p => (p && p.link) ? p.link : ('https://map.kakao.com/link/search/' + kq(p.name));
+const kmap = p => (p && p.link) ? p.link : ('https://map.kakao.com/link/search/' + kq((p && p.name) || ''));
+/* 링크 대상이 문자열이면 그대로, 장소 객체면 카카오맵 링크로 — href에 객체가 들어가 [object Object]가 되는 것 방지 */
+const actHref = t => (typeof t === 'string' ? t : kmap(t));
 function kakaoRoute(from, to){
   return 'https://map.kakao.com/link/from/' + kq(from.name) + ',' + from.lat + ',' + from.lng +
          '/to/' + kq(to.name) + ',' + to.lat + ',' + to.lng;
@@ -661,9 +662,9 @@ function itemHTML(it, i, small){
   const price = it.price ? '<div class="food-price" style="margin-top:6px;">💛 ' + esc(it.price) + '</div>' : '';
   const warn = it.warn ? '<div class="it-warn">⏰ ' + esc(it.warn) + '</div>' : '';
   const acts = (it.acts || []).map(a=>{
-    const [label, target, cls, isRoute] = a;
-    const href = typeof target === 'string' ? target : (isRoute ? target : kmap(target));
-    return '<a class="act-btn ' + (cls||'') + '" target="_blank" rel="noopener" href="' + href + '">' + esc(label) + '</a>';
+    const [label, target, cls] = a;
+    const href = actHref(target);
+    return '<a class="act-btn ' + (cls||'') + '" target="_blank" rel="noopener" href="' + esc(href) + '">' + esc(label) + '</a>';
   }).join('');
   return '<div class="item-card">' +
     '<div class="it-head"><div class="it-no' + (small?' sm':'') + '">' + (i+1) + '</div><div class="it-main">' +
@@ -699,7 +700,7 @@ function pickAB(k){
 /* ───────── 렌더: 반지 ───────── */
 function renderRings(){
   $('ringCards').innerHTML = RINGS.map(r=>{
-    const acts = r.acts.map(a=>'<a class="act-btn ' + (a[2]||'') + '" target="_blank" rel="noopener" href="' + (a[3]?a[1]:(typeof a[1]==='string'?a[1]:kmap(a[1]))) + '">' + esc(a[0]) + '</a>').join('');
+    const acts = r.acts.map(a=>'<a class="act-btn ' + (a[2]||'') + '" target="_blank" rel="noopener" href="' + esc(actHref(a[1])) + '">' + esc(a[0]) + '</a>').join('');
     return '<div class="item-card">' +
       '<div class="it-head"><div class="it-no">' + r.n + '</div><div class="it-main">' +
         '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">' +
@@ -742,7 +743,7 @@ function renderFood(){
   $('foodChips').innerHTML = CATS.map(c=>'<button class="cpill' + (foodCat===c[0]?' active':'') + '" onclick="setFood(\'' + c[0] + '\')">' + c[1] + '</button>').join('');
   const list = FOODS.filter(f=>foodCat==='all' || f.cat===foodCat);
   $('foodList').innerHTML = list.map(f=>{
-    const acts = f.acts.map(a=>'<a class="act-btn ' + (a[2]||'') + '" target="_blank" rel="noopener" href="' + a[1] + '">' + esc(a[0]) + '</a>').join('');
+    const acts = f.acts.map(a=>'<a class="act-btn ' + (a[2]||'') + '" target="_blank" rel="noopener" href="' + esc(actHref(a[1])) + '">' + esc(a[0]) + '</a>').join('');
     return '<div class="food-card">' +
       '<div class="food-top"><div class="food-name">' + esc(f.name) + '</div><span class="food-cat">' + esc(f.tag) + '</span></div>' +
       '<div class="food-meta">' + f.meta + '</div>' +
@@ -789,6 +790,7 @@ const GCOLOR = {start:'#14493F', ring:'#1F8A5B', morning:'#2D6FD0', A:'#C25A2A',
 const GNAME = {start:'출발·도착', ring:'12/11 반지·호텔', morning:'12/12 오전·본식', A:'A안 해방촌', B:'B안 서촌', food:'카페·맛집·전시', fest:'축제'};
 function initMap(){
   if(MAP) return;
+  if(!$('mapBox') || $('mapBox').offsetWidth === 0) return; /* 탭이 아직 화면에 없으면 초기화 보류 — 회색 빈칸·찌그러짐 방지 */
   MAP = L.map('mapBox', {zoomControl:true, scrollWheelZoom:true}).setView([37.5670,126.9890], 13);
   osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
@@ -799,6 +801,8 @@ function initMap(){
     attribution: 'Esri World Imagery'
   });
   osmLayer.addTo(MAP);
+  let tileErr = 0;
+  osmLayer.on('tileerror', ()=>{ if(++tileErr === 6) offToast('지도 타일을 못 불러왔어요 — 🛰️ 위성 지도로 바꿔 보세요'); });
   PINS.forEach(pin=>{
     const col = GCOLOR[pin.g];
     const label = pin.n || '';
@@ -817,6 +821,7 @@ function setLayer(k){
   if(!MAP) return;
   if(k === 'sat'){ MAP.removeLayer(osmLayer); satLayer.addTo(MAP); }
   else { MAP.removeLayer(satLayer); osmLayer.addTo(MAP); }
+  MAP.invalidateSize();
   $('lyrOsm').classList.toggle('on', k === 'osm');
   $('lyrSat').classList.toggle('on', k === 'sat');
 }
@@ -824,6 +829,7 @@ function fitAll(){
   if(!MAP) return;
   const b = L.latLngBounds(PINS.map(p=>[p.p.lat, p.p.lng]));
   MAP.fitBounds(b, {padding:[16,16]});
+  MAP.invalidateSize();
 }
 function renderPinList(){
   $('pinList').innerHTML = PINS.map((p,i)=>'<div class="pinrow" onclick="focusPin(' + i + ')">' +
@@ -882,18 +888,26 @@ function openMapOv(){ $('mapOv').classList.add('open'); document.body.style.over
 function closeMapOv(){ $('mapOv').classList.remove('open'); document.body.style.overflow = ''; }
 
 /* ───────── 탭 ───────── */
+function showMapTab(){
+  initMap();
+  [0, 90, 260, 600].forEach(t=>setTimeout(()=>{ if(!MAP) initMap(); if(MAP) MAP.invalidateSize(); }, t));
+}
+window.addEventListener('resize', ()=>{ if(MAP) MAP.invalidateSize(); });
+window.addEventListener('orientationchange', ()=>{ setTimeout(()=>{ if(MAP) MAP.invalidateSize(); }, 300); });
+document.addEventListener('visibilitychange', ()=>{ if(!document.hidden && MAP) MAP.invalidateSize(); });
+
 function goTab(id, btn){
   document.querySelectorAll('main > section').forEach(s=>s.classList.add('hidden'));
   $('tab-' + id).classList.remove('hidden');
   document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  if(id === 'map'){ setTimeout(()=>{ initMap(); if(MAP) MAP.invalidateSize(); }, 60); }
+  if(id === 'map') showMapTab();
   if(id === 'mag') magInit();
   window.scrollTo({top:0});
 }
 
 /* ───────── 오프라인 ───────── */
-const SW_CACHE = 'seoul-1211-v1';
+const SW_CACHE = 'seoul-1211-v3';
 let offList = null, offBusy = false;
 function isOffline(){ return !navigator.onLine; }
 function offToast(msg){
