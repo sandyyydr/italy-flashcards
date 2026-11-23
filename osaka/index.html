@@ -922,6 +922,7 @@ function addExpense(){
   exps.push({id:Date.now(), w:inW, cat:selCat, pay:inP, amt, store, memo, time});
   localStorage.setItem('os_exp_v1', JSON.stringify(exps));
   document.getElementById('expAmt').value=''; document.getElementById('expStore').value=''; document.getElementById('expMemo').value='';
+  ocrFilled.store = ''; ocrFilled.memo = '';
   updateKrwPreview(); renderMoney();
   saveToast(`✅ 저장! ${inW==='shared'?'공금':'개인'} · ${inP==='card'?'카드':'현금'} · ¥${amt.toLocaleString()}`);
 }
@@ -983,10 +984,10 @@ const OCR_BRANDS = ['ドン・キホーテ','ドンキ','ローソン','セブ�
   'マツモトキヨシ','マツキヨ','ダイコクドラッグ','スギ薬局','ウエルシア','ココカラファイン','サンドラッグ','ツルハ','ビックカメラ','ヨドバシ','ユニクロ','しまむら',
   'ダイソー','セリア','キャンドゥ','ロフト','ハンズ','成城石井','一蘭','大阪王将','餃子の王将','551','蓬萊','たこ焼','コメダ','マクドナルド','ミスタードーナツ',
   'ケンタッキー','吉野家','すき家','松屋','ライフ','イオン','阪急','近鉄','ダイエー','ドラッグストア','デイリーヤマザキ','ポプラ'];
-const OCR_BAD_STORE = /領収書|レシート|ご来店|ありがとう|お買上|お会計|合計|小計|税込|税抜|お預|預り|釣|つり|担当|レジ|TEL|電話|FAX|住所|営業時間|ポイント|会員|クーポン|番号|登録|日時|お客様|様$|レシートNo|伝票/;
+const OCR_BAD_STORE = /領収書|レシート|ご来店|ありがとう|お買上|お会計|合計|小計|税込|税抜|免税|対象|税額|お預|預り|釣|つり|担当|レジ|TEL|電話|FAX|住所|営業時間|ポイント|会員|クーポン|番号|登録|日時|お客様|様$|レシートNo|伝票|TOTAL|SUBTOTAL|TAX|CASH|CHANGE|CREDIT|RECEIPT|THANK|AMOUNT|JPY/i;
 const OCR_TOTAL_KW = [[/総?合計/,10],[/お買上(げ)?高?/,9],[/お会計/,8],[/現計/,8],[/税込(み)?計/,7],[/クレジット/,6],[/お支払/,5],[/合計/,6]];
 
-let ocrEnginePromise = null, ocrWorker = null, ocrBusy = false;
+let ocrEnginePromise = null, ocrWorker = null, ocrBusy = false, ocrFilled = {store:'', memo:''};
 
 function ocrSetStatus(msg, pct){
   const s = document.getElementById('ocrStatus');
@@ -1120,18 +1121,36 @@ function parseReceipt(raw){
   const headLines = lines.slice(0, 12);
   let store = headLines.find(l => OCR_BRANDS.some(b=>clean(l).includes(b)) && nameOk(l)) || '';
   if(!store) store = lines.slice(0, 7).find(nameOk) || '';
-  store = store.replace(/[¥]?\s*\d[\d,]*\s*円?$/, '').replace(/\s{2,}/g,' ').trim().slice(0, 34);
+  if(!store){
+    /* 영어 영수증(STARBUCKS 등)은 상단 라틴 상호명 */
+    const latinOk = s => {
+      const c = s.trim();
+      if(c.length < 3 || c.length > 26) return false;
+      if(OCR_BAD_STORE.test(c)) return false;
+      if(/[¥]|\d{3,}/.test(c)) return false;
+      return /[A-Za-z]{3,}/.test(c) && /^[A-Za-z0-9&'\.\- ]+$/.test(c);
+    };
+    store = lines.slice(0, 6).find(latinOk) || '';
+  }
+  store = store.replace(/[¥]?\s*\d[\d,]*\s*円?$/, '').replace(/\s{2,}/g,' ').trim()
+    /* OCR이 일본어 글자 사이에 끼워넣은 띄어쓰기 제거 */
+    .replace(/([\u3040-\u30ff\u4e00-\u9faf\uff66-\uff9f]) +/g,'$1')
+    .replace(/ +([\u3040-\u30ff\u4e00-\u9faf\uff66-\uff9f])/g,'$1')
+    .slice(0, 34);
 
   /* 메모: 품목 줄 1~2개 (예: 밥 · 차) */
   const items = [];
+  const OCR_ADDRESS = /[区市町村丁目番地号]|都道府県|電話|TEL|FAX/i;
   lines.forEach(l=>{
     const c = clean(l);
     if(items.length >= 2) return;
-    if(!isJp(c) || OCR_BAD_STORE.test(c)) return;
+    if(!isJp(c) || OCR_BAD_STORE.test(c) || OCR_ADDRESS.test(c)) return;
     if(OCR_TOTAL_KW.some(([re])=>re.test(c))) return;
     const mm = c.match(/^(.{2,18}?)[\s]*[¥]?\s?(\d{2,6})\s*円?$/);
     if(mm && !/^\d+$/.test(mm[1])){
-      const nm = mm[1].replace(/^[·・\-\*]+|[·・\-\*]+$/g,'').trim();
+      let nm = mm[1].replace(/^[·・\-\*]+|[·・\-\*]+$/g,'').trim();
+      nm = nm.replace(/\s?\d+\s*(mL|ML|ml|kg|Kg|g|L|個|点|枚|袋|本)$/,'').trim();
+      if((nm.match(/\d/g)||[]).length > 2) return;
       if(nm.length >= 2 && !items.includes(nm)) items.push(nm);
     }
   });
@@ -1156,8 +1175,14 @@ function ocrFillForm(p, text){
     filled.push('금액');
   }
   const storeEl = document.getElementById('expStore'), memoEl = document.getElementById('expMemo');
-  if(p.store && !storeEl.value.trim()){ storeEl.value = p.store; filled.push('가게명'); }
-  if(p.memo && !memoEl.value.trim()){ memoEl.value = p.memo; filled.push('메모'); }
+  if(p.store){
+    const cur = storeEl.value.trim();
+    if(!cur || cur === ocrFilled.store){ storeEl.value = p.store; ocrFilled.store = p.store; filled.push('가게명'); }
+  }
+  if(p.memo){
+    const cur = memoEl.value.trim();
+    if(!cur || cur === ocrFilled.memo){ memoEl.value = p.memo; ocrFilled.memo = p.memo; filled.push('메모'); }
+  }
   if(p.cat) selCat = p.cat;
   renderMoney();
 
