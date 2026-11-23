@@ -430,6 +430,19 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
       <div id="taxChecks"></div>
     </div>
 
+    <div class="sec-card" style="border-color:var(--gold);">
+      <h3>🛍️ 돈키호테 결제 팁 — 쿠폰·카카오페이</h3>
+      <div style="font-size:12.5px;line-height:1.55;color:var(--ink);">
+        <b>① 5~7% 할인쿠폰</b> — 세전 <b>1만 엔↑ 5% / 3만 엔↑ 7%</b> 추가 할인.
+      </div>
+      <div class="imp" style="margin-top:7px;">📵 <b>스크린샷·캡처는 안 통해요.</b> 매장 와이파이로 <b>실시간 웹 화면</b>을 열어 <b>결제 전에</b> 계산대에서 보여주세요.</div>
+      <div style="font-size:12.5px;line-height:1.55;color:var(--ink);margin-top:12px;">
+        <b>② 카카오페이 일본 첫 결제 50%</b> (최대 1만 원) — 일본에서 <b>첫 결제</b>라면 편의점 소액 말고 <b>2,400엔(약 2만 원) 이상</b> 결제에 카카오페이머니로 쓰는 게 이득.
+      </div>
+      <div class="ok" style="margin-top:7px;">💳 단, <b>돈키호테에서 카드 환급 0%</b>를 받으려면 결제·환급 모두 <b>본인 명의 VISA / Mastercard</b>로 하는 게 가장 안전해요. 카카오페이는 환급 대상 아님!</div>
+      <div style="font-size:11.5px;color:var(--sub);line-height:1.5;margin-top:8px;">※ 릴스에 나온 「1,500엔 할인」은 2025년에 끝난 행사예요. 쿠폰·카카오페이 조건은 결제 당일 앱에서 다시 확인하세요.</div>
+    </div>
+
     <div class="sec-card" style="border-color:var(--gold);background:#FFFBEF;">
       <h3 style="color:#8A6414;">🧠 한 줄 요약</h3>
       <div style="font-size:13px;line-height:1.6;color:#5A4410;">
@@ -1029,7 +1042,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v20';
+const SW_CACHE = 'osaka-planner-v21';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
