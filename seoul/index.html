@@ -91,7 +91,9 @@ main{padding:12px 14px calc(env(safe-area-inset-bottom,16px) + 78px);max-width:6
 .seg button.active{background:var(--green);color:#fff;}
 .seg.ab button.active{background:var(--rose);}
 .hint{font-size:12px;color:var(--sub);line-height:1.55;margin:6px 0 0;}
-.cmp{width:100%;border-collapse:collapse;font-size:12.5px;}
+.cmp{width:100%;border-collapse:collapse;font-size:12.5px;table-layout:fixed;}
+.cmp td,.cmp th{word-break:keep-all;overflow-wrap:anywhere;}
+.cmp.ring td:first-child,.cmp.ring th:first-child{width:44px;}
 .cmp th,.cmp td{border-bottom:1px solid #EFEADF;padding:8px 5px;text-align:left;vertical-align:top;line-height:1.45;}
 .cmp th{font-size:11.5px;color:var(--sub);font-weight:800;background:#F6F3E9;}
 .cmp tr:last-child td{border-bottom:none;}
@@ -161,7 +163,7 @@ main{padding:12px 14px calc(env(safe-area-inset-bottom,16px) + 78px);max-width:6
 .map-ov.open{display:flex;}
 .map-ov .mag-ov-scroll img{width:100%;max-width:none;}
 .map-ov .mag-ov-scroll.z img{width:200%;}
-nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;padding:6px 4px calc(env(safe-area-inset-bottom,10px) + 4px);z-index:30;}
+nav.tabbar{position:fixed;bottom:0;left:0;right:0;max-width:680px;margin:0 auto;background:rgba(255,253,247,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;padding:6px 4px calc(env(safe-area-inset-bottom,10px) + 4px);z-index:30;}
 .tab{flex:1;border:none;background:none;padding:6px 0;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:800;color:var(--sub);cursor:pointer;font-family:inherit;}
 .tab.active{color:var(--green);}
 .tab .ico{font-size:19px;line-height:1;}
@@ -284,7 +286,7 @@ a.tel{color:var(--green);font-weight:800;text-decoration:none;}
 
     <div class="sec-card">
       <h3>📋 4곳 비교 <span class="sub">시간·가성비·취소·특징</span></h3>
-      <table class="cmp">
+      <table class="cmp ring">
         <tr><th></th><th>원골드</th><th>존폴</th><th>공방301</th><th>새미</th></tr>
         <tr><td>시간</td><td><b>14:30</b></td><td><b>15:30</b></td><td><b>17:00</b></td><td><b>18:30</b></td></tr>
         <tr><td>가격대</td><td>80~170만</td><td>190~250만</td><td>160~230만</td><td>230~280만</td></tr>
