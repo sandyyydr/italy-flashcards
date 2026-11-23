@@ -1,4 +1,4 @@
-const CACHE = 'osaka-planner-v13';
+const CACHE = 'osaka-planner-v14';
 const CORE = [
   './',
   './index.html',
@@ -13,7 +13,7 @@ const CORE = [
 self.addEventListener('install', e => {
   e.waitUntil((async () => {
     const c = await caches.open(CACHE);
-    await Promise.all(CORE.map(u => c.add(u).catch(() => {})));
+    await Promise.all(CORE.map(u => c.add(new Request(u, { cache: 'reload' })).catch(() => {})));
     await self.skipWaiting();
   })());
 });

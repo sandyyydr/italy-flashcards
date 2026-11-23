@@ -1025,7 +1025,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v13';
+const SW_CACHE = 'osaka-planner-v14';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
@@ -1095,7 +1095,8 @@ async function ensureOffline(force){
     while(queue.length){
       const u = queue.shift(); done++;
       try{
-        if(!force && await c.match(u,{ignoreSearch:true})){}
+        const alwaysFresh = /(\/|\.html|\.json|\.js)$/.test(u);
+        if(!force && !alwaysFresh && await c.match(u,{ignoreSearch:true})){}
         else{
           const r = await fetch(u,{cache:'reload'});
           if(r && r.status === 200){ await c.put(u, r); added++; }
@@ -1106,6 +1107,10 @@ async function ensureOffline(force){
   };
   await Promise.all([worker(),worker(),worker(),worker()]);
   offBusy = false;
+  try{
+    const ks = await caches.keys();
+    await Promise.all(ks.filter(k => k.indexOf('osaka-planner-') === 0 && k !== SW_CACHE).map(k => caches.delete(k)));
+  }catch(e){}
   await updateOffBadge();
   if(added > 0) offToast(`오프라인 저장 완료 · ${offList.length}개 파일`);
   else offToast('이미 오프라인 저장되어 있어요');
