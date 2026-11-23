@@ -1,21 +1,56 @@
-const CACHE = 'osaka-planner-v10';
-const PRE = ['./', './index.html', './kix_t1_taxfree_map.webp', './kix_t1_kiosk_zoom.webp'];
+const CACHE = 'osaka-planner-v11';
+const CORE = [
+  './',
+  './index.html',
+  './manifest.json',
+  './offline-manifest.json',
+  './vendor/leaflet/leaflet.css',
+  './vendor/leaflet/leaflet.js',
+  './tiles/14/14358/6507.png',
+  './tiles/13/7176/3256.png'
+];
+
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(PRE)).catch(()=>{}));
-  self.skipWaiting();
+  e.waitUntil((async () => {
+    const c = await caches.open(CACHE);
+    await Promise.all(CORE.map(u => c.add(u).catch(() => {})));
+    await self.skipWaiting();
+  })());
 });
+
 self.addEventListener('activate', e => {
-  e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));
+  e.waitUntil((async () => {
+    const ks = await caches.keys();
+    await Promise.all(ks.filter(k => k !== CACHE && k.indexOf('osaka-planner-') === 0).map(k => caches.delete(k)));
+    await self.clients.claim();
+  })());
 });
+
+/* 캐시 우선 · 없으면 네트워크 → 성공하면 저장. 네트워크 실패 시 캐시에서 즉시 반환 */
 self.addEventListener('fetch', e => {
-  if (e.request.method !== 'GET') return;
-  e.respondWith(
-    fetch(e.request, {cache: 'no-store'}).then(res => {
-      if (res && res.status === 200 && res.type === 'basic') {
-        const copy = res.clone();
-        caches.open(CACHE).then(c => c.put(e.request, copy));
-      }
+  const req = e.request;
+  if (req.method !== 'GET') return;
+  const url = new URL(req.url);
+  if (url.origin !== location.origin) {
+    // 외부(구글맵 등)는 그대로 네트워크로
+    return;
+  }
+  e.respondWith((async () => {
+    const c = await caches.open(CACHE);
+    const hit = await c.match(req, { ignoreSearch: true });
+    if (hit) return hit;
+    try {
+      const res = await fetch(req);
+      if (res && res.status === 200 && res.type === 'basic') c.put(req, res.clone());
       return res;
-    }).catch(() => caches.match(e.request, {ignoreSearch: true}))
-  );
+    } catch (err) {
+      const fb = await c.match(req, { ignoreSearch: true });
+      if (fb) return fb;
+      throw err;
+    }
+  })());
+});
+
+self.addEventListener('message', e => {
+  if (e.data && e.data.type === 'skip-waiting') self.skipWaiting();
 });

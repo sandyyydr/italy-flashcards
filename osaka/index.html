@@ -10,8 +10,8 @@
 <link rel="manifest" href="./manifest.json"/>
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%2314493F'/><text x='50' y='66' font-size='54' text-anchor='middle'>🇯🇵</text></svg>"/>
 <title>오사카 3박 4일 2026</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="./vendor/leaflet/leaflet.css"/>
+<script src="./vendor/leaflet/leaflet.js"></script>
 <style>
 :root{--bg:#FAF7F0;--card:#FFFDF7;--green:#14493F;--mint:#E4EFEA;--org:#C25A2A;--orgbg:#FBEEE5;--gold:#F2C879;--line:#E4DEC9;--ink:#1F2D27;--sub:#5B6B63;}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -22,6 +22,17 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:-
 .dday{background:var(--gold);color:var(--green);font-size:12px;font-weight:800;padding:4px 10px;border-radius:99px;}
 .h-flight{margin-top:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:10px;padding:8px 11px;font-size:12px;line-height:1.45;color:#E7F0EC;}
 .h-flight b{color:var(--gold);}
+.off-bar{display:flex;align-items:center;gap:7px;margin-top:8px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.2);border-radius:9px;padding:7px 10px;font-size:11.5px;font-weight:700;color:#E7F0EC;cursor:pointer;}
+.off-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0;}
+.off-bar.ok .off-dot{background:#6EE7A8;box-shadow:0 0 0 3px rgba(110,231,168,.22);}
+.off-bar b{color:var(--gold);}
+.off-bar.ok b{color:#9AF0C2;}
+.off-panel{display:none;margin-top:6px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:10px 11px;font-size:11.5px;line-height:1.55;color:#DCEAE4;}
+.off-panel.open{display:block;}
+.off-panel .op-t{font-size:12px;font-weight:900;color:var(--gold);margin-bottom:5px;}
+.off-btn{margin-top:8px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.34);color:#fff;border-radius:8px;padding:6px 10px;font-size:11.5px;font-weight:800;font-family:inherit;cursor:pointer;}
+.off-toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,14px) + 74px);transform:translateX(-50%);background:rgba(20,73,63,.95);color:#fff;font-size:12.5px;font-weight:700;padding:9px 14px;border-radius:99px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none;max-width:88%;text-align:center;line-height:1.4;}
+.off-toast.show{opacity:1;}
 main{padding:12px 14px calc(env(safe-area-inset-bottom,16px) + 78px);max-width:680px;margin:0 auto;}
 .day-scroll{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none;}
 .day-scroll::-webkit-scrollbar{display:none;}
@@ -178,6 +189,16 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
   <div class="h-flight">
     <b>항공(QE7QB2)</b> 11/28(토) 부산 14:05 &rarr; 간사이 15:25 &nbsp;|&nbsp; 12/01(화) 11:00 귀국<br/>
     <b>숙소</b> 에스리드 호텔 난바 이스트 언넥스 · <b>USJ</b> 11/30(월) 닌텐도 12:40
+  </div>
+  <div class="off-bar" id="offBar" onclick="toggleOffPanel()">
+    <span class="off-dot" id="offDot"></span>
+    <span id="offBadge">📥 오프라인 저장 준비 중…</span>
+    <span style="margin-left:auto;font-size:10px;opacity:.7;" id="offChev">▾</span>
+  </div>
+  <div class="off-panel" id="offPanel">
+    <div class="op-t" id="offPanelTitle">📴 비행기 모드 사용법</div>
+    <div id="offPanelBody">와이파이에서 이 앱을 <b>한 번만 열어두면</b> 비행기 모드에서도 일정·가계부·매거진·면세 순서도·지도까지 다 열립니다.<div id="offStatus" style="margin-top:6px;color:#9AF0C2;font-weight:800;"></div></div>
+    <button class="off-btn" onclick="event.stopPropagation();ensureOffline(true)">🔄 지금 다시 저장</button>
   </div>
 </header>
 
@@ -616,7 +637,8 @@ const CHECKS = [
   "개인 현금 ¥15,000 환전 (1천엔 10장 + 5천엔 1장)",
   "110V 돼지코 · 멀티탭 · 보조배터리(기내)",
   "💊 파브론 비염 캡슐 Sα 구매 (돈키호테 약 코너 21~22시 전 방문 · 미개봉 면세)",
-  "🛍️ 돈키호테 3인 합산 33,000엔↑ 7% 쿠폰 · 여권 3개 준비"
+  "🛍️ 돈키호테 3인 합산 33,000엔↑ 7% 쿠폰 · 여권 3개 준비",
+  "📴 출국 전 와이파이에서 앱 한 번 열어 오프라인 저장(지도·매거진·면세 순서도)"
 ];
 
 let wallet = 'shared', selCat = CATS[0], selPay = 'cash', curDay = 0, mapDay = 0, mapObj = null;
@@ -878,7 +900,12 @@ function renderMap(){
   document.getElementById('mapDayScroll').innerHTML = days.map((x,i)=>`<div class="day-chip ${i===mapDay?'active':''}" onclick="mapDay=${i};renderMap()"><div class="d1">DAY ${i+1}</div><div class="d2">${x.d}</div><div class="d3">${x.city}</div></div>`).join('');
   if(!mapObj){
     mapObj = L.map('mapBox');
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM'}).addTo(mapObj);
+    /* ⓵ 오프라인 베이스맵 (앱에 들어있는 로컬 타일 · 항상 깔림) */
+    L.tileLayer('./tiles/14/{x}/{y}.png',{minZoom:12,maxZoom:19,minNativeZoom:14,maxNativeZoom:14,noWrap:true,bounds:[[34.635,135.455],[34.715,135.535]],attribution:'© OpenStreetMap'}).addTo(mapObj);
+    L.tileLayer('./tiles/13/{x}/{y}.png',{minZoom:10,maxZoom:19,minNativeZoom:13,maxNativeZoom:13,noWrap:true,bounds:[[34.36,135.16],[34.84,135.58]],attribution:'© OpenStreetMap contributors'}).addTo(mapObj);
+    /* ⓶ 온라인일 때만 위에 올라가는 선명한 OSM 타일 */
+    onlineLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:19});
+    syncOnlineLayer();
   }
   mapObj.eachLayer(l=>{ if(l instanceof L.Marker || l instanceof L.Polyline) mapObj.removeLayer(l); });
   const pts = days[mapDay].items;
@@ -997,6 +1024,115 @@ document.addEventListener('keydown', e=>{
   if(e.key === 'Escape') imgOvClose();
 });
 
+/* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
+const SW_CACHE = 'osaka-planner-v11';
+const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
+function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
+let onlineLayer = null, offList = null, offBusy = false;
+
+function offToast(msg){
+  let t = document.getElementById('offToast');
+  if(!t){ t = document.createElement('div'); t.id='offToast'; t.className='off-toast'; document.body.appendChild(t); }
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._tm); t._tm = setTimeout(()=>t.classList.remove('show'), 2600);
+}
+function syncOnlineLayer(){
+  if(!mapObj || !onlineLayer) return;
+  if(!isOffline()){ if(!mapObj.hasLayer(onlineLayer)) onlineLayer.addTo(mapObj); }
+  else { if(mapObj.hasLayer(onlineLayer)) mapObj.removeLayer(onlineLayer); }
+  updateOffBadge();
+}
+window.addEventListener('online', ()=>{ syncOnlineLayer(); ensureOffline(false); });
+window.addEventListener('offline', ()=>{ syncOnlineLayer(); });
+
+async function readOffCount(){
+  try{
+    const c = await caches.open(SW_CACHE);
+    const ks = await c.keys();
+    return ks.length;
+  }catch(e){ return -1; }
+}
+async function updateOffBadge(){
+  const bar = document.getElementById('offBar'), badge = document.getElementById('offBadge'), st = document.getElementById('offStatus');
+  if(!bar || !badge) return;
+  if(!('caches' in window)){ badge.innerHTML = '📴 오프라인 저장 미지원 브라우저'; return; }
+  const n = await readOffCount();
+  const total = offList ? offList.length : 0;
+  const off = isOffline();
+  if(offBusy){
+    bar.classList.remove('ok');
+    badge.innerHTML = `📥 저장 중 <b>${Math.max(n,0)}/${total||'…'}</b>`;
+    if(st) st.innerHTML = `저장 중… 와이파이를 끊지 마세요 (${Math.max(n,0)}/${total||'…'})`;
+    return;
+  }
+  if(total && n >= total - 1){
+    bar.classList.add('ok');
+    badge.innerHTML = `📴 <b>오프라인 준비 완료</b> · ${n}개`;
+    if(st) st.innerHTML = '✔ 일정·가계부·매거진 40쪽·면세 순서도·지도 타일까지 저장됨';
+  } else if(off){
+    bar.classList.remove('ok');
+    badge.innerHTML = `📴 오프라인 · <b>${n}/${total||'?'}</b> 저장됨`;
+    if(st) st.innerHTML = '와이파이에 연결되면 나머지를 자동으로 받아요.';
+  } else {
+    bar.classList.remove('ok');
+    badge.innerHTML = `📥 오프라인 저장 <b>${Math.max(n,0)}/${total||'…'}</b> — 탭해서 받기`;
+    if(st) st.innerHTML = '';
+  }
+}
+async function ensureOffline(force){
+  if(offBusy) return;
+  if(!('caches' in window)){ offToast('이 브라우저는 오프라인 저장을 지원하지 않아요'); return; }
+  offBusy = true; updateOffBadge();
+  if(!offList){
+    try{ offList = await (await fetch('./offline-manifest.json',{cache:'no-store'})).json(); }
+    catch(e){ offBusy = false; offToast('목록을 불러오지 못했어요 — 와이파이 확인 후 다시'); updateOffBadge(); return; }
+  }
+  let c;
+  try{ c = await caches.open(SW_CACHE); }catch(e){ offBusy=false; return; }
+  const queue = offList.slice();
+  let done = 0, added = 0;
+  const worker = async ()=>{
+    while(queue.length){
+      const u = queue.shift(); done++;
+      try{
+        if(!force && await c.match(u,{ignoreSearch:true})){}
+        else{
+          const r = await fetch(u,{cache:'reload'});
+          if(r && r.status === 200){ await c.put(u, r); added++; }
+        }
+      }catch(e){}
+      if(done % 4 === 0) updateOffBadge();
+    }
+  };
+  await Promise.all([worker(),worker(),worker(),worker()]);
+  offBusy = false;
+  await updateOffBadge();
+  if(added > 0) offToast(`오프라인 저장 완료 · ${offList.length}개 파일`);
+  else offToast('이미 오프라인 저장되어 있어요');
+}
+function toggleOffPanel(){
+  const p = document.getElementById('offPanel');
+  if(!p) return;
+  p.classList.toggle('open');
+  document.getElementById('offChev').textContent = p.classList.contains('open') ? '▴' : '▾';
+  updateOffBadge();
+}
+
+/* 비행기 모드에서 PDF 링크를 누르면 → 앱 안 페이지 뷰로 대신 열기 */
+document.addEventListener('click', e=>{
+  const a = e.target && e.target.closest ? e.target.closest('a[href$=".pdf"]') : null;
+  if(!a || !isOffline()) return;
+  const href = a.getAttribute('href') || '';
+  if(href.indexOf('kix_tax_refund') >= 0) return;
+  e.preventDefault();
+  const key = href.indexOf('food') >= 0 ? 'food' : (href.indexOf('shopping') >= 0 ? 'shop' : 'main');
+  try{
+    magGoto(key);
+    setTimeout(()=>{ const el = document.getElementById(MAGS[key].box); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }, 80);
+  }catch(err){}
+  offToast('비행기 모드예요 — 앱 안 페이지 뷰로 열었어요 (PDF는 인터넷 필요)');
+});
+
 function goTab(id, btn){
   document.querySelectorAll('main > section').forEach(s=>s.classList.add('hidden'));
   document.getElementById('tab-'+id).classList.remove('hidden');
@@ -1007,7 +1143,12 @@ function goTab(id, btn){
 }
 
 updateDday(); renderMoney(); renderPlan(); renderChecks(); renderPlaces(); renderTaxChecks();
-if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+updateOffBadge(); setTimeout(updateOffBadge, 2500); setTimeout(updateOffBadge, 7000);
+if(!isOffline()) setTimeout(()=>ensureOffline(false), 1500);
+if(FORCE_OFFLINE) setTimeout(()=>{ syncOnlineLayer(); offToast('오프라인 모드로 열었어요 (저장된 지도만 표시)'); }, 1200);
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').then(()=>{
+  navigator.serviceWorker.addEventListener('controllerchange', ()=>updateOffBadge());
+}).catch(()=>{});
 const MAG = {pages:11, dir:'./mag/', file:'./magazine.pdf'};
 const MAGS = {
   main: {pages:11, dir:'./mag/', file:'./magazine.pdf', name:'오사카 3박 4일 매거진', short:'📖 일정', w:1800, h:1273, jump:'magJump', box:'magPages', px:'magp'},
