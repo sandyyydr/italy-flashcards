@@ -98,7 +98,7 @@
 <Point><coordinates>135.502295,34.662933,0</coordinates></Point>
 </Placemark>
 </Folder>
-<Folder><name>2. 맛집·카페</name><description>최근호 님 오사카 맛집 매거진(13쪽) 카드 40곳 + 표 후보 23곳</description><open>1</open>
+<Folder><name>2. 맛집·카페</name><description>최근호 님 오사카 맛집 매거진(13쪽) 카드 39곳 + 표 후보 23곳</description><open>1</open>
 <Placemark>
 <name>551 호라이 본점</name>
 <styleUrl>#ly2</styleUrl>
@@ -225,13 +225,7 @@
 <ExtendedData><Data name="구분"><value>미소카츠</value></Data><Data name="일정"><value>일정 외 후보 (도톤보리)</value></Data><Data name="주소"><value>1-chome-9-19 Dotonbori, Chuo Ward, Osaka (B1)</value></Data><Data name="구글맵"><value>https://www.google.com/maps/search/?api=1&amp;query=34.6685616,135.5009314</value></Data></ExtendedData>
 <Point><coordinates>135.500931,34.668562,0</coordinates></Point>
 </Placemark>
-<Placemark>
-<name>스시 사카바 사치스</name>
-<styleUrl>#ly2</styleUrl>
-<description><![CDATA[<b>스시·이자카야</b><br/><span style='color:#666'>Sushi Sakaba Sashisu</span><br/>🗓 일정 외 후보 (난바워크)<br/>⭐ 4.1 / 5 (1,389리뷰)<br/>스시+술 가성비 · 평점 4.1(1,389). 14:00~22:00 · 예약 불가 · 우메다에서도 가성비 스시.<br/>📍 1-1-3 Umeda, Kita Ward, Osaka (Osaka Station)<br/><a href='https://www.google.com/maps/search/?api=1&query=34.6987788,135.499416'>구글맵에서 열기</a>]]></description>
-<ExtendedData><Data name="구분"><value>스시·이자카야</value></Data><Data name="일정"><value>일정 외 후보 (난바워크)</value></Data><Data name="주소"><value>1-1-3 Umeda, Kita Ward, Osaka (Osaka Station)</value></Data><Data name="구글맵"><value>https://www.google.com/maps/search/?api=1&amp;query=34.6987788,135.499416</value></Data></ExtendedData>
-<Point><coordinates>135.499416,34.698779,0</coordinates></Point>
-</Placemark>
+
 <Placemark>
 <name>와규카츠 반자이</name>
 <styleUrl>#ly2</styleUrl>

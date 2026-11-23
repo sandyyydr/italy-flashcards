@@ -277,7 +277,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
   <section id="tab-map" class="hidden">
     <div class="day-scroll" id="mapDayScroll"></div>
     <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
-      <button class="act-btn org" id="allPlBtn" onclick="toggleAllPlaces()">⭐ 추천 65곳 함께 보기</button>
+      <button class="act-btn org" id="allPlBtn" onclick="toggleAllPlaces()">⭐ 추천 64곳 함께 보기</button>
       <a class="act-btn map" href="./osaka_2026_all_places.kml" download>📥 KML</a>
     </div>
     <div id="mapBox"></div>
@@ -303,15 +303,15 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
       <div class="row"><div><b>덴노지 · 미도스지</b><br/><span style="font-size:12px;color:var(--sub);">덴시바 크리스마스 마켓(21:30) · 하루카스 300 · 미도스지 일루미네이션(25:00)</span></div><a class="act-btn map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Tenshiba+Osaka">지도</a></div>
     </div>
     <div class="sec-card" style="border-color:var(--gold);">
-      <h3>🗺️ 추천 장소 전체 65곳 (지도·KML)</h3>
+      <h3>🗺️ 추천 장소 전체 64곳 (지도·KML)</h3>
       <div style="font-size:12.5px;color:var(--sub);line-height:1.55;margin-bottom:8px;">
         지금까지 추천받은 곳을 전부 모은 목록이에요. 구글 마이맵스 <b>🇯🇵 오사카 2026 전체 추천 지도</b>와 같은 내용이고,
         아래 <b>KML 내려받기</b>로 파일을 받아 두면 구글맵 앱 → <b>저장됨 → 지도</b>에서 바로 떠요.
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-        <button class="act-btn org" id="pf0" onclick="filterPlaces(0)">전체 65</button>
+        <button class="act-btn org" id="pf0" onclick="filterPlaces(0)">전체 64</button>
         <button class="act-btn" id="pf1" onclick="filterPlaces(1)">① 확정 일정 13</button>
-        <button class="act-btn" id="pf2" onclick="filterPlaces(2)">② 맛집·카페 40</button>
+        <button class="act-btn" id="pf2" onclick="filterPlaces(2)">② 맛집·카페 39</button>
         <button class="act-btn" id="pf3" onclick="filterPlaces(3)">③ 쇼핑·기타 12</button>
       </div>
       <a class="act-btn org" style="width:100%;justify-content:center;margin-bottom:6px;" target="_blank" rel="noopener" href="https://www.google.com/maps/d/view?mid=1d8qKSSFk_9lc4__nbFN7xX_U8MHXoRo">🗺️ 구글 마이맵스 「오사카 2026 전체 추천 지도」 열기</a>
@@ -585,7 +585,6 @@ const PLACES = [
   {n:"야키니쿠 리키마루 센니치마에",c:"야키니쿠",l:2,w:"11/30 21:45 USJ 후",la:34.666755,ln:135.503472},
   {n:"그릴 캐피탈 동양정 난바",c:"양식·함박",l:2,w:"일정 외 후보 (난바 다카시마야 7F)",la:34.664498,ln:135.501949},
   {n:"아바톤 난바 쇼치쿠자점 (미소카츠)",c:"미소카츠",l:2,w:"일정 외 후보 (도톤보리)",la:34.668562,ln:135.500931},
-  {n:"스시 사카바 사치스",c:"스시·이자카야",l:2,w:"일정 외 후보 (난바워크)",la:34.698779,ln:135.499416},
   {n:"와규카츠 반자이",c:"규카츠",l:2,w:"일정 외 후보",la:34.678866,ln:135.503324},
   {n:"보타니카리 (한신 우메다)",c:"스파이스 카레",l:2,w:"11/29 우메다 쇼핑 중 점심 후보",la:34.701225,ln:135.498378},
   {n:"쵸카소바 무겐 (후쿠시마 에비에)",c:"라멘",l:2,w:"일정 외 후보",la:34.696603,ln:135.472201},
@@ -974,7 +973,7 @@ function renderPlaces(){
 function toggleAllPlaces(){
   showAllPlaces = !showAllPlaces;
   const b=document.getElementById('allPlBtn');
-  b.textContent = showAllPlaces ? '⭐ 추천 65곳 숨기기' : '⭐ 추천 65곳 함께 보기';
+  b.textContent = showAllPlaces ? '⭐ 추천 64곳 숨기기' : '⭐ 추천 64곳 함께 보기';
   renderMap();
 }
 function renderChecks(){
@@ -1030,7 +1029,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v18';
+const SW_CACHE = 'osaka-planner-v19';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
