@@ -427,6 +427,7 @@ const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>
 const kq = s => encodeURIComponent(s);
 const kakaoSearch = n => 'https://map.kakao.com/link/search/' + kq(n);
 const naverSearch = n => 'https://map.naver.com/p/search/' + kq(n);
+const kmap = p => (p && p.link) ? p.link : ('https://map.kakao.com/link/search/' + kq(p.name));
 function kakaoRoute(from, to){
   return 'https://map.kakao.com/link/from/' + kq(from.name) + ',' + from.lat + ',' + from.lng +
          '/to/' + kq(to.name) + ',' + to.lat + ',' + to.lng;
@@ -440,35 +441,35 @@ function dday(){
 
 /* 장소 좌표 (카카오맵 기준) */
 const P = {
-  seoulStn:{name:'서울역', lat:37.55407, lng:126.97070},
-  hotel:{name:'트래디업 호텔 바이 더 디자이너스', lat:37.57326, lng:126.98857},
-  onegold:{name:'원골드', lat:37.57556, lng:126.99044},
-  johnpaul:{name:'존폴쥬얼리', lat:37.57233, lng:126.99186},
-  gongbang:{name:'공방301 종로점', lat:37.57546, lng:126.99590},
-  saemi:{name:'새미쥬얼리', lat:37.57065, lng:126.99100},
-  riu:{name:'리우 메이크업 by 성수', lat:37.54190, lng:127.05463},
+  seoulStn:{name:'서울역', lat:37.55407, lng:126.97070, link:'http://place.map.kakao.com/9113903'},
+  hotel:{name:'트래디업 호텔 바이 더 디자이너스', lat:37.57326, lng:126.98857, link:'http://place.map.kakao.com/1186497591'},
+  onegold:{name:'원골드', lat:37.57556, lng:126.99044, link:'http://place.map.kakao.com/1975695201'},
+  johnpaul:{name:'존폴쥬얼리', lat:37.57233, lng:126.99186, link:'http://place.map.kakao.com/18552629'},
+  gongbang:{name:'공방301 종로점', lat:37.57546, lng:126.99590, link:'http://place.map.kakao.com/1616862769'},
+  saemi:{name:'새미쥬얼리', lat:37.57065, lng:126.99100, link:'http://place.map.kakao.com/17218011'},
+  riu:{name:'리우 메이크업 by 성수', lat:37.54190, lng:127.05463, link:'http://place.map.kakao.com/852705240'},
   royal:{name:'로얄호텔서울', lat:37.56426, lng:126.98560},
-  shinheung:{name:'신흥시장 (해방촌)', lat:37.54531, lng:126.98499},
-  jireumgil:{name:'지름길 사진관', lat:37.54501, lng:126.98518},
-  otophotoSh:{name:'오토포토 신흥시장', lat:37.54515, lng:126.98520},
-  namsan:{name:'남산 전망 덱', lat:37.54752, lng:126.98434},
+  shinheung:{name:'신흥시장 (해방촌)', lat:37.54531, lng:126.98499, link:'http://place.map.kakao.com/25043156'},
+  jireumgil:{name:'지름길 사진관', lat:37.54501, lng:126.98518, link:'http://place.map.kakao.com/767261590'},
+  otophotoSh:{name:'오토포토 신흥시장', lat:37.54515, lng:126.98520, link:'http://place.map.kakao.com/1618498604'},
+  namsan:{name:'남산 전망 덱', lat:37.54752, lng:126.98434, link:'https://maps.google.com/?cid=10490879327860871178'},
   seochon:{name:'서촌 (자하문로 일대)', lat:37.57910, lng:126.97020},
-  automatico:{name:'오토마티코 서촌', lat:37.57937, lng:126.96947},
-  otophotoSc:{name:'오토포토 서촌', lat:37.57956, lng:126.97110},
-  youngchive:{name:'영카이브 서촌', lat:37.58033, lng:126.96850},
-  daerim:{name:'대림미술관', lat:37.57754, lng:126.97336},
-  taylor:{name:'테일러커피 서촌경복궁', lat:37.57719, lng:126.97385},
-  stationfix:{name:'스태픽스', lat:37.57748, lng:126.96791},
-  mmm:{name:'국립현대미술관 서울', lat:37.57863, lng:126.98010},
-  tmari:{name:'카페 트마리', lat:37.57497, lng:126.99158},
-  dongbaek:{name:'동백양과점 익선점', lat:37.57340, lng:126.98960},
-  highway:{name:'하이웨스트 익선', lat:37.57312, lng:126.99067},
-  meongseok:{name:'멍석집 종로3가점', lat:37.57283, lng:126.99033},
-  songam:{name:'송암온반', lat:37.57400, lng:126.99004},
-  cheonggye:{name:'청계광장 (빛초롱축제)', lat:37.56907, lng:126.97759},
-  gwanghwamun:{name:'광화문광장 (광화문 마켓)', lat:37.57260, lng:126.97692},
-  douroum:{name:'도우룸 광화문', lat:37.57215, lng:126.97779},
-  euljiroboseok:{name:'을지로보석', lat:37.56514, lng:126.98925},
+  automatico:{name:'오토마티코 서촌', lat:37.57937, lng:126.96947, link:'http://place.map.kakao.com/2027326801'},
+  otophotoSc:{name:'오토포토 서촌', lat:37.57956, lng:126.97110, link:'http://place.map.kakao.com/1092737220'},
+  youngchive:{name:'영카이브 서촌', lat:37.58033, lng:126.96850, link:'http://place.map.kakao.com/1723026416'},
+  daerim:{name:'대림미술관', lat:37.57754, lng:126.97336, link:'http://place.map.kakao.com/8299285'},
+  taylor:{name:'테일러커피 서촌경복궁', lat:37.57719, lng:126.97385, link:'http://place.map.kakao.com/745214463'},
+  stationfix:{name:'스태픽스', lat:37.57748, lng:126.96791, link:'http://place.map.kakao.com/1508329235'},
+  mmm:{name:'국립현대미술관 서울', lat:37.57863, lng:126.98010, link:'http://place.map.kakao.com/17952661'},
+  tmari:{name:'카페 트마리', lat:37.57497, lng:126.99158, link:'http://place.map.kakao.com/871897654'},
+  dongbaek:{name:'동백양과점 익선점', lat:37.57340, lng:126.98960, link:'http://place.map.kakao.com/630916358'},
+  highway:{name:'하이웨스트 익선', lat:37.57312, lng:126.99067, link:'http://place.map.kakao.com/2084457534'},
+  meongseok:{name:'멍석집 종로3가점', lat:37.57283, lng:126.99033, link:'http://place.map.kakao.com/474618750'},
+  songam:{name:'송암온반', lat:37.57400, lng:126.99004, link:'http://place.map.kakao.com/502697911'},
+  cheonggye:{name:'청계광장 (빛초롱축제)', lat:37.56907, lng:126.97759, link:'http://place.map.kakao.com/11512319'},
+  gwanghwamun:{name:'광화문광장 (광화문 마켓)', lat:37.57260, lng:126.97692, link:'http://place.map.kakao.com/8193961'},
+  douroum:{name:'도우룸 광화문', lat:37.57215, lng:126.97779, link:'http://place.map.kakao.com/741962073'},
+  euljiroboseok:{name:'을지로보석', lat:37.56514, lng:126.98925, link:'http://place.map.kakao.com/539686431'},
   doryang:{name:'도량', lat:37.57797, lng:126.97250}
 };
 
@@ -564,7 +565,7 @@ const ABA = [
    move:[{k:'walk',t:'도보',m:1}], total:'도보 1분 (오토포토와 35m)',
    acts:[['카카오맵', P.jireumgil,'map'],['네이버 예약', naverSearch('지름길 사진관'),'map',1]]},
   {t:'17:14 → 18:30', title:'남산 전망 덱 — 일몰 17:14', note:'도보 5분 · 해방촌오거리 윗길(소월로) · <b>12/12 일몰 17:14</b><br/>대기 길면 일몰 먼저 보고 내려와 촬영해도 돼요.',
-   move:[{k:'walk',t:'도보',m:5}], total:'도보 5분', acts:[['카카오맵', P.namsan,'map']]},
+   move:[{k:'walk',t:'도보',m:5}], total:'도보 5분', acts:[['지도', P.namsan,'map']]},
   {t:'18:30 → 20:30', title:'신흥시장 저녁 (선택)', note:'시장 골목 식당 · 해방촌오거리 도보 3분 · 시간 남으면 한 시간', move:[{k:'walk',t:'도보',m:3}], total:'도보 3분',
    acts:[['신흥시장 지도', P.shinheung,'map']]},
   {t:'20:45 → 21:35', title:'해방촌 → 호텔 짐 픽업 → 서울역', note:'택시 26분 → 21:11 짐 픽업 → 21:35 서울역 · 호텔 밤 20~21시 픽업 확인 필요(02-763-3196)',
@@ -647,7 +648,7 @@ const FOODS = [
   {cat:'photo', name:'영카이브 서촌 (대안)', tag:'포토부스', meta:'필운대로 47 · 24시간 무인', price:'5,000원대', note:'줄 길 때 쓰는 대안. 무인이라 시간 제약이 없어요.', acts:[['카카오맵', P.youngchive,'map']]},
   {cat:'photo', name:'오토포토 신흥시장', tag:'포토부스', meta:'소월로20길 32 · 셀프 즉석', price:'5,000원대', note:'A안용 · 지름길 사진관과 35m. 예식 끝나고 바로 2컷 찍기 좋아요.', acts:[['카카오맵', P.otophotoSh,'map']]},
   {cat:'photo', name:'지름길 사진관', tag:'사진관', meta:'소월로20길 36 · 토 11:00~20:00', price:'2인 20,000 + 보정·인화 10,000 = 30,000원', note:'A안 핵심 · 아직 예약 전이에요. 네이버 예약으로 17:00을 잡아두세요.', acts:[['카카오맵', P.jireumgil,'map'],['네이버 예약', naverSearch('지름길 사진관 용산'),'map',1]]},
-  {cat:'photo', name:'남산 전망 덱', tag:'일몰', meta:'해방촌오거리 윗길(소월로) · 지름길 도보 5분', price:'무료', note:'12/12 일몰 <b>17:14</b>. 사진관과 순서를 바꿔도 돼요.', acts:[['카카오맵', P.namsan,'map']]},
+  {cat:'photo', name:'남산 전망 덱', tag:'일몰', meta:'해방촌오거리 윗길(소월로) · 지름길 도보 5분', price:'무료', note:'12/12 일몰 <b>17:14</b>. 사진관과 순서를 바꿔도 돼요.', acts:[['지도', P.namsan,'map']]},
   {cat:'photo', name:'신흥시장 저녁', tag:'저녁', meta:'시장 골목 식당 · 18:30~ · 해방촌오거리 도보 3분', price:'', note:'A안 마무리 코스. 시장이라 가격 부담이 없어요.', acts:[['신흥시장 지도', P.shinheung,'map']]}
 ];
 const CATS = [['all','전체'],['star','⭐ 스타 셰프'],['cafe','☕ 카페'],['dinner','🍽️ 저녁'],['festival','🎄 축제·전시'],['photo','📸 포토부스·사진']];
@@ -659,7 +660,7 @@ function itemHTML(it, i, small){
   const warn = it.warn ? '<div class="it-warn">⏰ ' + esc(it.warn) + '</div>' : '';
   const acts = (it.acts || []).map(a=>{
     const [label, target, cls, isRoute] = a;
-    const href = typeof target === 'string' ? target : (isRoute ? target : kakaoSearch(target.name));
+    const href = typeof target === 'string' ? target : (isRoute ? target : kmap(target));
     return '<a class="act-btn ' + (cls||'') + '" target="_blank" rel="noopener" href="' + href + '">' + esc(label) + '</a>';
   }).join('');
   return '<div class="item-card">' +
@@ -696,7 +697,7 @@ function pickAB(k){
 /* ───────── 렌더: 반지 ───────── */
 function renderRings(){
   $('ringCards').innerHTML = RINGS.map(r=>{
-    const acts = r.acts.map(a=>'<a class="act-btn ' + (a[2]||'') + '" target="_blank" rel="noopener" href="' + (a[3]?a[1]:(typeof a[1]==='string'?a[1]:kakaoSearch(a[1].name))) + '">' + esc(a[0]) + '</a>').join('');
+    const acts = r.acts.map(a=>'<a class="act-btn ' + (a[2]||'') + '" target="_blank" rel="noopener" href="' + (a[3]?a[1]:(typeof a[1]==='string'?a[1]:kmap(a[1]))) + '">' + esc(a[0]) + '</a>').join('');
     return '<div class="item-card">' +
       '<div class="it-head"><div class="it-no">' + r.n + '</div><div class="it-main">' +
         '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">' +
@@ -801,7 +802,7 @@ function initMap(){
     const label = pin.n || '';
     const icon = L.divIcon({className:'', html:'<div class="leaflet-pin" style="background:' + col + ';width:' + (label?24:14) + 'px;height:' + (label?24:14) + 'px;font-size:' + (label?11:0) + 'px;">' + label + '</div>', iconSize:[label?24:14, label?24:14], iconAnchor:[label?12:7, label?12:7]});
     const m = L.marker([pin.p.lat, pin.p.lng], {icon:icon, title:pin.t});
-    m.bindPopup('<b>' + esc(pin.t) + '</b><br/>' + esc(pin.d) + '<br/><a href="' + kakaoSearch(pin.p.name) + '" target="_blank" rel="noopener">카카오맵에서 열기</a>');
+    m.bindPopup('<b>' + esc(pin.t) + '</b><br/>' + esc(pin.d) + '<br/><a href="' + kmap(pin.p) + '" target="_blank" rel="noopener">지도에서 열기</a>');
     m.addTo(MAP);
     m.__pin = pin;
     markers.push(m);
