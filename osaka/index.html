@@ -1025,7 +1025,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v12';
+const SW_CACHE = 'osaka-planner-v13';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
@@ -1143,7 +1143,9 @@ updateDday(); renderMoney(); renderPlan(); renderChecks(); renderPlaces(); rende
 updateOffBadge(); setTimeout(updateOffBadge, 2500); setTimeout(updateOffBadge, 7000);
 if(!isOffline()) setTimeout(()=>ensureOffline(false), 1500);
 if(FORCE_OFFLINE) setTimeout(()=>{ syncOnlineLayer(); offToast('오프라인 모드로 열었어요 (저장된 지도만 표시)'); }, 1200);
-if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').then(()=>{
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').then(reg=>{
+  setTimeout(()=>{ try{ reg.update(); }catch(e){} }, 4000);
+  setInterval(()=>{ try{ reg.update(); }catch(e){} }, 30*60*1000);
   navigator.serviceWorker.addEventListener('controllerchange', ()=>{
     updateOffBadge();
     try{
