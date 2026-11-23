@@ -935,7 +935,7 @@ function renderMap(){
     PLACES.forEach(p=>{
       const mk = L.circleMarker([p.la,p.ln],{radius:6,color:'#fff',weight:1.5,fillColor:LAYER_COL[p.l],fillOpacity:0.95}).addTo(mapObj);
       mk.bindPopup(`<b>${p.n}</b><br/><span style="color:#555">${LAYER_NAME[p.l]} · ${p.c}</span>${p.w?`<br/>${p.w}`:''}<br/><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=${p.la},${p.ln}">구글맵에서 열기</a>`);
-      latlngs.push([p.la,p.ln]);
+      /* 추천 핀은 지도 범위 계산에서 빼서, 64곳을 켜도 그날 동선 크기로 유지 */
     });
   }
   mapObj.fitBounds(latlngs, {padding:[36,36]});
@@ -1029,7 +1029,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v19';
+const SW_CACHE = 'osaka-planner-v20';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
