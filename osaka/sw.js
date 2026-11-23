@@ -1,4 +1,4 @@
-const CACHE = 'osaka-planner-v27';
+const CACHE = 'osaka-planner-v28';
 const CORE = [
   './',
   './index.html',
@@ -37,6 +37,18 @@ self.addEventListener('fetch', e => {
   }
   e.respondWith((async () => {
     const c = await caches.open(CACHE);
+    /* 문서(HTML)는 네트워크 우선 — 앱을 새로 열면 항상 최신 페이지, 오프라인이면 캐시 */
+    if (req.mode === 'navigate' || req.destination === 'document') {
+      try {
+        const res = await fetch(req);
+        if (res && res.status === 200) c.put(req, res.clone());
+        return res;
+      } catch (err) {
+        const fb = await c.match(req, { ignoreSearch: true });
+        if (fb) return fb;
+        throw err;
+      }
+    }
     const hit = await c.match(req, { ignoreSearch: true });
     if (hit) return hit;
     try {
