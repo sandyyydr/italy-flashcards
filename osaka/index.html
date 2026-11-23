@@ -252,7 +252,7 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
     <div class="mag-tabs">
       <button type="button" id="mtab-main" class="on" onclick="magGoto('main')">📖 일정 11</button>
       <button type="button" id="mtab-food" onclick="magGoto('food')">🍜 맛집 13</button>
-      <button type="button" id="mtab-shop" onclick="magGoto('shop')">🛍️ 쇼핑 15</button>
+      <button type="button" id="mtab-shop" onclick="magGoto('shop')">🛍️ 쇼핑 16</button>
     </div>
 
     <div class="mag-hero mag-sec" id="magsec-main">
@@ -280,13 +280,13 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
     <div class="mag-jump" id="foodJump"></div>
     <div id="foodPages"></div>
 
-    <div class="mag-sp">🛍️ 쇼핑·돈키호테 필수템 <span>15쪽 · 베스트 12 · 면세·수하물·예산</span></div>
+    <div class="mag-sp">🛍️ 돈키호테 신박템 <span>16쪽 v2 · 사진 확인 23개 · TOP 10 · 면세·수하물·예산</span></div>
     <div class="mag-hero shop mag-sec" id="magsec-shop">
-      <div class="mt">🛍️ 쇼핑 · 돈키호테 필수템 매거진</div>
-      <div class="ms">영상 8개에서 반복된 12개만 · 15쪽<br/>면세 제도(2026-11-01 변경)·거를 것·수하물·33,000엔 예산 계산</div>
+      <div class="mt">🛍️ 돈키호테 신박템 매거진 v2</div>
+      <div class="ms">사진으로 확인한 23개 · 5개 카테고리 · 16쪽<br/>먼저 살 10개 표·뺀 3개 품목·면세 제도(2026-11-01 변경)·수하물·33,000엔 예산 계산</div>
       <div class="mag-btns">
         <a class="mag-btn solid" target="_blank" rel="noopener" href="./shopping_magazine.pdf">🔍 크게 열기</a>
-        <a class="mag-btn out" href="./shopping_magazine.pdf" download="오사카_쇼핑_필수템_매거진_2026.pdf">⬇️ 저장</a>
+        <a class="mag-btn out" href="./shopping_magazine.pdf" download="오사카_돈키호테_신박템_매거진_2026_v2.pdf">⬇️ 저장</a>
       </div>
       <div class="mag-note">💡 면세가 <b>출국 후 환급</b>으로 바뀌었어요(3쪽). 계산대에서 10% 빼주지 않습니다.</div>
     </div>
@@ -298,7 +298,7 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
       <div class="row"><div><b>A안 · B안 하루 일정 비교</b><br/><span style="font-size:12px;color:var(--sub);">2쪽 요약본 · 11/19 작성</span></div><a class="act-btn map" target="_blank" rel="noopener" href="./osaka_ab_compare.pdf">PDF 열기</a></div>
       <div class="row"><div><b>완전판 일정 매거진</b><br/><span style="font-size:12px;color:var(--sub);">11쪽 · 맨 위 페이지와 같은 파일</span></div><a class="act-btn" href="./magazine.pdf" download="오사카_3박4일_매거진_2026.pdf">⬇️ 저장</a></div>
       <div class="row"><div><b>오사카 맛집 매거진</b><br/><span style="font-size:12px;color:var(--sub);">13쪽 · 35곳</span></div><a class="act-btn" href="./food_magazine.pdf" download="오사카_맛집_매거진_2026.pdf">⬇️ 저장</a></div>
-      <div class="row"><div><b>쇼핑·돈키호테 필수템 매거진</b><br/><span style="font-size:12px;color:var(--sub);">15쪽 · 베스트 12</span></div><a class="act-btn" href="./shopping_magazine.pdf" download="오사카_쇼핑_필수템_매거진_2026.pdf">⬇️ 저장</a></div>
+      <div class="row"><div><b>돈키호테 신박템 매거진 v2</b><br/><span style="font-size:12px;color:var(--sub);">16쪽 · 사진 확인 23개</span></div><a class="act-btn" href="./shopping_magazine.pdf" download="오사카_돈키호테_신박템_매거진_2026_v2.pdf">⬇️ 저장</a></div>
     </div>
   </section>
 </main>
@@ -815,7 +815,7 @@ const MAG = {pages:11, dir:'./mag/', file:'./magazine.pdf'};
 const MAGS = {
   main: {pages:11, dir:'./mag/', file:'./magazine.pdf', name:'오사카 3박 4일 매거진', short:'📖 일정', w:1800, h:1273, jump:'magJump', box:'magPages', px:'magp'},
   food: {pages:13, dir:'./pages_food/', file:'./food_magazine.pdf', name:'오사카 맛집 매거진', short:'🍜 맛집', w:1500, h:1060, jump:'foodJump', box:'foodPages', px:'foodp'},
-  shop: {pages:15, dir:'./pages_shop/', file:'./shopping_magazine.pdf', name:'쇼핑·돈키호테 필수템 매거진', short:'🛍️ 쇼핑', w:1500, h:1061, jump:'shopJump', box:'shopPages', px:'shopp'}
+  shop: {pages:16, dir:'./pages_shop/', file:'./shopping_magazine.pdf', name:'돈키호테 신박템 매거진 v2', short:'🛍️ 쇼핑', w:1500, h:1061, jump:'shopJump', box:'shopPages', px:'shopp'}
 };
 
 /* ───────── 📖 매거진 탭 로직 (일정 · 맛집 · 쇼핑 3종) ───────── */
