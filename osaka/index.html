@@ -1148,8 +1148,9 @@ function parseReceipt(raw){
     if(OCR_TOTAL_KW.some(([re])=>re.test(c))) return;
     const mm = c.replace(/^\d{6,}/, '').match(/^(.{2,18}?)[\s]*[¥]?\s?(\d{2,6})\s*円?$/);
     if(mm && !/^\d+$/.test(mm[1])){
-      let nm = mm[1].replace(/^[·・\-\*]+|[·・\-\*]+$/g,'').trim();
-      nm = nm.replace(/\s?\d+\s*(mL|ML|ml|kg|Kg|g|L|個|点|枚|袋|本)$/,'').trim();
+      let nm = mm[1].replace(/^[·・\-\*_]+|[·・\-\*_]+$/g,'').trim();
+      nm = nm.replace(/\s?\d+\s*(mL|ML|ml|kg|Kg|g|L|個|点|枚|袋|本)$/,'').replace(/[_·・\-\s]+$/,'').trim();
+      if(!/[\u3040-\u30ff\u4e00-\u9fafA-Za-z]/.test(nm)) return;
       if((nm.match(/\d/g)||[]).length > 2) return;
       if(nm.length >= 2 && !items.includes(nm)) items.push(nm);
     }
@@ -1160,7 +1161,7 @@ function parseReceipt(raw){
   const guessText = clean((store||'') + ' ' + lines.slice(0,8).join(' '));
   let cat = null;
   if(/ローソン|セブン|ファミリーマート|ファミマ|コンビニ|デイリー|ポプラ|ミニストップ/.test(guessText)) cat = CATS[4];
-  else if(/ドンキ|マツモト|マツキヨ|薬|ドラッグ|無印|ユニクロ|ダイソー|セリア|ロフト|ハンズ|ビックカメラ|ヨドバシ|百貨店|ショップ|雑貨/.test(guessText)) cat = CATS[3];
+  else if(/ドン・キホーテ|ドンキホーテ|ドンキ|マツモト|マツキヨ|薬|ドラッグ|無印|ユニクロ|ダイソー|セリア|ロフト|ハンズ|ビックカメラ|ヨドバシ|百貨店|ショップ|雑貨/.test(guessText)) cat = CATS[3];
   else if(/ラーメン|寿司|鮨|焼肉|たこ焼|お好み焼|カフェ|コーヒー|スターバックス|スタバ|喫茶|レストラン|食堂|居酒屋|定食|うどん|そば|パン|ケーキ|餃子|串カツ/.test(guessText)) cat = CATS[0];
   else if(/電車|タクシー|切符|乗車|運賃|バス|ICカード/.test(guessText)) cat = CATS[2];
   else if(/入場|チケット|USJ|ユニバーサル|美術館|ミュージアム/.test(guessText)) cat = CATS[1];
