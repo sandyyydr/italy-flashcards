@@ -1025,7 +1025,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v16';
+const SW_CACHE = 'osaka-planner-v17';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
@@ -1108,8 +1108,12 @@ async function ensureOffline(force){
   await Promise.all([worker(),worker(),worker(),worker()]);
   offBusy = false;
   try{
+    const mine = parseInt((SW_CACHE.match(/v(\d+)$/) || [0, 0])[1], 10);
     const ks = await caches.keys();
-    await Promise.all(ks.filter(k => k.indexOf('osaka-planner-') === 0 && k !== SW_CACHE).map(k => caches.delete(k)));
+    await Promise.all(ks.filter(k => {
+      const m = k.match(/^osaka-planner-v(\d+)$/);
+      return m && parseInt(m[1], 10) < mine;   /* 나보다 옛 버전만 정리 */
+    }).map(k => caches.delete(k)));
   }catch(e){}
   await updateOffBadge();
   if(added > 0) offToast(`오프라인 저장 완료 · ${offList.length}개 파일`);
