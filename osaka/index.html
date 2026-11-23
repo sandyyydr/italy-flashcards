@@ -83,6 +83,65 @@ main{padding:12px 14px calc(env(safe-area-inset-bottom,16px) + 78px);max-width:6
 .cpill{border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:6px 10px;font-size:12.5px;font-weight:700;cursor:pointer;}
 .cpill.active{background:var(--green);border-color:var(--green);color:#fff;}
 .inp{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit;background:#fff;margin-bottom:8px;}
+
+/* ───────── 💴 가계부 · 영수증 OCR ───────── */
+.sum-card{background:var(--green);color:#FAF7F0;border-radius:16px;padding:14px 15px;margin-bottom:12px;box-shadow:0 2px 10px rgba(20,73,63,.16);}
+.sum-lbl{font-size:12px;font-weight:800;color:var(--gold);}
+.sum-total{font-size:26px;font-weight:900;letter-spacing:-.5px;margin-top:2px;line-height:1.25;}
+.sum-total span{font-size:13px;font-weight:700;color:#DCE8E2;letter-spacing:0;}
+.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:11px;}
+.sum-box{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:11px;padding:8px 10px;}
+.sum-box .sl{font-size:11px;font-weight:800;color:#D6E6E0;}
+.sum-box .sv{font-size:16.5px;font-weight:900;margin-top:1px;}
+.sum-box .sk{font-size:10.5px;color:#C6DAD3;margin-top:1px;}
+.rem-row{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:9px 0;border-bottom:1px solid #EFEADF;}
+.rem-row:last-child{border-bottom:none;}
+.rem-row .rl{font-size:13px;font-weight:800;}
+.rem-row .rl span{display:block;font-size:10.5px;color:var(--sub);font-weight:700;margin-top:2px;line-height:1.4;}
+.rem-row .rr{text-align:right;font-size:13.5px;font-weight:900;color:var(--green);white-space:nowrap;}
+.rem-row .rr span{display:block;font-size:10.5px;color:var(--sub);font-weight:700;margin-top:2px;}
+.rem-row .rr.warn{color:#A82E1B;}
+.tgl-row{display:flex;gap:8px;margin:5px 0 9px;}
+.tgl{flex:1;border:1.6px solid var(--line);background:#fff;border-radius:11px;padding:10px 4px;font-size:13.5px;font-weight:800;color:var(--sub);font-family:inherit;cursor:pointer;}
+.tgl.on{color:#fff;}
+.tgl.on.sh{background:var(--green);border-color:var(--green);}
+.tgl.on.pe{background:#6B2F8C;border-color:#6B2F8C;}
+.tgl.on.card{background:#1E4A8C;border-color:#1E4A8C;}
+.tgl.on.cash{background:#9C6410;border-color:#9C6410;}
+.pick-lbl{font-size:11.5px;font-weight:800;color:var(--sub);margin-top:6px;}
+.bdg{display:inline-block;font-size:10.5px;font-weight:900;padding:2px 6px;border-radius:6px;margin-right:3px;vertical-align:1px;}
+.bdg.sh{background:#DCEBE4;color:#0F4A3B;}
+.bdg.pe{background:#EFE2F5;color:#5E2A79;}
+.bdg.card{background:#E2EBF8;color:#1B4380;}
+.bdg.cash{background:#FBEED3;color:#7A4E05;}
+.h3-sub{font-size:11px;font-weight:700;color:var(--sub);margin-left:4px;}
+.ocr-note{font-size:12px;color:var(--sub);line-height:1.55;margin:0 0 9px;}
+.ocr-note b{color:var(--green);}
+.ocr-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:7px;background:var(--org);color:#fff;border:none;border-radius:12px;padding:13px 10px;font-size:14.5px;font-weight:800;font-family:inherit;cursor:pointer;}
+.ocr-btn[disabled]{opacity:.62;}
+.ocr-status{font-size:12px;color:var(--sub);font-weight:700;line-height:1.55;margin-top:8px;}
+.ocr-status:empty{display:none;}
+.ocr-status b{color:var(--org);}
+.ocr-barwrap{height:7px;background:#EAE4D3;border-radius:99px;overflow:hidden;margin-top:7px;display:none;}
+.ocr-barwrap.on{display:block;}
+.ocr-bar{height:100%;width:0;background:var(--org);border-radius:99px;transition:width .3s;}
+.ocr-thumb{display:none;gap:9px;align-items:center;margin-top:9px;}
+.ocr-thumb img{width:64px;height:64px;object-fit:cover;border-radius:9px;border:1px solid var(--line);flex-shrink:0;background:#fff;}
+.ocr-thumb .tt{font-size:11.5px;color:var(--sub);font-weight:700;line-height:1.5;}
+details.ocr-raw{margin-top:9px;background:#F7F5EE;border:1px solid #EDE8DA;border-radius:10px;padding:0 11px;display:none;}
+details.ocr-raw summary{font-size:11.5px;font-weight:800;color:var(--sub);padding:9px 0;cursor:pointer;}
+details.ocr-raw pre{font-size:11px;line-height:1.55;white-space:pre-wrap;word-break:break-all;margin:0 0 11px;max-height:180px;overflow:auto;color:#3A4A44;}
+.flt{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0 4px;}
+.flt button{border:1.4px solid var(--line);background:#fff;border-radius:99px;padding:5px 10px;font-size:11.5px;font-weight:800;color:var(--sub);font-family:inherit;cursor:pointer;}
+.flt button.on{background:var(--green);border-color:var(--green);color:#fff;}
+.exp-row{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:10px 0;border-bottom:1px solid #EFEADF;}
+.exp-row:last-child{border-bottom:none;}
+.exp-row .et{font-size:13.5px;font-weight:800;line-height:1.35;word-break:break-all;}
+.exp-row .es{font-size:11px;color:var(--sub);font-weight:700;margin-top:3px;line-height:1.5;}
+.exp-row .er{text-align:right;flex-shrink:0;}
+.exp-row .er b{font-size:14.5px;font-weight:900;color:var(--ink);display:block;white-space:nowrap;}
+.exp-row .er span{font-size:10.5px;color:var(--sub);}
+.exp-row .er button{border:none;background:#F3EFE4;color:var(--sub);border-radius:7px;width:24px;height:24px;font-size:12px;font-weight:900;cursor:pointer;margin-top:4px;line-height:1;padding:0;}
 nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;padding:6px 6px calc(env(safe-area-inset-bottom,10px) + 4px);z-index:30;}
 .tab{flex:1;border:none;background:none;padding:6px 0;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11.5px;font-weight:700;color:var(--sub);cursor:pointer;}
 .tab.active{color:var(--green);}
@@ -233,25 +292,38 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
       </div>
     </div>
 
-    <div class="seg">
-      <button id="segShared" class="active" onclick="wallet='shared';renderMoney()">👥 공금 (3인)</button>
-      <button id="segPersonal" onclick="wallet='personal';renderMoney()">🙋‍♀️ 내 개인</button>
-    </div>
-
     <div id="moneySummary"></div>
 
     <div class="sec-card">
-      <h3>➕ 지출 바로 입력</h3>
+      <h3>📷 영수증 사진 자동 입력 <span class="h3-sub">무료 · 사진만 찍으면 금액 자동</span></h3>
+      <div class="ocr-note">사진을 찍거나 사진첩에서 고르면 <b>합계 금액·가게명</b>을 읽어 아래 입력칸에 채워요. 저장은 <b>직접 확인한 다음</b> 버튼으로!</div>
+      <input id="ocrFile" type="file" accept="image/*" capture="environment" style="display:none" onchange="ocrFilePicked(this)"/>
+      <button type="button" class="ocr-btn" id="ocrBtn" onclick="ocrPickFile()">📷 영수증 찍기 / 사진 선택</button>
+      <div class="ocr-status" id="ocrStatus"></div>
+      <div class="ocr-barwrap" id="ocrBarWrap"><div class="ocr-bar" id="ocrBar"></div></div>
+      <div class="ocr-thumb" id="ocrThumb"><img id="ocrPreview" alt="영수증 미리보기"/><div class="tt" id="ocrThumbTxt"></div></div>
+      <details class="ocr-raw" id="ocrRawWrap"><summary>🔍 인식된 원문 텍스트 보기 (숫자 틀렸을 때 확인)</summary><pre id="ocrRaw"></pre></details>
+    </div>
+
+    <div class="sec-card">
+      <h3>➕ 지출 입력 <span class="h3-sub">1/3 나눗셈 없이 · 공금/개인 · 카드/현금</span></h3>
+      <div class="pick-lbl">구분</div>
+      <div class="tgl-row" id="wkPills"></div>
+      <div class="pick-lbl">결제수단</div>
+      <div class="tgl-row" id="payPills"></div>
+      <div class="pick-lbl">카테고리</div>
       <div class="cat-pills" id="catPills"></div>
-      <div class="cat-pills" id="payPills"></div>
       <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
         <input id="expAmt" class="inp" type="text" inputmode="numeric" style="margin:0;flex:1;" placeholder="금액 (¥ 엔화)" oninput="formatAmtInput(this);updateKrwPreview()"/>
         <span id="krwPreview" style="font-size:12.5px;font-weight:700;color:var(--org);min-width:84px;text-align:right;">약 0원</span>
       </div>
-      <input id="expMemo" class="inp" placeholder="내용 (예: 이치란 라멘 3인, 단톤 패딩 등)"/>
-      <button class="act-btn map" style="width:100%;justify-content:center;padding:11px;font-size:14px;" onclick="addExpense()">기록하기</button>
+      <input id="expStore" class="inp" placeholder="가게명 (예: ドン・キホーテ 道頓堀店 / 돈키호테)"/>
+      <input id="expMemo" class="inp" placeholder="메모 (예: 이치란 라멘 3인, 단톤 패딩)"/>
+      <button class="act-btn map" style="width:100%;justify-content:center;padding:12px;font-size:14.5px;" onclick="addExpense()">기록하기</button>
+      <div id="saveToast" style="font-size:12px;font-weight:800;color:var(--green);opacity:0;transition:opacity .25s;margin-top:7px;min-height:16px;"></div>
     </div>
 
+    <div class="sec-card" id="budgetCard"></div>
     <div class="sec-card" id="catSummaryCard"></div>
     <div class="sec-card" id="expListCard"></div>
 
@@ -741,60 +813,80 @@ const CHECKS = [
   "📴 출국 전 와이파이에서 앱 한 번 열어 오프라인 저장(지도·매거진·면세 순서도)"
 ];
 
-let wallet = 'shared', selCat = CATS[0], selPay = 'cash', curDay = 0, mapDay = 0, mapObj = null;
+let inW = 'shared', inP = 'cash', selCat = CATS[0], fW = 'all', fP = 'all', curDay = 0, mapDay = 0, mapObj = null;
 let budgets = JSON.parse(localStorage.getItem('os_bud_v1')||'null') || {shared:{cash:30000,card:50000}, personal:{cash:5000,card:34500}};
 let exps = JSON.parse(localStorage.getItem('os_exp_v1')||'[]');
 let chkState = JSON.parse(localStorage.getItem('os_chk_v1')||'{}');
 
 const fmt = y => Math.round(y * RATE).toLocaleString() + '원';
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const sumAmt = arr => arr.reduce((a,e)=>a + (Number(e.amt)||0), 0);
 function updateDday(){
   const diff = Math.ceil((new Date('2026-11-28T00:00:00+09:00') - new Date()) / 86400000);
   document.getElementById('ddayBadge').textContent = diff > 0 ? `D-${diff}` : (diff === 0 ? 'D-DAY' : `D+${-diff}`);
 }
 
 function renderMoney(){
-  document.getElementById('segShared').classList.toggle('active', wallet==='shared');
-  document.getElementById('segPersonal').classList.toggle('active', wallet==='personal');
-  const b = budgets[wallet];
-  const list = exps.filter(e=>e.w===wallet);
-  const usedCash = list.filter(e=>e.pay==='cash').reduce((a,b)=>a+b.amt,0);
-  const usedCard = list.filter(e=>e.pay==='card').reduce((a,b)=>a+b.amt,0);
-  const remCash = b.cash - usedCash, remCard = b.card - usedCard;
-  const totalUsed = usedCash + usedCard, totalBud = b.cash + b.card;
+  const shared = exps.filter(e=>e.w==='shared'), personal = exps.filter(e=>e.w!=='shared');
+  const tot = sumAmt(exps), shTot = sumAmt(shared), peTot = sumAmt(personal);
+  const cardTot = sumAmt(exps.filter(e=>e.pay==='card')), cashTot = sumAmt(exps.filter(e=>e.pay==='cash'));
 
   document.getElementById('moneySummary').innerHTML = `
-    <div style="background:var(--green);color:#fff;border-radius:16px;padding:13px 15px;margin-bottom:10px;">
-      <div style="font-size:12px;color:var(--gold);font-weight:700;">${wallet==='shared'?'👥 3인 공금':'🙋‍♀️ 내 개인'} 총 사용액 (시작 ¥${totalBud.toLocaleString()})</div>
-      <div style="font-size:23px;font-weight:900;margin-top:2px;">¥${totalUsed.toLocaleString()} <span style="font-size:13px;font-weight:600;color:#DCE8E2;">(약 ${fmt(totalUsed)})</span></div>
-    </div>
-    <div class="bal-grid">
-      <div class="bal-box ${remCash<0?'warn':''}">
-        <div class="lbl">💴 남은 현금 (시작 ¥${b.cash.toLocaleString()})</div>
-        <div class="val">¥${remCash.toLocaleString()}</div>
-        <div class="krw">약 ${fmt(remCash)} ${remCash<0?'🚨 초과!':''}</div>
-      </div>
-      <div class="bal-box ${remCard<0?'warn':''}">
-        <div class="lbl">💳 남은 카드 (시작 ¥${b.card.toLocaleString()})</div>
-        <div class="val">¥${remCard.toLocaleString()}</div>
-        <div class="krw">약 ${fmt(remCard)} ${remCard<0?'🚨 초과!':''}</div>
+    <div class="sum-card">
+      <div class="sum-lbl">💴 이번 여행 총 지출 (공금 + 개인)</div>
+      <div class="sum-total">¥${tot.toLocaleString()} <span>약 ${fmt(tot)}</span></div>
+      <div class="sum-grid">
+        <div class="sum-box"><div class="sl">👥 공금 합계</div><div class="sv">¥${shTot.toLocaleString()}</div><div class="sk">약 ${fmt(shTot)} · ${shared.length}건</div></div>
+        <div class="sum-box"><div class="sl">🙋‍♀️ 개인 합계</div><div class="sv">¥${peTot.toLocaleString()}</div><div class="sk">약 ${fmt(peTot)} · ${personal.length}건</div></div>
+        <div class="sum-box"><div class="sl">💳 카드 합계</div><div class="sv">¥${cardTot.toLocaleString()}</div><div class="sk">약 ${fmt(cardTot)}</div></div>
+        <div class="sum-box"><div class="sl">💴 현금 합계</div><div class="sv">¥${cashTot.toLocaleString()}</div><div class="sk">약 ${fmt(cashTot)}</div></div>
       </div>
     </div>`;
 
-  document.getElementById('catPills').innerHTML = CATS.map(c=>`<button class="cpill ${selCat===c?'active':''}" onclick="selCat='${c}';renderMoney()">${c}</button>`).join('');
+  const remRow = (label, key, list) => {
+    const b = budgets[key] || {cash:0, card:0};
+    const rc = b.cash - sumAmt(list.filter(e=>e.pay==='cash'));
+    const rk = b.card - sumAmt(list.filter(e=>e.pay==='card'));
+    const over = rc < 0 || rk < 0;
+    return `<div class="rem-row">
+      <div class="rl">${label}<span>시작 ¥${(b.cash+b.card).toLocaleString()} (현금 ¥${b.cash.toLocaleString()} · 카드 ¥${b.card.toLocaleString()})</span></div>
+      <div class="rr ${over?'warn':''}">💴 ¥${rc.toLocaleString()} · 💳 ¥${rk.toLocaleString()}<span>남은 돈${over?' 🚨 초과!':''}</span></div>
+    </div>`;
+  };
+  document.getElementById('budgetCard').innerHTML = `<h3>💰 남은 돈 <span class="h3-sub">시작 금액 − 쓴 돈</span></h3>` +
+    remRow('👥 공금', 'shared', shared) + remRow('🙋‍♀️ 개인', 'personal', personal);
+
+  document.getElementById('wkPills').innerHTML = `
+    <button type="button" class="tgl sh ${inW==='shared'?'on':''}" onclick="inW='shared';renderMoney()">👥 공금</button>
+    <button type="button" class="tgl pe ${inW==='personal'?'on':''}" onclick="inW='personal';renderMoney()">🙋‍♀️ 개인</button>`;
   document.getElementById('payPills').innerHTML = `
-    <button class="cpill ${selPay==='cash'?'active':''}" onclick="selPay='cash';renderMoney()">💴 현금</button>
-    <button class="cpill ${selPay==='card'?'active':''}" onclick="selPay='card';renderMoney()">💳 카드</button>`;
+    <button type="button" class="tgl card ${inP==='card'?'on':''}" onclick="inP='card';renderMoney()">💳 카드</button>
+    <button type="button" class="tgl cash ${inP==='cash'?'on':''}" onclick="inP='cash';renderMoney()">💴 현금</button>`;
+  document.getElementById('catPills').innerHTML = CATS.map(c=>`<button type="button" class="cpill ${selCat===c?'active':''}" onclick="selCat='${c}';renderMoney()">${c}</button>`).join('');
 
   const byCat = {}; CATS.forEach(c=>byCat[c]=0);
-  list.forEach(e=>{ byCat[e.cat] = (byCat[e.cat]||0) + e.amt; });
+  exps.forEach(e=>{ byCat[e.cat] = (byCat[e.cat]||0) + (Number(e.amt)||0); });
   document.getElementById('catSummaryCard').innerHTML = `<h3>📊 카테고리별 지출 합계</h3>` +
     CATS.map(c=>`<div class="row"><span>${c}</span><span><b>¥${byCat[c].toLocaleString()}</b> <span style="font-size:12px;color:var(--sub);">(${fmt(byCat[c])})</span></span></div>`).join('');
 
-  document.getElementById('expListCard').innerHTML = `<h3>🧾 지출 내역 (${list.length}건)</h3>` + (list.length ? list.slice().reverse().map(e=>`
-    <div class="row">
-      <div><b>${e.memo||e.cat}</b><br/><span style="font-size:11.5px;color:var(--sub);">${e.cat} · ${e.pay==='cash'?'💴 현금':'💳 카드'} · ${e.time}</span></div>
-      <div style="text-align:right;"><b>¥${e.amt.toLocaleString()}</b> <button class="act-btn" style="padding:3px 7px;margin-left:4px;" onclick="delExp(${e.id})">✕</button><br/><span style="font-size:11.5px;color:var(--sub);">${fmt(e.amt)}</span></div>
-    </div>`).join('') : '<div style="font-size:13px;color:var(--sub);">아직 입력된 내역이 없어요! 위에서 바로 추가해 보세요.</div>');
+  const flt = exps.filter(e => (fW==='all' || e.w===fW) && (fP==='all' || e.pay===fP));
+  const fltTot = sumAmt(flt);
+  const chip = (group, val, label) => {
+    const on = (group==='w' ? fW : fP) === val;
+    const act = group==='w' ? `fW='${val}'` : `fP='${val}'`;
+    return `<button type="button" class="${on?'on':''}" onclick="${act};renderMoney()">${label}</button>`;
+  };
+  document.getElementById('expListCard').innerHTML = `<h3>🧾 지출 내역 <span class="h3-sub">${flt.length}건 · ¥${fltTot.toLocaleString()} (약 ${fmt(fltTot)})</span></h3>
+    <div class="flt">${chip('w','all','전체')}${chip('w','shared','👥 공금')}${chip('w','personal','🙋‍♀️ 개인')}<span style="width:6px;"></span>${chip('p','all','결제 전체')}${chip('p','card','💳 카드')}${chip('p','cash','💴 현금')}</div>` +
+    (flt.length ? flt.slice().reverse().map(e=>`
+    <div class="exp-row">
+      <div>
+        <div class="et">${esc(e.store || e.memo || e.cat)}</div>
+        ${e.store && e.memo ? `<div class="es" style="margin-top:1px;">${esc(e.memo)}</div>` : ''}
+        <div class="es"><span class="bdg ${e.w==='shared'?'sh':'pe'}">${e.w==='shared'?'공금':'개인'}</span><span class="bdg ${e.pay==='card'?'card':'cash'}">${e.pay==='card'?'카드':'현금'}</span>${esc(e.cat)} · ${esc(e.time)}</div>
+      </div>
+      <div class="er"><b>¥${(Number(e.amt)||0).toLocaleString()}</b><span>약 ${fmt(e.amt)}</span><button type="button" onclick="delExp(${e.id})" aria-label="삭제">✕</button></div>
+    </div>`).join('') : '<div style="font-size:13px;color:var(--sub);line-height:1.6;">아직 입력된 내역이 없어요. 위 <b>📷 영수증 촬영</b>이나 직접 입력으로 추가해 보세요!</div>');
 }
 
 function calcOsCur(from){
@@ -814,33 +906,55 @@ function updateKrwPreview(){
   const v = parseFloat((document.getElementById('expAmt').value||'').replace(/,/g,'')) || 0;
   document.getElementById('krwPreview').textContent = '약 ' + fmt(v);
 }
+function saveToast(msg){
+  const el = document.getElementById('saveToast'); if(!el) return;
+  el.textContent = msg; el.style.opacity = 1;
+  clearTimeout(saveToast._t);
+  saveToast._t = setTimeout(()=>{ el.style.opacity = 0; }, 2600);
+}
 function addExpense(){
   const amt = parseInt((document.getElementById('expAmt').value||'').replace(/,/g,''), 10);
   if(!amt || amt<=0) return alert('엔화 금액을 입력해 주세요!');
+  const store = document.getElementById('expStore').value.trim();
   const memo = document.getElementById('expMemo').value.trim();
   const d = new Date();
   const time = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
-  exps.push({id:Date.now(), w:wallet, cat:selCat, pay:selPay, amt, memo, time});
+  exps.push({id:Date.now(), w:inW, cat:selCat, pay:inP, amt, store, memo, time});
   localStorage.setItem('os_exp_v1', JSON.stringify(exps));
-  document.getElementById('expAmt').value=''; document.getElementById('expMemo').value='';
+  document.getElementById('expAmt').value=''; document.getElementById('expStore').value=''; document.getElementById('expMemo').value='';
   updateKrwPreview(); renderMoney();
+  saveToast(`✅ 저장! ${inW==='shared'?'공금':'개인'} · ${inP==='card'?'카드':'현금'} · ¥${amt.toLocaleString()}`);
 }
 function delExp(id){
+  const t = exps.find(e=>e.id===id);
+  const label = t ? (t.store||t.memo||t.cat) : '이 항목';
+  if(!confirm(`${label} ¥${t?Number(t.amt).toLocaleString():''} 를 지울까요?`)) return;
   exps = exps.filter(e=>e.id!==id);
   localStorage.setItem('os_exp_v1', JSON.stringify(exps));
   renderMoney();
 }
 function copyKakao(){
-  const list = exps.filter(e=>e.w==='shared');
-  const uCash = list.filter(e=>e.pay==='cash').reduce((a,b)=>a+b.amt,0);
-  const uCard = list.filter(e=>e.pay==='card').reduce((a,b)=>a+b.amt,0);
-  const tot = uCash + uCard;
-  const rCash = budgets.shared.cash - uCash, rCard = budgets.shared.card - uCard;
-  let txt = `🇯🇵 오사카 3인 공금 현황\n• 총 지출: ¥${tot.toLocaleString()} (약 ${fmt(tot)} / 인당 ¥${Math.round(tot/3).toLocaleString()})\n• 남은 현금: ¥${rCash.toLocaleString()} | 남은 카드: ¥${rCard.toLocaleString()}\n\n[내역]\n` +
-    (list.length ? list.map(e=>`- ${e.memo||e.cat}: ¥${e.amt.toLocaleString()} (${e.pay==='cash'?'현금':'카드'})`).join('\n') : '(아직 내역 없음)');
-  navigator.clipboard?.writeText(txt);
-  document.getElementById('copyToast').textContent = '✅ 카톡에 바로 붙여넣을 수 있게 복사했어요!';
-  setTimeout(()=>document.getElementById('copyToast').textContent='', 3000);
+  const sh = exps.filter(e=>e.w==='shared'), pe = exps.filter(e=>e.w!=='shared');
+  const shCash = sumAmt(sh.filter(e=>e.pay==='cash')), shCard = sumAmt(sh.filter(e=>e.pay==='card'));
+  const tot = sumAmt(exps);
+  const rCash = budgets.shared.cash - shCash, rCard = budgets.shared.card - shCard;
+  const line = e => `- ${e.store||e.memo||e.cat}: ¥${(Number(e.amt)||0).toLocaleString()} (${e.pay==='cash'?'현금':'카드'})`;
+  let txt = `🇯🇵 오사카 가계부\n• 총 지출: ¥${tot.toLocaleString()} (약 ${fmt(tot)})\n• 공금: ¥${sumAmt(sh).toLocaleString()} (현금 ¥${shCash.toLocaleString()} / 카드 ¥${shCard.toLocaleString()})\n• 개인: ¥${sumAmt(pe).toLocaleString()}\n• 남은 공금: 현금 ¥${rCash.toLocaleString()} / 카드 ¥${rCard.toLocaleString()}\n\n[공금 내역]\n` +
+    (sh.length ? sh.map(line).join('\n') : '(아직 내역 없음)');
+  const done = () => {
+    document.getElementById('copyToast').textContent = '✅ 카톡에 바로 붙여넣을 수 있게 복사했어요!';
+    setTimeout(()=>{ document.getElementById('copyToast').textContent=''; }, 3000);
+  };
+  const fallback = () => {
+    const ta = document.createElement('textarea'); ta.value = txt;
+    ta.style.position='fixed'; ta.style.opacity='0'; ta.style.left='-9999px';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); }catch(e){}
+    document.body.removeChild(ta); done();
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(done).catch(fallback);
+  } else { fallback(); }
 }
 function editBudget(){
   document.getElementById('bSharedCash').value = budgets.shared.cash;
@@ -863,7 +977,241 @@ function exportExp(){
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'osaka_budget_backup.json'; a.click();
 }
 
+/* ───────── 📷 영수증 OCR (Tesseract.js · 무료·브라우저) ───────── */
+const OCR_SRC = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+const OCR_BRANDS = ['ドン・キホーテ','ドンキ','ローソン','セブン-イレブン','セブンイレブン','セブン','ファミリーマート','ファミマ','無印良品','スターバックス','スタバ',
+  'マツモトキヨシ','マツキヨ','ダイコクドラッグ','スギ薬局','ウエルシア','ココカラファイン','サンドラッグ','ツルハ','ビックカメラ','ヨドバシ','ユニクロ','しまむら',
+  'ダイソー','セリア','キャンドゥ','ロフト','ハンズ','成城石井','一蘭','大阪王将','餃子の王将','551','蓬萊','たこ焼','コメダ','マクドナルド','ミスタードーナツ',
+  'ケンタッキー','吉野家','すき家','松屋','ライフ','イオン','阪急','近鉄','ダイエー','ドラッグストア','デイリーヤマザキ','ポプラ'];
+const OCR_BAD_STORE = /領収書|レシート|ご来店|ありがとう|お買上|お会計|合計|小計|税込|税抜|お預|預り|釣|つり|担当|レジ|TEL|電話|FAX|住所|営業時間|ポイント|会員|クーポン|番号|登録|日時|お客様|様$|レシートNo|伝票/;
+const OCR_TOTAL_KW = [[/総?合計/,10],[/お買上(げ)?高?/,9],[/お会計/,8],[/現計/,8],[/税込(み)?計/,7],[/クレジット/,6],[/お支払/,5],[/合計/,6]];
 
+let ocrEnginePromise = null, ocrWorker = null, ocrBusy = false;
+
+function ocrSetStatus(msg, pct){
+  const s = document.getElementById('ocrStatus');
+  if(s) s.innerHTML = msg || '';
+  const wrap = document.getElementById('ocrBarWrap'), bar = document.getElementById('ocrBar');
+  if(pct == null){ if(wrap) wrap.classList.remove('on'); return; }
+  if(wrap) wrap.classList.add('on');
+  if(bar) bar.style.width = Math.max(4, Math.min(100, Math.round(pct))) + '%';
+}
+function ocrLoadEngine(){
+  if(window.Tesseract) return Promise.resolve(window.Tesseract);
+  if(ocrEnginePromise) return ocrEnginePromise;
+  ocrEnginePromise = new Promise((res, rej)=>{
+    const s = document.createElement('script');
+    s.src = OCR_SRC; s.async = true;
+    s.onload = ()=> window.Tesseract ? res(window.Tesseract) : rej(new Error('no-tesseract'));
+    s.onerror = ()=> rej(new Error('cdn-blocked'));
+    document.head.appendChild(s);
+    setTimeout(()=>{ if(!window.Tesseract) rej(new Error('timeout')); }, 25000);
+  }).catch(err=>{ ocrEnginePromise = null; throw err; });
+  return ocrEnginePromise;
+}
+function ocrPickFile(){
+  if(ocrBusy) return;
+  ocrLoadEngine().catch(()=>{});   /* 사진 고르는 동안 미리 받아둔다 */
+  const inp = document.getElementById('ocrFile');
+  inp.value = '';
+  inp.click();
+}
+function ocrLog(m){
+  const st = String((m && m.status) || ''), pr = Number(m && m.progress) || 0;
+  if(/recognizing/i.test(st)){
+    const p = Math.round(pr*100);
+    ocrSetStatus(`🔎 영수증 읽는 중… ${p}%`, 35 + pr*65);
+  } else if(/language|traineddata|download/i.test(st)){
+    ocrSetStatus(`📥 일본어 인식 데이터 내려받는 중… ${Math.round(pr*100)}% <span style="font-weight:600;">(처음 한 번만)</span>`, 8 + pr*25);
+  } else {
+    ocrSetStatus('🔎 인식 엔진 준비 중…', 8 + pr*25);
+  }
+}
+function ocrPrepareImage(file){
+  return new Promise((resolve, reject)=>{
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = ()=>{
+      try{
+        const MAXW = 1400;
+        const nw = img.naturalWidth || img.width || MAXW, nh = img.naturalHeight || img.height || MAXW;
+        const sc = Math.min(1, MAXW / nw);
+        const w = Math.max(1, Math.round(nw*sc)), h = Math.max(1, Math.round(nh*sc));
+        const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+        const ctx = cv.getContext('2d');
+        ctx.fillStyle = '#fff'; ctx.fillRect(0,0,w,h);
+        ctx.drawImage(img, 0, 0, w, h);
+        const data = ctx.getImageData(0,0,w,h), p = data.data;
+        /* 회색조 + 3%·97% 분위 대비 스트레치 → 영수증 글씨가 더 또렷해짐 */
+        const hist = new Uint32Array(256);
+        const n = p.length/4;
+        for(let i=0;i<p.length;i+=4){
+          hist[(p[i]*0.299 + p[i+1]*0.587 + p[i+2]*0.114)|0]++;
+        }
+        let lo = 0, hi = 255, acc = 0;
+        for(let v=0;v<256;v++){ acc += hist[v]; if(acc > n*0.03){ lo = v; break; } }
+        acc = 0;
+        for(let v=255;v>=0;v--){ acc += hist[v]; if(acc > n*0.03){ hi = v; break; } }
+        if(hi - lo < 50){ lo = 0; hi = 255; }
+        const span = Math.max(1, hi - lo);
+        for(let i=0;i<p.length;i+=4){
+          let g = (p[i]*0.299 + p[i+1]*0.587 + p[i+2]*0.114);
+          g = (g - lo) * 255 / span;
+          g = g < 0 ? 0 : (g > 255 ? 255 : g);
+          g = g * 1.06;
+          p[i] = p[i+1] = p[i+2] = g > 245 ? 255 : Math.min(255, g);
+        }
+        ctx.putImageData(data, 0, 0);
+        URL.revokeObjectURL(url);
+        resolve(cv);
+      }catch(e){ URL.revokeObjectURL(url); reject(e); }
+    };
+    img.onerror = ()=>{ URL.revokeObjectURL(url); reject(new Error('image-load')); };
+    img.src = url;
+  });
+}
+function parseReceipt(raw){
+  const norm = String(raw||'')
+    .replace(/[０-９]/g, c=>String.fromCharCode(c.charCodeAt(0) - 0xFEE0))
+    .replace(/[￥]/g, '¥').replace(/[，]/g, ',');
+  const lines = norm.split(/\r?\n/).map(s=>s.replace(/[\u3000\s]+/g,' ').trim()).filter(Boolean);
+  const clean = s => s.replace(/\s/g,'');
+  const isJp = s => /[\u3040-\u30ff\u4e00-\u9faf]/.test(s);
+
+  const cands = [];
+  lines.forEach((line, li)=>{
+    const lc = clean(line);
+    let kw = 0;
+    OCR_TOTAL_KW.forEach(([re,w])=>{ if(re.test(lc)) kw = Math.max(kw, w); });
+    const yen = /[¥]|円/.test(lc);
+    /* 소계·거스름돈·포인트·날짜·전화·시간은 지운 뒤 숫자만 본다 */
+    const masked = lc
+      .replace(/(お預|預り|釣銭|お釣|つり|おつり|ポイント|残高|小計|値引|割引|税抜|両替|チャージ|残額|返金)[^0-9]{0,10}[0-9,]+/g, ' ')
+      .replace(/(19|20)\d{2}\s*[\/\-.年]\s*\d{1,2}\s*[\/\-.月]\s*\d{1,2}/g, ' ')
+      .replace(/\d{1,4}-\d{2,4}-\d{3,4}/g, ' ')
+      .replace(/\d{1,2}:\d{2}(:\d{2})?/g, ' ')
+      .replace(/\d+(\.\d+)?\s*%/g, ' ');
+    const re = /(-)?[¥]?\s?(\d{1,3}(?:,\d{3})+|\d+)(\.\d+)?/g;
+    let m;
+    while((m = re.exec(masked)) !== null){
+      if(m[1] === '-') continue;
+      const numStr = m[2];
+      const v = parseInt(numStr.replace(/,/g,''), 10);
+      if(!isFinite(v) || v < 50 || v > 300000) continue;
+      if(/^\d{8,}$/.test(numStr)) continue;                    /* 바코드·긴 관리번호 */
+      if(/^(19|20)\d{2}$/.test(numStr)) continue;              /* 연도 */
+      cands.push({v, kw, yen, li, score: kw*10 + (yen?12:0) + Math.min(8, v/1000) + (li/Math.max(1,lines.length))*3});
+    }
+  });
+  let best = cands.filter(c=>c.kw>0).sort((a,b)=>b.score-a.score)[0]
+          || cands.filter(c=>c.yen).sort((a,b)=>b.v-a.v)[0]
+          || cands.filter(c=>c.li >= lines.length*0.5).sort((a,b)=>b.v-a.v)[0]
+          || null;
+  const amount = best ? best.v : 0;
+
+  /* 가게 이름: 앞쪽 줄에서 브랜드 → 없으면 상단의 일본어 상호명 */
+  const nameOk = s => {
+    const c = clean(s);
+    if(c.length < 2 || c.length > 26) return false;
+    if(OCR_BAD_STORE.test(c)) return false;
+    if(!isJp(c)) return false;
+    return (c.match(/[0-9]/g)||[]).length <= 4;
+  };
+  const headLines = lines.slice(0, 12);
+  let store = headLines.find(l => OCR_BRANDS.some(b=>clean(l).includes(b)) && nameOk(l)) || '';
+  if(!store) store = lines.slice(0, 7).find(nameOk) || '';
+  store = store.replace(/[¥]?\s*\d[\d,]*\s*円?$/, '').replace(/\s{2,}/g,' ').trim().slice(0, 34);
+
+  /* 메모: 품목 줄 1~2개 (예: 밥 · 차) */
+  const items = [];
+  lines.forEach(l=>{
+    const c = clean(l);
+    if(items.length >= 2) return;
+    if(!isJp(c) || OCR_BAD_STORE.test(c)) return;
+    if(OCR_TOTAL_KW.some(([re])=>re.test(c))) return;
+    const mm = c.match(/^(.{2,18}?)[\s]*[¥]?\s?(\d{2,6})\s*円?$/);
+    if(mm && !/^\d+$/.test(mm[1])){
+      const nm = mm[1].replace(/^[·・\-\*]+|[·・\-\*]+$/g,'').trim();
+      if(nm.length >= 2 && !items.includes(nm)) items.push(nm);
+    }
+  });
+  const memo = items.join(' · ').slice(0, 40);
+
+  /* 카테고리 추정 */
+  const guessText = clean((store||'') + ' ' + lines.slice(0,8).join(' '));
+  let cat = null;
+  if(/ローソン|セブン|ファミリーマート|ファミマ|コンビニ|デイリー|ポプラ|ミニストップ/.test(guessText)) cat = CATS[4];
+  else if(/ドンキ|マツモト|マツキヨ|薬|ドラッグ|無印|ユニクロ|ダイソー|セリア|ロフト|ハンズ|ビックカメラ|ヨドバシ|百貨店|ショップ|雑貨/.test(guessText)) cat = CATS[3];
+  else if(/ラーメン|寿司|鮨|焼肉|たこ焼|お好み焼|カフェ|コーヒー|スターバックス|スタバ|喫茶|レストラン|食堂|居酒屋|定食|うどん|そば|パン|ケーキ|餃子|串カツ/.test(guessText)) cat = CATS[0];
+  else if(/電車|タクシー|切符|乗車|運賃|バス|ICカード/.test(guessText)) cat = CATS[2];
+  else if(/入場|チケット|USJ|ユニバーサル|美術館|ミュージアム/.test(guessText)) cat = CATS[1];
+
+  return {amount, store, memo, cat, text: norm};
+}
+function ocrFillForm(p, text){
+  const filled = [];
+  if(p.amount > 0){
+    document.getElementById('expAmt').value = Number(p.amount).toLocaleString();
+    updateKrwPreview();
+    filled.push('금액');
+  }
+  const storeEl = document.getElementById('expStore'), memoEl = document.getElementById('expMemo');
+  if(p.store && !storeEl.value.trim()){ storeEl.value = p.store; filled.push('가게명'); }
+  if(p.memo && !memoEl.value.trim()){ memoEl.value = p.memo; filled.push('메모'); }
+  if(p.cat) selCat = p.cat;
+  renderMoney();
+
+  document.getElementById('ocrRaw').textContent = (text || '').trim() || '(글자를 못 읽었어요)';
+  const rawWrap = document.getElementById('ocrRawWrap');
+  rawWrap.style.display = 'block';
+  if(!p.amount) rawWrap.open = true;
+
+  const thumb = document.getElementById('ocrThumb');
+  thumb.style.display = 'flex';
+  document.getElementById('ocrThumbTxt').innerHTML = p.amount
+    ? `<b>합계 ¥${p.amount.toLocaleString()}</b><br/>${esc(p.store || '가게명 미확인')}`
+    : '금액을 못 찾았어요<br/>아래 원문을 보거나 직접 입력하세요';
+
+  if(filled.length) ocrSetStatus(`✅ ${filled.join(' · ')} 자동 입력 완료! <b>확인 → 구분(공금/개인)·결제(카드/현금) 고르고 저장</b>하세요.`, null);
+  else ocrSetStatus('🤔 금액을 못 찾았어요. <b>금액을 직접 입력</b>하면 그대로 저장됩니다. (원문은 위 접이식에서 확인)', null);
+}
+async function ocrFilePicked(input){
+  const f = input.files && input.files[0];
+  if(!f) return;
+  if(ocrBusy){ alert('앞 영수증을 읽는 중이에요. 잠깐만 기다려 주세요!'); return; }
+  ocrBusy = true;
+  const btn = document.getElementById('ocrBtn');
+  if(btn){ btn.disabled = true; btn.textContent = '🔎 영수증 읽는 중…'; }
+  try{
+    ocrSetStatus('📷 사진 준비 중…', 4);
+    const canvas = await ocrPrepareImage(f);
+    try{
+      document.getElementById('ocrPreview').src = canvas.toDataURL('image/jpeg', 0.6);
+      document.getElementById('ocrThumb').style.display = 'flex';
+      document.getElementById('ocrThumbTxt').textContent = '인식 중…';
+    }catch(e){}
+    ocrSetStatus('🔎 인식 엔진 준비 중…', 8);
+    const T = await ocrLoadEngine();
+    if(!ocrWorker) ocrWorker = await T.createWorker('jpn+eng', 1, { logger: ocrLog });
+    ocrSetStatus('🔎 영수증 읽는 중… 0%', 35);
+    const res = await ocrWorker.recognize(canvas);
+    const text = (res && res.data && res.data.text) || '';
+    ocrFillForm(parseReceipt(text), text);
+  }catch(err){
+    console.warn('OCR 실패:', err);
+    const offline = !navigator.onLine;
+    ocrSetStatus(offline
+      ? '📴 인터넷이 없어 자동 인식을 못 했어요. <b>금액·가게명을 직접 입력</b>하면 똑같이 저장됩니다.'
+      : '⚠️ 인식 엔진을 불러오지 못했어요(통신·차단). <b>금액과 가게명을 직접 입력</b>해도 전혀 문제없어요!', null);
+    const rawWrap = document.getElementById('ocrRawWrap');
+    if(rawWrap) rawWrap.style.display = 'none';
+  }finally{
+    ocrBusy = false;
+    if(btn){ btn.disabled = false; btn.textContent = '📷 영수증 찍기 / 사진 선택'; }
+    const wrap = document.getElementById('ocrBarWrap');
+    if(wrap) wrap.classList.remove('on');
+  }
+}
 function routeDirUrl(prev, cur){
   if(!cur) return '';
   const dstName = cur.gq || cur.name.replace(/<[^>]+>|&rarr;/g,' ').trim();
