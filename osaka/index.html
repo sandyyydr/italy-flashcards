@@ -1146,7 +1146,7 @@ function parseReceipt(raw){
     if(items.length >= 2) return;
     if(!isJp(c) || OCR_BAD_STORE.test(c) || OCR_ADDRESS.test(c)) return;
     if(OCR_TOTAL_KW.some(([re])=>re.test(c))) return;
-    const mm = c.match(/^(.{2,18}?)[\s]*[¥]?\s?(\d{2,6})\s*円?$/);
+    const mm = c.replace(/^\d{6,}/, '').match(/^(.{2,18}?)[\s]*[¥]?\s?(\d{2,6})\s*円?$/);
     if(mm && !/^\d+$/.test(mm[1])){
       let nm = mm[1].replace(/^[·・\-\*]+|[·・\-\*]+$/g,'').trim();
       nm = nm.replace(/\s?\d+\s*(mL|ML|ml|kg|Kg|g|L|個|点|枚|袋|本)$/,'').trim();
