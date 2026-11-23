@@ -61,7 +61,7 @@ main{padding:12px 14px calc(env(safe-area-inset-bottom,16px) + 78px);max-width:6
 .act-btn.org{background:var(--org);border-color:var(--org);color:#fff;}
 .chk-btn{width:26px;height:26px;border-radius:8px;border:2px solid var(--green);background:#fff;color:#fff;font-size:14px;font-weight:900;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
 .item-card.done .chk-btn{background:var(--green);}
-#mapBox{height:360px;border-radius:16px;border:1.5px solid var(--line);overflow:hidden;margin-bottom:10px;}
+#mapBox{height:360px;border-radius:16px;border:1.5px solid var(--line);overflow:hidden;margin-bottom:10px;background:#DCE7EA;}
 .sec-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px;}
 .sec-card h3{margin:0 0 8px;font-size:15.5px;font-weight:800;color:var(--green);}
 .row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #EFEADF;font-size:13.5px;gap:8px;}
@@ -902,7 +902,7 @@ function renderMap(){
     mapObj = L.map('mapBox');
     /* ⓵ 오프라인 베이스맵 (앱에 들어있는 로컬 타일 · 항상 깔림) */
     L.tileLayer('./tiles/14/{x}/{y}.png',{minZoom:12,maxZoom:19,minNativeZoom:14,maxNativeZoom:14,noWrap:true,bounds:[[34.635,135.455],[34.715,135.535]],attribution:'© OpenStreetMap'}).addTo(mapObj);
-    L.tileLayer('./tiles/13/{x}/{y}.png',{minZoom:10,maxZoom:19,minNativeZoom:13,maxNativeZoom:13,noWrap:true,bounds:[[34.36,135.16],[34.84,135.58]],attribution:'© OpenStreetMap contributors'}).addTo(mapObj);
+    L.tileLayer('./tiles/13/{x}/{y}.png',{minZoom:10,maxZoom:19,minNativeZoom:13,maxNativeZoom:13,noWrap:true,bounds:[[34.30,135.05],[34.90,135.66]],attribution:'© OpenStreetMap contributors'}).addTo(mapObj);
     /* ⓶ 온라인일 때만 위에 올라가는 선명한 OSM 타일 */
     onlineLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:19});
     syncOnlineLayer();
@@ -1025,7 +1025,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v14';
+const SW_CACHE = 'osaka-planner-v15';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
