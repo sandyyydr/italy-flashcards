@@ -357,7 +357,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
           <li>계산 전 <b>여권 제시</b> → <b>세금 포함 정가</b>로 결제 (면세 카운터에서 환급 수단 등록)</li>
           <li><b>세전 ¥5,000</b> 이상 (세금 포함 ¥5,500). 같은 날·같은 매장 <b>합산 OK</b> — 일반·소모품 구분 없어졌어요</li>
           <li><b>먹을 것·바로 쓸 화장품은 따로 계산!</b> 한 영수증 물건 중 하나라도 없거나 뜯으면 <b>그 영수증 전체</b>가 환급 제외</li>
-          <li>여권·결제 카드·환급 카드 <b>모두 같은 사람 명의</b> (Amex는 등록 불가 → VISA·Mastercard)</li>
+          <li>여권·결제 카드·환급 카드 <b>모두 같은 사람 명의</b> — J-TaxRefund는 <b>Amex 등록 불가</b>라 VISA·Mastercard로</li>
         </ul>
         <div class="imp">⭐ 결제 직후 <b>영수증 하단 QR</b>을 찍어 매장별 환급 대행사에 <b>카드/계좌 등록</b> + 영수증 사진 백업! 검색해서 찾은 사이트 말고 <b>영수증 QR</b>로만 들어가세요.</div>
         <div class="tip">💡 J-TaxRefund는 인증 3단계(<b>이메일 → 여권 → 카드</b>). 가입은 <b>Gmail</b>이 잘 되고, 가입 후 <b>[J-TaxRefund] 계정이 생성되었습니다</b> 메일의 <b>전용 아이디</b>를 저장하세요 — 조회는 이메일이 아니라 그 아이디로 로그인해요.</div>
@@ -1025,7 +1025,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v15';
+const SW_CACHE = 'osaka-planner-v16';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
