@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2"><Document>
 <name>🇯🇵 오사카 2026 전체 추천 지도</name>
-<description><![CDATA[이승현 님 오사카 3박 4일(2026.11.28~12.01) 추천 장소 전체 지도.<br/>① 확정 일정 ② 맛집·카페(최근호 님 매거진 + 유저 추가 핫플) ③ 쇼핑·기타.<br/>좌표는 2026-11-22 Google Maps 기준 확인. 만든 날 2026-11-22 · 핫플 5곳 추가 2026-11-24.]]></description>
+<description><![CDATA[이승현 님 오사카 3박 4일(2026.11.28~12.01) 추천 장소 전체 지도.<br/>① 확정 일정 ② 맛집·카페 59곳(최근호 님 매거진 + 유저 추가 + 블로그 20곳) ③ 쇼핑·기타.<br/>좌표는 2026-11-22 Google Maps 기준 확인. 만든 날 2026-11-22 · 핫플 5곳 추가 2026-11-24 · 맛집 20곳 추가 2026-11-25.]]></description>
 <Style id="ly1"><IconStyle><color>ffffffff</color><scale>1.0</scale><Icon><href>http://maps.google.com/mapfiles/kml/paddle/red-circle.png</href></Icon></IconStyle><LabelStyle><scale>0.85</scale></LabelStyle></Style>
 <Style id="ly2"><IconStyle><color>ffffffff</color><scale>1.0</scale><Icon><href>http://maps.google.com/mapfiles/kml/paddle/orange-circle.png</href></Icon></IconStyle><LabelStyle><scale>0.85</scale></LabelStyle></Style>
 <Style id="ly3"><IconStyle><color>ffffffff</color><scale>1.0</scale><Icon><href>http://maps.google.com/mapfiles/kml/paddle/blu-circle.png</href></Icon></IconStyle><LabelStyle><scale>0.85</scale></LabelStyle></Style>
@@ -98,7 +98,7 @@
 <Point><coordinates>135.502295,34.662933,0</coordinates></Point>
 </Placemark>
 </Folder>
-<Folder><name>2. 맛집·카페</name><description>최근호 님 오사카 맛집 매거진(13쪽) 카드 39곳 + 표 후보 23곳</description><open>1</open>
+<Folder><name>2. 맛집·카페</name><description>맛집·카페 59곳 — 기존 매거진 39곳 + 블로그에서 새로 담은 20곳(2026-11-25 좌표 확인)</description><open>1</open>
 <Placemark>
 <name>551 호라이 본점</name>
 <styleUrl>#ly2</styleUrl>
@@ -372,6 +372,146 @@
 <description><![CDATA[<b>카페·지브리 감성</b><br/><span style='color:#666'>살롱 드 아만토 (나카자키초)</span><br/>🗓 추천 · 우메다 옆 나카자키초<br/>⭐ 3.7 / 5 (607리뷰)<br/>영업 12:00~22:00 (매일). 지브리 감성 인테리어, 나카자키초 소품샵 거리 한복판. 우메다에서 도보 12분.<br/>📍 1-chōme-7-26 Nakazakinishi, Kita Ward, Osaka, 530-0015<br/><a href='https://maps.google.com/?cid=15027777494711305633&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA'>구글맵에서 열기</a>]]></description>
 <ExtendedData><Data name="구분"><value>카페·지브리 감성</value></Data><Data name="일정"><value>추천 · 우메다 옆 나카자키초</value></Data><Data name="주소"><value>1-chōme-7-26 Nakazakinishi, Kita Ward, Osaka, 530-0015</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=15027777494711305633&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
 <Point><coordinates>135.504399,34.708071,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【맛집】겟토</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>이자카야·계란말이</b><br/><span style='color:#666'>月盗</span><br/>⭐ 4.3 / 5 (181리뷰)<br/>계란말이 세계챔피언 · 노른자 다시마키타마고 · 일 휴무<br/>📍 〒540-0025 Osaka, Chuo Ward, Tokuichō, 1-chōme−4−１０ イースタン船場ビル<br/><a href='https://maps.google.com/?cid=3354122396634489111'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>이자카야·계란말이</value></Data><Data name="일정"><value>계란말이 세계챔피언 · 노른자 다시마키타마고 · 일 휴무</value></Data><Data name="주소"><value>〒540-0025 Osaka, Chuo Ward, Tokuichō, 1-chōme−4−１０ イースタン船場ビル</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=3354122396634489111</value></Data></ExtendedData>
+<Point><coordinates>135.5147271,34.6841649,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【맛집】니쿠 상구르망</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>함바그</b><br/><span style='color:#666'>Niku Sangourmand</span><br/>⭐ 4.2 / 5 (634리뷰)<br/>우설 오므라이스 함바그 · 수 휴무 · 금~일만 저녁<br/>📍 〒530-0041 Osaka, Kita Ward, Tenjinbashi, 3-chōme−10−８ 与力町スカイハイツ 102<br/><a href='https://maps.google.com/?cid=7324549046019363727'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>함바그</value></Data><Data name="일정"><value>우설 오므라이스 함바그 · 수 휴무 · 금~일만 저녁</value></Data><Data name="주소"><value>〒530-0041 Osaka, Kita Ward, Tenjinbashi, 3-chōme−10−８ 与力町スカイハイツ 102</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=7324549046019363727</value></Data></ExtendedData>
+<Point><coordinates>135.5123308,34.7019722,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【맛집】야키니쿠 우시가타리</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>야키니쿠</b><br/><span style='color:#666'>Yakiniku Ushigatari</span><br/>⭐ 4.8 / 5 (1,036리뷰)<br/>후쿠시마역 로컬 야키니쿠 · 화 휴무 · 저녁만<br/>📍 〒553-0003 Osaka, Fukushima Ward, Fukushima, 1-chōme−6−１８ クリスタルハウス 1F<br/><a href='https://maps.google.com/?cid=10396038116234117119'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>야키니쿠</value></Data><Data name="일정"><value>후쿠시마역 로컬 야키니쿠 · 화 휴무 · 저녁만</value></Data><Data name="주소"><value>〒553-0003 Osaka, Fukushima Ward, Fukushima, 1-chōme−6−１８ クリスタルハウス 1F</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=10396038116234117119</value></Data></ExtendedData>
+<Point><coordinates>135.4878649,34.6953907,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【맛집】야키니쿠 카메다 남센바</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>야키니쿠</b><br/><span style='color:#666'>Yakiniku KAMEDA Minamisenba Store</span><br/>⭐ 4.8 / 5 (1,268리뷰)<br/>가성비 로컬 야키니쿠 · 특상 우설 · 17:00~04:00<br/>📍 4-chōme-8-2 Minamisenba, Chuo Ward, Osaka, 542-0081<br/><a href='https://maps.google.com/?cid=6563095938068008217'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>야키니쿠</value></Data><Data name="일정"><value>가성비 로컬 야키니쿠 · 특상 우설 · 17:00~04:00</value></Data><Data name="주소"><value>4-chōme-8-2 Minamisenba, Chuo Ward, Osaka, 542-0081</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=6563095938068008217</value></Data></ExtendedData>
+<Point><coordinates>135.49948039999998,34.6776732,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【맛집】규카츠 토미타</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>규카츠</b><br/><span style='color:#666'>Gyukatsu Tomita</span><br/>⭐ 4.5 / 5 (3,435리뷰)<br/>비성형육 규카츠 · 11:00~21:00 · 웨이팅 김<br/>📍 〒556-0011 Osaka, Naniwa Ward, Nanbanaka, 2-chōme−3−１ ２階<br/><a href='https://maps.google.com/?cid=5283956538724007843'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>규카츠</value></Data><Data name="일정"><value>비성형육 규카츠 · 11:00~21:00 · 웨이팅 김</value></Data><Data name="주소"><value>〒556-0011 Osaka, Naniwa Ward, Nanbanaka, 2-chōme−3−１ ２階</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=5283956538724007843</value></Data></ExtendedData>
+<Point><coordinates>135.5039325,34.6627484,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【맛집】토리소바 자긴 니보시점</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>라멘</b><br/><span style='color:#666'>Torisoba Zagin Niboshi</span><br/>⭐ 4.5 / 5 (2,880리뷰)<br/>우엉튀김 닭육수 라멘 · 고기스시 · 10:00~22:00<br/>📍 3-chōme-9-6 Minamisenba, Chuo Ward, Osaka, 542-0081<br/><a href='https://maps.google.com/?cid=7402924320916826170'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>라멘</value></Data><Data name="일정"><value>우엉튀김 닭육수 라멘 · 고기스시 · 10:00~22:00</value></Data><Data name="주소"><value>3-chōme-9-6 Minamisenba, Chuo Ward, Osaka, 542-0081</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=7402924320916826170</value></Data></ExtendedData>
+<Point><coordinates>135.50112180000002,34.6776623,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【맛집】카미나리 스시</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>스시</b><br/><span style='color:#666'>Kaminari Sushi</span><br/>⭐ 4.5 / 5 (1,857리뷰)<br/>두꺼운 네타 · 웨이팅 적음 · 11:00~23:00<br/>📍 1-chōme-9-20 Sennichimae, Chuo Ward, Osaka, 542-0074<br/><a href='https://maps.google.com/?cid=4638222556681207274'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>스시</value></Data><Data name="일정"><value>두꺼운 네타 · 웨이팅 적음 · 11:00~23:00</value></Data><Data name="주소"><value>1-chōme-9-20 Sennichimae, Chuo Ward, Osaka, 542-0074</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=4638222556681207274</value></Data></ExtendedData>
+<Point><coordinates>135.503516,34.667598999999996,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【맛집】와규 스키야키 쿠로노 우라난바</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>스키야키</b><br/><span style='color:#666'>Wagyu Sukiyaki Kurono Ura-Namba Main Store</span><br/>⭐ 4.9 / 5 (3,353리뷰)<br/>오사카식·도쿄식 선택 · 11:00~14:00/17:00~22:00<br/>📍 2-17 Nanbasennichimae, Chuo Ward, Osaka, 542-0075<br/><a href='https://maps.google.com/?cid=17397448577899589840'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>스키야키</value></Data><Data name="일정"><value>오사카식·도쿄식 선택 · 11:00~14:00/17:00~22:00</value></Data><Data name="주소"><value>2-17 Nanbasennichimae, Chuo Ward, Osaka, 542-0075</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=17397448577899589840</value></Data></ExtendedData>
+<Point><coordinates>135.50448889999998,34.6651502,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【맛집】이즈모 후쿠시마 본점</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>장어덮밥</b><br/><span style='color:#666'>IZUMO Unagi</span><br/>⭐ 4.7 / 5 (3,364리뷰)<br/>두툼한 계란 장어덮밥 · 작은 사이즈 있음<br/>📍 5-chōme-12-18 Fukushima, Fukushima Ward, Osaka, 553-0003<br/><a href='https://maps.google.com/?cid=17421137614141374412'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>장어덮밥</value></Data><Data name="일정"><value>두툼한 계란 장어덮밥 · 작은 사이즈 있음</value></Data><Data name="주소"><value>5-chōme-12-18 Fukushima, Fukushima Ward, Osaka, 553-0003</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=17421137614141374412</value></Data></ExtendedData>
+<Point><coordinates>135.4867012,34.6964067,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【맛집】마구로 잇테츠 교바시점</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>스시·참치</b><br/><span style='color:#666'>Maguro Ittetsu Kyobashi</span><br/>⭐ 4.1 / 5 (571리뷰)<br/>교바시 스탠딩 스시 · 참치류 추천<br/>📍 3-chōme-11-9 Higashinodamachi, Miyakojima Ward, Osaka, 534-0024<br/><a href='https://maps.google.com/?cid=9004838960002888875'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>스시·참치</value></Data><Data name="일정"><value>교바시 스탠딩 스시 · 참치류 추천</value></Data><Data name="주소"><value>3-chōme-11-9 Higashinodamachi, Miyakojima Ward, Osaka, 534-0024</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=9004838960002888875</value></Data></ExtendedData>
+<Point><coordinates>135.53405759999998,34.6987531,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【맛집】쿠시카츠 다나카 아메무라점</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>쿠시카츠</b><br/><span style='color:#666'>Kushikatsu Tanaka America-mura Store</span><br/>⭐ 4.7 / 5 (10,703리뷰)<br/>타코야키 체험 · 호르몬 쿠시카츠 · 12:00~05:00<br/>📍 1-chōme-8-21 Nishishinsaibashi, Chuo Ward, Osaka, 542-0086<br/><a href='https://maps.google.com/?cid=1412941375484094162'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>쿠시카츠</value></Data><Data name="일정"><value>타코야키 체험 · 호르몬 쿠시카츠 · 12:00~05:00</value></Data><Data name="주소"><value>1-chōme-8-21 Nishishinsaibashi, Chuo Ward, Osaka, 542-0086</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=1412941375484094162</value></Data></ExtendedData>
+<Point><coordinates>135.49798339999998,34.6734395,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【맛집】로만테이 아베노 하루카스점</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>카츠산도</b><br/><span style='color:#666'>Abeno Katsu-sand Parlour ROMAN-tei</span><br/>⭐ 4.3 / 5 (240리뷰)<br/>하루카스 B2F · 타마고·에비 산도 · 10:00~20:00<br/>📍 〒545-6090 Osaka, Abeno Ward, Abenosuji, 1-chōme−1−４３ あべのハルカス近鉄本店 Wing Building, B2F<br/><a href='https://maps.google.com/?cid=11653650795025769971'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>카츠산도</value></Data><Data name="일정"><value>하루카스 B2F · 타마고·에비 산도 · 10:00~20:00</value></Data><Data name="주소"><value>〒545-6090 Osaka, Abeno Ward, Abenosuji, 1-chōme−1−４３ あべのハルカス近鉄本店 Wing Building, B2F</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=11653650795025769971</value></Data></ExtendedData>
+<Point><coordinates>135.514368,34.6458129,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【맛집】와규 이다텐</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>와규·덮밥</b><br/><span style='color:#666'>Wagyu IDATEN</span><br/>⭐ 4.7 / 5 (1,496리뷰)<br/>와규 초밥·로스트비프·스키야키동 · 월 휴무<br/>📍 〒542-0076 Osaka, Chuo Ward, Namba, 1-chōme−8−２０ 嘉光ビル 2階<br/><a href='https://maps.google.com/?cid=4922574177392583819'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>와규·덮밥</value></Data><Data name="일정"><value>와규 초밥·로스트비프·스키야키동 · 월 휴무</value></Data><Data name="주소"><value>〒542-0076 Osaka, Chuo Ward, Namba, 1-chōme−8−２０ 嘉光ビル 2階</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=4922574177392583819</value></Data></ExtendedData>
+<Point><coordinates>135.5010546,34.6677597,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【맛집】이타마에 야키니쿠 이치마사</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>야키니쿠</b><br/><span style='color:#666'>Itamae yakiniku Ichimasa</span><br/>⭐ 4.9 / 5 (634리뷰)<br/>소우에몬초 두꺼운 특상우설 · 화 휴무 · 17:00~22:00<br/>📍 1-8 Souemonchō, Chuo Ward, Osaka, 542-0084<br/><a href='https://maps.google.com/?cid=9856945394536807802'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>야키니쿠</value></Data><Data name="일정"><value>소우에몬초 두꺼운 특상우설 · 화 휴무 · 17:00~22:00</value></Data><Data name="주소"><value>1-8 Souemonchō, Chuo Ward, Osaka, 542-0084</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=9856945394536807802</value></Data></ExtendedData>
+<Point><coordinates>135.50588779999998,34.6696427,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【맛집】메이지켄</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>오므라이스·쿠시카츠</b><br/><span style='color:#666'>Meijiken</span><br/>⭐ 4.2 / 5 (2,448리뷰)<br/>1925년 창업 100년 노포 · 수 휴무 · 월요일은 점심만<br/>📍 1-chōme-5-32 Shinsaibashisuji, Chuo Ward, Osaka, 542-0085<br/><a href='https://maps.google.com/?cid=12921712387673618451'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>오므라이스·쿠시카츠</value></Data><Data name="일정"><value>1925년 창업 100년 노포 · 수 휴무 · 월요일은 점심만</value></Data><Data name="주소"><value>1-chōme-5-32 Shinsaibashisuji, Chuo Ward, Osaka, 542-0085</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=12921712387673618451</value></Data></ExtendedData>
+<Point><coordinates>135.5022323,34.6726613,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【맛집】돈카츠 이마나라</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>돈카츠</b><br/><span style='color:#666'>Tonkatsu Imanara</span><br/>⭐ 4.9 / 5 (2,186리뷰)<br/>육즙 돈카츠 4.9 · 11:30~16:00/17:00~22:30<br/>📍 1-chōme-9-20 Sennichimae, Chuo Ward, Osaka, 542-0074<br/><a href='https://maps.google.com/?cid=11392910533775951477'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>돈카츠</value></Data><Data name="일정"><value>육즙 돈카츠 4.9 · 11:30~16:00/17:00~22:30</value></Data><Data name="주소"><value>1-chōme-9-20 Sennichimae, Chuo Ward, Osaka, 542-0074</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=11392910533775951477</value></Data></ExtendedData>
+<Point><coordinates>135.50355439999998,34.667623999999996,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【맛집】코우찬 (もんじゃ こうちゃん)</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>몬쟈야키</b><br/><span style='color:#666'>Kouchan</span><br/>⭐ 4.8 / 5 (222리뷰)<br/>몬쟈야키·가리비·호르몬구이 · 17:00~04:00<br/>📍 〒542-0075 Osaka, Chuo Ward, Nanbasennichimae, 1−５ 金森ビル 1階<br/><a href='https://maps.google.com/?cid=1611975674045007787'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>몬쟈야키</value></Data><Data name="일정"><value>몬쟈야키·가리비·호르몬구이 · 17:00~04:00</value></Data><Data name="주소"><value>〒542-0075 Osaka, Chuo Ward, Nanbasennichimae, 1−５ 金森ビル 1階</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=1611975674045007787</value></Data></ExtendedData>
+<Point><coordinates>135.5054183,34.6649269,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【맛집】츠루하시 오토코구시</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>야키토리·야타이</b><br/><span style='color:#666'>Kushiyakiyatai Tsuruhashiotokogushi</span><br/>⭐ 4.7 / 5 (411리뷰)<br/>에비스초 꼬치구이 야타이 · 수 휴무 · 19:30~24:00<br/>📍 3-chōme-1-1 Ebisunishi, Naniwa Ward, Osaka, 556-0003<br/><a href='https://maps.google.com/?cid=12317735621884583481'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>야키토리·야타이</value></Data><Data name="일정"><value>에비스초 꼬치구이 야타이 · 수 휴무 · 19:30~24:00</value></Data><Data name="주소"><value>3-chōme-1-1 Ebisunishi, Naniwa Ward, Osaka, 556-0003</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=12317735621884583481</value></Data></ExtendedData>
+<Point><coordinates>135.5044792,34.6521314,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【맛집】아야 스파이스테이</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>스프카레</b><br/><span style='color:#666'>スープカレー aya spice亭</span><br/>⭐ 4.6 / 5 (101리뷰)<br/>히가시신사이바시 스프카레 · 점심만 11:00~15:00<br/>📍 〒542-0083 Osaka, Chuo Ward, Higashishinsaibashi, 1-chōme−13−１９ １階 Japanese Bar common内<br/><a href='https://maps.google.com/?cid=6523317999185941886'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>스프카레</value></Data><Data name="일정"><value>히가시신사이바시 스프카레 · 점심만 11:00~15:00</value></Data><Data name="주소"><value>〒542-0083 Osaka, Chuo Ward, Higashishinsaibashi, 1-chōme−13−１９ １階 Japanese Bar common内</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=6523317999185941886</value></Data></ExtendedData>
+<Point><coordinates>135.5033989,34.673721,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【맛집】치카치킨 다이마루 신사이바시</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>치킨</b><br/><span style='color:#666'>ぶりや チカチキン 大丸心斎橋店</span><br/>⭐ 4.6 / 5 (205리뷰)<br/>다이마루 B2F 치킨 · 하프 포장 · 11:00~21:00<br/>📍 〒542-0085 Osaka, Chuo Ward, Shinsaibashisuji, 1-chōme−7−１ Main Building, B2F<br/><a href='https://maps.google.com/?cid=16361755103346848577'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>치킨</value></Data><Data name="일정"><value>다이마루 B2F 치킨 · 하프 포장 · 11:00~21:00</value></Data><Data name="주소"><value>〒542-0085 Osaka, Chuo Ward, Shinsaibashisuji, 1-chōme−7−１ Main Building, B2F</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=16361755103346848577</value></Data></ExtendedData>
+<Point><coordinates>135.5009632,34.673162999999995,0</coordinates></Point>
 </Placemark>
 </Folder>
 <Folder><name>3. 쇼핑·기타</name><description>쇼핑·체험·전망대 · 12곳</description><open>1</open>
