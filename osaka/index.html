@@ -1328,13 +1328,80 @@ const OCR_SRC = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.
 const OCR_BRANDS = ['ドン・キホーテ','ドンキ','ローソン','セブン-イレブン','セブンイレブン','セブン','ファミリーマート','ファミマ','無印良品','スターバックス','スタバ',
   'マツモトキヨシ','マツキヨ','ダイコクドラッグ','スギ薬局','ウエルシア','ココカラファイン','サンドラッグ','ツルハ','ビックカメラ','ヨドバシ','ユニクロ','しまむら',
   'ダイソー','セリア','キャンドゥ','ロフト','ハンズ','成城石井','一蘭','大阪王将','餃子の王将','551','蓬萊','たこ焼','コメダ','マクドナルド','ミスタードーナツ',
-  'ケンタッキー','吉野家','すき家','松屋','ライフ','イオン','阪急','近鉄','ダイエー','ドラッグストア','デイリーヤマザキ','ポプラ'];
+  'ケンタッキー','吉野家','すき家','松屋','ライフ','イオン','阪急','近鉄','ダイエー','ドラッグストア','デイリーヤマザキ','ポプラ','エディオン','パンやきどころ'];
 const OCR_BAD_STORE = /領収書|レシート|ご来店|ありがとう|お買上|お会計|合計|小計|税込|税抜|免税|対象|税額|お預|預り|釣|つり|担当|レジ|TEL|電話|FAX|住所|営業時間|ポイント|会員|クーポン|番号|登録|日時|お客様|様$|レシートNo|伝票|TOTAL|SUBTOTAL|TAX|CASH|CHANGE|CREDIT|RECEIPT|THANK|AMOUNT|JPY/i;
-const OCR_TOTAL_KW = [[/総?合計/,10],[/お買上(げ)?高?/,9],[/お会計/,8],[/現計/,8],[/税込(み)?計/,7],[/クレジット/,6],[/お支払/,5],[/合計/,6]];
+const OCR_TOTAL_KW = [[/合計金額|合計全額|ご合計/,12],[/総?合計/,10],[/お買上(げ)?高?|お買上金額/,9],[/お会計/,8],[/現計/,8],[/税込(み)?計/,7],[/クレジット|カード支払/,6],[/合計/,6],[/お支払/,5],[/小計/,2]];
+
+/* 반각 가타카나 → 전각 (ｺｸｳﾏﾌﾟﾚｰﾝ → コクウマプレーン) */
+const JA_HW_MAP = {'ｦ':'ヲ','ｧ':'ァ','ｨ':'ィ','ｩ':'ゥ','ｪ':'ェ','ｫ':'ォ','ｬ':'ャ','ｭ':'ュ','ｮ':'ョ','ｯ':'ッ','ｰ':'ー','ｱ':'ア','ｲ':'イ','ｳ':'ウ','ｴ':'エ','ｵ':'オ','ｶ':'カ','ｷ':'キ','ｸ':'ク','ｹ':'ケ','ｺ':'コ','ｻ':'サ','ｼ':'シ','ｽ':'ス','ｾ':'セ','ｿ':'ソ','ﾀ':'タ','ﾁ':'チ','ﾂ':'ツ','ﾃ':'テ','ﾄ':'ト','ﾅ':'ナ','ﾆ':'ニ','ﾇ':'ヌ','ﾈ':'ネ','ﾉ':'ノ','ﾊ':'ハ','ﾋ':'ヒ','ﾌ':'フ','ﾍ':'ヘ','ﾎ':'ホ','ﾏ':'マ','ﾐ':'ミ','ﾑ':'ム','ﾒ':'メ','ﾓ':'モ','ﾔ':'ヤ','ﾕ':'ユ','ﾖ':'ヨ','ﾗ':'ラ','ﾘ':'リ','ﾙ':'ル','ﾚ':'レ','ﾛ':'ロ','ﾜ':'ワ','ﾝ':'ン','ﾞ':'\u309B','ﾟ':'\u309C'};
+const JA_DAKU = {'カ':'ガ','キ':'ギ','ク':'グ','ケ':'ゲ','コ':'ゴ','サ':'ザ','シ':'ジ','ス':'ズ','セ':'ゼ','ソ':'ゾ','タ':'ダ','チ':'ヂ','ツ':'ヅ','テ':'デ','ト':'ド','ハ':'バ','ヒ':'ビ','フ':'ブ','ヘ':'ベ','ホ':'ボ','ウ':'ヴ'};
+const JA_HANDAKU = {'ハ':'パ','ヒ':'ピ','フ':'プ','ヘ':'ペ','ホ':'ポ'};
+function jaHalfToFull(s){
+  const src = String(s||'');
+  let out = '';
+  for(let i=0;i<src.length;i++){
+    const f = JA_HW_MAP[src[i]];
+    if(!f){ out += src[i]; continue; }
+    if(f === '\u309B' || f === '\u309C'){
+      const last = out.slice(-1);
+      const map = (f === '\u309B') ? JA_DAKU : JA_HANDAKU;
+      if(map[last]) out = out.slice(0,-1) + map[last];
+      continue;
+    }
+    out += f;
+  }
+  return out;
+}
+/* 금액 오인 방지: 사업자등록번호·영수증번호·POS·전화·시각·날짜·%를 지운다 */
+function ocrMaskNoise(s){
+  return String(s||'')
+    .replace(/[TＴ]\s*[0-9OＯlI]{12,}/g,' ')
+    .replace(/事業者登録番号[^\n]{0,6}/g,' ')
+    .replace(/登録番号\s*[:：]?\s*[^\s]{4,}/g,' ')
+    .replace(/No\.?\s*[0-9][0-9\-]{3,}/gi,' ')
+    .replace(/レジ\s*#?\s*\d+/g,' ')
+    .replace(/POS\s*[:：]?\s*\d+/gi,' ')
+    .replace(/\d{2,4}-\d{2,4}-\d{3,4}/g,' ')
+    .replace(/\d{5,}-\d{3,}/g,' ')
+    .replace(/\d{1,4}-\d{1,4}(?:-\d{1,4})?/g,' ')
+    .replace(/\d{1,2}:\d{2}(?::\d{2})?/g,' ')
+    .replace(/(?:19|20)\d{2}\s*[年\/.\-]\s*\d{1,2}\s*[月\/.\-]\s*\d{1,2}\s*日?/g,' ')
+    .replace(/\d+(?:\.\d+)?\s*%/g,' ')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+/* 품목이 아닌 줄 (합계·세금·결제·가게 정보) */
+const OCR_ITEM_NOISE = /小計|合計|消費税|税込|税抜|外税|内税|内消費|免税|対象|お預|預り|お釣|おつり|釣銭|つり銭|ポイント|残高|レシート|伝票|点数|クレジット|現金|お支払|支払|値引|割引|両替|チャージ|返金|領収|登録番号|端末|取引|レジ|担当|電話|TEL|FAX|定休日|営業時間|発行日|ありがとう|お買上|明細|軽減|税率|セキュリティ|荷物|消耗品|酒類|テーブル|卓番|注文|オーダー|単価|個数|お客様|控え|売上|番号|対象額|領収書/i;
+const OCR_ADDR_LINE = /都道府県|県.{0,6}(市|郡)|市.{0,8}区|丁目|番地|号室|.{1,6}(通り|通)$/;
+/* 체인 상호 — OCR 흔들림(セフン·EDdbN 등)까지 잡는다 */
+const OCR_CHAIN = [
+  [/セ[ブプフビバ]?[ンソ][\s\-ー・]{0,3}[イィｲ][レﾚ]ブン|セブンイレブン|7[\s\-]?ELEVEN|SEVEN[\s\-]?ELEVEN/i,'セブン-イレブン'],
+  [/エディオン|エデオン|E[Dd][Ii1l\|][Oo0][Nn]|ED[O0]N|^E[Dd][A-Za-z]{0,2}[Nn]$/,'エディオン'],
+  [/ローソン|LAWSON/i,'ローソン'],
+  [/ファミリーマート|ファミマ|FAMILY[\s]?MART/i,'ファミリーマート'],
+  [/ドン[・\s]?キホーテ|ドンキ|DON[\s]?QUIJOTE/i,'ドン・キホーテ'],
+  [/パンやきどころ|パンやき処/i,'パンやきどころ'],
+  [/無印良品|MUJI/i,'無印良品'],
+  [/スターバックス|STARBUCKS/i,'スターバックス'],
+  [/マツモトキヨシ|マツキヨ/i,'マツモトキヨシ'],
+  [/ダイコクドラッグ|ダイコク/i,'ダイコクドラッグ'],
+  [/ユニクロ|UNIQLO/i,'ユニクロ'],
+  [/ダイソー|DAISO/i,'ダイソー'],
+  [/ビックカメラ|BIC[\s]?CAMERA/i,'ビックカメラ'],
+  [/ヨドバシ|YODOBASHI/i,'ヨドバシ'],
+  [/成城石井/i,'成城石井']
+];
+function ocrChainName(line){
+  const s = String(line||'');
+  if(!s) return '';
+  for(let i=0;i<OCR_CHAIN.length;i++){ if(OCR_CHAIN[i][0].test(s)) return OCR_CHAIN[i][1]; }
+  return '';
+}
 
 /* ───────── 🇯🇵→🇰🇷 영수증 한국어 변환 (1단계 사전 → 2단계 무료 번역기 → 사전 fallback) ───────── */
 const JA_KO_STORE = [
   ['ドン・キホーテ','돈키호테'],['ドンキホーテ','돈키호테'],['ドンキ','돈키'],
+  ['エディオン','에디온'],['パンやきどころ','빵야키도코로'],['すし酒場さしす','스시 사카바 사시스'],['すし酒場','스시 사카바'],
   ['ミスタードーナツ','미스터도넛'],['スターバックス','스타벅스'],['スタバ','스타벅스'],
   ['セブン-イレブン','세븐일레븐'],['セブンイレブン','세븐일레븐'],['セブン','세븐일레븐'],
   ['ファミリーマート','패밀리마트'],['ファミマ','패밀리마트'],['ローソン','로손'],
@@ -1354,6 +1421,8 @@ const JA_KO_STORE = [
 ];
 const JA_KO_PLACE = [
   ['関西国際空港','간사이공항'],['関西空港','간사이공항'],['道頓堀','도톤보리'],['なんば','난바'],['難波','난바'],
+  ['福岡大濠公園駅前店','후쿠오카 오호리코엔에키마에점'],['心斎橋東店','신사이바시히가시점'],['大濠公園','오호리코엔'],
+  ['福岡','후쿠오카'],['荒戸','아라토'],['神戸','고베'],['兵庫','효고'],['栄町通','사카에마치도리'],['なんばウォーク','난바워크'],
   ['千日前','센니치마에'],['心斎橋','신사이바시'],['梅田','우메다'],['天王寺','텐노지'],['新世界','신세카이'],
   ['日本橋','닛폰바시'],['京橋','쿄바시'],['本町','혼마치'],['堺筋','사카이스지'],['御堂筋','미도스지'],
   ['中央区','주오구'],['北区','기타구'],['浪速区','나니와구'],['西区','니시구'],['阿倍野','아베노'],['住之江','스미노에'],
@@ -1363,6 +1432,11 @@ const JA_KO_PLACE = [
 ];
 const JA_KO_ITEM = [
   ['おにぎり','삼각김밥'],['ツナマヨ','참치마요'],['からあげクン','가라아게군'],['レギュラー','레귤러'],
+  ['クボタ','쿠보타'],['コクウマ','코쿠우마'],['プレーン','플레인'],['バターパン','버터빵'],['ホンセット','병 세트'],
+  ['デニッシュ','데니시'],['クロワッサン','크루아상'],['ミックスサンドイッチ','믹스 샌드위치'],['メロンパン','메론빵'],
+  ['カレーパン','카레빵'],['クロックムッシュ','크로크무슈'],['パンチェッタ','판체타'],['セミドライトマト','세미드라이 토마토'],
+  ['チェダーチーズ','체다치즈'],['シャンプー','샴푸'],['ビスケット','비스킷'],
+  ['生ビール','생맥주'],['白身','흰살생선'],['三昧','모둠'],['茶碗蒸し','차완무시'],['鉄火巻','철화마키'],['うなぎ','장어'],['抜うなぎ','장어'],
   ['お茶','녹차'],['緑茶','녹차'],['ミネラルウォーター','생수'],['天然水','생수'],['水','생수'],['牛乳','우유'],
   ['パン','빵'],['菓子パン','단빵'],['お菓子','과자'],['詰め合わせ','모둠'],['詰合せ','모둠'],
   ['セッケン','비누'],['石鹸','비누'],['洗剤','세제'],['目薬','안약'],['マスク','마스크'],['シートマスク','마스크팩'],
@@ -1520,7 +1594,7 @@ async function jaTranslateWords(words){
 async function ocrLocalize(p){
   const storeJa = jaCleanStr(p.store || '');
   const storeSegs = storeJa ? jaSeg(jaCompactStr(storeJa), JA_DICT_PLACE) : [];
-  const rows = (Array.isArray(p.itemRows) ? p.itemRows : []).slice(0, 14)
+  const rows = (Array.isArray(p.itemRows) ? p.itemRows : []).slice(0, 20)
     .map(r=>({ ja: jaCleanStr(r && r.ja || ''), amt: Number(r && r.amt) || 0 }))
     .filter(r=>r.ja);
   const itemToks = rows.map(r=>jaSeg(jaCompactStr(r.ja), JA_DICT_ITEM));
@@ -1711,49 +1785,195 @@ function ocrLog(m){
     ocrSetStatus('🔎 인식 엔진 준비 중…', 8 + pr*25);
   }
 }
+/* ── 이미지 전처리: 배경·조명 정규화 → 영수증 영역 → 확대 → Sauvola 이진화 ── */
+const OCR_TARGET_LONG = 2600;      /* 처리 결과 긴 변 목표 px */
+const OCR_MAX_PIXELS = 4.8e6;      /* 메모리·속도 상한 */
+function ocrBoxMean(src, w, h, r, tmp, out){
+  const k = 2*r+1;
+  const t = tmp || new Float32Array(w*h);
+  const o = out || new Float32Array(w*h);
+  for(let y=0;y<h;y++){
+    const oy = y*w; let s = 0;
+    for(let x=-r;x<=r;x++) s += src[oy + Math.min(w-1, Math.max(0, x))];
+    for(let x=0;x<w;x++){
+      t[oy+x] = s/k;
+      s += src[oy + Math.min(w-1, x+r+1)] - src[oy + Math.max(0, x-r)];
+    }
+  }
+  for(let x=0;x<w;x++){
+    let s = 0;
+    for(let y=-r;y<=r;y++) s += t[Math.min(h-1, Math.max(0, y))*w + x];
+    for(let y=0;y<h;y++){
+      o[y*w+x] = s/k;
+      s += t[Math.min(h-1, y+r+1)*w + x] - t[Math.max(0, y-r)*w + x];
+    }
+  }
+  return o;
+}
+/* 블록 배경 밝기로 나눠 조명 그라데이션·배경색을 없앤다 (종이 ≈ 190) */
+function ocrNormalizeLum(g, w, h){
+  const bs = 8, bw = Math.ceil(w/bs), bh = Math.ceil(h/bs);
+  const small = new Float32Array(bw*bh), cnt = new Float32Array(bw*bh);
+  for(let y=0;y<h;y++){
+    const by = (y/bs)|0, o = y*w;
+    for(let x=0;x<w;x++){ const k = by*bw + ((x/bs)|0); small[k] += g[o+x]; cnt[k]++; }
+  }
+  for(let i=0;i<small.length;i++) small[i] /= (cnt[i] || 1);
+  const sm = ocrBoxMean(small, bw, bh, 2);
+  for(let y=0;y<h;y++){
+    const fy = y/bs - 0.5;
+    const y0 = Math.max(0, Math.min(bh-1, Math.floor(fy))), y1 = Math.min(bh-1, y0+1);
+    const ty = Math.min(1, Math.max(0, fy - y0)), o = y*w;
+    for(let x=0;x<w;x++){
+      const fx = x/bs - 0.5;
+      const x0 = Math.max(0, Math.min(bw-1, Math.floor(fx))), x1 = Math.min(bw-1, x0+1);
+      const tx = Math.min(1, Math.max(0, fx - x0));
+      const a = sm[y0*bw+x0], b = sm[y0*bw+x1], c = sm[y1*bw+x0], d = sm[y1*bw+x1];
+      const bg = (a*(1-tx)+b*tx)*(1-ty) + (c*(1-tx)+d*tx)*ty;
+      let v = g[o+x] / Math.max(bg, 18) * 190;
+      g[o+x] = v < 0 ? 0 : (v > 255 ? 255 : v);
+    }
+  }
+  return g;
+}
+/* 글자 밀도(블록 표준편차)로 영수증 영역만 남긴다 */
+function ocrCropRect(t, w, h){
+  const bs = 16, bw = Math.floor(w/bs), bh = Math.floor(h/bs);
+  if(bw < 6 || bh < 6) return null;
+  const sd = new Float32Array(bw*bh);
+  for(let by=0;by<bh;by++)for(let bx=0;bx<bw;bx++){
+    let s = 0, s2 = 0, n = 0;
+    for(let y=by*bs;y<(by+1)*bs;y++){
+      const o = y*w;
+      for(let x=bx*bs;x<(bx+1)*bs;x++){ const v = t[o+x]; s += v; s2 += v*v; n++; }
+    }
+    const m = s/n; sd[by*bw+bx] = Math.sqrt(Math.max(0, s2/n - m*m));
+  }
+  const mask = new Uint8Array(bw*bh);
+  for(let i=0;i<mask.length;i++) mask[i] = sd[i] > 26 ? 1 : 0;
+  const dil = new Uint8Array(bw*bh);
+  for(let by=0;by<bh;by++)for(let bx=0;bx<bw;bx++){
+    let v = 0;
+    for(let dy=-2;dy<=2 && !v;dy++)for(let dx=-2;dx<=2;dx++){
+      const y = by+dy, x = bx+dx;
+      if(y<0||x<0||y>=bh||x>=bw) continue;
+      if(mask[y*bw+x]){ v = 1; break; }
+    }
+    dil[by*bw+bx] = v;
+  }
+  const lab = new Int32Array(bw*bh).fill(-1), comps = [];
+  for(let i=0;i<dil.length;i++){
+    if(!dil[i] || lab[i] >= 0) continue;
+    const id = comps.length, st = [i];
+    lab[i] = id;
+    let cnt = 0, minx = bw, miny = bh, maxx = 0, maxy = 0;
+    while(st.length){
+      const p = st.pop(); cnt++;
+      const py = (p/bw)|0, px = p%bw;
+      if(px<minx) minx = px; if(px>maxx) maxx = px;
+      if(py<miny) miny = py; if(py>maxy) maxy = py;
+      if(px>0 && dil[p-1] && lab[p-1]<0){ lab[p-1] = id; st.push(p-1); }
+      if(px<bw-1 && dil[p+1] && lab[p+1]<0){ lab[p+1] = id; st.push(p+1); }
+      if(py>0 && dil[p-bw] && lab[p-bw]<0){ lab[p-bw] = id; st.push(p-bw); }
+      if(py<bh-1 && dil[p+bw] && lab[p+bw]<0){ lab[p+bw] = id; st.push(p+bw); }
+    }
+    comps.push({cnt:cnt, minx:minx, miny:miny, maxx:maxx, maxy:maxy});
+  }
+  if(!comps.length) return null;
+  comps.sort((a,b)=>b.cnt-a.cnt);
+  const big = comps[0].cnt;
+  let minx = bw, miny = bh, maxx = 0, maxy = 0;
+  comps.forEach(c=>{
+    if(c.cnt < big*0.08) return;
+    if(c.minx<minx) minx = c.minx; if(c.miny<miny) miny = c.miny;
+    if(c.maxx>maxx) maxx = c.maxx; if(c.maxy>maxy) maxy = c.maxy;
+  });
+  const pad = 2;
+  const x = Math.max(0, (minx-pad)*bs), y = Math.max(0, (miny-pad)*bs);
+  const x2 = Math.min(w, (maxx+1+pad)*bs), y2 = Math.min(h, (maxy+1+pad)*bs);
+  if(x2-x < 40 || y2-y < 40) return null;
+  return {x:x, y:y, w:x2-x, h:y2-y};
+}
+function ocrGrayCanvas(img, sx, sy, sw, sh, W, H){
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d', {willReadFrequently:true});
+  ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+  ctx.fillStyle = '#fff'; ctx.fillRect(0,0,W,H);
+  ctx.drawImage(img, sx, sy, sw, sh, 0, 0, W, H);
+  const d = ctx.getImageData(0,0,W,H), p = d.data, n = W*H, g = new Float32Array(n);
+  for(let i=0,j=0;i<n;i++,j+=4) g[i] = p[j]*0.299 + p[j+1]*0.587 + p[j+2]*0.114;
+  return {cv:cv, ctx:ctx, d:d, g:g, W:W, H:H};
+}
+function ocrPrepBuild(img){
+  const nw = img.naturalWidth || img.width || 0, nh = img.naturalHeight || img.height || 0;
+  if(!nw || !nh) throw new Error('image-load');
+  /* 1) 작은 사본에서 영수증 영역 추정 */
+  let rect = null;
+  try{
+    const dw = Math.min(nw, 760), dh = Math.max(1, Math.round(nh*dw/nw));
+    const sm = ocrGrayCanvas(img, 0, 0, nw, nh, dw, dh);
+    ocrNormalizeLum(sm.g, dw, dh);
+    const r = ocrCropRect(sm.g, dw, dh);
+    if(r && (r.w*r.h)/(dw*dh) < 0.94){
+      const fx = nw/dw, fy = nh/dh;
+      const R = {x:Math.round(r.x*fx), y:Math.round(r.y*fy), w:Math.round(r.w*fx), h:Math.round(r.h*fy)};
+      if(R.w >= nw*0.2 && R.h >= nh*0.2 && R.x >= 0 && R.y >= 0 && R.x+R.w <= nw && R.y+R.h <= nh) rect = R;
+    }
+  }catch(e){ rect = null; }
+  const sx = rect?rect.x:0, sy = rect?rect.y:0, sw = rect?rect.w:nw, sh = rect?rect.h:nh;
+  /* 2) 확대 배율: 작은 사진은 키우고 큰 사진은 줄여 긴 변 2600px 근처로 */
+  let zoom = OCR_TARGET_LONG / Math.max(sw, sh);
+  if(!isFinite(zoom) || zoom <= 0) zoom = 1;
+  if(sw*sh*zoom*zoom > OCR_MAX_PIXELS) zoom = Math.sqrt(OCR_MAX_PIXELS/(sw*sh));
+  zoom = Math.max(0.3, Math.min(6, zoom));
+  const W = Math.max(1, Math.round(sw*zoom)), H = Math.max(1, Math.round(sh*zoom));
+  const im = ocrGrayCanvas(img, sx, sy, sw, sh, W, H);
+  const g = im.g;
+  ocrNormalizeLum(g, W, H);
+  /* 3) 흑색 로고(상호)용 반전 회색조 띠 — 이진화가 뭉개기 전에 미리 만들어 둔다 */
+  let brandCv = null;
+  try{
+    const bhh = Math.max(8, Math.round(H*0.24));
+    brandCv = document.createElement('canvas'); brandCv.width = W; brandCv.height = bhh;
+    const bctx = brandCv.getContext('2d', {willReadFrequently:true});
+    const id = bctx.createImageData(W, bhh), dd = id.data;
+    for(let y=0;y<bhh;y++)for(let x=0;x<W;x++){
+      const v = 255 - (g[y*W+x] | 0), j = (y*W+x)*4;
+      dd[j] = dd[j+1] = dd[j+2] = v; dd[j+3] = 255;
+    }
+    bctx.putImageData(id, 0, 0);
+  }catch(e){ brandCv = null; }
+  /* 4) Sauvola 이진화 — 얇은 획은 살리고 굵은 로고는 뭉개지 않게 창을 넓게 */
+  const r = Math.max(6, Math.min(40, Math.round(W/45)));
+  const mean = ocrBoxMean(g, W, H, r);
+  const sq = new Float32Array(W*H);
+  for(let i=0;i<sq.length;i++) sq[i] = g[i]*g[i];
+  const varM = ocrBoxMean(sq, W, H, r);
+  for(let i=0;i<g.length;i++){
+    const m = mean[i], sd = Math.sqrt(Math.max(0, varM[i] - m*m));
+    g[i] = g[i] > m*(1 + 0.2*(sd/128 - 1)) ? 255 : 0;
+  }
+  const dd = im.d.data;
+  for(let i=0,j=0;i<g.length;i++,j+=4){ const v = g[i]|0; dd[j] = dd[j+1] = dd[j+2] = v; dd[j+3] = 255; }
+  im.ctx.putImageData(im.d, 0, 0);
+  im.cv.__brandCv = brandCv;
+  return im.cv;
+}
 function ocrPrepareImage(file){
   return new Promise((resolve, reject)=>{
     const url = URL.createObjectURL(file);
     const img = new Image();
     img.onload = ()=>{
-      try{
-        const MAXW = 1400;
-        const nw = img.naturalWidth || img.width || MAXW, nh = img.naturalHeight || img.height || MAXW;
-        const sc = Math.min(1, MAXW / nw);
-        const w = Math.max(1, Math.round(nw*sc)), h = Math.max(1, Math.round(nh*sc));
-        const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
-        const ctx = cv.getContext('2d');
-        ctx.fillStyle = '#fff'; ctx.fillRect(0,0,w,h);
-        ctx.drawImage(img, 0, 0, w, h);
-        const data = ctx.getImageData(0,0,w,h), p = data.data;
-        /* 회색조 + 3%·97% 분위 대비 스트레치 → 영수증 글씨가 더 또렷해짐 */
-        const hist = new Uint32Array(256);
-        const n = p.length/4;
-        for(let i=0;i<p.length;i+=4){
-          hist[(p[i]*0.299 + p[i+1]*0.587 + p[i+2]*0.114)|0]++;
-        }
-        let lo = 0, hi = 255, acc = 0;
-        for(let v=0;v<256;v++){ acc += hist[v]; if(acc > n*0.03){ lo = v; break; } }
-        acc = 0;
-        for(let v=255;v>=0;v--){ acc += hist[v]; if(acc > n*0.03){ hi = v; break; } }
-        if(hi - lo < 50){ lo = 0; hi = 255; }
-        const span = Math.max(1, hi - lo);
-        for(let i=0;i<p.length;i+=4){
-          let g = (p[i]*0.299 + p[i+1]*0.587 + p[i+2]*0.114);
-          g = (g - lo) * 255 / span;
-          g = g < 0 ? 0 : (g > 255 ? 255 : g);
-          g = g * 1.06;
-          p[i] = p[i+1] = p[i+2] = g > 245 ? 255 : Math.min(255, g);
-        }
-        ctx.putImageData(data, 0, 0);
-        URL.revokeObjectURL(url);
-        resolve(cv);
-      }catch(e){ URL.revokeObjectURL(url); reject(e); }
+      let cv = null;
+      try{ cv = ocrPrepBuild(img); }catch(e){ cv = null; }
+      URL.revokeObjectURL(url);
+      if(cv) resolve(cv); else reject(new Error('image-load'));
     };
     img.onerror = ()=>{ URL.revokeObjectURL(url); reject(new Error('image-load')); };
     img.src = url;
   });
 }
+
 /* 영수증 날짜 추출 — 2026年11月28日 / 2026/11/28 / R8.11.28 / 11月28日 */
 function parseReceiptDay(text){
   const s = String(text||'').replace(/[０-９]/g, c=>String.fromCharCode(c.charCodeAt(0) - 0xFEE0));
@@ -1810,107 +2030,209 @@ function parseReceiptTime(text){
   }
   return '';
 }
-function parseReceipt(raw){
-  const norm = String(raw||'')
-    .replace(/[０-９]/g, c=>String.fromCharCode(c.charCodeAt(0) - 0xFEE0))
-    .replace(/[￥]/g, '¥').replace(/[，]/g, ',');
-  const lines = norm.split(/\r?\n/).map(s=>s.replace(/[\u3000\s]+/g,' ').trim()).filter(Boolean);
-  const clean = s => s.replace(/\s/g,'');
-  const isJp = s => /[\u3040-\u30ff\u4e00-\u9faf]/.test(s);
-
-  const cands = [];
-  lines.forEach((line, li)=>{
-    const lc = clean(line);
-    let kw = 0;
-    OCR_TOTAL_KW.forEach(([re,w])=>{ if(re.test(lc)) kw = Math.max(kw, w); });
-    const yen = /[¥]|円/.test(lc);
-    /* 소계·거스름돈·포인트·날짜·전화·시간은 지운 뒤 숫자만 본다 */
-    const masked = lc
-      .replace(/(お預|預り|釣銭|お釣|つり|おつり|ポイント|残高|小計|値引|割引|税抜|両替|チャージ|残額|返金)[^0-9]{0,10}[0-9,]+/g, ' ')
-      .replace(/(19|20)\d{2}\s*[\/\-.年]\s*\d{1,2}\s*[\/\-.月]\s*\d{1,2}/g, ' ')
-      .replace(/\d{1,4}-\d{2,4}-\d{3,4}/g, ' ')
-      .replace(/\d{1,2}:\d{2}(:\d{2})?/g, ' ')
-      .replace(/\d+(\.\d+)?\s*%/g, ' ');
-    const re = /(-)?[¥]?\s?(\d{1,3}(?:,\d{3})+|\d+)(\.\d+)?/g;
-    let m;
-    while((m = re.exec(masked)) !== null){
-      if(m[1] === '-') continue;
-      const numStr = m[2];
-      const v = parseInt(numStr.replace(/,/g,''), 10);
-      if(!isFinite(v) || v < 50 || v > 300000) continue;
-      if(/^\d{8,}$/.test(numStr)) continue;                    /* 바코드·긴 관리번호 */
-      if(/^(19|20)\d{2}$/.test(numStr)) continue;              /* 연도 */
-      cands.push({v, kw, yen, li, score: kw*10 + (yen?12:0) + Math.min(8, v/1000) + (li/Math.max(1,lines.length))*3});
-    }
-  });
-  let best = cands.filter(c=>c.kw>0).sort((a,b)=>b.score-a.score)[0]
-          || cands.filter(c=>c.yen).sort((a,b)=>b.v-a.v)[0]
-          || cands.filter(c=>c.li >= lines.length*0.5).sort((a,b)=>b.v-a.v)[0]
-          || null;
-  const amount = best ? best.v : 0;
-
-  /* 가게 이름: 앞쪽 줄에서 브랜드 → 없으면 상단의 일본어 상호명 */
-  const nameOk = s => {
-    const c = clean(s);
-    if(c.length < 2 || c.length > 26) return false;
-    if(OCR_BAD_STORE.test(c)) return false;
-    if(!isJp(c)) return false;
-    return (c.match(/[0-9]/g)||[]).length <= 4;
-  };
-  const headLines = lines.slice(0, 12);
-  let store = headLines.find(l => OCR_BRANDS.some(b=>clean(l).includes(b)) && nameOk(l)) || '';
-  if(!store) store = lines.slice(0, 7).find(nameOk) || '';
-  if(!store){
-    /* 영어 영수증(STARBUCKS 등)은 상단 라틴 상호명 */
-    const latinOk = s => {
-      const c = s.trim();
-      if(c.length < 3 || c.length > 26) return false;
-      if(OCR_BAD_STORE.test(c)) return false;
-      if(/[¥]|\d{3,}/.test(c)) return false;
-      return /[A-Za-z]{3,}/.test(c) && /^[A-Za-z0-9&'\.\- ]+$/.test(c);
-    };
-    store = lines.slice(0, 6).find(latinOk) || '';
+/* ── 영수증 파서 (실제 종이 영수증: 반각 가타카나 · 2줄 품목 · 여러 장) ── */
+function ocrIsPriceOnly(s){
+  let t = String(s||'').replace(/[\s|｜_=\[\]]/g,'').replace(/[¥￥,]/g,'');
+  t = t.replace(/(点|個|本|枚|袋|パック|セット|内|外|円|軽|※|\*)/g,'');
+  return !!t && /^\d{1,7}$/.test(t);
+}
+/* 이름 끝의 수량(× 2点 · 끝의 1) 과 단가(単800)를 떼어낸다 */
+function ocrStripQty(name){
+  let qty = null, m;
+  m = name.match(/^(.*?)\s*[×xX]\s*(\d{1,3})\s*(?:点|個|本|枚|袋|セット)?\s*$/);
+  if(m){ qty = +m[2]; name = m[1]; }
+  if(qty === null){
+    m = name.match(/^(.*?)\s+(\d{1,2})\s*$/);
+    if(m && /[^\d\s]/.test(m[1])){ qty = +m[2]; name = m[1]; }
   }
-  store = store.replace(/[¥]?\s*\d[\d,]*\s*円?$/, '').replace(/\s{2,}/g,' ').trim()
-    /* OCR이 일본어 글자 사이에 끼워넣은 띄어쓰기 제거 */
-    .replace(/([\u3040-\u30ff\u4e00-\u9faf\uff66-\uff9f]) +/g,'$1')
-    .replace(/ +([\u3040-\u30ff\u4e00-\u9faf\uff66-\uff9f])/g,'$1')
-    .slice(0, 34);
-
-  /* 메모: 품목 전부 (일본어 원문 + 가격, 한 줄에 하나씩) */
-  const itemRows = [];
-  const OCR_ADDRESS = /[区市町村丁目番地号]|都道府県|電話|TEL|FAX/i;
-  const OCR_NOT_ITEM = /小計|合計|消費税|税込|税抜|内税|免税|対象額|お預|預り|お釣|釣銭|つり|ポイント|残高|レシート|バーコード|伝票|点数|クレジット|現金|お支払|支払|値引|割引|両替|チャージ|返金|領収/;
-  lines.forEach(l=>{
-    const c = clean(l);
-    if(itemRows.length >= 14) return;
-    if(!isJp(c) || OCR_BAD_STORE.test(c) || OCR_ADDRESS.test(c) || OCR_NOT_ITEM.test(c)) return;
-    if(OCR_TOTAL_KW.some(([re])=>re.test(c))) return;
-    const mm = c.replace(/^\d{8,}/, '').match(/^(.{2,20}?)[\s]*[¥]?\s?([\d,]{2,7})\s*円?$/);
-    if(mm && !/^[\d,]+$/.test(mm[1])){
-      const price = parseInt(mm[2].replace(/,/g,''), 10);
-      if(!(price >= 10 && price <= 999999)) return;
-      let nm = mm[1].replace(/^[·・\-\*_]+|[·・\-\*_]+$/g,'').trim();
-      nm = nm.replace(/\s?(\d+)\s*(mL|ML|ml|kg|Kg|g|L|個|点|枚|袋|パック|セット|本)$/, (m0,n,u)=>' ' + n + (JA_KO_UNIT[u] || u)).replace(/[_·・\-\s]+$/,'').trim();
-      if(!/[\u3040-\u30ff\u4e00-\u9fafA-Za-z]/.test(nm)) return;
-      if((nm.match(/\d/g)||[]).length > 4) return;
-      if(nm.length >= 2 && !itemRows.some(r=>r.ja === nm)) itemRows.push({ja: nm, amt: price});
+  m = name.match(/^(.*?)\s*単\s*(\d{1,6})\s*$/);
+  if(m) name = m[1];
+  m = name.match(/^(.*?)\s*[@＠]\s*(\d{1,6})\s*$/);
+  if(m){ name = m[1]; }
+  return {name:name, qty:qty};
+}
+/* 한 줄 → {name, amt, qty}  ·  ¥380내 / ¥550外 / *145 / 145円 / 145* / 맨끝 숫자 */
+function ocrSplitPrice(line, avoidBare){
+  let name = String(line||'').trim(), amt = null, m;
+  m = name.match(/^(.*?)\s*[¥￥]\s*(\d{1,3}(?:,\d{3})+|\d{1,7})\s*(?:内|外|円|軽|※|\*)?\s*$/);
+  if(m){ amt = parseInt(m[2].replace(/,/g,''),10); name = m[1]; }
+  if(amt === null){
+    m = name.match(/^(.*?)\s*[*※×]\s*(\d{1,3}(?:,\d{3})+|\d{1,7})\s*$/);
+    if(m){ amt = parseInt(m[2].replace(/,/g,''),10); name = m[1]; }
+  }
+  if(amt === null){
+    m = name.match(/^(.*?)(\d{1,3}(?:,\d{3})+|\d{1,7})\s*(?:内|外|円|엔|軽)\s*$/);
+    if(m){ amt = parseInt(m[2].replace(/,/g,''),10); name = m[1]; }
+  }
+  if(amt === null){
+    m = name.match(/^(.*?)(\d{1,3}(?:,\d{3})+|\d{1,7})\s*[*※]\s*$/);
+    if(m){ amt = parseInt(m[2].replace(/,/g,''),10); name = m[1]; }
+  }
+  if(amt === null && !avoidBare){
+    m = name.match(/^(.*?)\s+(\d{1,3}(?:,\d{3})+|\d{1,7})\s*$/);
+    if(m){ amt = parseInt(m[2].replace(/,/g,''),10); name = m[1]; }
+  }
+  const q = ocrStripQty(name);
+  if(amt !== null && !(amt >= 1 && amt <= 999999)) amt = null;
+  return {name:q.name, amt:amt, qty:q.qty};
+}
+function ocrCleanItemName(s){
+  let t = String(s||'').replace(/^[\s*※・·\-_=|:：、。,.]+/,'').replace(/[\s*※・·\-_=|:：、。,.]+$/,'');
+  t = t.replace(/\s+/g,' ').trim();
+  if(t.length < 2) return '';
+  if(!/[ぁ-んァ-ヶ一-龯A-Za-z0-9]/.test(t)) return '';
+  if((t.match(/\d/g)||[]).length > 8) return '';
+  return t;
+}
+function ocrExtractItems(lines){
+  const rows = [];
+  const push = r => { if(rows.length < 20) rows.push(r); };
+  for(let i=0;i<lines.length;i++){
+    const ln = String(lines[i]||'').trim();
+    if(!ln) continue;
+    const masked = ocrMaskNoise(ln);
+    const lc = masked.replace(/\s+/g,'');
+    if(lc.length < 2) continue;
+    if(!/[ぁ-んァ-ヶ一-龯A-Za-z0-9]/.test(lc)) continue;
+    if(OCR_ITEM_NOISE.test(lc)) continue;
+    if(OCR_ADDR_LINE.test(lc)) continue;
+    const nxtMask = lines[i+1] ? ocrMaskNoise(String(lines[i+1])) : '';
+    const nextPriceOnly = ocrIsPriceOnly(nxtMask);
+    let nextCont = nextPriceOnly;
+    if(!nextCont && nxtMask){
+      const nsp = ocrSplitPrice(nxtMask, false);
+      const nnm = ocrCleanItemName(nsp.name);
+      if(nsp.amt !== null && (nnm.length <= 3 || /^[@＠]?\d{1,6}$/.test(nnm))) nextCont = true;
     }
+    const sp = ocrSplitPrice(masked, nextPriceOnly);
+    const nm = ocrCleanItemName(sp.name);
+    if(sp.amt === null){
+      if(nextCont && nm) push({ja:nm, amt:null, qty:null});
+      continue;
+    }
+    if(!nm){
+      for(let k=rows.length-1;k>=0;k--){
+        if(rows[k].amt === null){ rows[k].amt = sp.amt; if(sp.qty) rows[k].qty = sp.qty; break; }
+      }
+      continue;
+    }
+    const prev = rows[rows.length-1];
+    if(prev && prev.amt === null){
+      if(!/^[@＠]?\d{1,6}$/.test(nm)) prev.ja = prev.ja + ' ' + nm;
+      prev.amt = sp.amt;
+      if(sp.qty) prev.qty = sp.qty;
+      continue;
+    }
+    push({ja:nm, amt:sp.amt, qty:sp.qty || null});
+  }
+  return rows.filter(r=>r.amt !== null && r.ja);
+}
+function ocrPickTotal(lines){
+  const cands = new Map();
+  let subtotal = 0;
+  const n = Math.max(1, lines.length);
+  lines.forEach((ln, li)=>{
+    const masked = ocrMaskNoise(ln);
+    const lc = masked.replace(/\s+/g,'');
+    if(!lc) return;
+    const nums = [];
+    const re = /(\d{1,3}(?:,\d{3})+|\d{1,7})/g;
+    let m;
+    while((m = re.exec(masked))){
+      const s = m[1], v = parseInt(s.replace(/,/g,''),10);
+      if(!isFinite(v) || v < 30 || v > 500000) continue;
+      if(/^\d{8,}$/.test(s) || /^(19|20)\d{2}$/.test(s)) continue;
+      nums.push(v);
+    }
+    if(!nums.length) return;
+    if(/小計/.test(lc) && !/合計/.test(lc)) subtotal = Math.max(subtotal, Math.max.apply(null, nums));
+    if(/お預|預り|お釣|おつり|釣銭|つり銭|ポイント|残高|両替|チャージ|返金|値引|割引|消費税|内消費|税額|お客様|控え|外税/.test(lc)) return;
+    let kw = 0;
+    OCR_TOTAL_KW.forEach(([re2,w])=>{ if(re2.test(lc)) kw = Math.max(kw, w); });
+    const yen = /[¥￥]/.test(masked);
+    nums.forEach(v=>{
+      const cur = cands.get(v) || {v:v, kw:0, count:0, li:li, yen:false};
+      cur.count++;
+      cur.kw = Math.max(cur.kw, kw);
+      if(yen) cur.yen = true;
+      if(li < cur.li) cur.li = li;
+      cands.set(v, cur);
+    });
   });
+  let best = null;
+  cands.forEach(c=>{
+    const score = c.kw*10 + c.count*9 + Math.min(6, c.v/1200) + (c.li/n)*4 + (c.yen?3:0);
+    if(!best || score > best.score) best = {v:c.v, kw:c.kw, count:c.count, li:c.li, score:score};
+  });
+  if(!best) return 0;
+  if(subtotal && best.v < subtotal) return subtotal;
+  return best.v;
+}
+function ocrPlaceName(line){
+  let s = String(line||'').replace(/^[^ぁ-んァ-ヶ一-龯A-Za-z]+/,'').trim();
+  s = s.replace(/^店\s*[:：]\s*/,'').replace(/^\d{3,6}\s*/,'').trim();
+  s = s.replace(/[\s|｜]+$/,'');
+  if(!/店$/.test(s)) return '';
+  if(/[¥]|\d{2,}/.test(s)) return '';
+  if(s.length < 3 || s.length > 16) return '';
+  if(OCR_ITEM_NOISE.test(s) || OCR_BAD_STORE.test(s)) return '';
+  return s;
+}
+/* 체인이 아니어도 상단의 일본어 상호를 잡는다 (すし酒場さしす 등) */
+function ocrShopName(line){
+  const s = String(line||'').replace(/[０-９]/g,'').trim();
+  if(s.length < 3 || s.length > 20) return '';
+  if(/\d/.test(s)) return '';
+  if(/[¥]/.test(s)) return '';
+  if(OCR_ITEM_NOISE.test(s) || OCR_BAD_STORE.test(s) || OCR_ADDR_LINE.test(s)) return '';
+  return s;
+}
+function ocrGuessStore(lines, brandHint){
+  const head = (lines||[]).slice(0, 16);
+  for(let i=0;i<head.length;i++){
+    const chain = ocrChainName(head[i]);
+    if(!chain) continue;
+    let extra = '';
+    for(let j=i+1;j<=Math.min(i+2, head.length-1);j++){
+      const p = ocrPlaceName(head[j]);
+      if(p){ extra = p; break; }
+      if(!extra && /^[A-Za-z][A-Za-z&'.\- ]{1,15}$/.test(String(head[j]||'').trim())) extra = String(head[j]).trim();
+    }
+    return (chain + ' ' + extra).trim();
+  }
+  if(brandHint){
+    let extra = '';
+    for(let i=0;i<head.length;i++){ const p = ocrPlaceName(head[i]); if(p){ extra = p; break; } }
+    return (brandHint + ' ' + extra).trim();
+  }
+  for(let i=0;i<head.length;i++){ const p = ocrPlaceName(head[i]); if(p) return p; }
+  for(let i=0;i<Math.min(6, head.length);i++){
+    const s = ocrShopName(head[i]);
+    if(s) return s;
+  }
+  return '';
+}
+function parseReceipt(raw, brandHint){
+  const norm = String(raw||'')
+    .replace(/[０-９Ａ-Ｚａ-ｚ]/g, c=>String.fromCharCode(c.charCodeAt(0) - 0xFEE0))
+    .replace(/[￥]/g,'¥').replace(/[，]/g,',');
+  const lines = norm.split(/\r?\n/).map(s=>s.replace(/[\u3000\s]+/g,' ').trim()).filter(Boolean).map(jaHalfToFull);
+  const amount = ocrPickTotal(lines);
+  const store = ocrGuessStore(lines, brandHint || '');
+  const itemRows = ocrExtractItems(lines);
   const items = itemRows.map(r=>r.ja);
-  const memo = itemRows.map(r=>'• ' + r.ja + ' ¥' + r.amt.toLocaleString()).join('\n');
-
-  /* 카테고리 추정 */
-  const guessText = clean((store||'') + ' ' + lines.slice(0,8).join(' '));
+  const memo = itemRows.map(r=>'• ' + r.ja + ' ¥' + Number(r.amt).toLocaleString()).join('\n');
+  const guessText = (store || '') + ' ' + lines.slice(0, 10).join(' ');
   let cat = null;
   if(/ローソン|セブン|ファミリーマート|ファミマ|コンビニ|デイリー|ポプラ|ミニストップ/.test(guessText)) cat = CATS[4];
-  else if(/ドン・キホーテ|ドンキホーテ|ドンキ|マツモト|マツキヨ|薬|ドラッグ|無印|ユニクロ|ダイソー|セリア|ロフト|ハンズ|ビックカメラ|ヨドバシ|百貨店|ショップ|雑貨/.test(guessText)) cat = CATS[3];
-  else if(/ラーメン|寿司|鮨|焼肉|たこ焼|お好み焼|カフェ|コーヒー|スターバックス|スタバ|喫茶|レストラン|食堂|居酒屋|定食|うどん|そば|パン|ケーキ|餃子|串カツ/.test(guessText)) cat = CATS[0];
+  else if(/ドン・キホーテ|ドンキホーテ|ドンキ|マツモト|マツキヨ|薬|ドラッグ|無印|ユニクロ|ダイソー|セリア|ロフト|ハンズ|ビックカメラ|ヨドバシ|百貨店|ショップ|雑貨|エディオン|家電/.test(guessText)) cat = CATS[3];
+  else if(/ラーメン|寿司|鮨|焼肉|たこ焼|お好み焼|カフェ|コーヒー|スターバックス|スタバ|喫茶|レストラン|食堂|居酒屋|酒場|定食|うどん|そば|パン|ケーキ|餃子|串カツ|ベーカリー/.test(guessText)) cat = CATS[0];
   else if(/電車|タクシー|切符|乗車|運賃|バス|ICカード/.test(guessText)) cat = CATS[2];
   else if(/入場|チケット|USJ|ユニバーサル|美術館|ミュージアム/.test(guessText)) cat = CATS[1];
-
-  return {amount, store, memo, items: items.slice(), itemRows: itemRows.slice(), cat, date: parseReceiptDay(norm), time: parseReceiptTime(norm), text: norm};
+  return {amount:amount, store:store, memo:memo, items:items.slice(), itemRows:itemRows.slice(), cat:cat,
+    date:parseReceiptDay(norm), time:parseReceiptTime(norm), text:norm, lines:lines};
 }
+
 function ocrFillForm(p, text){
   const filled = [];
   if(p.amount > 0){
@@ -2000,11 +2322,27 @@ async function ocrFilePicked(input){
     }catch(e){}
     ocrSetStatus('🔎 인식 엔진 준비 중…', 8);
     const T = await ocrLoadEngine();
-    if(!ocrWorker) ocrWorker = await T.createWorker('jpn+eng', 1, { logger: ocrLog });
+    if(!ocrWorker){
+      ocrWorker = await T.createWorker('jpn+eng', 1, { logger: ocrLog });
+      try{ await ocrWorker.setParameters({tessedit_pageseg_mode:'6', user_defined_dpi:'300', preserve_interword_spaces:'1'}); }catch(e){}
+    }
     ocrSetStatus('🔎 영수증 읽는 중… 0%', 35);
     const res = await ocrWorker.recognize(canvas);
     const text = (res && res.data && res.data.text) || '';
-    const p = parseReceipt(text);
+    /* 상호가 흑색 로고(흰 글씨)뿐이면 반전본으로 한 번 더 읽어 가게 이름만 보태요 */
+    let brandHint = '';
+    try{
+      const hasChain = String(text).split(/\r?\n/).some(function(l){ return !!ocrChainName(l); });
+      if(canvas.__brandCv && !hasChain){
+        ocrSetStatus('🏪 가게 이름 확인 중…', 93);
+        await ocrWorker.setParameters({tessedit_pageseg_mode:'11'});
+        const br = await ocrWorker.recognize(canvas.__brandCv);
+        const bt = (br && br.data && br.data.text) || '';
+        bt.split(/\r?\n/).forEach(function(l){ if(!brandHint && ocrChainName(l)) brandHint = ocrChainName(l); });
+        await ocrWorker.setParameters({tessedit_pageseg_mode:'6'});
+      }
+    }catch(e){ try{ await ocrWorker.setParameters({tessedit_pageseg_mode:'6'}); }catch(e2){} }
+    const p = parseReceipt(text, brandHint);
     if(p.store || p.memo || (p.itemRows || []).length){
       ocrSetStatus('🇰🇷 가게명·품목을 한국어로 바꾸는 중…', 94);
       try{ await ocrLocalize(p); }catch(e){ console.warn('한국어 변환 실패:', e); }
@@ -2289,7 +2627,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v45';
+const SW_CACHE = 'osaka-planner-v46';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
