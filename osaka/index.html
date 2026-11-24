@@ -155,9 +155,22 @@ details.ocr-raw>summary .sm{font-weight:700;color:#9AA8A1;font-size:10.5px;}
 .ocr-ja summary::before{content:'▸ ';}
 .ocr-ja[open] summary::before{content:'▾ ';}
 .ocr-ja pre{font-size:11px;line-height:1.55;white-space:pre-wrap;word-break:break-all;margin:0 0 11px;max-height:260px;overflow:auto;color:#3A4A44;}
-.flt{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0 4px;}
-.flt button{border:1.4px solid var(--line);background:#fff;border-radius:99px;padding:5px 10px;font-size:11.5px;font-weight:800;color:var(--sub);font-family:inherit;cursor:pointer;}
-.flt button.on{background:var(--green);border-color:var(--green);color:#fff;}
+/* 지출 내역 필터 — 알약형 대신 하단 밑줄 탭 */
+.flt{display:block;margin:6px 0 2px;}
+.utab-row{display:flex;align-items:stretch;border-bottom:1px solid var(--line);}
+.utab-row .utab-g{flex:0 0 auto;align-self:center;font-size:10px;font-weight:800;color:#9AA8A1;letter-spacing:.4px;padding-right:7px;}
+.utab-row button{position:relative;flex:0 0 auto;border:none;background:none;padding:9px 10px 8px;font-size:12.5px;font-weight:800;color:var(--sub);font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.utab-row button.on{color:var(--green);}
+.utab-row button.on::after{content:'';position:absolute;left:6px;right:6px;bottom:-1px;height:2.5px;border-radius:2px;background:var(--green);}
+/* 일자별 그룹 */
+.exp-day{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin:13px 0 0;padding:0 1px 5px;border-bottom:1.5px solid var(--green);}
+.exp-day:first-of-type{margin-top:10px;}
+.exp-day .dd{font-size:13px;font-weight:900;color:var(--green);letter-spacing:.1px;line-height:1.3;}
+.exp-day .dd .dn{display:inline-block;font-size:9.5px;font-weight:900;color:#fff;background:var(--org);border-radius:6px;padding:1.5px 6px;margin-left:5px;vertical-align:1px;}
+.exp-day .ds{text-align:right;flex-shrink:0;line-height:1.3;}
+.exp-day .ds b{display:block;font-size:12.5px;font-weight:900;color:var(--ink);white-space:nowrap;}
+.exp-day .ds span{display:block;font-size:10px;font-weight:800;color:var(--sub);white-space:nowrap;margin-top:1px;}
+.exp-row.last{border-bottom:none;}
 .exp-row{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:10px 0;border-bottom:1px solid #EFEADF;}
 .exp-row:last-child{border-bottom:none;}
 .exp-row .et{font-size:13.5px;font-weight:800;line-height:1.35;word-break:break-all;}
@@ -169,6 +182,17 @@ textarea.inp{resize:vertical;line-height:1.62;min-height:76px;max-height:260px;o
 .exp-row .er b{font-size:14.5px;font-weight:900;color:var(--ink);display:block;white-space:nowrap;}
 .exp-row .er span{font-size:10.5px;color:var(--sub);}
 .exp-row .er button{border:none;background:#F3EFE4;color:var(--sub);border-radius:7px;width:24px;height:24px;font-size:12px;font-weight:900;cursor:pointer;margin-top:4px;line-height:1;padding:0;}
+.exp-row .er .erbtn{display:flex;gap:4px;justify-content:flex-end;margin-top:4px;}
+.exp-row .er .erbtn button{margin-top:0;width:26px;height:26px;}
+.exp-row .er .erbtn button.edt{background:#E4EFEA;color:#14493F;font-size:11.5px;}
+.exp-row .er .erbtn button.edt:hover,.exp-row .er .erbtn button.edt:active{background:#CFE4DA;}
+/* 날짜 빠른 선택 칩 */
+.dayq{display:flex;gap:6px;margin:0 0 9px;flex-wrap:wrap;}
+.dayq .dchip{border:1.4px solid var(--line);background:#fff;border-radius:9px;padding:5px 8px 4px;font-size:11.5px;font-weight:800;color:var(--sub);font-family:inherit;cursor:pointer;line-height:1.25;}
+.dayq .dchip i{display:block;font-style:normal;font-size:9.5px;font-weight:800;color:#9AA8A1;}
+.dayq .dchip.on{background:var(--green);border-color:var(--green);color:#fff;}
+.dayq .dchip.on i{color:var(--gold);}
+#saveBtn.editing{background:var(--org);border-color:var(--org);color:#fff;}
 nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;padding:6px 6px calc(env(safe-area-inset-bottom,10px) + 4px);z-index:30;}
 .tab{flex:1;border:none;background:none;padding:6px 0;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11.5px;font-weight:700;color:var(--sub);cursor:pointer;}
 .tab.active{color:var(--green);}
@@ -336,14 +360,17 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
       <details class="ocr-raw" id="ocrRawWrap"><summary>🔍 영수증 전체 한국어 번역 보기 <span class="sm">숫자 틀렸을 때 확인</span></summary><div class="ocr-kr" id="ocrKr"></div><details class="ocr-ja"><summary>🇯🇵 일본어 원문 그대로 보기</summary><pre id="ocrRaw"></pre></details></details>
     </div>
 
-    <div class="sec-card">
-      <h3>➕ 지출 입력 <span class="h3-sub">1/3 나눗셈 없이 · 공금/개인 · 카드/현금</span></h3>
+    <div class="sec-card" id="expFormCard">
+      <h3 id="expFormTitle">➕ 지출 입력 <span class="h3-sub">1/3 나눗셈 없이 · 공금/개인 · 카드/현금</span></h3>
       <div class="pick-lbl">구분</div>
       <div class="tgl-row" id="wkPills"></div>
       <div class="pick-lbl">결제수단</div>
       <div class="tgl-row" id="payPills"></div>
       <div class="pick-lbl">카테고리</div>
       <div class="cat-pills" id="catPills"></div>
+      <div class="pick-lbl">날짜 <span style="font-weight:700;color:#9AA8A1;">기본 오늘 · 영수증에서 읽으면 자동</span></div>
+      <input id="expDate" class="inp" type="date" style="margin-bottom:6px;font-weight:800;color:var(--ink);" oninput="dateTouched=true;renderMoney()"/>
+      <div class="dayq" id="dayQuick"></div>
       <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
         <input id="expAmt" class="inp" type="text" inputmode="numeric" style="margin:0;flex:1;" placeholder="금액 (¥ 엔화)" oninput="formatAmtInput(this);updateKrwPreview()"/>
         <span id="krwPreview" style="font-size:12.5px;font-weight:700;color:var(--org);min-width:84px;text-align:right;">약 0원</span>
@@ -351,8 +378,9 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
       <input id="expStore" class="inp" placeholder="가게명 (예: ドン・キホーテ 道頓堀店 / 돈키호테)"/>
       <textarea id="expMemo" class="inp" rows="4" oninput="autoGrowMemo()" placeholder="메모 (품목을 한 줄씩 — 사진으로 읽으면 자동으로 채워져요)"></textarea>
       <div style="display:flex;gap:8px;">
-        <button class="act-btn map" style="flex:2;justify-content:center;padding:12px;font-size:14.5px;" onclick="addExpense()">기록하기</button>
-        <button class="act-btn" style="flex:1;justify-content:center;padding:12px;font-size:13.5px;" onclick="clearExpInput()">🧹 입력 비우기</button>
+        <button id="saveBtn" class="act-btn map" style="flex:2;justify-content:center;padding:12px;font-size:14.5px;" onclick="addExpense()">기록하기</button>
+        <button id="cancelEditBtn" class="act-btn" style="display:none;flex:1;justify-content:center;padding:12px;font-size:13.5px;" onclick="cancelEdit()">취소</button>
+        <button id="clearBtn" class="act-btn" style="flex:1;justify-content:center;padding:12px;font-size:13.5px;" onclick="clearExpInput()">🧹 입력 비우기</button>
       </div>
       <div id="saveToast" style="font-size:12px;font-weight:800;color:var(--green);opacity:0;transition:opacity .25s;margin-top:7px;min-height:16px;"></div>
     </div>
@@ -855,6 +883,39 @@ let chkState = JSON.parse(localStorage.getItem('os_chk_v1')||'{}');
 const fmt = y => Math.round(y * RATE).toLocaleString() + '원';
 const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const sumAmt = arr => arr.reduce((a,e)=>a + (Number(e.amt)||0), 0);
+
+/* ── 날짜 · 일자별 그룹 도우미 ── */
+const pad2 = n => String(n).padStart(2,'0');
+const WD_KO = ['일','월','화','수','목','금','토'];
+const TRIP_FIRST = '2026-11-28', TRIP_LAST = '2026-12-01';
+let editingId = null, dateTouched = false;
+function isoOfDate(d){ return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`; }
+function dateOfIso(s){
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s||''));
+  if(!m) return null;
+  const d = new Date(+m[1], +m[2]-1, +m[3]);
+  return (d.getFullYear()===+m[1] && d.getMonth()===+m[2]-1 && d.getDate()===+m[3]) ? d : null;
+}
+function dayKey(e){
+  if(e && /^\d{4}-\d{2}-\d{2}$/.test(e.day||'')) return e.day;
+  const m = String((e && e.time) || '').match(/(\d{1,2})\/(\d{1,2})/);
+  return m ? `2026-${pad2(m[1])}-${pad2(m[2])}` : '';
+}
+function dayTitle(k){
+  const d = dateOfIso(k);
+  if(!d) return '📌 날짜 미지정';
+  return `📅 ${d.getMonth()+1}/${pad2(d.getDate())} (${WD_KO[d.getDay()]})`;
+}
+function tripDayNo(k){
+  const d = dateOfIso(k), f = dateOfIso(TRIP_FIRST), l = dateOfIso(TRIP_LAST);
+  if(!d || !f || !l || d < f || d > l) return '';
+  return `${Math.round((d - f)/86400000) + 1}일차`;
+}
+function setExpDate(iso){ const el = document.getElementById('expDate'); if(el) el.value = iso; dateTouched = true; renderMoney(); }
+function initExpDate(force){
+  const el = document.getElementById('expDate'); if(!el) return;
+  if(force || !el.value) el.value = isoOfDate(new Date());
+}
 function updateDday(){
   const diff = Math.ceil((new Date('2026-11-28T00:00:00+09:00') - new Date()) / 86400000);
   document.getElementById('ddayBadge').textContent = diff > 0 ? `D-${diff}` : (diff === 0 ? 'D-DAY' : `D+${-diff}`);
@@ -908,19 +969,47 @@ function renderMoney(){
   const chip = (group, val, label) => {
     const on = (group==='w' ? fW : fP) === val;
     const act = group==='w' ? `fW='${val}'` : `fP='${val}'`;
-    return `<button type="button" class="${on?'on':''}" onclick="${act};renderMoney()">${label}</button>`;
+    return `<button type="button" class="${on?'on':''}" aria-selected="${on}" onclick="${act};renderMoney()">${label}</button>`;
   };
-  document.getElementById('expListCard').innerHTML = `<h3>🧾 지출 내역 <span class="h3-sub">${flt.length}건 · ¥${fltTot.toLocaleString()} (약 ${fmt(fltTot)})</span></h3>
-    <div class="flt">${chip('w','all','전체')}${chip('w','shared','👥 공금')}${chip('w','personal','🙋‍♀️ 개인')}<span style="width:6px;"></span>${chip('p','all','결제 전체')}${chip('p','card','💳 카드')}${chip('p','cash','💴 현금')}</div>` +
-    (flt.length ? flt.slice().reverse().map(e=>`
-    <div class="exp-row">
+
+  /* 날짜 빠른 선택 — 여행 4일 */
+  const dayEl = document.getElementById('expDate');
+  const dayVal = dayEl ? dayEl.value : '';
+  const dq = document.getElementById('dayQuick');
+  if(dq) dq.innerHTML = ['2026-11-28','2026-11-29','2026-11-30','2026-12-01'].map(iso=>{
+    const d = dateOfIso(iso);
+    return `<button type="button" class="dchip ${dayVal===iso?'on':''}" onclick="setExpDate('${iso}')">${d.getMonth()+1}/${pad2(d.getDate())}<i>${WD_KO[d.getDay()]}</i></button>`;
+  }).join('');
+
+  /* 일자별 그룹 — 날짜 최신순, 같은 날은 늦은 시간부터 */
+  const bucket = new Map();
+  flt.forEach(e=>{ const k = dayKey(e); if(!bucket.has(k)) bucket.set(k, []); bucket.get(k).push(e); });
+  const tMin = e => { const m = String(e.time||'').match(/(\d{1,2}):(\d{2})/); return m ? (+m[1])*60 + (+m[2]) : -1; };
+  const dayKeys = [...bucket.keys()].sort((a,b)=> !a ? 1 : !b ? -1 : b.localeCompare(a));
+  const expRow = (e, last) => `
+    <div class="exp-row${last?' last':''}">
       <div>
         <div class="et">${esc(e.store || e.memo || e.cat)}</div>
         ${e.store && e.memo ? `<div class="es memo">${esc(e.memo)}</div>` : ''}
-        <div class="es"><span class="bdg ${e.w==='shared'?'sh':'pe'}">${e.w==='shared'?'공금':'개인'}</span><span class="bdg ${e.pay==='card'?'card':'cash'}">${e.pay==='card'?'카드':'현금'}</span>${esc(e.cat)} · ${esc(e.time)}</div>
+        <div class="es"><span class="bdg ${e.w==='shared'?'sh':'pe'}">${e.w==='shared'?'공금':'개인'}</span><span class="bdg ${e.pay==='card'?'card':'cash'}">${e.pay==='card'?'카드':'현금'}</span>${esc(e.cat)} · ${esc(String(e.time||'').replace(/^\d{1,2}\/\d{1,2}\s*/, '') || '시간 미지정')}</div>
       </div>
-      <div class="er"><b>¥${(Number(e.amt)||0).toLocaleString()}</b><span>약 ${fmt(e.amt)}</span><button type="button" onclick="delExp(${e.id})" aria-label="삭제">✕</button></div>
-    </div>`).join('') : '<div style="font-size:13px;color:var(--sub);line-height:1.6;">아직 입력된 내역이 없어요. 위 <b>📷 영수증 촬영</b>이나 직접 입력으로 추가해 보세요!</div>');
+      <div class="er"><b>¥${(Number(e.amt)||0).toLocaleString()}</b><span>약 ${fmt(e.amt)}</span>
+        <div class="erbtn"><button type="button" class="edt" onclick="startEdit(${e.id})" aria-label="수정">✏️</button><button type="button" onclick="delExp(${e.id})" aria-label="삭제">✕</button></div></div>
+    </div>`;
+  const listHtml = dayKeys.length ? dayKeys.map(k=>{
+    const list = bucket.get(k).slice().sort((a,b)=> tMin(b)-tMin(a) || (b.id||0)-(a.id||0));
+    const sum = sumAmt(list), tn = tripDayNo(k);
+    return `<div class="exp-day">
+      <div class="dd">${dayTitle(k)}${tn?`<span class="dn">${tn}</span>`:''}</div>
+      <div class="ds"><b>¥${sum.toLocaleString()}</b><span>약 ${fmt(sum)} · ${list.length}건</span></div>
+    </div>` + list.map((e,i)=>expRow(e, i===list.length-1)).join('');
+  }).join('') : '<div style="font-size:13px;color:var(--sub);line-height:1.6;margin-top:9px;">아직 입력된 내역이 없어요. 위 <b>📷 영수증 촬영</b>이나 직접 입력으로 추가해 보세요!</div>';
+
+  document.getElementById('expListCard').innerHTML = `<h3>🧾 지출 내역 <span class="h3-sub">${flt.length}건 · ¥${fltTot.toLocaleString()} (약 ${fmt(fltTot)})</span></h3>
+    <div class="flt">
+      <div class="utab-row"><span class="utab-g">구분</span>${chip('w','all','전체')}${chip('w','shared','👥 공금')}${chip('w','personal','🙋‍♀️ 개인')}</div>
+      <div class="utab-row"><span class="utab-g">결제</span>${chip('p','all','전체')}${chip('p','card','💳 카드')}${chip('p','cash','💴 현금')}</div>
+    </div>` + listHtml;
 }
 
 function calcOsCur(from){
@@ -975,14 +1064,67 @@ function addExpense(){
   if(!amt || amt<=0) return alert('엔화 금액을 입력해 주세요!');
   const store = document.getElementById('expStore').value.trim();
   const memo = document.getElementById('expMemo').value.trim();
-  const d = new Date();
-  const time = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
-  exps.push({id:Date.now(), w:inW, cat:selCat, pay:inP, amt, store, memo, time});
+  const dateIso = (document.getElementById('expDate')||{}).value || isoOfDate(new Date());
+  const dd = dateOfIso(dateIso) || new Date();
+  const wasEdit = editingId != null;
+  const target = wasEdit ? exps.find(e=>e.id===editingId) : null;
+  /* 시각은 기존 내역 것을 유지(수정 시), 새 내역이면 지금 시각 */
+  const oldHM = target ? String(target.time||'').match(/(\d{1,2}):(\d{2})/) : null;
+  const now = new Date();
+  const hm = oldHM ? `${pad2(oldHM[1])}:${oldHM[2]}` : `${pad2(now.getHours())}:${pad2(now.getMinutes())}`;
+  const time = `${dd.getMonth()+1}/${dd.getDate()} ${hm}`;
+  if(wasEdit && target){
+    Object.assign(target, {w:inW, cat:selCat, pay:inP, amt, store, memo, day:dateIso, time});
+  } else {
+    exps.push({id:Date.now(), w:inW, cat:selCat, pay:inP, amt, store, memo, day:dateIso, time});
+  }
   localStorage.setItem('os_exp_v1', JSON.stringify(exps));
   document.getElementById('expAmt').value=''; document.getElementById('expStore').value=''; document.getElementById('expMemo').value='';
   ocrFilled.store = ''; ocrFilled.memo = '';
-  updateKrwPreview(); renderMoney();
-  saveToast(`✅ 저장! ${inW==='shared'?'공금':'개인'} · ${inP==='card'?'카드':'현금'} · ¥${amt.toLocaleString()}`);
+  editingId = null; dateTouched = false;
+  updateKrwPreview(); updateSaveBtn(); renderMoney();
+  saveToast(`${wasEdit?'💾 수정 저장!':'✅ 저장!'} ${dayTitle(dateIso).replace('📅 ','')} · ${inW==='shared'?'공금':'개인'} · ${inP==='card'?'카드':'현금'} · ¥${amt.toLocaleString()}`);
+}
+function startEdit(id){
+  const t = exps.find(e=>e.id===id);
+  if(!t) return;
+  editingId = id;
+  inW = (t.w==='shared') ? 'shared' : 'personal';
+  inP = (t.pay==='card') ? 'card' : 'cash';
+  selCat = CATS.includes(t.cat) ? t.cat : CATS[0];
+  document.getElementById('expAmt').value = (Number(t.amt)||0).toLocaleString();
+  document.getElementById('expStore').value = t.store || '';
+  document.getElementById('expMemo').value = t.memo || '';
+  const dayEl = document.getElementById('expDate');
+  if(dayEl) dayEl.value = dayKey(t) || isoOfDate(new Date());
+  dateTouched = true;
+  ocrFilled.store = ''; ocrFilled.memo = '';
+  autoGrowMemo(); updateKrwPreview(); updateSaveBtn(); renderMoney();
+  const card = document.getElementById('expFormCard');
+  if(card) card.scrollIntoView({behavior:'smooth', block:'start'});
+  saveToast('✏️ 수정 중 — 값을 고른 뒤 💾 수정 저장을 눌러 주세요');
+}
+function cancelEdit(){
+  editingId = null; dateTouched = false;
+  clearExpInput();
+  updateSaveBtn();
+  saveToast('↩️ 수정을 취소했어요 — 새 내역으로 입력합니다');
+}
+function updateSaveBtn(){
+  const editing = editingId != null;
+  const b = document.getElementById('saveBtn');
+  if(b){
+    b.textContent = editing ? '💾 수정 저장' : '기록하기';
+    b.classList.toggle('editing', editing);
+  }
+  const c = document.getElementById('cancelEditBtn');
+  if(c) c.style.display = editing ? 'inline-flex' : 'none';
+  const cl = document.getElementById('clearBtn');
+  if(cl) cl.style.display = editing ? 'none' : 'inline-flex';
+  const t = document.getElementById('expFormTitle');
+  if(t) t.innerHTML = editing
+    ? '✏️ 지출 수정 <span class="h3-sub">고치고 💾 수정 저장 · 기존 내역이 바뀝니다</span>'
+    : '➕ 지출 입력 <span class="h3-sub">1/3 나눗셈 없이 · 공금/개인 · 카드/현금</span>';
 }
 function delExp(id){
   const t = exps.find(e=>e.id===id);
@@ -990,7 +1132,9 @@ function delExp(id){
   if(!confirm(`${label} ¥${t?Number(t.amt).toLocaleString():''} 를 지울까요?`)) return;
   exps = exps.filter(e=>e.id!==id);
   localStorage.setItem('os_exp_v1', JSON.stringify(exps));
+  if(editingId === id){ editingId = null; updateSaveBtn(); }
   renderMoney();
+  saveToast('🗑️ 삭제했어요 — 일자별 합계와 총액을 다시 계산했습니다');
 }
 function copyKakao(){
   const sh = exps.filter(e=>e.w==='shared'), pe = exps.filter(e=>e.w!=='shared');
@@ -1467,6 +1611,37 @@ function ocrPrepareImage(file){
     img.src = url;
   });
 }
+/* 영수증 날짜 추출 — 2026年11月28日 / 2026/11/28 / R8.11.28 / 11月28日 */
+function parseReceiptDay(text){
+  const s = String(text||'').replace(/[０-９]/g, c=>String.fromCharCode(c.charCodeAt(0) - 0xFEE0));
+  const mk = (y,m,d)=>{
+    y=+y; m=+m; d=+d;
+    if(!(m>=1&&m<=12&&d>=1&&d<=31)) return null;
+    const dt = new Date(y, m-1, d);
+    return (dt.getFullYear()===y && dt.getMonth()===m-1 && dt.getDate()===d) ? dt : null;
+  };
+  const found = [];
+  let m;
+  const reY = /((?:19|20)\d{2})\s*[年\/.\-]\s*(\d{1,2})\s*[月\/.\-]\s*(\d{1,2})\s*日?/g;
+  while((m = reY.exec(s)) !== null){ const dt = mk(m[1], m[2], m[3]); if(dt) found.push(dt); }
+  if(!found.length){
+    const reR = /(?:令和|R)\s*(\d{1,2})\s*[年.\/\-]\s*(\d{1,2})\s*[月.\/\-]\s*(\d{1,2})\s*日?/gi;
+    while((m = reR.exec(s)) !== null){ const dt = mk(2018 + (+m[1]), m[2], m[3]); if(dt) found.push(dt); }
+  }
+  if(!found.length){
+    const reMD = /(\d{1,2})\s*月\s*(\d{1,2})\s*日/g;
+    while((m = reMD.exec(s)) !== null){ const dt = mk(2026, m[1], m[2]); if(dt) found.push(dt); }
+  }
+  if(!found.length){
+    /* 연도 없는 11/28 14:32 형태 — 시각이 붙은 것만 */
+    const reS = /(\d{1,2})\s*[\/\-]\s*(\d{1,2})\s+\d{1,2}:\d{2}/g;
+    while((m = reS.exec(s)) !== null){ const dt = mk(2026, m[1], m[2]); if(dt) found.push(dt); }
+  }
+  if(!found.length) return '';
+  const today = new Date();
+  const near = found.filter(d=>Math.abs(d - today) < 400*86400000);
+  return isoOfDate(near[0] || found[0]);
+}
 function parseReceipt(raw){
   const norm = String(raw||'')
     .replace(/[０-９]/g, c=>String.fromCharCode(c.charCodeAt(0) - 0xFEE0))
@@ -1566,7 +1741,7 @@ function parseReceipt(raw){
   else if(/電車|タクシー|切符|乗車|運賃|バス|ICカード/.test(guessText)) cat = CATS[2];
   else if(/入場|チケット|USJ|ユニバーサル|美術館|ミュージアム/.test(guessText)) cat = CATS[1];
 
-  return {amount, store, memo, items: items.slice(), itemRows: itemRows.slice(), cat, text: norm};
+  return {amount, store, memo, items: items.slice(), itemRows: itemRows.slice(), cat, date: parseReceiptDay(norm), text: norm};
 }
 function ocrFillForm(p, text){
   const filled = [];
@@ -1576,6 +1751,10 @@ function ocrFillForm(p, text){
     filled.push('금액');
   }
   const storeEl = document.getElementById('expStore'), memoEl = document.getElementById('expMemo');
+  if(p.date && !dateTouched){
+    const dEl = document.getElementById('expDate');
+    if(dEl && dEl.value !== p.date){ dEl.value = p.date; filled.push('🗓️ 날짜'); }
+  }
   if(p.store){
     const cur = storeEl.value.trim();
     if(!cur || cur === ocrFilled.store){ storeEl.value = p.store; ocrFilled.store = p.store; filled.push('가게명'); }
@@ -1935,7 +2114,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v39';
+const SW_CACHE = 'osaka-planner-v40';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
@@ -2058,7 +2237,7 @@ function goTab(id, btn){
   if(id==='mag') magInit();
 }
 
-updateDday(); renderMoney(); renderPlan(); renderChecks(); renderPlaces(); renderTaxChecks();
+updateDday(); initExpDate(true); updateSaveBtn(); renderMoney(); renderPlan(); renderChecks(); renderPlaces(); renderTaxChecks();
 updateOffBadge(); setTimeout(updateOffBadge, 2500); setTimeout(updateOffBadge, 7000);
 if(!isOffline()) setTimeout(()=>ensureOffline(false), 1500);
 if(FORCE_OFFLINE) setTimeout(()=>{ syncOnlineLayer(); offToast('오프라인 모드로 열었어요 (저장된 지도만 표시)'); }, 1200);
