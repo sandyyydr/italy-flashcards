@@ -1229,19 +1229,19 @@ async function ocrLocalize(p){
   const rows = (Array.isArray(p.itemRows) ? p.itemRows : []).slice(0, 14)
     .map(r=>({ ja: jaCleanStr(r && r.ja || ''), amt: Number(r && r.amt) || 0 }))
     .filter(r=>r.ja);
-  const itemToks = rows.map(r=>jaCleanStr(r.ja).split(' ').filter(Boolean).map(tk=>jaSeg(jaCompactStr(tk), JA_DICT_ITEM)));
+  const itemToks = rows.map(r=>jaSeg(jaCompactStr(r.ja), JA_DICT_ITEM));
 
   /* 사전에 없는 일본어만 모아서 한 번에 번역 */
   const left = [];
   storeSegs.forEach(s=>{ if(s.ja) left.push(s.ja); });
-  itemToks.forEach(toks=>toks.forEach(segs=>segs.forEach(s=>{ if(s.ja) left.push(s.ja); })));
+  itemToks.forEach(segs=>segs.forEach(s=>{ if(s.ja) left.push(s.ja); }));
   const tr = await jaTranslateWords(left);
   const fill = segs=>segs.forEach(s=>{ if(s.ja && tr[s.ja]) s.tr = tr[s.ja]; });
   fill(storeSegs);
-  itemToks.forEach(toks=>toks.forEach(segs=>fill(segs)));
+  itemToks.forEach(segs=>fill(segs));
 
   const storeKo = jaJoin(storeSegs).replace(/^[-−－–—·・\s]+|[-−－–—·・\s]+$/g,'').slice(0, 40);
-  const itemKos = itemToks.map(toks=>toks.map(segs=>jaJoin(segs)).filter(Boolean).join(' ').replace(/^[-−－–—·・\s]+|[-−－–—·・\s]+$/g,''))
+  const itemKos = itemToks.map(segs=>jaJoin(segs).replace(/^[-−－–—·・\s]+|[-−－–—·・\s]+$/g,''))
     .map(s=>s.replace(/(\d+)\s*(個|点|枚|袋|本|パック)/g, (m0,n,u)=> n + (JA_KO_UNIT[u] || u)));
 
   /* 메모: 품목을 한 줄에 하나씩 + 가격 */
@@ -1526,10 +1526,11 @@ function parseReceipt(raw){
   /* 메모: 품목 전부 (일본어 원문 + 가격, 한 줄에 하나씩) */
   const itemRows = [];
   const OCR_ADDRESS = /[区市町村丁目番地号]|都道府県|電話|TEL|FAX/i;
+  const OCR_NOT_ITEM = /小計|合計|消費税|税込|税抜|内税|免税|対象額|お預|預り|お釣|釣銭|つり|ポイント|残高|レシート|バーコード|伝票|点数|クレジット|現金|お支払|支払|値引|割引|両替|チャージ|返金|領収/;
   lines.forEach(l=>{
     const c = clean(l);
     if(itemRows.length >= 14) return;
-    if(!isJp(c) || OCR_BAD_STORE.test(c) || OCR_ADDRESS.test(c)) return;
+    if(!isJp(c) || OCR_BAD_STORE.test(c) || OCR_ADDRESS.test(c) || OCR_NOT_ITEM.test(c)) return;
     if(OCR_TOTAL_KW.some(([re])=>re.test(c))) return;
     const mm = c.replace(/^\d{8,}/, '').match(/^(.{2,20}?)[\s]*[¥]?\s?([\d,]{2,7})\s*円?$/);
     if(mm && !/^[\d,]+$/.test(mm[1])){
