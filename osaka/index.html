@@ -353,7 +353,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
 .wb.s{background:#EFEAE0;color:#6B5B3E;}
 .wadd{position:absolute;top:6px;right:6px;width:27px;height:27px;border-radius:50%;background:rgba(255,255,255,.95);border:1.5px solid rgba(20,73,63,.28);color:var(--green);font-size:16px;font-weight:900;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:inherit;box-shadow:0 1px 4px rgba(0,0,0,.14);padding:0;}
 .wadd.on{background:var(--green);border-color:var(--green);color:#fff;}
-.wbar{position:fixed;visibility:hidden;left:50%;transform:translateX(-50%) translateY(14px);bottom:calc(env(safe-area-inset-bottom,10px) + 66px);background:rgba(20,73,63,.97);color:#fff;border-radius:999px;padding:11px 17px;font-size:13px;font-weight:800;display:flex;align-items:center;gap:8px;box-shadow:0 6px 18px rgba(0,0,0,.3);z-index:45;opacity:0;pointer-events:none;transition:opacity .18s, transform .18s;max-width:calc(100% - 24px);cursor:pointer;}
+.wbar{position:fixed;visibility:hidden;left:50%;transform:translateX(-50%) translateY(14px);width:max-content;white-space:nowrap;bottom:calc(env(safe-area-inset-bottom,10px) + 66px);background:rgba(20,73,63,.97);color:#fff;border-radius:999px;padding:11px 17px;font-size:13px;font-weight:800;display:flex;align-items:center;gap:8px;box-shadow:0 6px 18px rgba(0,0,0,.3);z-index:45;opacity:0;pointer-events:none;transition:opacity .18s, transform .18s;max-width:calc(100% - 24px);cursor:pointer;}
 .wbar.show{opacity:1;pointer-events:auto;visibility:visible;transform:translateX(-50%) translateY(0);}
 .wbar .wcnt{background:var(--gold);color:var(--green);border-radius:99px;padding:1px 7px;font-size:12px;font-weight:900;}
 .wbar .wsum{color:var(--gold);font-weight:900;}
@@ -2779,7 +2779,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v61';
+const SW_CACHE = 'osaka-planner-v62';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
