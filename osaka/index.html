@@ -1591,6 +1591,9 @@ function ocrFillForm(p, text){
   document.getElementById('ocrRaw').textContent = (text || '').trim() || '(글자를 못 읽었어요)';
   const krBox = document.getElementById('ocrKr');
   const krows = (Array.isArray(p.krLines) ? p.krLines : []).filter(r=>r);
+  if(!krows.length && (p.pairs || []).length){
+    (p.pairs || []).filter(x=>x && x.ko).forEach(x=>krows.push({kr: x.ko, grp: 'store'}));
+  }
   if(krBox){
     if(krows.length || (p.pairs || []).length){
       const TITLES = {store:'🏪 가게 정보', items:'🛒 산 품목', pay:'🧾 합계 · 결제'};
