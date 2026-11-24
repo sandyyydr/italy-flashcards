@@ -383,7 +383,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
         <span id="krwPreview" style="font-size:12.5px;font-weight:700;color:var(--org);min-width:84px;text-align:right;">약 0원</span>
       </div>
       <input id="expStore" class="inp" placeholder="가게명 (예: ドン・キホーテ 道頓堀店 / 돈키호테)"/>
-      <textarea id="expMemo" class="inp" rows="4" oninput="autoGrowMemo()" placeholder="메모 (품목을 한 줄씩 — 사진으로 읽으면 자동으로 채워져요)"></textarea>
+      <textarea id="expMemo" class="inp" rows="4" oninput="onMemoInput()" placeholder="메모 (품목을 한 줄씩 — '우유 1000엔'처럼 금액을 쓰면 자동으로 합산돼요)"></textarea>
       <div style="display:flex;gap:8px;">
         <button id="saveBtn" class="act-btn map" style="flex:2;justify-content:center;padding:12px;font-size:14.5px;" onclick="addExpense()">기록하기</button>
         <button id="cancelEditBtn" class="act-btn" style="display:none;flex:1;justify-content:center;padding:12px;font-size:13.5px;" onclick="cancelEdit()">취소</button>
@@ -896,6 +896,7 @@ const pad2 = n => String(n).padStart(2,'0');
 const WD_KO = ['일','월','화','수','목','금','토'];
 const TRIP_FIRST = '2026-11-28', TRIP_LAST = '2026-12-01';
 let editingId = null, dateTouched = false, timeTouched = false;
+let amtFromMemo = false, ocrAmtLock = false;   /* 메모 합산으로 채운 금액인지 · OCR 총액 보호 */
 function isoOfDate(d){ return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`; }
 function dateOfIso(s){
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s||''));
@@ -1051,12 +1052,46 @@ function calcOsCur(from){
   }
 }
 function formatAmtInput(el){
+  amtFromMemo = false;
   const raw = el.value.replace(/[^0-9]/g, '');
   el.value = raw ? Number(raw).toLocaleString() : '';
 }
 function updateKrwPreview(){
   const v = parseFloat((document.getElementById('expAmt').value||'').replace(/,/g,'')) || 0;
-  document.getElementById('krwPreview').textContent = '약 ' + fmt(v);
+  document.getElementById('krwPreview').textContent = '약 ' + fmt(v) + ((amtFromMemo && v > 0) ? ' (메모 합산)' : '');
+}
+/* ── 메모에 쓴 엔화 금액 자동 합산 (우유 1000엔 / ¥500 / 500円) ── */
+function memoYenSum(text){
+  const s = String(text || '');
+  let sum = 0;
+  const re = /(?:[¥￥]\s*([0-9][0-9,]*)|([0-9][0-9,]*)\s*(?:円|엔|JPY|yen))/g;
+  let m;
+  while((m = re.exec(s))){
+    const v = parseInt(String(m[1] || m[2]).replace(/,/g, ''), 10);
+    if(v > 0) sum += v;
+  }
+  return sum;
+}
+function syncMemoToAmt(){
+  if(ocrAmtLock) return;
+  const memoEl = document.getElementById('expMemo'), amtEl = document.getElementById('expAmt');
+  if(!memoEl || !amtEl) return;
+  const sum = memoYenSum(memoEl.value);
+  if(sum >= 1){
+    amtFromMemo = true;
+    amtEl.value = sum.toLocaleString();
+  } else if(amtFromMemo){
+    amtFromMemo = false;
+    amtEl.value = '';
+  } else {
+    return;
+  }
+  updateKrwPreview();
+}
+function onMemoInput(){
+  autoGrowMemo();
+  ocrAmtLock = false;   /* 사용자가 메모를 직접 손대면 OCR 총액보다 메모 합산이 우선 */
+  syncMemoToAmt();
 }
 function saveToast(msg){
   const el = document.getElementById('saveToast'); if(!el) return;
@@ -1073,6 +1108,7 @@ function autoGrowMemo(){
 function clearExpInput(){
   const setV = (id, v)=>{ const el = document.getElementById(id); if(el) el.value = v; };
   setV('expAmt',''); setV('expStore',''); setV('expMemo','');
+  amtFromMemo = false; ocrAmtLock = false;
   initExpTime(true); timeTouched = false;
   autoGrowMemo();
   updateKrwPreview();
@@ -1112,6 +1148,7 @@ function addExpense(){
   }
   localStorage.setItem('os_exp_v1', JSON.stringify(exps));
   document.getElementById('expAmt').value=''; document.getElementById('expStore').value=''; document.getElementById('expMemo').value='';
+  amtFromMemo = false; ocrAmtLock = false;
   ocrFilled.store = ''; ocrFilled.memo = '';
   editingId = null; dateTouched = false; timeTouched = false;
   initExpTime(true);
@@ -1126,6 +1163,7 @@ function startEdit(id){
   inP = (t.pay==='card') ? 'card' : 'cash';
   selCat = CATS.includes(t.cat) ? t.cat : CATS[0];
   document.getElementById('expAmt').value = (Number(t.amt)||0).toLocaleString();
+  amtFromMemo = false; ocrAmtLock = true;   /* 저장된 금액 유지 · 메모를 직접 고치면 그때 합산 */
   document.getElementById('expStore').value = t.store || '';
   document.getElementById('expMemo').value = t.memo || '';
   const dayEl = document.getElementById('expDate');
@@ -1840,6 +1878,8 @@ function ocrFillForm(p, text){
   const filled = [];
   if(p.amount > 0){
     document.getElementById('expAmt').value = Number(p.amount).toLocaleString();
+    amtFromMemo = false;      /* OCR이 읽은 세금 포함 총액을 그대로 둔다 */
+    ocrAmtLock = true;        /* 메모를 직접 고치기 전까지 덮어쓰지 않음 */
     updateKrwPreview();
     filled.push('금액');
   }
@@ -2212,7 +2252,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v42';
+const SW_CACHE = 'osaka-planner-v43';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
