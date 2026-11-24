@@ -1164,7 +1164,8 @@ async function ocrLocalize(p){
 
   const storeKo = jaJoin(storeSegs).slice(0, 40);
   const itemKos = itemToks.map(toks=>toks.map(segs=>jaJoin(segs)).filter(Boolean).join(' ')).filter(Boolean);
-  const memoKo = itemKos.join(' · ').slice(0, 48);
+  const memoKo = itemKos.join(' · ').slice(0, 48)
+    .replace(/(\d+)\s*(個|点|枚|袋|本|パック)/g, (m0,n,u)=> n + (JA_KO_UNIT[u] || u));
 
   p.storeJa = storeJa;
   p.memoJa = itemJa.join(' · ');
@@ -1349,7 +1350,7 @@ function parseReceipt(raw){
     const mm = c.replace(/^\d{6,}/, '').match(/^(.{2,18}?)[\s]*[¥]?\s?(\d{2,6})\s*円?$/);
     if(mm && !/^\d+$/.test(mm[1])){
       let nm = mm[1].replace(/^[·・\-\*_]+|[·・\-\*_]+$/g,'').trim();
-      nm = nm.replace(/\s?\d+\s*(mL|ML|ml|kg|Kg|g|L|個|点|枚|袋|セット|本)$/, (m0,n,u)=>' ' + n + (JA_KO_UNIT[u] || u)).replace(/[_·・\-\s]+$/,'').trim();
+      nm = nm.replace(/\s?(\d+)\s*(mL|ML|ml|kg|Kg|g|L|個|点|枚|袋|パック|セット|本)$/, (m0,n,u)=>' ' + n + (JA_KO_UNIT[u] || u)).replace(/[_·・\-\s]+$/,'').trim();
       if(!/[\u3040-\u30ff\u4e00-\u9fafA-Za-z]/.test(nm)) return;
       if((nm.match(/\d/g)||[]).length > 4) return;
       if(nm.length >= 2 && !items.includes(nm)) items.push(nm);
@@ -1713,7 +1714,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v36';
+const SW_CACHE = 'osaka-planner-v37';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
