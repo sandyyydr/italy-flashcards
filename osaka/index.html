@@ -1787,7 +1787,7 @@ function ocrLog(m){
 }
 /* ── 이미지 전처리: 배경·조명 정규화 → 영수증 영역 → 확대 → Sauvola 이진화 ── */
 const OCR_TARGET_LONG = 3200;      /* 처리 결과 긴 변 목표 px */
-const OCR_MAX_PIXELS = 7.2e6;      /* 메모리·속도 상한 */
+const OCR_MAX_PIXELS = 8.2e6;      /* 메모리·속도 상한 */
 function ocrBoxMean(src, w, h, r, tmp, out){
   const k = 2*r+1;
   const t = tmp || new Float32Array(w*h);
@@ -1894,6 +1894,47 @@ function ocrCropRect(t, w, h){
   if(x2-x < 40 || y2-y < 40) return null;
   return {x:x, y:y, w:x2-x, h:y2-y};
 }
+/* 가벼운 언샤프 — 확대하며 흐려진 얇은 획을 살린다 */
+function ocrSharpen(g, W, H, amt){
+  const b = ocrBoxMean(g, W, H, 2);
+  for(let i=0;i<g.length;i++){
+    const v = g[i] + amt*(g[i] - b[i]);
+    g[i] = v < 0 ? 0 : (v > 255 ? 255 : v);
+  }
+}
+/* Sauvola 이진화 — 국소 평균·표준편차는 1/2 해상도에서 구해 보간 (메모리 절반) */
+function ocrBinarize(g, W, H){
+  const hw = Math.max(1, W >> 1), hh = Math.max(1, H >> 1);
+  const gh = new Float32Array(hw*hh);
+  for(let y=0;y<hh;y++){
+    const o0 = (2*y)*W, o1 = Math.min(H-1, 2*y+1)*W, o = y*hw;
+    for(let x=0;x<hw;x++){
+      const x0 = 2*x, x1 = Math.min(W-1, 2*x+1);
+      gh[o+x] = (g[o0+x0] + g[o0+x1] + g[o1+x0] + g[o1+x1])*0.25;
+    }
+  }
+  const r = Math.max(4, Math.min(26, Math.round(hw/45)));
+  const mh = ocrBoxMean(gh, hw, hh, r);
+  const sq = new Float32Array(hw*hh);
+  for(let i=0;i<sq.length;i++) sq[i] = gh[i]*gh[i];
+  const vh = ocrBoxMean(sq, hw, hh, r);
+  for(let y=0;y<H;y++){
+    const fy = y/2 - 0.5;
+    const y0 = Math.max(0, Math.min(hh-1, Math.floor(fy))), y1 = Math.min(hh-1, y0+1);
+    const ty = Math.min(1, Math.max(0, fy-y0)), o = y*W;
+    for(let x=0;x<W;x++){
+      const fx = x/2 - 0.5;
+      const x0 = Math.max(0, Math.min(hw-1, Math.floor(fx))), x1 = Math.min(hw-1, x0+1);
+      const tx = Math.min(1, Math.max(0, fx-x0));
+      const a = mh[y0*hw+x0], b = mh[y0*hw+x1], c = mh[y1*hw+x0], e = mh[y1*hw+x1];
+      const mean = (a*(1-tx)+b*tx)*(1-ty) + (c*(1-tx)+e*tx)*ty;
+      const p = vh[y0*hw+x0], q = vh[y0*hw+x1], s1 = vh[y1*hw+x0], s2 = vh[y1*hw+x1];
+      const v2 = (p*(1-tx)+q*tx)*(1-ty) + (s1*(1-tx)+s2*tx)*ty;
+      const sd = Math.sqrt(Math.max(0, v2 - mean*mean));
+      g[o+x] = g[o+x] > mean*(1 + 0.2*(sd/128 - 1)) ? 255 : 0;
+    }
+  }
+}
 function ocrGrayCanvas(img, sx, sy, sw, sh, W, H){
   const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
   const ctx = cv.getContext('2d', {willReadFrequently:true});
@@ -1930,6 +1971,7 @@ function ocrPrepBuild(img, mode){
   const im = ocrGrayCanvas(img, sx, sy, sw, sh, W, H);
   const g = im.g;
   ocrNormalizeLum(g, W, H);
+  try{ ocrSharpen(g, W, H, 0.5); }catch(e){}
   /* 3) 흑색 로고(상호)용 반전 회색조 띠 — 이진화가 뭉개기 전에 미리 만들어 둔다 */
   let brandCv = null;
   try{
@@ -1952,15 +1994,7 @@ function ocrPrepBuild(img, mode){
     const T = paper*0.62;
     for(let i=0;i<g.length;i++) g[i] = g[i] > T ? 255 : 0;
   } else {
-    const r = Math.max(6, Math.min(40, Math.round(W/45)));
-    const mean = ocrBoxMean(g, W, H, r);
-    const sq = new Float32Array(W*H);
-    for(let i=0;i<sq.length;i++) sq[i] = g[i]*g[i];
-    const varM = ocrBoxMean(sq, W, H, r);
-    for(let i=0;i<g.length;i++){
-      const m = mean[i], sd = Math.sqrt(Math.max(0, varM[i] - m*m));
-      g[i] = g[i] > m*(1 + 0.2*(sd/128 - 1)) ? 255 : 0;
-    }
+    ocrBinarize(g, W, H);
   }
   const dd = im.d.data;
   for(let i=0,j=0;i<g.length;i++,j+=4){ const v = g[i]|0; dd[j] = dd[j+1] = dd[j+2] = v; dd[j+3] = 255; }
@@ -2687,7 +2721,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v51';
+const SW_CACHE = 'osaka-planner-v52';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
