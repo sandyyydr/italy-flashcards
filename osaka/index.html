@@ -1904,7 +1904,7 @@ function ocrGrayCanvas(img, sx, sy, sw, sh, W, H){
   for(let i=0,j=0;i<n;i++,j+=4) g[i] = p[j]*0.299 + p[j+1]*0.587 + p[j+2]*0.114;
   return {cv:cv, ctx:ctx, d:d, g:g, W:W, H:H};
 }
-function ocrPrepBuild(img){
+function ocrPrepBuild(img, mode){
   const nw = img.naturalWidth || img.width || 0, nh = img.naturalHeight || img.height || 0;
   if(!nw || !nh) throw new Error('image-load');
   /* 1) 작은 사본에서 영수증 영역 추정 */
@@ -1943,15 +1943,24 @@ function ocrPrepBuild(img){
     }
     bctx.putImageData(id, 0, 0);
   }catch(e){ brandCv = null; }
-  /* 4) Sauvola 이진화 — 얇은 획은 살리고 굵은 로고는 뭉개지 않게 창을 넓게 */
-  const r = Math.max(6, Math.min(40, Math.round(W/45)));
-  const mean = ocrBoxMean(g, W, H, r);
-  const sq = new Float32Array(W*H);
-  for(let i=0;i<sq.length;i++) sq[i] = g[i]*g[i];
-  const varM = ocrBoxMean(sq, W, H, r);
-  for(let i=0;i<g.length;i++){
-    const m = mean[i], sd = Math.sqrt(Math.max(0, varM[i] - m*m));
-    g[i] = g[i] > m*(1 + 0.2*(sd/128 - 1)) ? 255 : 0;
+  /* 4) 이진화 — 기본은 Sauvola(얇은 획 보존), 두 번째 시도는 종이 밝기 기준 전역 임계값 */
+  if(mode === 'global'){
+    const hist = new Uint32Array(256);
+    for(let i=0;i<g.length;i++) hist[g[i]|0]++;
+    let acc = 0, paper = 255;
+    for(let v=255;v>=0;v--){ acc += hist[v]; if(acc > g.length*0.12){ paper = v; break; } }
+    const T = paper*0.62;
+    for(let i=0;i<g.length;i++) g[i] = g[i] > T ? 255 : 0;
+  } else {
+    const r = Math.max(6, Math.min(40, Math.round(W/45)));
+    const mean = ocrBoxMean(g, W, H, r);
+    const sq = new Float32Array(W*H);
+    for(let i=0;i<sq.length;i++) sq[i] = g[i]*g[i];
+    const varM = ocrBoxMean(sq, W, H, r);
+    for(let i=0;i<g.length;i++){
+      const m = mean[i], sd = Math.sqrt(Math.max(0, varM[i] - m*m));
+      g[i] = g[i] > m*(1 + 0.2*(sd/128 - 1)) ? 255 : 0;
+    }
   }
   const dd = im.d.data;
   for(let i=0,j=0;i<g.length;i++,j+=4){ const v = g[i]|0; dd[j] = dd[j+1] = dd[j+2] = v; dd[j+3] = 255; }
@@ -1959,13 +1968,13 @@ function ocrPrepBuild(img){
   im.cv.__brandCv = brandCv;
   return im.cv;
 }
-function ocrPrepareImage(file){
+function ocrPrepareImage(file, mode){
   return new Promise((resolve, reject)=>{
     const url = URL.createObjectURL(file);
     const img = new Image();
     img.onload = ()=>{
       let cv = null;
-      try{ cv = ocrPrepBuild(img); }catch(e){ cv = null; }
+      try{ cv = ocrPrepBuild(img, mode || 'sauvola'); }catch(e){ cv = null; }
       URL.revokeObjectURL(url);
       if(cv) resolve(cv); else reject(new Error('image-load'));
     };
@@ -2233,6 +2242,16 @@ function ocrGuessStore(lines, brandHint){
   }
   return '';
 }
+function ocrParseScore(p, conf){
+  if(!p) return 0;
+  let sc = Math.min(30, (conf || 0)*0.35);
+  if(p.amount > 0) sc += 35;
+  if(p.store) sc += 22;
+  if(p.date) sc += 10;
+  if(p.time) sc += 5;
+  sc += Math.min(20, (p.itemRows || []).length * 4);
+  return sc;
+}
 function parseReceipt(raw, brandHint){
   const norm = String(raw||'')
     .replace(/[０-９Ａ-Ｚａ-ｚ]/g, c=>String.fromCharCode(c.charCodeAt(0) - 0xFEE0))
@@ -2335,21 +2354,39 @@ async function ocrFilePicked(input){
   ocrSetBtns(true, '🔎 읽는 중…');
   try{
     ocrSetStatus('📷 사진 준비 중…', 4);
-    const canvas = await ocrPrepareImage(f);
-    try{
-      document.getElementById('ocrPreview').src = canvas.toDataURL('image/jpeg', 0.6);
-      document.getElementById('ocrThumb').style.display = 'flex';
-      document.getElementById('ocrThumbTxt').textContent = '인식 중…';
-    }catch(e){}
     ocrSetStatus('🔎 인식 엔진 준비 중…', 8);
     const T = await ocrLoadEngine();
     if(!ocrWorker){
       ocrWorker = await T.createWorker('jpn+eng', 1, { logger: ocrLog });
       try{ await ocrWorker.setParameters({tessedit_pageseg_mode:'6', user_defined_dpi:'300', preserve_interword_spaces:'1'}); }catch(e){}
     }
-    ocrSetStatus('🔎 영수증 읽는 중… 0%', 35);
-    const res = await ocrWorker.recognize(canvas);
-    const text = (res && res.data && res.data.text) || '';
+    const readOnce = async function(md){
+      const cv = await ocrPrepareImage(f, md);
+      ocrSetStatus('🔎 영수증 읽는 중… 0%', 35);
+      const res = await ocrWorker.recognize(cv);
+      return {cv:cv, text:(res && res.data && res.data.text) || '', conf:(res && res.data && res.data.confidence) || 0};
+    };
+    let a = await readOnce('sauvola');
+    let p = parseReceipt(a.text, '');
+    let best = {a:a, p:p, score:ocrParseScore(p, a.conf)};
+    const weak = !p.store || !p.amount || !(p.itemRows || []).length || a.conf < 80;
+    if(weak){
+      try{
+        ocrSetStatus('🔎 글자를 한 번 더 확인하는 중…', 76);
+        const b2 = await readOnce('global');
+        const pb = parseReceipt(b2.text, '');
+        const sb = ocrParseScore(pb, b2.conf);
+        if(sb > best.score) best = {a:b2, p:pb, score:sb};
+      }catch(e){ console.warn('2차 인식 실패:', e); }
+    }
+    const canvas = best.a.cv;
+    const text = best.a.text;
+    p = best.p;
+    try{
+      document.getElementById('ocrPreview').src = canvas.toDataURL('image/jpeg', 0.6);
+      document.getElementById('ocrThumb').style.display = 'flex';
+      document.getElementById('ocrThumbTxt').textContent = '인식 중…';
+    }catch(e){}
     /* 상호가 흑색 로고(흰 글씨)뿐이면 반전본으로 한 번 더 읽어 가게 이름만 보태요 */
     let brandHint = '';
     try{
@@ -2361,9 +2398,9 @@ async function ocrFilePicked(input){
         const bt = (br && br.data && br.data.text) || '';
         bt.split(/\r?\n/).forEach(function(l){ if(!brandHint && ocrChainName(l)) brandHint = ocrChainName(l); });
         await ocrWorker.setParameters({tessedit_pageseg_mode:'6'});
+        if(brandHint && !p.store) p.store = brandHint;
       }
     }catch(e){ try{ await ocrWorker.setParameters({tessedit_pageseg_mode:'6'}); }catch(e2){} }
-    const p = parseReceipt(text, brandHint);
     if(p.store || p.memo || (p.itemRows || []).length){
       ocrSetStatus('🇰🇷 가게명·품목을 한국어로 바꾸는 중…', 94);
       try{ await ocrLocalize(p); }catch(e){ console.warn('한국어 변환 실패:', e); }
@@ -2648,7 +2685,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v49';
+const SW_CACHE = 'osaka-planner-v50';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
