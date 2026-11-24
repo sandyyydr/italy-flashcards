@@ -2081,7 +2081,7 @@ function ocrSplitPrice(line, avoidBare){
     if(m){ amt = ocrFixDigits(m[2]); name = m[1]; }
   }
   const q = ocrStripQty(name);
-  if(amt !== null && !(amt >= 1 && amt <= 999999)) amt = null;
+  if(amt !== null && !(amt >= 10 && amt <= 999999)) amt = null;
   return {name:q.name, amt:amt, qty:q.qty};
 }
 function ocrCleanItemName(s){
@@ -2096,7 +2096,16 @@ function ocrCleanItemName(s){
 function ocrExtractItems(lines){
   const rows = [];
   const push = r => { if(rows.length < 20) rows.push(r); };
+  /* 품목 구간: 첫 날짜 줄 다음 ~ 첫 합계/세금 줄 전 */
+  let from = 0, to = lines.length;
   for(let i=0;i<lines.length;i++){
+    if(/(?:19|20)\d{2}\s*[年\/.\-]\s*\d{1,2}\s*[月\/.\-]\s*\d{1,2}/.test(lines[i]) || /\d{1,2}\s*月\s*\d{1,2}\s*日/.test(lines[i])){ from = i+1; break; }
+  }
+  for(let i=from;i<lines.length;i++){
+    if(/小計|合計|お買上|外税|消費税|お預|おつり|お釣/.test(lines[i].replace(/\s/g,''))){ to = i; break; }
+  }
+  if(to <= from) { from = 0; to = lines.length; }
+  for(let i=from;i<to;i++){
     const ln = String(lines[i]||'').trim();
     if(!ln) continue;
     const masked = ocrMaskNoise(ln);
@@ -2639,7 +2648,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v48';
+const SW_CACHE = 'osaka-planner-v49';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
