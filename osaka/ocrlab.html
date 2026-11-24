@@ -34,6 +34,18 @@ canvas{max-width:100%;border:1px solid #999}
   <button id="run">RUN OCR</button>
 </div>
 <div id="stat"></div>
+<div class="row">
+  <textarea id="matrix" rows="7" style="width:100%;font-size:11px">[
+ {"mode":"sauvola","scale":3,"win":31,"k":0.2,"sharp":0,"psm":6,"dpi":300},
+ {"mode":"sauvola","scale":3,"win":61,"k":0.2,"sharp":0,"psm":6,"dpi":300},
+ {"mode":"global","scale":3,"win":31,"k":0.2,"sharp":0,"psm":6,"dpi":300},
+ {"mode":"norm","scale":3,"win":31,"k":0.2,"sharp":1,"psm":4,"dpi":300},
+ {"mode":"sauvola","scale":4,"win":61,"k":0.2,"sharp":0,"psm":4,"dpi":300},
+ {"mode":"sauvola","scale":3,"win":41,"k":0.3,"sharp":0,"psm":11,"dpi":300}
+]</textarea>
+  <button id="batch">RUN MATRIX</button>
+</div>
+<pre id="batchout"></pre>
 <div class="row"><canvas id="cv"></canvas></div>
 <pre id="raw">(raw text)</pre>
 <div class="row"><textarea id="paste" rows="6" style="width:100%">(붙여넣은 원문)</textarea></div>
@@ -173,6 +185,39 @@ document.getElementById('run').onclick=async()=>{
     stat('ERR '+e.message);
     document.getElementById('raw').textContent=String(e&&e.stack||e);
   }finally{running=false;}
+};
+document.getElementById('batch').onclick=async()=>{
+  if(running) return;
+  const f=document.getElementById('f').files[0];
+  if(!f){stat('파일을 먼저 고르세요');return;}
+  const list=JSON.parse(document.getElementById('matrix').value);
+  const out=document.getElementById('batchout');
+  running=true;out.textContent='';
+  window.LAST=[];
+  try{
+    if(!window.Tesseract) await loadScript(T_SRC);
+    if(!worker) worker=await Tesseract.createWorker('jpn+eng',1,{logger:m=>{if(/recogn/i.test(m.status))stat('인식 '+Math.round(m.progress*100)+'%');}});
+    const img=await loadImg(f);
+    for(let i=0;i<list.length;i++){
+      const c=list[i];
+      stat('('+(i+1)+'/'+list.length+') 전처리…');
+      const t0=performance.now();
+      const cv=computePrep(img,c.mode,c.scale,c.win||31,c.k==null?0.2:c.k,c.sharp||0);
+      const t1=performance.now();
+      await worker.setParameters({tessedit_pageseg_mode:String(c.psm||6),user_defined_dpi:String(c.dpi||300),preserve_interword_spaces:'1'});
+      const res=await worker.recognize(cv);
+      const t2=performance.now();
+      const txt=(res&&res.data&&res.data.text)||'';
+      const head='=== #'+i+' '+JSON.stringify(c)+' · prep '+(t1-t0|0)+'ms · ocr '+(t2-t1|0)+'ms · '+cv.width+'x'+cv.height+' ===\n';
+      out.textContent+=head+txt+'\n';
+      window.LAST.push({cfg:c,ms:(t2-t1)|0,txt:txt});
+      const pv=document.getElementById('cv');const sc=Math.min(1,520/cv.width);
+      pv.width=Math.round(cv.width*sc);pv.height=Math.round(cv.height*sc);
+      pv.getContext('2d').drawImage(cv,0,0,pv.width,pv.height);
+    }
+    stat('matrix done ('+list.length+'개)');
+  }catch(e){out.textContent+='ERR '+e.message;stat('ERR');}
+  finally{running=false;}
 };
 document.getElementById('parseBtn').onclick=()=>{
   try{ document.getElementById('parsed').textContent=JSON.stringify(testParse(document.getElementById('paste').value),null,1); }
