@@ -1263,6 +1263,7 @@ async function ocrLocalize(p){
 /* ───────── 🇯🇵 영수증 전줄 → 🇰🇷 한국어 해석 (가게 정보·품목·합계 모두) ───────── */
 const JA_RCPT_SEP = /^[-‐‑‒–—―ー_=~·・\s]{3,}$/;
 const JA_PH_BASE = 0xE000;
+const jaLineNorm = s => jaCleanStr(s);
 const JA_RCPT_UNIT = {mL:'mL',ml:'mL',ML:'mL',L:'L',kg:'kg',g:'g',点:'개',枚:'장',個:'개',本:'개',袋:'봉지',パック:'팩',セット:'세트',名:'명',人:'명'};
 const JA_WD_KO = {月:'월',火:'화',水:'수',木:'목',金:'금',土:'토',日:'일'};
 const JA_PAY_WORDS = /소계|소비세|합계|면세|대상액|받은 돈|거스름돈|포인트|카드\(신용\)|현금|결제|할인|환전|충전|환불|구매 수량/;
