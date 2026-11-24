@@ -162,6 +162,10 @@ details.ocr-raw>summary .sm{font-weight:700;color:#9AA8A1;font-size:10.5px;}
 .utab-row button{position:relative;flex:0 0 auto;border:none;background:none;padding:9px 10px 8px;font-size:12.5px;font-weight:800;color:var(--sub);font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;}
 .utab-row button.on{color:var(--green);}
 .utab-row button.on::after{content:'';position:absolute;left:6px;right:6px;bottom:-1px;height:2.5px;border-radius:2px;background:var(--green);}
+/* 일자 탭 3번째 줄 — 가로 스크롤(칩이 많아도 한 줄 유지) */
+.utab-row.drow{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain;}
+.utab-row.drow::-webkit-scrollbar{display:none;}
+.utab-row.drow .utab-g{position:sticky;left:0;z-index:1;background:var(--card);}
 /* 일자별 그룹 */
 .exp-day{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin:13px 0 0;padding:0 1px 5px;border-bottom:1.5px solid var(--green);}
 .exp-day:first-of-type{margin-top:10px;}
@@ -878,7 +882,7 @@ const CHECKS = [
   "📴 출국 전 와이파이에서 앱 한 번 열어 오프라인 저장(지도·매거진·면세 순서도)"
 ];
 
-let inW = 'shared', inP = 'cash', selCat = CATS[0], fW = 'all', fP = 'all', curDay = 0, mapDay = 0, mapObj = null;
+let inW = 'shared', inP = 'cash', selCat = CATS[0], fW = 'all', fP = 'all', fD = 'all', curDay = 0, mapDay = 0, mapObj = null;
 let budgets = JSON.parse(localStorage.getItem('os_bud_v1')||'null') || {shared:{cash:30000,card:50000}, personal:{cash:5000,card:34500}};
 let exps = JSON.parse(localStorage.getItem('os_exp_v1')||'[]');
 let chkState = JSON.parse(localStorage.getItem('os_chk_v1')||'{}');
@@ -977,12 +981,23 @@ function renderMoney(){
   document.getElementById('catSummaryCard').innerHTML = `<h3>📊 카테고리별 지출 합계</h3>` +
     CATS.map(c=>`<div class="row"><span>${c}</span><span><b>¥${byCat[c].toLocaleString()}</b> <span style="font-size:12px;color:var(--sub);">(${fmt(byCat[c])})</span></span></div>`).join('');
 
-  const flt = exps.filter(e => (fW==='all' || e.w===fW) && (fP==='all' || e.pay===fP));
+  /* 일자 탭 — 여행 4일 + 실제 입력된 다른 날짜 자동 추가 */
+  const daySet = new Set(['2026-11-28','2026-11-29','2026-11-30','2026-12-01']);
+  exps.forEach(e=>{ const k = dayKey(e); if(k) daySet.add(k); });
+  const dayLabel = iso => { const d = dateOfIso(iso); return d ? `${d.getMonth()+1}/${pad2(d.getDate())}(${WD_KO[d.getDay()]})` : '날짜 미지정'; };
+  const dayTabs = [...daySet].sort().map(k=>({val:k, label:dayLabel(k)}));
+  if(exps.some(e=>!dayKey(e))) dayTabs.push({val:'none', label:'날짜 미지정'});
+  if(fD!=='all' && !dayTabs.some(t=>t.val===fD)) fD = 'all';
+  const dayHit = e => fD==='all' ? true : (fD==='none' ? !dayKey(e) : dayKey(e)===fD);
+
+  /* 구분·결제·일자 3개 필터 AND 조합 */
+  const flt = exps.filter(e => (fW==='all' || e.w===fW) && (fP==='all' || e.pay===fP) && dayHit(e));
   const fltTot = sumAmt(flt);
   const chip = (group, val, label) => {
-    const on = (group==='w' ? fW : fP) === val;
-    const act = group==='w' ? `fW='${val}'` : `fP='${val}'`;
-    return `<button type="button" class="${on?'on':''}" aria-selected="${on}" onclick="${act};renderMoney()">${label}</button>`;
+    const cur = group==='w' ? fW : (group==='p' ? fP : fD);
+    const act = group==='w' ? 'fW' : (group==='p' ? 'fP' : 'fD');
+    const on = cur === val;
+    return `<button type="button" class="${on?'on':''}" aria-selected="${on}" onclick="${act}='${val}';renderMoney()">${label}</button>`;
   };
 
   /* 날짜 빠른 선택 — 여행 4일 */
@@ -1016,12 +1031,13 @@ function renderMoney(){
       <div class="dd">${dayTitle(k)}${tn?`<span class="dn">${tn}</span>`:''}</div>
       <div class="ds"><b>¥${sum.toLocaleString()}</b><span>약 ${fmt(sum)} · ${list.length}건</span></div>
     </div>` + list.map((e,i)=>expRow(e, i===list.length-1)).join('');
-  }).join('') : '<div style="font-size:13px;color:var(--sub);line-height:1.6;margin-top:9px;">아직 입력된 내역이 없어요. 위 <b>📷 영수증 촬영</b>이나 직접 입력으로 추가해 보세요!</div>';
+  }).join('') : (exps.length ? '<div style="font-size:13px;color:var(--sub);line-height:1.6;margin-top:9px;">이 조건에 맞는 내역이 없어요. 위 <b>구분·결제·일자</b> 필터를 바꿔 보세요!</div>' : '<div style="font-size:13px;color:var(--sub);line-height:1.6;margin-top:9px;">아직 입력된 내역이 없어요. 위 <b>📷 영수증 촬영</b>이나 직접 입력으로 추가해 보세요!</div>');
 
   document.getElementById('expListCard').innerHTML = `<h3>🧾 지출 내역 <span class="h3-sub">${flt.length}건 · ¥${fltTot.toLocaleString()} (약 ${fmt(fltTot)})</span></h3>
     <div class="flt">
       <div class="utab-row"><span class="utab-g">구분</span>${chip('w','all','전체')}${chip('w','shared','👥 공금')}${chip('w','personal','🙋‍♀️ 개인')}</div>
       <div class="utab-row"><span class="utab-g">결제</span>${chip('p','all','전체')}${chip('p','card','💳 카드')}${chip('p','cash','💴 현금')}</div>
+      <div class="utab-row drow"><span class="utab-g">일자</span>${chip('d','all','전체')}${dayTabs.map(t=>chip('d', t.val, t.label)).join('')}</div>
     </div>` + listHtml;
 }
 
@@ -1156,13 +1172,46 @@ function delExp(id){
   saveToast('🗑️ 삭제했어요 — 일자별 합계와 총액을 다시 계산했습니다');
 }
 function copyKakao(){
-  const sh = exps.filter(e=>e.w==='shared'), pe = exps.filter(e=>e.w!=='shared');
+  /* 카톡 공유용 — 공금 내역만. 개인 지출은 아예 넣지 않는다 */
+  const sh = exps.filter(e=>e.w==='shared');
+  const shTot = sumAmt(sh);
   const shCash = sumAmt(sh.filter(e=>e.pay==='cash')), shCard = sumAmt(sh.filter(e=>e.pay==='card'));
-  const tot = sumAmt(exps);
-  const rCash = budgets.shared.cash - shCash, rCard = budgets.shared.card - shCard;
-  const line = e => `- ${e.store||e.memo||e.cat}: ¥${(Number(e.amt)||0).toLocaleString()} (${e.pay==='cash'?'현금':'카드'})`;
-  let txt = `🇯🇵 오사카 가계부\n• 총 지출: ¥${tot.toLocaleString()} (약 ${fmt(tot)})\n• 공금: ¥${sumAmt(sh).toLocaleString()} (현금 ¥${shCash.toLocaleString()} / 카드 ¥${shCard.toLocaleString()})\n• 개인: ¥${sumAmt(pe).toLocaleString()}\n• 남은 공금: 현금 ¥${rCash.toLocaleString()} / 카드 ¥${rCard.toLocaleString()}\n\n[공금 내역]\n` +
-    (sh.length ? sh.map(line).join('\n') : '(아직 내역 없음)');
+  const b = budgets.shared || {cash:0, card:0};
+  const rCash = (Number(b.cash)||0) - shCash, rCard = (Number(b.card)||0) - shCard;
+  const L = [];
+  L.push('🇯🇵 오사카 가계부 · 공금 정산');
+  if(!sh.length){
+    L.push('💰 아직 공금 지출 내역이 없어요.');
+  } else {
+    L.push(`💰 공금 지출 ¥${shTot.toLocaleString()} (약 ${fmt(shTot)}) · ${sh.length}건`);
+    L.push(`   💳 카드 ¥${shCard.toLocaleString()} / 💴 현금 ¥${shCash.toLocaleString()}`);
+  }
+  L.push(`🏦 남은 공금 💴 ¥${rCash.toLocaleString()} / 💳 ¥${rCard.toLocaleString()}${(rCash<0||rCard<0)?' 🚨 초과':''}`);
+
+  if(sh.length){
+    /* 일자별 묶음 — 날짜 오름차순, 같은 날은 시간 오름차순(시간 없으면 뒤) */
+    const bucket = new Map();
+    sh.forEach(e=>{ const k = dayKey(e); if(!bucket.has(k)) bucket.set(k, []); bucket.get(k).push(e); });
+    const tMin = e => { const h = hmOf(e); return h ? (+h.slice(0,2))*60 + (+h.slice(3)) : 24*60+999; };
+    const keys = [...bucket.keys()].sort((a,b2)=> !a ? 1 : !b2 ? -1 : a.localeCompare(b2));
+    keys.forEach(k=>{
+      const list = bucket.get(k).slice().sort((a,b2)=> tMin(a)-tMin(b2) || (a.id||0)-(b2.id||0));
+      const sum = sumAmt(list), tn = tripDayNo(k);
+      L.push('');
+      L.push(`${dayTitle(k)}${tn?` · ${tn}`:''}`);
+      list.forEach(e=>{
+        const nm = String(e.store||e.cat||'지출').trim();
+        const memo = String(e.memo||'').replace(/\s+/g,' ').trim();
+        const mm = (memo && memo !== nm) ? ` (${memo.length > 40 ? memo.slice(0,40)+'…' : memo})` : '';
+        const hm = hmOf(e);
+        L.push(`   · ${hm?hm+' ':''}${nm}${mm} — ¥${(Number(e.amt)||0).toLocaleString()} (${e.pay==='cash'?'현금':'카드'})`);
+      });
+      L.push(`   └ 소계 ¥${sum.toLocaleString()} (약 ${fmt(sum)}) · ${list.length}건`);
+    });
+    L.push('');
+    L.push('— 공금만 모았어요 (개인 지출 제외)');
+  }
+  const txt = L.join('\n');
   const done = () => {
     document.getElementById('copyToast').textContent = '✅ 카톡에 바로 붙여넣을 수 있게 복사했어요!';
     setTimeout(()=>{ document.getElementById('copyToast').textContent=''; }, 3000);
@@ -2163,7 +2212,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v41';
+const SW_CACHE = 'osaka-planner-v42';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
