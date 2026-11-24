@@ -368,8 +368,11 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
       <div class="tgl-row" id="payPills"></div>
       <div class="pick-lbl">카테고리</div>
       <div class="cat-pills" id="catPills"></div>
-      <div class="pick-lbl">날짜 <span style="font-weight:700;color:#9AA8A1;">기본 오늘 · 영수증에서 읽으면 자동</span></div>
-      <input id="expDate" class="inp" type="date" style="margin-bottom:6px;font-weight:800;color:var(--ink);" oninput="dateTouched=true;renderMoney()"/>
+      <div class="pick-lbl">날짜 · 시간 <span style="font-weight:700;color:#9AA8A1;">기본 오늘 · 영수증에서 읽으면 자동</span></div>
+      <div style="display:flex;gap:8px;">
+        <input id="expDate" class="inp" type="date" style="flex:1.5;margin-bottom:6px;font-weight:800;color:var(--ink);" oninput="dateTouched=true;renderMoney()"/>
+        <input id="expTime" class="inp" type="time" style="flex:1;margin-bottom:6px;font-weight:800;color:var(--ink);" oninput="timeTouched=true"/>
+      </div>
       <div class="dayq" id="dayQuick"></div>
       <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
         <input id="expAmt" class="inp" type="text" inputmode="numeric" style="margin:0;flex:1;" placeholder="금액 (¥ 엔화)" oninput="formatAmtInput(this);updateKrwPreview()"/>
@@ -888,7 +891,7 @@ const sumAmt = arr => arr.reduce((a,e)=>a + (Number(e.amt)||0), 0);
 const pad2 = n => String(n).padStart(2,'0');
 const WD_KO = ['일','월','화','수','목','금','토'];
 const TRIP_FIRST = '2026-11-28', TRIP_LAST = '2026-12-01';
-let editingId = null, dateTouched = false;
+let editingId = null, dateTouched = false, timeTouched = false;
 function isoOfDate(d){ return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`; }
 function dateOfIso(s){
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s||''));
@@ -915,6 +918,16 @@ function setExpDate(iso){ const el = document.getElementById('expDate'); if(el) 
 function initExpDate(force){
   const el = document.getElementById('expDate'); if(!el) return;
   if(force || !el.value) el.value = isoOfDate(new Date());
+}
+function initExpTime(force){
+  const el = document.getElementById('expTime'); if(!el) return;
+  if(force || !el.value){ const d = new Date(); el.value = `${pad2(d.getHours())}:${pad2(d.getMinutes())}`; }
+}
+/* 저장된 내역의 시각(HH:MM) — 신형은 hm, 예전 내역은 time에서 빼쓴다 */
+function hmOf(e){
+  if(e && /^\d{1,2}:\d{2}$/.test(e.hm||'')){ const m = e.hm.match(/^(\d{1,2}):(\d{2})$/); return `${pad2(m[1])}:${m[2]}`; }
+  const m = String((e && e.time) || '').match(/(\d{1,2}):(\d{2})/);
+  return m ? `${pad2(m[1])}:${m[2]}` : '';
 }
 function updateDday(){
   const diff = Math.ceil((new Date('2026-11-28T00:00:00+09:00') - new Date()) / 86400000);
@@ -981,23 +994,23 @@ function renderMoney(){
     return `<button type="button" class="dchip ${dayVal===iso?'on':''}" onclick="setExpDate('${iso}')">${d.getMonth()+1}/${pad2(d.getDate())}<i>${WD_KO[d.getDay()]}</i></button>`;
   }).join('');
 
-  /* 일자별 그룹 — 날짜 최신순, 같은 날은 늦은 시간부터 */
+  /* 일자별 그룹 — 날짜 최신순, 같은 날 안에서는 시간 오름차순 */
   const bucket = new Map();
   flt.forEach(e=>{ const k = dayKey(e); if(!bucket.has(k)) bucket.set(k, []); bucket.get(k).push(e); });
-  const tMin = e => { const m = String(e.time||'').match(/(\d{1,2}):(\d{2})/); return m ? (+m[1])*60 + (+m[2]) : -1; };
+  const tMin = e => { const h = hmOf(e); return h ? (+h.slice(0,2))*60 + (+h.slice(3)) : 24*60+999; };
   const dayKeys = [...bucket.keys()].sort((a,b)=> !a ? 1 : !b ? -1 : b.localeCompare(a));
   const expRow = (e, last) => `
     <div class="exp-row${last?' last':''}">
       <div>
         <div class="et">${esc(e.store || e.memo || e.cat)}</div>
         ${e.store && e.memo ? `<div class="es memo">${esc(e.memo)}</div>` : ''}
-        <div class="es"><span class="bdg ${e.w==='shared'?'sh':'pe'}">${e.w==='shared'?'공금':'개인'}</span><span class="bdg ${e.pay==='card'?'card':'cash'}">${e.pay==='card'?'카드':'현금'}</span>${esc(e.cat)} · ${esc(String(e.time||'').replace(/^\d{1,2}\/\d{1,2}\s*/, '') || '시간 미지정')}</div>
+        <div class="es"><span class="bdg ${e.w==='shared'?'sh':'pe'}">${e.w==='shared'?'공금':'개인'}</span><span class="bdg ${e.pay==='card'?'card':'cash'}">${e.pay==='card'?'카드':'현금'}</span>${esc(e.cat)}${hmOf(e)?` · 🕐 ${hmOf(e)}`:' · 시간 미지정'}</div>
       </div>
       <div class="er"><b>¥${(Number(e.amt)||0).toLocaleString()}</b><span>약 ${fmt(e.amt)}</span>
         <div class="erbtn"><button type="button" class="edt" onclick="startEdit(${e.id})" aria-label="수정">✏️</button><button type="button" onclick="delExp(${e.id})" aria-label="삭제">✕</button></div></div>
     </div>`;
   const listHtml = dayKeys.length ? dayKeys.map(k=>{
-    const list = bucket.get(k).slice().sort((a,b)=> tMin(b)-tMin(a) || (b.id||0)-(a.id||0));
+    const list = bucket.get(k).slice().sort((a,b)=> tMin(a)-tMin(b) || (a.id||0)-(b.id||0));
     const sum = sumAmt(list), tn = tripDayNo(k);
     return `<div class="exp-day">
       <div class="dd">${dayTitle(k)}${tn?`<span class="dn">${tn}</span>`:''}</div>
@@ -1044,6 +1057,7 @@ function autoGrowMemo(){
 function clearExpInput(){
   const setV = (id, v)=>{ const el = document.getElementById(id); if(el) el.value = v; };
   setV('expAmt',''); setV('expStore',''); setV('expMemo','');
+  initExpTime(true); timeTouched = false;
   autoGrowMemo();
   updateKrwPreview();
   ocrFilled.store = ''; ocrFilled.memo = '';
@@ -1068,22 +1082,25 @@ function addExpense(){
   const dd = dateOfIso(dateIso) || new Date();
   const wasEdit = editingId != null;
   const target = wasEdit ? exps.find(e=>e.id===editingId) : null;
-  /* 시각은 기존 내역 것을 유지(수정 시), 새 내역이면 지금 시각 */
-  const oldHM = target ? String(target.time||'').match(/(\d{1,2}):(\d{2})/) : null;
+  /* 시간은 입력칸 값(기본 지금 · OCR은 영수증 시각) */
   const now = new Date();
-  const hm = oldHM ? `${pad2(oldHM[1])}:${oldHM[2]}` : `${pad2(now.getHours())}:${pad2(now.getMinutes())}`;
+  const nowHM = `${pad2(now.getHours())}:${pad2(now.getMinutes())}`;
+  const hmRaw = String((document.getElementById('expTime')||{}).value || '');
+  const hmMatch = hmRaw.match(/^(\d{1,2}):(\d{2})$/);
+  const hm = hmMatch ? `${pad2(hmMatch[1])}:${hmMatch[2]}` : nowHM;
   const time = `${dd.getMonth()+1}/${dd.getDate()} ${hm}`;
   if(wasEdit && target){
-    Object.assign(target, {w:inW, cat:selCat, pay:inP, amt, store, memo, day:dateIso, time});
+    Object.assign(target, {w:inW, cat:selCat, pay:inP, amt, store, memo, day:dateIso, hm, time});
   } else {
-    exps.push({id:Date.now(), w:inW, cat:selCat, pay:inP, amt, store, memo, day:dateIso, time});
+    exps.push({id:Date.now(), w:inW, cat:selCat, pay:inP, amt, store, memo, day:dateIso, hm, time});
   }
   localStorage.setItem('os_exp_v1', JSON.stringify(exps));
   document.getElementById('expAmt').value=''; document.getElementById('expStore').value=''; document.getElementById('expMemo').value='';
   ocrFilled.store = ''; ocrFilled.memo = '';
-  editingId = null; dateTouched = false;
+  editingId = null; dateTouched = false; timeTouched = false;
+  initExpTime(true);
   updateKrwPreview(); updateSaveBtn(); renderMoney();
-  saveToast(`${wasEdit?'💾 수정 저장!':'✅ 저장!'} ${dayTitle(dateIso).replace('📅 ','')} · ${inW==='shared'?'공금':'개인'} · ${inP==='card'?'카드':'현금'} · ¥${amt.toLocaleString()}`);
+  saveToast(`${wasEdit?'💾 수정 저장!':'✅ 저장!'} ${dayTitle(dateIso).replace('📅 ','')} ${hm} · ${inW==='shared'?'공금':'개인'} · ${inP==='card'?'카드':'현금'} · ¥${amt.toLocaleString()}`);
 }
 function startEdit(id){
   const t = exps.find(e=>e.id===id);
@@ -1097,7 +1114,9 @@ function startEdit(id){
   document.getElementById('expMemo').value = t.memo || '';
   const dayEl = document.getElementById('expDate');
   if(dayEl) dayEl.value = dayKey(t) || isoOfDate(new Date());
-  dateTouched = true;
+  const timeEl = document.getElementById('expTime');
+  if(timeEl) timeEl.value = hmOf(t) || '';
+  dateTouched = true; timeTouched = true;
   ocrFilled.store = ''; ocrFilled.memo = '';
   autoGrowMemo(); updateKrwPreview(); updateSaveBtn(); renderMoney();
   const card = document.getElementById('expFormCard');
@@ -1105,7 +1124,7 @@ function startEdit(id){
   saveToast('✏️ 수정 중 — 값을 고른 뒤 💾 수정 저장을 눌러 주세요');
 }
 function cancelEdit(){
-  editingId = null; dateTouched = false;
+  editingId = null; dateTouched = false; timeTouched = false;
   clearExpInput();
   updateSaveBtn();
   saveToast('↩️ 수정을 취소했어요 — 새 내역으로 입력합니다');
@@ -1642,6 +1661,31 @@ function parseReceiptDay(text){
   const near = found.filter(d=>Math.abs(d - today) < 400*86400000);
   return isoOfDate(near[0] || found[0]);
 }
+/* 영수증 시각 추출 — 20:14 / 20時14分 (날짜가 있는 줄 우선) */
+function parseReceiptTime(text){
+  const s = String(text||'').replace(/[０-９]/g, c=>String.fromCharCode(c.charCodeAt(0) - 0xFEE0));
+  const take = (h, mi)=>{
+    const hh = +h, mm = +mi;
+    if(!(hh>=0 && hh<=23) || !(mm>=0 && mm<=59)) return '';
+    return `${pad2(hh)}:${pad2(mm)}`;
+  };
+  const lines = s.split(/\r?\n/);
+  const dateRe = /((?:19|20)\d{2}\s*[年\/.\-]\s*\d{1,2}\s*[月\/.\-]\s*\d{1,2})|(\d{1,2}\s*月\s*\d{1,2}\s*日)/;
+  for(const line of lines){
+    if(!dateRe.test(line)) continue;
+    const m = line.match(/(\d{1,2}):(\d{2})/);
+    if(m){ const t = take(m[1], m[2]); if(t) return t; }
+    const j = line.match(/(\d{1,2})\s*時\s*(\d{1,2})\s*分?/);
+    if(j){ const t = take(j[1], j[2]); if(t) return t; }
+  }
+  const jm = s.match(/(\d{1,2})\s*時\s*(\d{1,2})\s*分/);
+  if(jm){ const t = take(jm[1], jm[2]); if(t) return t; }
+  for(const line of lines.slice(0, 10)){
+    const m = line.match(/(?:^|\s)(\d{1,2}):(\d{2})(?::\d{2})?(?:\s|$)/);
+    if(m){ const t = take(m[1], m[2]); if(t) return t; }
+  }
+  return '';
+}
 function parseReceipt(raw){
   const norm = String(raw||'')
     .replace(/[０-９]/g, c=>String.fromCharCode(c.charCodeAt(0) - 0xFEE0))
@@ -1741,7 +1785,7 @@ function parseReceipt(raw){
   else if(/電車|タクシー|切符|乗車|運賃|バス|ICカード/.test(guessText)) cat = CATS[2];
   else if(/入場|チケット|USJ|ユニバーサル|美術館|ミュージアム/.test(guessText)) cat = CATS[1];
 
-  return {amount, store, memo, items: items.slice(), itemRows: itemRows.slice(), cat, date: parseReceiptDay(norm), text: norm};
+  return {amount, store, memo, items: items.slice(), itemRows: itemRows.slice(), cat, date: parseReceiptDay(norm), time: parseReceiptTime(norm), text: norm};
 }
 function ocrFillForm(p, text){
   const filled = [];
@@ -1754,6 +1798,10 @@ function ocrFillForm(p, text){
   if(p.date && !dateTouched){
     const dEl = document.getElementById('expDate');
     if(dEl && dEl.value !== p.date){ dEl.value = p.date; filled.push('🗓️ 날짜'); }
+  }
+  if(p.time && !timeTouched){
+    const tEl = document.getElementById('expTime');
+    if(tEl && tEl.value !== p.time){ tEl.value = p.time; filled.push('🕐 시간'); }
   }
   if(p.store){
     const cur = storeEl.value.trim();
@@ -1802,8 +1850,9 @@ function ocrFillForm(p, text){
 
   const thumb = document.getElementById('ocrThumb');
   thumb.style.display = 'flex';
+  const when = [p.date ? `${p.date.slice(5,7)}/${p.date.slice(8,10)}` : '', p.time || ''].filter(Boolean).join(' ');
   document.getElementById('ocrThumbTxt').innerHTML = p.amount
-    ? `<b>합계 ¥${p.amount.toLocaleString()}</b><br/>${esc(p.store || '가게명 미확인')}`
+    ? `<b>합계 ¥${p.amount.toLocaleString()}</b><br/>${esc(p.store || '가게명 미확인')}${when?`<br/>🗓️ ${esc(when)}`:''}`
     : '금액을 못 찾았어요<br/>아래 원문을 보거나 직접 입력하세요';
 
   if(filled.length) ocrSetStatus(`✅ ${filled.join(' · ')} 자동 입력(한국어) 완료! <b>확인 → 구분(공금/개인)·결제(카드/현금) 고르고 저장</b>하세요.`, null);
@@ -2114,7 +2163,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v40';
+const SW_CACHE = 'osaka-planner-v41';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
@@ -2237,7 +2286,7 @@ function goTab(id, btn){
   if(id==='mag') magInit();
 }
 
-updateDday(); initExpDate(true); updateSaveBtn(); renderMoney(); renderPlan(); renderChecks(); renderPlaces(); renderTaxChecks();
+updateDday(); initExpDate(true); initExpTime(true); updateSaveBtn(); renderMoney(); renderPlan(); renderChecks(); renderPlaces(); renderTaxChecks();
 updateOffBadge(); setTimeout(updateOffBadge, 2500); setTimeout(updateOffBadge, 7000);
 if(!isOffline()) setTimeout(()=>ensureOffline(false), 1500);
 if(FORCE_OFFLINE) setTimeout(()=>{ syncOnlineLayer(); offToast('오프라인 모드로 열었어요 (저장된 지도만 표시)'); }, 1200);
