@@ -1269,9 +1269,11 @@ const JA_WD_KO = {月:'월',火:'화',水:'수',木:'목',金:'금',土:'토',�
 const JA_PAY_WORDS = /소계|소비세|합계|면세|대상액|받은 돈|거스름돈|포인트|카드\(신용\)|현금|결제|할인|환전|충전|환불/;
 
 function jaRcptPrep(raw){
-  const s = jaLineNorm(raw);
-  if(!s) return null;
-  if(JA_RCPT_SEP.test(s)) return {sep: true, raw: raw};
+  const s0 = jaLineNorm(raw);
+  if(!s0) return null;
+  if(JA_RCPT_SEP.test(s0)) return {sep: true, raw: raw};
+  /* OCR이 "3, 627"처럼 숫자 사이를 벌린 것 되돌리기 */
+  const s = s0.replace(/(\d)\s*,\s*(\d)/g, '$1,$2');
   const ph = [];
   const add = (t, num)=>{ ph.push({t: String(t), num: !!num}); return String.fromCharCode(JA_PH_BASE + ph.length - 1); };
   let w = s;
@@ -1325,11 +1327,12 @@ function jaRcptLineText(prep, tr){
     let t = p.ko != null ? p.ko : (p.ja != null ? (tr[p.ja] || p.ja) : (p.num != null ? p.num : (p.raw || '')));
     t = String(t == null ? '' : t).trim();
     if(!t) return;
+    if(/^[_\\|~^`'"·・\-]+$/.test(t)) return;
     const attach = (p.ko != null && JA_ATTACH_KO.has(p.ko)) || /^[)）\],.·%]/.test(t);
     const noSpace = !out || attach || /[([（]$/.test(out);
     out += (noSpace ? '' : ' ') + t;
   });
-  return out.replace(/\s+/g, ' ').replace(/\s+([)\]},.])/g, '$1').trim();
+  return out.replace(/\s+/g, ' ').replace(/\s+([)\]},.])/g, '$1').replace(/[\s_\\|~]+$/, '').trim();
 }
 /* 영수증 전체 줄을 한국어로 — {grp: store|items|pay|note, kr, amt, cur, won} */
 async function ocrTranslateReceipt(lines){
