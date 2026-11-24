@@ -1268,9 +1268,16 @@ function copyKakao(){
       L.push('');
       L.push(`${dayTitle(k)}${tn?` · ${tn}`:''}`);
       list.forEach(e=>{
-        const nm = String(e.store||e.cat||'지출').trim();
-        const memo = String(e.memo||'').replace(/\s+/g,' ').trim();
-        const mm = (memo && memo !== nm) ? ` (${memo.length > 40 ? memo.slice(0,40)+'…' : memo})` : '';
+        const memoLines = String(e.memo||'').split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+        let nm = String(e.store||'').trim();
+        let extra = memoLines;
+        if(!nm && memoLines.length){           /* 가게명이 없으면 메모 첫 항목을 이름으로 */
+          nm = memoLines[0].replace(/^[•·]\s*/, '');
+          extra = memoLines.slice(1);
+        }
+        if(!nm) nm = String(e.cat || '지출');
+        const ex = extra.join(' · ');
+        const mm = ex ? ` (${ex.length > 40 ? ex.slice(0,40)+'…' : ex})` : '';
         const hm = hmOf(e);
         L.push(`   · ${hm?hm+' ':''}${nm}${mm} — ¥${(Number(e.amt)||0).toLocaleString()} (${e.pay==='cash'?'현금':'카드'})`);
       });
@@ -2282,7 +2289,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v44';
+const SW_CACHE = 'osaka-planner-v45';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
