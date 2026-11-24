@@ -133,26 +133,6 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
 .tabbar.tight .tab .ico{font-size:19px;}
 
 
-/* Personal Donki list styles */
-.donki-card{border-color:var(--org)!important}
-.donki-head{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
-.donki-head h3{margin:0 0 5px}
-.donki-head p,.donki-foot{font-size:12px;line-height:1.5;color:var(--sub);margin:0 0 10px}
-.donki-form{display:grid;gap:8px;margin:12px 0}
-.donki-form input{box-sizing:border-box;width:100%;min-width:0;border:1px solid var(--line);border-radius:10px;padding:11px 12px;background:var(--card);color:var(--text);font:inherit;font-size:14px}
-.donki-fields{display:grid;grid-template-columns:2fr 1fr;gap:8px}
-.donki-add{width:100%;justify-content:center;padding:11px}
-.donki-summary{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-weight:700;font-size:13px;padding:10px 0;border-top:1px solid var(--line)}
-.donki-items{display:grid;gap:8px}
-.donki-item{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:9px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px}
-.donki-item input[type=checkbox]{width:18px;height:18px;accent-color:var(--org)}
-.donki-item.done .donki-name{text-decoration:line-through;opacity:.55}
-.donki-name{font-weight:700;font-size:14px;overflow-wrap:anywhere}
-.donki-detail{font-size:12px;color:var(--sub);margin-top:3px;overflow-wrap:anywhere}
-.donki-delete{border:0;background:transparent;color:var(--sub);font-size:18px;padding:5px;cursor:pointer}
-.donki-actions{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
-.donki-foot{margin:8px 0 0}
-
 </style>
 </head>
 <body>
@@ -233,30 +213,6 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
 
   <!-- 4. 위시·면세·체크 -->
   <section id="tab-wish" class="hidden">
-    <!-- 개인 돈키호테 쇼핑리스트: 이 영역만 추가 -->
-    <div class="sec-card donki-card">
-      <div class="donki-head">
-        <div><h3>🛍️ 내 돈키호테 쇼핑 리스트</h3><p>상품을 직접 추가하고 구매 체크해요. 목록은 이 기기·브라우저에 저장됩니다.</p></div>
-        <a class="act-btn map" href="https://hyeeat0001.pages.dev/" target="_blank" rel="noopener">혜잇 리스트 참고 ↗</a>
-      </div>
-      <div class="donki-form">
-        <input id="donkiName" type="text" placeholder="상품명 (예: 곤약젤리)" aria-label="상품명">
-        <div class="donki-fields">
-          <input id="donkiPrice" type="number" min="0" step="1" placeholder="가격(엔)" aria-label="가격 엔">
-          <input id="donkiQty" type="number" min="1" step="1" value="1" aria-label="수량">
-        </div>
-        <input id="donkiMemo" type="text" placeholder="메모 (선택: 맛, 색상, 누구 선물 등)" aria-label="메모">
-        <button class="act-btn org donki-add" type="button" onclick="donkiAddItem()">＋ 상품 추가</button>
-      </div>
-      <div class="donki-summary"><span id="donkiCount">0개</span><span id="donkiTotal">합계 ¥0 · 약 ₩0</span></div>
-      <div id="donkiItems" class="donki-items"></div>
-      <div class="donki-actions">
-        <button class="act-btn" type="button" onclick="donkiClearBought()">구매한 항목 지우기</button>
-        <button class="act-btn" type="button" onclick="donkiClearAll()">목록 비우기</button>
-      </div>
-      <p class="donki-foot">※ 혜잇의 상품 정보·사진을 복사하지 않고, 참고 링크만 연결했어요. 환산은 앱의 환율 설정과 별개로 100엔≈849원 기준의 대략적인 금액입니다.</p>
-    </div>
-
     <div class="sec-card" style="background:var(--orgbg);border-color:var(--org);">
       <h3 style="color:var(--org);">🚨 2026-11 개편 일본 면세 주의!</h3>
       <div style="font-size:13px;line-height:1.55;color:#5A3118;">
@@ -934,47 +890,6 @@ document.addEventListener('keydown', e=>{
   if(e.key === 'ArrowRight') magOvStep(1);
   if(e.key === 'ArrowLeft') magOvStep(-1);
 });
-
-/* Personal Donki list functions */
-const DONKI_STORAGE_KEY = 'osaka_donki_personal_list_v1';
-function donkiLoad(){try{return JSON.parse(localStorage.getItem(DONKI_STORAGE_KEY)||'[]')}catch(e){return []}}
-function donkiSave(items){try{localStorage.setItem(DONKI_STORAGE_KEY,JSON.stringify(items))}catch(e){}}
-function donkiRender(){
-  const items=donkiLoad(), host=document.getElementById('donkiItems');
-  if(!host)return;
-  host.innerHTML='';
-  let total=0, count=0;
-  items.forEach((it,i)=>{
-    const qty=Math.max(1,Number(it.qty)||1), price=Math.max(0,Number(it.price)||0);
-    if(!it.done){total+=price*qty;count+=qty}
-    const row=document.createElement('div'); row.className='donki-item'+(it.done?' done':'');
-    const check=document.createElement('input');check.type='checkbox';check.checked=!!it.done;check.setAttribute('aria-label','구매 완료');
-    check.addEventListener('change',()=>{const a=donkiLoad();a[i].done=check.checked;donkiSave(a);donkiRender()});
-    const info=document.createElement('div');
-    const name=document.createElement('div');name.className='donki-name';name.textContent=it.name||'상품';
-    const detail=document.createElement('div');detail.className='donki-detail';detail.textContent='¥'+price.toLocaleString('ja-JP')+' × '+qty+(it.memo?' · '+it.memo:'');
-    info.append(name,detail);
-    const del=document.createElement('button');del.className='donki-delete';del.type='button';del.textContent='×';del.setAttribute('aria-label','상품 삭제');
-    del.addEventListener('click',()=>{const a=donkiLoad();a.splice(i,1);donkiSave(a);donkiRender()});
-    row.append(check,info,del);host.append(row);
-  });
-  document.getElementById('donkiCount').textContent=count+'개';
-  document.getElementById('donkiTotal').textContent='합계 ¥'+total.toLocaleString('ja-JP')+' · 약 ₩'+Math.round(total*8.49).toLocaleString('ko-KR');
-  if(!items.length){const empty=document.createElement('p');empty.className='donki-foot';empty.textContent='아직 상품이 없어요. 위에서 사고 싶은 상품을 추가해 보세요.';host.append(empty)}
-}
-function donkiAddItem(){
-  const name=document.getElementById('donkiName').value.trim();
-  if(!name){document.getElementById('donkiName').focus();return}
-  const price=Math.max(0,Number(document.getElementById('donkiPrice').value)||0);
-  const qty=Math.max(1,Math.floor(Number(document.getElementById('donkiQty').value)||1));
-  const memo=document.getElementById('donkiMemo').value.trim();
-  const items=donkiLoad();items.push({name,price,qty,memo,done:false});donkiSave(items);
-  document.getElementById('donkiName').value='';document.getElementById('donkiPrice').value='';document.getElementById('donkiQty').value='1';document.getElementById('donkiMemo').value='';
-  donkiRender();
-}
-function donkiClearBought(){donkiSave(donkiLoad().filter(x=>!x.done));donkiRender()}
-function donkiClearAll(){if(confirm('쇼핑 리스트를 모두 비울까요?')){donkiSave([]);donkiRender()}}
-document.addEventListener('DOMContentLoaded',donkiRender);
 
 </script>
 
