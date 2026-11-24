@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OCR Lab (dev)</title>
+<style>
+body{font:13px/1.45 -apple-system,system-ui,sans-serif;margin:0;padding:10px;background:#f6f7f5;color:#193a2c}
+h1{font-size:15px;margin:0 0 8px}
+.row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+select,input,button{font:inherit;padding:4px 6px;border:1px solid #bcd;border-radius:6px;background:#fff}
+button{background:#1f7a4d;color:#fff;border:0;padding:6px 12px;font-weight:700}
+pre{background:#101815;color:#c9f7d9;padding:8px;border-radius:8px;overflow:auto;font-size:11px;line-height:1.35;max-height:60vh;white-space:pre-wrap}
+canvas{max-width:100%;border:1px solid #999}
+#stat{font-weight:700;color:#0a6}
+</style>
+</head>
+<body>
+<h1>OCR Lab — 실제 종이 영수증 튜닝용 임시 페이지</h1>
+<div class="row">
+  <input type="file" id="f" accept="image/*">
+  <select id="mode">
+    <option value="norm">norm (gray)</option>
+    <option value="sauvola">norm+sauvola</option>
+    <option value="global">norm+global</option>
+    <option value="stretch">stretch (Old)</option>
+  </select>
+  <label>scale <select id="scale"><option>2</option><option>2.5</option><option selected>3</option><option>3.5</option><option>4</option></select></label>
+  <label>win <select id="win"><option>15</option><option>21</option><option selected>31</option><option>41</option><option>61</option></select></label>
+  <label>k <input id="k" value="0.2" size="4"></label>
+  <label>sharp <select id="sharp"><option value="0">0</option><option value="0.6" selected>0.6</option><option value="1">1.0</option></select></label>
+  <label>psm <select id="psm"><option>3</option><option>4</option><option selected>6</option><option>11</option></select></label>
+  <label>dpi <select id="dpi"><option>150</option><option selected>300</option><option>400</option></select></label>
+  <button id="run">RUN OCR</button>
+</div>
+<div id="stat"></div>
+<div class="row"><canvas id="cv"></canvas></div>
+<pre id="raw">(raw text)</pre>
+<div class="row"><textarea id="paste" rows="6" style="width:100%">(붙여넣은 원문)</textarea></div>
+<button id="parseBtn">TEST PARSE</button>
+<pre id="parsed"></pre>
+<script>
+const T_SRC='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.async=true;s.onload=res;s.onerror=()=>rej(new Error('load'));document.head.appendChild(s);});}
+let worker=null, running=false;
+const stat=m=>{document.getElementById('stat').textContent=m;};
+function loadImg(file){return new Promise((res,rej)=>{const u=URL.createObjectURL(file);const im=new Image();im.onload=()=>{URL.revokeObjectURL(u);res(im);};im.onerror=()=>{URL.revokeObjectURL(u);rej(new Error('img'));};im.src=u;});}
+function toGray(img,w,h){
+  const cv=document.createElement('canvas');cv.width=w;cv.height=h;
+  const ctx=cv.getContext('2d',{willReadFrequently:true});
+  ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);
+  ctx.drawImage(img,0,0,w,h);
+  const d=ctx.getImageData(0,0,w,h),p=d.data,n=w*h,g=new Float32Array(n);
+  for(let i=0,j=0;i<n;i++,j+=4) g[i]=p[j]*0.299+p[j+1]*0.587+p[j+2]*0.114;
+  return {cv,ctx,d,g};
+}
+/* 큰 반경 박스 평균(가로→세로 2패스, 가장자리 clamp) */
+function boxFilter(src,w,h,r){
+  const tmp=new Float32Array(w*h),out=new Float32Array(w*h),d=2*r+1;
+  for(let y=0;y<h;y++){
+    const o=y*w;let s=0;
+    for(let x=-r;x<=r;x++) s+=src[o+Math.min(w-1,Math.max(0,x))];
+    for(let x=0;x<w;x++){
+      tmp[o+x]=s/d;
+      s+=src[o+Math.min(w-1,x+r+1)]-src[o+Math.max(0,x-r)];
+    }
+  }
+  for(let x=0;x<w;x++){
+    let s=0;
+    for(let y=-r;y<=r;y++) s+=tmp[Math.min(h-1,Math.max(0,y))*w+x];
+    for(let y=0;y<h;y++){
+      out[y*w+x]=s/d;
+      s+=tmp[Math.min(h-1,y+r+1)*w+x]-tmp[Math.max(0,y-r)*w+x];
+    }
+  }
+  return out;
+}
+/* 배경 밝기 추정: 1/8 블록 평균 → 블록 블러 → 양선형 업샘플 */
+function bgEstimate(g,w,h,bs,r){
+  const bw=Math.ceil(w/bs),bh=Math.ceil(h/bs),small=new Float32Array(bw*bh),cnt=new Float32Array(bw*bh);
+  for(let y=0;y<h;y++){const by=(y/bs)|0,o=y*w;for(let x=0;x<w;x++){const k=by*bw+((x/bs)|0);small[k]+=g[o+x];cnt[k]++;}}
+  for(let i=0;i<small.length;i++) small[i]/=(cnt[i]||1);
+  const sm=boxFilter(small,bw,bh,r),out=new Float32Array(w*h);
+  for(let y=0;y<h;y++){
+    const fy=y/bs-0.5,y0=Math.max(0,Math.min(bh-1,Math.floor(fy))),y1=Math.min(bh-1,y0+1),ty=Math.min(1,Math.max(0,fy-y0));
+    for(let x=0;x<w;x++){
+      const fx=x/bs-0.5,x0=Math.max(0,Math.min(bw-1,Math.floor(fx))),x1=Math.min(bw-1,x0+1),tx=Math.min(1,Math.max(0,fx-x0));
+      const a=sm[y0*bw+x0],b=sm[y0*bw+x1],c=sm[y1*bw+x0],e=sm[y1*bw+x1];
+      out[y*w+x]=(a*(1-tx)+b*tx)*(1-ty)+(c*(1-tx)+e*tx)*ty;
+    }
+  }
+  return out;
+}
+function stretchOld(g){
+  const n=g.length,hist=new Uint32Array(256);
+  for(let i=0;i<n;i++) hist[Math.min(255,Math.max(0,g[i]|0))]++;
+  let lo=0,hi=255,acc=0;
+  for(let v=0;v<256;v++){acc+=hist[v];if(acc>n*0.03){lo=v;break;}}
+  acc=0;
+  for(let v=255;v>=0;v--){acc+=hist[v];if(acc>n*0.03){hi=v;break;}}
+  if(hi-lo<50){lo=0;hi=255;}
+  const span=Math.max(1,hi-lo);
+  for(let i=0;i<n;i++){let v=(g[i]-lo)*255/span;v=v*1.06;g[i]=v>245?255:(v<0?0:(v>255?255:v));}
+}
+function sharpen(g,w,h,r,amt){
+  const b=boxFilter(g,w,h,r);
+  for(let i=0;i<g.length;i++){let v=g[i]+amt*(g[i]-b[i]);g[i]=v<0?0:(v>255?255:v);}
+}
+function computePrep(img,mode,scale,win,k,sharp){
+  const w=Math.round(img.naturalWidth*scale),h=Math.round(img.naturalHeight*scale);
+  const {cv,ctx,d,g}=toGray(img,w,h);
+  if(mode==='stretch'){ stretchOld(g); if(sharp) sharpen(g,w,h,2,sharp); }
+  else{
+    const bg=bgEstimate(g,w,h,8,2);
+    const target=190;
+    for(let i=0;i<g.length;i++){const b=Math.max(bg[i],18);let v=g[i]/b*target;g[i]=v<0?0:(v>255?255:v);}
+    if(mode==='sauvola'){
+      const r=(win-1)/2;
+      const m=boxFilter(g,w,h,r);
+      const g2=new Float32Array(g.length);for(let i=0;i<g.length;i++)g2[i]=g[i]*g[i];
+      const s2=boxFilter(g2,w,h,r);
+      for(let i=0;i<g.length;i++){
+        const mean=m[i],sd=Math.sqrt(Math.max(0,s2[i]-mean*mean));
+        const T=mean*(1+k*(sd/128-1));
+        g[i]=g[i]>T?255:0;
+      }
+    } else if(mode==='global'){
+      const hist=new Uint32Array(256);
+      for(let i=0;i<g.length;i++) hist[g[i]|0]++;
+      let acc=0,paper=255;
+      for(let v=255;v>=0;v--){acc+=hist[v];if(acc>g.length*0.12){paper=v;break;}}
+      const T=paper*0.62;
+      for(let i=0;i<g.length;i++) g[i]=g[i]>T?255:0;
+    } else if(sharp){ sharpen(g,w,h,2,sharp); }
+  }
+  for(let i=0,j=0;i<g.length;i++,j+=4){const v=g[i]|0;d.data[j]=d.data[j+1]=d.data[j+2]=v;d.data[j+3]=255;}
+  ctx.putImageData(d,0,0);
+  return cv;
+}
+document.getElementById('run').onclick=async()=>{
+  if(running) return;
+  const f=document.getElementById('f').files[0];
+  if(!f){stat('파일을 먼저 고르세요');return;}
+  running=true;
+  try{
+    const mode=document.getElementById('mode').value,scale=+document.getElementById('scale').value;
+    const win=+document.getElementById('win').value,k=parseFloat(document.getElementById('k').value)||0.2;
+    const sharp=parseFloat(document.getElementById('sharp').value)||0;
+    const psm=document.getElementById('psm').value,dpi=document.getElementById('dpi').value;
+    stat('전처리 중…');
+    const t0=performance.now();
+    const img=await loadImg(f);
+    const cv=computePrep(img,mode,scale,win,k,sharp);
+    const t1=performance.now();
+    /* 미리보기(축소) */
+    const pv=document.getElementById('cv');const maxw=520;const sc=Math.min(1,maxw/cv.width);
+    pv.width=Math.round(cv.width*sc);pv.height=Math.round(cv.height*sc);
+    pv.getContext('2d').drawImage(cv,0,0,pv.width,pv.height);
+    stat('전처리 '+(t1-t0|0)+'ms · '+cv.width+'x'+cv.height+' · 엔진 준비…');
+    if(!window.Tesseract) await loadScript(T_SRC);
+    if(!worker){
+      worker=await Tesseract.createWorker('jpn+eng',1,{logger:m=>{if(/recogn/i.test(m.status))stat('전처리 '+(t1-t0|0)+'ms · 인식 '+Math.round(m.progress*100)+'%');}});
+    }
+    await worker.setParameters({tessedit_pageseg_mode:psm,user_defined_dpi:dpi,preserve_interword_spaces:'1'});
+    stat('인식 중… '+cv.width+'x'+cv.height);
+    const res=await worker.recognize(cv);
+    const t2=performance.now();
+    const txt=(res&&res.data&&res.data.text)||'';
+    document.getElementById('raw').textContent=txt;
+    stat(`done · prep ${(t1-t0|0)}ms · ocr ${(t2-t1|0)}ms · ${cv.width}x${cv.height} · mode=${mode} s=${scale} win=${win} k=${k} sharp=${sharp} psm=${psm} dpi=${dpi}`);
+  }catch(e){
+    stat('ERR '+e.message);
+    document.getElementById('raw').textContent=String(e&&e.stack||e);
+  }finally{running=false;}
+};
+document.getElementById('parseBtn').onclick=()=>{
+  try{ document.getElementById('parsed').textContent=JSON.stringify(testParse(document.getElementById('paste').value),null,1); }
+  catch(e){ document.getElementById('parsed').textContent='ERR '+e.message; }
+};
+</script>
+</body>
+</html>
