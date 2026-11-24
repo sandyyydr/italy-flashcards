@@ -31,17 +31,18 @@ canvas{max-width:100%;border:1px solid #999}
   <label>sharp <select id="sharp"><option value="0">0</option><option value="0.6" selected>0.6</option><option value="1">1.0</option></select></label>
   <label>psm <select id="psm"><option>3</option><option>4</option><option selected>6</option><option>11</option></select></label>
   <label>dpi <select id="dpi"><option>150</option><option selected>300</option><option>400</option></select></label>
+  <label>crop <select id="crop"><option value="1" selected>on</option><option value="0">off</option></select></label>
   <button id="run">RUN OCR</button>
 </div>
 <div id="stat"></div>
 <div class="row">
   <textarea id="matrix" rows="7" style="width:100%;font-size:11px">[
- {"mode":"sauvola","scale":3,"win":31,"k":0.2,"sharp":0,"psm":6,"dpi":300},
- {"mode":"sauvola","scale":3,"win":61,"k":0.2,"sharp":0,"psm":6,"dpi":300},
- {"mode":"global","scale":3,"win":31,"k":0.2,"sharp":0,"psm":6,"dpi":300},
- {"mode":"norm","scale":3,"win":31,"k":0.2,"sharp":1,"psm":4,"dpi":300},
- {"mode":"sauvola","scale":4,"win":61,"k":0.2,"sharp":0,"psm":4,"dpi":300},
- {"mode":"sauvola","scale":3,"win":41,"k":0.3,"sharp":0,"psm":11,"dpi":300}
+ {"mode":"sauvola","scale":4,"win":61,"k":0.2,"psm":4,"crop":1},
+ {"mode":"sauvola","scale":5,"win":41,"k":0.2,"psm":6,"crop":1},
+ {"mode":"norm","scale":5,"win":31,"k":0.2,"sharp":1,"psm":4,"crop":1},
+ {"mode":"global","scale":5,"win":31,"k":0.2,"psm":6,"crop":1},
+ {"mode":"sauvola","scale":6,"win":61,"k":0.25,"psm":6,"crop":1},
+ {"mode":"sauvola","scale":5,"win":41,"k":0.2,"psm":4,"crop":0}
 ]</textarea>
   <button id="batch">RUN MATRIX</button>
 </div>
@@ -119,19 +120,103 @@ function sharpen(g,w,h,r,amt){
   const b=boxFilter(g,w,h,r);
   for(let i=0;i<g.length;i++){let v=g[i]+amt*(g[i]-b[i]);g[i]=v<0?0:(v>255?255:v);}
 }
-function computePrep(img,mode,scale,win,k,sharp){
-  const w=Math.round(img.naturalWidth*scale),h=Math.round(img.naturalHeight*scale);
-  const {cv,ctx,d,g}=toGray(img,w,h);
-  if(mode==='stretch'){ stretchOld(g); if(sharp) sharpen(g,w,h,2,sharp); }
+function computePrep(img,mode,scale,win,k,sharp,crop){
+  /* 1) 작은 복사본에서 영수증 영역 찾기 (원본 좌표로 환산) */
+  let rect=null;
+  if(crop){
+    const dw=Math.min(img.naturalWidth,760), dh=Math.max(1,Math.round(img.naturalHeight*dw/img.naturalWidth));
+    const sm=toGray(img,dw,dh);
+    const bgs=bgEstimate(sm.g,dw,dh,8,2);
+    const t=new Float32Array(sm.g.length);
+    for(let i=0;i<sm.g.length;i++){const b=Math.max(bgs[i],18);let v=sm.g[i]/b*190;t[i]=v<0?0:(v>255?255:v);}
+    const r=autoCropRect(t,dw,dh);
+    if(r && (r.w*r.h)/(dw*dh) < 0.94){
+      const fx=img.naturalWidth/dw, fy=img.naturalHeight/dh;
+      rect={x:Math.max(0,Math.round(r.x*fx)),y:Math.max(0,Math.round(r.y*fy)),w:Math.round(r.w*fx),h:Math.round(r.h*fy)};
+    }
+  }
+  /* 2) 크롭(있으면) + 확대 렌더 */
+  let sw,sh,sx,sy;
+  if(rect){ sx=rect.x;sy=rect.y;sw=rect.w;sh=rect.h; } else { sx=0;sy=0;sw=img.naturalWidth;sh=img.naturalHeight; }
+  let S=scale;
+  const MAXPX=11e6;
+  while(sw*S*sh*S>MAXPX && S>1) S=Math.max(1,S-0.5);
+  const W=Math.max(1,Math.round(sw*S)), H=Math.max(1,Math.round(sh*S));
+  const cv=document.createElement('canvas');cv.width=W;cv.height=H;
+  const ctx=cv.getContext('2d',{willReadFrequently:true});
+  ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
+  ctx.drawImage(img,sx,sy,sw,sh,0,0,W,H);
+  const d=ctx.getImageData(0,0,W,H),p=d.data,n=W*H,g=new Float32Array(n);
+  for(let i=0,j=0;i<n;i++,j+=4) g[i]=p[j]*0.299+p[j+1]*0.587+p[j+2]*0.114;
+  const out=finishPrep(cv,ctx,d,g,mode,win,k,sharp,rect);
+  out.dataset.zoom=String(S);
+  return out;
+}
+/* 텍스트 밀도(블록 표준편차)로 영수증 영역 bbox 추정 */
+function autoCropRect(t,w,h){
+  const bs=16,bw=Math.floor(w/bs),bh=Math.floor(h/bs);
+  if(bw<4||bh<4) return null;
+  const sd=new Float32Array(bw*bh);
+  for(let by=0;by<bh;by++){
+    for(let bx=0;bx<bw;bx++){
+      let s=0,s2=0,n=0;
+      for(let y=by*bs;y<(by+1)*bs;y++){const o=y*w;for(let x=bx*bs;x<(bx+1)*bs;x++){const v=t[o+x];s+=v;s2+=v*v;n++;}}
+      const m=s/n;sd[by*bw+bx]=Math.sqrt(Math.max(0,s2/n-m*m));
+    }
+  }
+  const TH=26;
+  const mask=new Uint8Array(bw*bh);
+  for(let i=0;i<mask.length;i++) mask[i]=sd[i]>TH?1:0;
+  /* 팽창 2블록 */
+  const dil=new Uint8Array(bw*bh);
+  for(let by=0;by<bh;by++)for(let bx=0;bx<bw;bx++){
+    let v=0;
+    for(let dy=-2;dy<=2&&!v;dy++)for(let dx=-2;dx<=2;dx++){const y=by+dy,x=bx+dx;if(y<0||x<0||y>=bh||x>=bw)continue;if(mask[y*bw+x]){v=1;break;}}
+    dil[by*bw+bx]=v;
+  }
+  /* 연결요소 */
+  const lab=new Int32Array(bw*bh).fill(-1);const comps=[];
+  for(let i=0;i<dil.length;i++){
+    if(!dil[i]||lab[i]>=0) continue;
+    const id=comps.length;let cnt=0,minx=bw,miny=bh,maxx=0,maxy=0;
+    const st=[i];lab[i]=id;
+    while(st.length){
+      const p=st.pop();cnt++;const py=(p/bw)|0,px=p%bw;
+      if(px<minx)minx=px;if(px>maxx)maxx=px;if(py<miny)miny=py;if(py>maxy)maxy=py;
+      for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){
+        const nx=px+dx,ny=py+dy;
+        if(nx<0||ny<0||nx>=bw||ny>=bh) continue;
+        const q=ny*bw+nx;
+        if(dil[q]&&lab[q]<0){lab[q]=id;st.push(q);}
+      }
+    }
+    comps.push({cnt,minx,miny,maxx,maxy});
+  }
+  if(!comps.length) return null;
+  comps.sort((a,b)=>b.cnt-a.cnt);
+  const big=comps[0].cnt;
+  let minx=bw,miny=bh,maxx=0,maxy=0,used=0;
+  comps.forEach(c=>{ if(c.cnt<big*0.08) return; used++;
+    if(c.minx<minx)minx=c.minx;if(c.miny<miny)miny=c.miny;if(c.maxx>maxx)maxx=c.maxx;if(c.maxy>maxy)maxy=c.maxy;});
+  const pad=2;
+  const x=Math.max(0,(minx-pad)*bs), y=Math.max(0,(miny-pad)*bs);
+  const x2=Math.min(w,(maxx+1+pad)*bs), y2=Math.min(h,(maxy+1+pad)*bs);
+  const rw=x2-x, rh=y2-y;
+  if(rw<40||rh<40) return null;
+  return {x,y,w:rw,h:rh,used};
+}
+function finishPrep(cv,ctx,d,g,mode,win,k,sharp,rect){
+  if(mode==='stretch'){ stretchOld(g); if(sharp) sharpen(g,cv.width,cv.height,2,sharp); }
   else{
-    const bg=bgEstimate(g,w,h,8,2);
+    const bg=bgEstimate(g,cv.width,cv.height,8,2);
     const target=190;
     for(let i=0;i<g.length;i++){const b=Math.max(bg[i],18);let v=g[i]/b*target;g[i]=v<0?0:(v>255?255:v);}
     if(mode==='sauvola'){
-      const r=(win-1)/2;
-      const m=boxFilter(g,w,h,r);
+      const r=Math.max(1,Math.round((win-1)/2));
+      const m=boxFilter(g,cv.width,cv.height,r);
       const g2=new Float32Array(g.length);for(let i=0;i<g.length;i++)g2[i]=g[i]*g[i];
-      const s2=boxFilter(g2,w,h,r);
+      const s2=boxFilter(g2,cv.width,cv.height,r);
       for(let i=0;i<g.length;i++){
         const mean=m[i],sd=Math.sqrt(Math.max(0,s2[i]-mean*mean));
         const T=mean*(1+k*(sd/128-1));
@@ -144,10 +229,12 @@ function computePrep(img,mode,scale,win,k,sharp){
       for(let v=255;v>=0;v--){acc+=hist[v];if(acc>g.length*0.12){paper=v;break;}}
       const T=paper*0.62;
       for(let i=0;i<g.length;i++) g[i]=g[i]>T?255:0;
-    } else if(sharp){ sharpen(g,w,h,2,sharp); }
+    } else if(sharp){ sharpen(g,cv.width,cv.height,2,sharp); }
   }
-  for(let i=0,j=0;i<g.length;i++,j+=4){const v=g[i]|0;d.data[j]=d.data[j+1]=d.data[j+2]=v;d.data[j+3]=255;}
+  const dd=d.data;
+  for(let i=0,j=0;i<g.length;i++,j+=4){const v=g[i]|0;dd[j]=dd[j+1]=dd[j+2]=v;dd[j+3]=255;}
   ctx.putImageData(d,0,0);
+  cv.dataset.rect=rect?JSON.stringify(rect):'';
   return cv;
 }
 document.getElementById('run').onclick=async()=>{
@@ -163,7 +250,7 @@ document.getElementById('run').onclick=async()=>{
     stat('전처리 중…');
     const t0=performance.now();
     const img=await loadImg(f);
-    const cv=computePrep(img,mode,scale,win,k,sharp);
+    const cv=computePrep(img,mode,scale,win,k,sharp,document.getElementById('crop').value==='1');
     const t1=performance.now();
     /* 미리보기(축소) */
     const pv=document.getElementById('cv');const maxw=520;const sc=Math.min(1,maxw/cv.width);
@@ -202,13 +289,13 @@ document.getElementById('batch').onclick=async()=>{
       const c=list[i];
       stat('('+(i+1)+'/'+list.length+') 전처리…');
       const t0=performance.now();
-      const cv=computePrep(img,c.mode,c.scale,c.win||31,c.k==null?0.2:c.k,c.sharp||0);
+      const cv=computePrep(img,c.mode,c.scale,c.win||31,c.k==null?0.2:c.k,c.sharp||0,c.crop===undefined?true:!!c.crop);
       const t1=performance.now();
       await worker.setParameters({tessedit_pageseg_mode:String(c.psm||6),user_defined_dpi:String(c.dpi||300),preserve_interword_spaces:'1'});
       const res=await worker.recognize(cv);
       const t2=performance.now();
       const txt=(res&&res.data&&res.data.text)||'';
-      const head='=== #'+i+' '+JSON.stringify(c)+' · prep '+(t1-t0|0)+'ms · ocr '+(t2-t1|0)+'ms · '+cv.width+'x'+cv.height+' ===\n';
+      const head='=== #'+i+' '+JSON.stringify(c)+' · prep '+(t1-t0|0)+'ms · ocr '+(t2-t1|0)+'ms · '+cv.width+'x'+cv.height+' zoom='+(cv.dataset.zoom||'')+(cv.dataset.rect?' rect='+cv.dataset.rect:'')+' ===\n';
       out.textContent+=head+txt+'\n';
       window.LAST.push({cfg:c,ms:(t2-t1)|0,txt:txt});
       const pv=document.getElementById('cv');const sc=Math.min(1,520/cv.width);
