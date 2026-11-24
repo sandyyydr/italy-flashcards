@@ -383,7 +383,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
         <span id="krwPreview" style="font-size:12.5px;font-weight:700;color:var(--org);min-width:84px;text-align:right;">약 0원</span>
       </div>
       <input id="expStore" class="inp" placeholder="가게명 (예: ドン・キホーテ 道頓堀店 / 돈키호테)"/>
-      <textarea id="expMemo" class="inp" rows="4" oninput="onMemoInput()" placeholder="메모 (품목을 한 줄씩 — '우유 1000엔'처럼 금액을 쓰면 자동으로 합산돼요)"></textarea>
+      <textarea id="expMemo" class="inp" rows="4" oninput="onMemoInput()" onblur="normalizeMemoField()" placeholder="메모 (품목을 한 줄씩 — '우유 1000엔'처럼 금액을 쓰면 자동으로 합산돼요)"></textarea>
       <div style="display:flex;gap:8px;">
         <button id="saveBtn" class="act-btn map" style="flex:2;justify-content:center;padding:12px;font-size:14.5px;" onclick="addExpense()">기록하기</button>
         <button id="cancelEditBtn" class="act-btn" style="display:none;flex:1;justify-content:center;padding:12px;font-size:13.5px;" onclick="cancelEdit()">취소</button>
@@ -1093,6 +1093,33 @@ function onMemoInput(){
   ocrAmtLock = false;   /* 사용자가 메모를 직접 손대면 OCR 총액보다 메모 합산이 우선 */
   syncMemoToAmt();
 }
+/* 메모 줄 정리 — '밥500엔' → '• 밥 ¥500' (천단위 콤마). 타이핑 중에는 건드리지 않고 저장·포커스 나갈 때만 */
+function normalizeMemo(text){
+  const lines = String(text || '').split(/\r?\n/);
+  const AMT = /[¥￥]\s*[0-9][0-9,]*|[0-9][0-9,]*\s*(?:円|엔|JPY|yen)/g;
+  return lines.map(raw=>{
+    const line = raw.trim().replace(/^[•·]\s*/, '');
+    if(!line) return '';
+    const hits = line.match(AMT) || [];
+    if(hits.length !== 1) return raw.trim();   /* 금액이 없거나 여러 개면 손대지 않음 */
+    let name = '', amt = null;
+    let m = line.match(/^(.*?)\s*[¥￥]\s*([0-9][0-9,]*)\s*$/);
+    if(m){ name = m[1]; amt = parseInt(m[2].replace(/,/g, ''), 10); }
+    else {
+      m = line.match(/^(.*?)\s*([0-9][0-9,]*)\s*(?:円|엔|JPY|yen)\s*$/);
+      if(m){ name = m[1]; amt = parseInt(m[2].replace(/,/g, ''), 10); }
+    }
+    if(amt == null || !(amt > 0)) return raw.trim();
+    name = String(name).replace(/[\s:：\-–—]+$/, '').trim();
+    return name ? `• ${name} ¥${amt.toLocaleString()}` : `• ¥${amt.toLocaleString()}`;
+  }).join('\n');
+}
+function normalizeMemoField(){
+  const el = document.getElementById('expMemo');
+  if(!el) return;
+  const next = normalizeMemo(el.value);
+  if(next !== el.value){ el.value = next; autoGrowMemo(); }
+}
 function saveToast(msg){
   const el = document.getElementById('saveToast'); if(!el) return;
   el.textContent = msg; el.style.opacity = 1;
@@ -1129,7 +1156,10 @@ function addExpense(){
   const amt = parseInt((document.getElementById('expAmt').value||'').replace(/,/g,''), 10);
   if(!amt || amt<=0) return alert('엔화 금액을 입력해 주세요!');
   const store = document.getElementById('expStore').value.trim();
-  const memo = document.getElementById('expMemo').value.trim();
+  const memoEl = document.getElementById('expMemo');
+  memoEl.value = normalizeMemo(memoEl.value);   /* 저장 시점에 '밥500엔' → '• 밥 ¥500' */
+  autoGrowMemo();
+  const memo = memoEl.value.trim();
   const dateIso = (document.getElementById('expDate')||{}).value || isoOfDate(new Date());
   const dd = dateOfIso(dateIso) || new Date();
   const wasEdit = editingId != null;
@@ -2252,7 +2282,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v43';
+const SW_CACHE = 'osaka-planner-v44';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
