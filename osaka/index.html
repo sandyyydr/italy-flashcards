@@ -163,7 +163,7 @@ details.ocr-raw>summary .sm{font-weight:700;color:#9AA8A1;font-size:10.5px;}
 .exp-row .et{font-size:13.5px;font-weight:800;line-height:1.35;word-break:break-all;}
 .exp-row>div:first-child{flex:1;min-width:0;}
 .exp-row .es{font-size:11px;color:var(--sub);font-weight:700;margin-top:3px;line-height:1.5;white-space:normal;overflow-wrap:anywhere;word-break:break-word;}
-textarea.inp{resize:vertical;line-height:1.62;min-height:76px;font-size:13.5px;padding:9px 11px;}
+textarea.inp{resize:vertical;line-height:1.62;min-height:76px;max-height:260px;overflow-y:auto;font-size:13.5px;padding:9px 11px;}
 .exp-row .es.memo{margin-top:5px;padding:6px 9px;background:#F7F5EE;border:1px solid #EFEADF;border-radius:8px;font-size:11.5px;line-height:1.7;color:#3A4A44;font-weight:700;white-space:pre-line;}
 .exp-row .er{text-align:right;flex-shrink:0;}
 .exp-row .er b{font-size:14.5px;font-weight:900;color:var(--ink);display:block;white-space:nowrap;}
@@ -349,7 +349,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
         <span id="krwPreview" style="font-size:12.5px;font-weight:700;color:var(--org);min-width:84px;text-align:right;">약 0원</span>
       </div>
       <input id="expStore" class="inp" placeholder="가게명 (예: ドン・キホーテ 道頓堀店 / 돈키호테)"/>
-      <textarea id="expMemo" class="inp" rows="4" placeholder="메모 (품목을 한 줄씩 — 사진으로 읽으면 자동으로 채워져요)"></textarea>
+      <textarea id="expMemo" class="inp" rows="4" oninput="autoGrowMemo()" placeholder="메모 (품목을 한 줄씩 — 사진으로 읽으면 자동으로 채워져요)"></textarea>
       <div style="display:flex;gap:8px;">
         <button class="act-btn map" style="flex:2;justify-content:center;padding:12px;font-size:14.5px;" onclick="addExpense()">기록하기</button>
         <button class="act-btn" style="flex:1;justify-content:center;padding:12px;font-size:13.5px;" onclick="clearExpInput()">🧹 입력 비우기</button>
@@ -946,9 +946,16 @@ function saveToast(msg){
   clearTimeout(saveToast._t);
   saveToast._t = setTimeout(()=>{ el.style.opacity = 0; }, 2600);
 }
+function autoGrowMemo(){
+  const el = document.getElementById('expMemo');
+  if(!el) return;
+  el.style.height = 'auto';
+  el.style.height = Math.min(Math.max(el.scrollHeight, 76), 260) + 'px';
+}
 function clearExpInput(){
   const setV = (id, v)=>{ const el = document.getElementById(id); if(el) el.value = v; };
   setV('expAmt',''); setV('expStore',''); setV('expMemo','');
+  autoGrowMemo();
   updateKrwPreview();
   ocrFilled.store = ''; ocrFilled.memo = '';
   const rawWrap = document.getElementById('ocrRawWrap');
@@ -1577,6 +1584,7 @@ function ocrFillForm(p, text){
     const cur = memoEl.value.trim();
     if(!cur || cur === ocrFilled.memo){ memoEl.value = p.memo; ocrFilled.memo = p.memo; filled.push('메모'); }
   }
+  autoGrowMemo();
   if(p.cat) selCat = p.cat;
   renderMoney();
 
