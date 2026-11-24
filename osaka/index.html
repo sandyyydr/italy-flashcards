@@ -130,6 +130,11 @@ main{padding:12px 14px calc(env(safe-area-inset-bottom,16px) + 78px);max-width:6
 .ocr-thumb{display:none;gap:9px;align-items:center;margin-top:9px;}
 .ocr-thumb img{width:64px;height:64px;object-fit:cover;border-radius:9px;border:1px solid var(--line);flex-shrink:0;background:#fff;}
 .ocr-thumb .tt{font-size:11.5px;color:var(--sub);font-weight:700;line-height:1.5;}
+.ocr-kr{display:none;font-size:11.5px;line-height:1.6;color:#3A4A44;padding:2px 0 9px;margin-bottom:4px;border-bottom:1px dashed #E3DECB;}
+.ocr-kr .t{font-weight:800;color:var(--green);margin-bottom:3px;font-size:11.5px;}
+.ocr-kr .pair{margin-top:2px;}
+.ocr-kr .pair i{font-style:normal;color:#9AA8A1;margin:0 2px;}
+.ocr-kr .pair b{color:#1E5B4B;}
 details.ocr-raw{margin-top:9px;background:#F7F5EE;border:1px solid #EDE8DA;border-radius:10px;padding:0 11px;display:none;}
 details.ocr-raw summary{font-size:11.5px;font-weight:800;color:var(--sub);padding:9px 0;cursor:pointer;}
 details.ocr-raw pre{font-size:11px;line-height:1.55;white-space:pre-wrap;word-break:break-all;margin:0 0 11px;max-height:180px;overflow:auto;color:#3A4A44;}
@@ -298,7 +303,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
 
     <div class="sec-card">
       <h3>📷 영수증 사진 자동 입력 <span class="h3-sub">무료 · 사진만 찍으면 금액 자동</span></h3>
-      <div class="ocr-note">바로 찍거나, <b>이미 찍어둔 사진</b>을 골라도 돼요 — <b>합계 금액·가게명</b>을 읽어 아래 입력칸에 채워요. 저장은 <b>직접 확인한 다음</b> 버튼으로!</div>
+      <div class="ocr-note">바로 찍거나, <b>이미 찍어둔 사진</b>을 골라도 돼요 — <b>합계 금액</b>과 <b>가게명·품목</b>을 읽어 <b>한국어로 바꿔</b> 아래 입력칸에 채워요. 저장은 <b>직접 확인한 다음</b> 버튼으로!</div>
       <input id="ocrFileCamera" type="file" accept="image/*" capture="environment" style="display:none" onchange="ocrFilePicked(this)"/>
       <input id="ocrFileGallery" type="file" accept="image/*" style="display:none" onchange="ocrFilePicked(this)"/>
       <div class="ocr-btn-row">
@@ -308,7 +313,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
       <div class="ocr-status" id="ocrStatus"></div>
       <div class="ocr-barwrap" id="ocrBarWrap"><div class="ocr-bar" id="ocrBar"></div></div>
       <div class="ocr-thumb" id="ocrThumb"><img id="ocrPreview" alt="영수증 미리보기"/><div class="tt" id="ocrThumbTxt"></div></div>
-      <details class="ocr-raw" id="ocrRawWrap"><summary>🔍 인식된 원문 텍스트 보기 (숫자 틀렸을 때 확인)</summary><pre id="ocrRaw"></pre></details>
+      <details class="ocr-raw" id="ocrRawWrap"><summary>🔍 원문(일본어) · 한국어 번역 보기 (숫자 틀렸을 때 확인)</summary><div class="ocr-kr" id="ocrKr"></div><pre id="ocrRaw"></pre></details>
     </div>
 
     <div class="sec-card">
@@ -993,6 +998,184 @@ const OCR_BRANDS = ['ドン・キホーテ','ドンキ','ローソン','セブ�
 const OCR_BAD_STORE = /領収書|レシート|ご来店|ありがとう|お買上|お会計|合計|小計|税込|税抜|免税|対象|税額|お預|預り|釣|つり|担当|レジ|TEL|電話|FAX|住所|営業時間|ポイント|会員|クーポン|番号|登録|日時|お客様|様$|レシートNo|伝票|TOTAL|SUBTOTAL|TAX|CASH|CHANGE|CREDIT|RECEIPT|THANK|AMOUNT|JPY/i;
 const OCR_TOTAL_KW = [[/総?合計/,10],[/お買上(げ)?高?/,9],[/お会計/,8],[/現計/,8],[/税込(み)?計/,7],[/クレジット/,6],[/お支払/,5],[/合計/,6]];
 
+/* ───────── 🇯🇵→🇰🇷 영수증 한국어 변환 (1단계 사전 → 2단계 무료 번역기 → 사전 fallback) ───────── */
+const JA_KO_STORE = [
+  ['ドン・キホーテ','돈키호테'],['ドンキホーテ','돈키호테'],['ドンキ','돈키'],
+  ['ミスタードーナツ','미스터도넛'],['スターバックス','스타벅스'],['スタバ','스타벅스'],
+  ['セブン-イレブン','세븐일레븐'],['セブンイレブン','세븐일레븐'],['セブン','세븐일레븐'],
+  ['ファミリーマート','패밀리마트'],['ファミマ','패밀리마트'],['ローソン','로손'],
+  ['無印良品','무인양품'],['マツモトキヨシ','마츠모토키요시'],['マツキヨ','마츠키요시'],
+  ['ダイコクドラッグ','다이코쿠드럭'],['ダイコク','다이코쿠'],['スギ薬局','스기약국'],['ウエルシア','웰시아'],
+  ['ココカラファイン','코코카라파인'],['サンドラッグ','선드럭'],['ツルハ','츠루하'],
+  ['ビックカメラ','빅카메라'],['ヨドバシ','요도바시'],['ユニクロ','유니클로'],['しまむら','시마무라'],
+  ['ダイソー','다이소'],['セリア','세리아'],['キャンドゥ','캔두'],['ロフト','로프트'],['ハンズ','핸즈'],
+  ['成城石井','세이조이시이'],['一蘭','이치란'],['大阪王将','오사카왕장'],['餃子の王将','교자노오쇼'],
+  ['551蓬莱','551 호라이'],['蓬萊','호라이'],['たこ焼','타코야키'],['コメダ','코메다'],['マクドナルド','맥도날드'],
+  ['ケンタッキー','KFC'],['吉野家','요시노야'],['すき家','스키야'],['松屋','마츠야'],
+  ['ライフ','라이프'],['イオン','이온'],['阪急','한큐'],['阪神','한신'],['近鉄','킨테츠'],['ダイエー','다이에'],
+  ['大丸','다이마루'],['高島屋','타카시마야'],['ルクア','루쿠아'],['グランフロント','그랜드프론트'],
+  ['なんばパークス','난바파크스'],['ドラッグストア','드러그스토어'],['デイリーヤマザキ','데일리야마자키'],
+  ['ポプラ','포플'],['ミニストップ','미니스톱'],['りくろーおじさん','리쿠로 아저씨'],['りくろー','리쿠로 아저씨'],
+  ['だるま','다루마'],['かに道楽','카니도라쿠'],['づぼらや','즈보라야'],['黒門市場','구로몬시장']
+];
+const JA_KO_PLACE = [
+  ['関西国際空港','간사이공항'],['関西空港','간사이공항'],['道頓堀','도톤보리'],['なんば','난바'],['難波','난바'],
+  ['千日前','센니치마에'],['心斎橋','신사이바시'],['梅田','우메다'],['天王寺','텐노지'],['新世界','신세카이'],
+  ['日本橋','닛폰바시'],['京橋','쿄바시'],['本町','혼마치'],['堺筋','사카이스지'],['御堂筋','미도스지'],
+  ['中央区','주오구'],['北区','기타구'],['浪速区','나니와구'],['西区','니시구'],['阿倍野','아베노'],['住之江','스미노에'],
+  ['空港','공항'],['駅','역'],['ビル','빌딩'],['タワー','타워'],['地下街','지하가'],
+  ['店','점'],['支店','지점'],['本店','본점'],['号店','호점'],['階','층'],
+  ['北館','북관'],['南館','남관'],['東館','동관'],['西館','서관']
+];
+const JA_KO_ITEM = [
+  ['おにぎり','삼각김밥'],['ツナマヨ','참치마요'],['からあげクン','가라아게군'],['レギュラー','레귤러'],
+  ['お茶','녹차'],['緑茶','녹차'],['ミネラルウォーター','생수'],['天然水','생수'],['水','생수'],['牛乳','우유'],
+  ['パン','빵'],['菓子パン','단빵'],['お菓子','과자'],['詰め合わせ','모둠'],['詰合せ','모둠'],
+  ['セッケン','비누'],['石鹸','비누'],['洗剤','세제'],['目薬','안약'],['マスク','마스크'],['シートマスク','마스크팩'],
+  ['ヘアオイル','헤어오일'],['ウタマロ','우타마로'],['UTAMARO','우타마로'],['コーロスキン','콜로스킨'],
+  ['ビオレ','비오레'],['クレイ','클레이'],['歯ブラシ','칫솔'],['歯磨き','치약'],['ハンドクリーム','핸드크림'],
+  ['ティッシュ','화장지'],['ボルヴィック','볼빅'],['明治おいしい牛乳','메이지 맛있는 우유'],
+  ['クレンジング','클렌징'],['化粧水','화장수'],['乳液','로션'],['日焼け止め','자외선차단제'],
+  ['ビール','맥주'],['チューハイ','츄하이'],['コーヒー','커피'],['ラテ','라떼'],['ジュース','주스'],
+  ['弁当','도시락'],['サンドイッチ','샌드위치'],['ラーメン','라멘'],['たこ焼き','타코야키'],
+  ['お好み焼き','오코노미야키'],['唐揚げ','가라아게'],['チョコ','초콜릿'],['アイス','아이스크림'],
+  ['バナナ','바나나'],['りんご','사과'],['ボールペン','볼펜'],['タオル','타월'],['靴下','양말'],
+  ['充電器','충전기'],['イヤホン','이어폰'],['ポテト','감자튀김'],['ナゲット','너겟'],['セット','세트']
+];
+const JA_KO_UNIT = {'個':'개','点':'점','枚':'장','袋':'봉지','本':'개','切れ':'조각','パック':'팩','セット':'세트'};
+const jaSortByLen = a => a.slice().sort((x,y)=>y[0].length-x[0].length);
+const JA_DICT_PLACE = jaSortByLen(JA_KO_STORE.concat(JA_KO_PLACE));
+const JA_DICT_ITEM  = jaSortByLen(JA_KO_ITEM.concat(JA_KO_PLACE).concat(JA_KO_STORE));
+const JA_ATTACH_KO = new Set(['점','지점','본점','호점','역','구','관','층','빌딩','타워','공항','지하가']);
+const JA_HAS_JP = s => /[\u3040-\u30ff\u4e00-\u9faf\uff66-\uff9f]/.test(String(s||''));
+
+function jaCleanStr(s){
+  return String(s||'')
+    .replace(/[０-９Ａ-Ｚａ-ｚ]/g, c=>String.fromCharCode(c.charCodeAt(0) - 0xFEE0))
+    .replace(/[\s\u3000]+/g,' ')
+    .trim();
+}
+function jaCompactStr(s){ return jaCleanStr(s).replace(/\s+/g,''); }
+/* 사전 최장일치로 조각내기 — 사전에 있으면 한국어, 없으면 일본어 덩어리로 남김 */
+function jaSeg(compact, dict){
+  const out = [];
+  let i = 0;
+  while(i < compact.length){
+    let hit = null;
+    for(let d=0; d<dict.length; d++){
+      const k = dict[d][0];
+      if(k && compact.startsWith(k, i)){ hit = d; break; }
+    }
+    if(hit !== null){ out.push({ko: dict[hit][1]}); i += dict[hit][0].length; }
+    else{
+      let j = i + 1;
+      while(j < compact.length && !dict.some(([k])=>k && compact.startsWith(k, j))) j++;
+      out.push({ja: compact.slice(i, j)});
+      i = j;
+    }
+  }
+  return out;
+}
+/* 조각 이어붙이기 — '점·역·구' 같은 꼬리는 앞말에 붙여요 */
+function jaJoin(segs){
+  let s = '';
+  segs.forEach(seg=>{
+    const t = seg.ko != null ? seg.ko : (seg.tr != null ? seg.tr : (seg.ja || ''));
+    if(!t) return;
+    if(!s) s = t;
+    else if(JA_ATTACH_KO.has(t)) s += t;
+    else s += ' ' + t;
+  });
+  return s.replace(/\s+/g,' ').trim();
+}
+const jaTrCache = new Map();
+function jaFetchJson(url, ms){
+  return new Promise((resolve, reject)=>{
+    let done = false;
+    const ctl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+    const t = setTimeout(()=>{
+      if(done) return; done = true;
+      try{ if(ctl) ctl.abort(); }catch(e){}
+      reject(new Error('timeout'));
+    }, ms);
+    fetch(url, ctl ? { signal: ctl.signal, mode: 'cors' } : { mode: 'cors' })
+      .then(r=>{ if(!r.ok) throw new Error('http' + r.status); return r.json(); })
+      .then(j=>{ if(done) return; done = true; clearTimeout(t); resolve(j); })
+      .catch(e=>{ if(done) return; done = true; clearTimeout(t); reject(e); });
+  });
+}
+/* 사전으로 못 바꾼 일본어만 무료 번역기로 (4초 타임아웃 · 실패하면 조용히 사전 결과 유지) */
+async function jaTranslateWords(words){
+  const list = [...new Set(words.map(w=>String(w||'').trim()).filter(w=>w && JA_HAS_JP(w)))];
+  const out = {};
+  list.forEach(w=>{ if(jaTrCache.has(w)) out[w] = jaTrCache.get(w); });
+  const need = list.filter(w=>!out[w]);
+  if(!need.length) return out;
+  if(typeof navigator !== 'undefined' && navigator.onLine === false) return out;
+  const put = (q, r)=>{
+    const v = String(r||'').replace(/\s+/g,' ').trim();
+    if(!v || !/[가-힣]/.test(v)) return;
+    if(/MYMEMORY|QUERY LENGTH|INVALID/i.test(v)) return;
+    out[q] = v; jaTrCache.set(q, v);
+  };
+  /* ① 구글 (여러 단어 한 번에 · CORS 허용 확인된 엔드포인트) */
+  try{
+    const u = 'https://clients5.google.com/translate_a/t?client=dict-chrome-ex&sl=ja&tl=ko&'
+      + need.map(q=>'q=' + encodeURIComponent(q)).join('&');
+    const j = await jaFetchJson(u, 4000);
+    if(Array.isArray(j) && j.length && Array.isArray(j[0])){
+      j.forEach((row, i)=>{ if(need[i]) put(need[i], Array.isArray(row) ? row[0] : row); });
+    } else if(Array.isArray(j) && (j.length === 1 || j.length === need.length)){
+      need.forEach((q, i)=>{ const v = j[i]; put(q, Array.isArray(v) ? v[0] : v); });
+    }
+  }catch(e){}
+  /* ② translate_a/single (gtx) — 남은 단어만 */
+  for(const q of need.filter(x=>!out[x]).slice(0, 5)){
+    try{
+      const j = await jaFetchJson('https://translate.googleapis.com/translate_a/single?client=gtx&sl=ja&tl=ko&dt=t&q=' + encodeURIComponent(q), 4000);
+      const t = (Array.isArray(j) && Array.isArray(j[0])) ? j[0].map(x=>x && x[0]).join('') : '';
+      put(q, t);
+    }catch(e){}
+  }
+  /* ③ MyMemory — 마지막 fallback */
+  for(const q of need.filter(x=>!out[x]).slice(0, 5)){
+    try{
+      const j = await jaFetchJson('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(q) + '&langpair=ja%7Cko', 4000);
+      put(q, j && j.responseData && j.responseData.translatedText);
+    }catch(e){}
+  }
+  return out;
+}
+/* OCR 결과 → 한국어 가게명·품목 메모 */
+async function ocrLocalize(p){
+  const storeJa = jaCleanStr(p.store || '');
+  const storeSegs = storeJa ? jaSeg(jaCompactStr(storeJa), JA_DICT_PLACE) : [];
+  const itemJa = (Array.isArray(p.items) ? p.items : []).slice(0, 2);
+  const itemToks = itemJa.map(it=>jaCleanStr(it).split(' ').filter(Boolean).map(tk=>jaSeg(jaCompactStr(tk), JA_DICT_ITEM)));
+
+  /* 사전에 없는 일본어만 모아서 한 번에 번역 */
+  const left = [];
+  storeSegs.forEach(s=>{ if(s.ja) left.push(s.ja); });
+  itemToks.forEach(toks=>toks.forEach(segs=>segs.forEach(s=>{ if(s.ja) left.push(s.ja); })));
+  const tr = await jaTranslateWords(left);
+  const fill = segs=>segs.forEach(s=>{ if(s.ja && tr[s.ja]) s.tr = tr[s.ja]; });
+  fill(storeSegs);
+  itemToks.forEach(toks=>toks.forEach(segs=>fill(segs)));
+
+  const storeKo = jaJoin(storeSegs).slice(0, 40);
+  const itemKos = itemToks.map(toks=>toks.map(segs=>jaJoin(segs)).filter(Boolean).join(' ')).filter(Boolean);
+  const memoKo = itemKos.join(' · ').slice(0, 48);
+
+  p.storeJa = storeJa;
+  p.memoJa = itemJa.join(' · ');
+  p.store = storeKo || storeJa;
+  p.memo = memoKo || (p.memo || '');
+  p.pairs = [];
+  if(storeJa) p.pairs.push({ja: storeJa, ko: p.store});
+  itemJa.forEach((it, i)=>{ if(itemKos[i]) p.pairs.push({ja: it, ko: itemKos[i]}); });
+  return p;
+}
+
 let ocrEnginePromise = null, ocrWorker = null, ocrBusy = false, ocrFilled = {store:'', memo:''};
 
 function ocrSetStatus(msg, pct){
@@ -1166,9 +1349,9 @@ function parseReceipt(raw){
     const mm = c.replace(/^\d{6,}/, '').match(/^(.{2,18}?)[\s]*[¥]?\s?(\d{2,6})\s*円?$/);
     if(mm && !/^\d+$/.test(mm[1])){
       let nm = mm[1].replace(/^[·・\-\*_]+|[·・\-\*_]+$/g,'').trim();
-      nm = nm.replace(/\s?\d+\s*(mL|ML|ml|kg|Kg|g|L|個|点|枚|袋|本)$/,'').replace(/[_·・\-\s]+$/,'').trim();
+      nm = nm.replace(/\s?\d+\s*(mL|ML|ml|kg|Kg|g|L|個|点|枚|袋|セット|本)$/, (m0,n,u)=>' ' + n + (JA_KO_UNIT[u] || u)).replace(/[_·・\-\s]+$/,'').trim();
       if(!/[\u3040-\u30ff\u4e00-\u9fafA-Za-z]/.test(nm)) return;
-      if((nm.match(/\d/g)||[]).length > 2) return;
+      if((nm.match(/\d/g)||[]).length > 4) return;
       if(nm.length >= 2 && !items.includes(nm)) items.push(nm);
     }
   });
@@ -1183,7 +1366,7 @@ function parseReceipt(raw){
   else if(/電車|タクシー|切符|乗車|運賃|バス|ICカード/.test(guessText)) cat = CATS[2];
   else if(/入場|チケット|USJ|ユニバーサル|美術館|ミュージアム/.test(guessText)) cat = CATS[1];
 
-  return {amount, store, memo, cat, text: norm};
+  return {amount, store, memo, items: items.slice(), cat, text: norm};
 }
 function ocrFillForm(p, text){
   const filled = [];
@@ -1205,6 +1388,15 @@ function ocrFillForm(p, text){
   renderMoney();
 
   document.getElementById('ocrRaw').textContent = (text || '').trim() || '(글자를 못 읽었어요)';
+  const krBox = document.getElementById('ocrKr');
+  if(krBox){
+    const pairs = (p.pairs || []).filter(x=>x && x.ko);
+    if(pairs.length){
+      krBox.innerHTML = `<div class="t">🇰🇷 한국어로 바꾼 내용</div>`
+        + pairs.map(x=>`<div class="pair">${esc(x.ja)}<i>→</i><b>${esc(x.ko)}</b></div>`).join('');
+      krBox.style.display = 'block';
+    } else { krBox.innerHTML = ''; krBox.style.display = 'none'; }
+  }
   const rawWrap = document.getElementById('ocrRawWrap');
   rawWrap.style.display = 'block';
   if(!p.amount) rawWrap.open = true;
@@ -1215,7 +1407,7 @@ function ocrFillForm(p, text){
     ? `<b>합계 ¥${p.amount.toLocaleString()}</b><br/>${esc(p.store || '가게명 미확인')}`
     : '금액을 못 찾았어요<br/>아래 원문을 보거나 직접 입력하세요';
 
-  if(filled.length) ocrSetStatus(`✅ ${filled.join(' · ')} 자동 입력 완료! <b>확인 → 구분(공금/개인)·결제(카드/현금) 고르고 저장</b>하세요.`, null);
+  if(filled.length) ocrSetStatus(`✅ ${filled.join(' · ')} 자동 입력(한국어) 완료! <b>확인 → 구분(공금/개인)·결제(카드/현금) 고르고 저장</b>하세요.`, null);
   else ocrSetStatus('🤔 금액을 못 찾았어요. <b>금액을 직접 입력</b>하면 그대로 저장됩니다. (원문은 위 접이식에서 확인)', null);
 }
 async function ocrFilePicked(input){
@@ -1238,7 +1430,12 @@ async function ocrFilePicked(input){
     ocrSetStatus('🔎 영수증 읽는 중… 0%', 35);
     const res = await ocrWorker.recognize(canvas);
     const text = (res && res.data && res.data.text) || '';
-    ocrFillForm(parseReceipt(text), text);
+    const p = parseReceipt(text);
+    if(p.store || p.memo){
+      ocrSetStatus('🇰🇷 가게명·품목을 한국어로 바꾸는 중…', 95);
+      try{ await ocrLocalize(p); }catch(e){ console.warn('한국어 변환 실패:', e); }
+    }
+    ocrFillForm(p, text);
   }catch(err){
     console.warn('OCR 실패:', err);
     const offline = !navigator.onLine;
@@ -1516,7 +1713,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v33';
+const SW_CACHE = 'osaka-planner-v36';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
