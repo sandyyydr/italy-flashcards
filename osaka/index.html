@@ -916,7 +916,7 @@ function renderMoney(){
     <div class="exp-row">
       <div>
         <div class="et">${esc(e.store || e.memo || e.cat)}</div>
-        ${e.store && e.memo ? `<div class="es" style="margin-top:1px;">${esc(e.memo)}</div>` : ''}
+        ${e.store && e.memo ? `<div class="es memo">${esc(e.memo)}</div>` : ''}
         <div class="es"><span class="bdg ${e.w==='shared'?'sh':'pe'}">${e.w==='shared'?'공금':'개인'}</span><span class="bdg ${e.pay==='card'?'card':'cash'}">${e.pay==='card'?'카드':'현금'}</span>${esc(e.cat)} · ${esc(e.time)}</div>
       </div>
       <div class="er"><b>¥${(Number(e.amt)||0).toLocaleString()}</b><span>약 ${fmt(e.amt)}</span><button type="button" onclick="delExp(${e.id})" aria-label="삭제">✕</button></div>
