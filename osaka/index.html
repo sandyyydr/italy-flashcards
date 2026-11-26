@@ -381,6 +381,44 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
 .wm-btn.on:after{content:' — 다시 누르면 빼요';font-size:12px;font-weight:700;}
 @media (min-width:520px){ .wgrid{grid-template-columns:1fr 1fr 1fr;} }
 
+/* ── 🧳 짐 싸기 체크리스트 ── */
+.pk-hero{background:linear-gradient(180deg,#FFFDF7,#F7F3E8);border:1px solid var(--line);border-radius:16px;padding:13px 14px;margin-bottom:12px;}
+.pk-hero-t{font-size:16px;font-weight:900;color:var(--green);}
+.pk-hero-s{font-size:11.5px;color:var(--sub);line-height:1.5;margin-top:3px;}
+.pk-bartrack{height:13px;background:#E7E1D0;border-radius:99px;overflow:hidden;margin-top:11px;}
+.pk-barfill{height:100%;width:0%;background:linear-gradient(90deg,#2E7D64,#63BC97);border-radius:99px;transition:width .25s;}
+.pk-count{font-size:12.5px;font-weight:800;color:var(--green);margin-top:7px;}
+.pk-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.pk-btns .act-btn{padding:6px 9px;font-size:11.5px;}
+.pk-cat{border:1px solid var(--line);border-radius:14px;background:var(--card);margin-bottom:10px;overflow:hidden;}
+.pk-cat-h{display:flex;align-items:center;gap:8px;padding:11px 12px;background:#F6F1E4;cursor:pointer;-webkit-user-select:none;user-select:none;}
+.pk-cat-h .pk-emoji{font-size:17px;flex:0 0 auto;}
+.pk-cat-h .pk-name{font-size:13.5px;font-weight:900;color:var(--green);flex:1;min-width:0;line-height:1.3;}
+.pk-sub{display:block;font-size:10.5px;font-weight:600;color:var(--sub);line-height:1.4;margin-top:2px;}
+.pk-cat-h .pk-num{font-size:11.5px;font-weight:900;color:var(--sub);white-space:nowrap;}
+.pk-cat-h .pk-arrow{font-size:10px;color:var(--sub);transition:transform .2s;}
+.pk-cat.fold .pk-arrow{transform:rotate(-90deg);}
+.pk-cat.fold .pk-body{display:none;}
+.pk-body{padding:2px 12px 6px;}
+.pk-item{display:flex;gap:9px;align-items:flex-start;padding:9px 0;border-bottom:1px solid #F0EBDF;cursor:pointer;}
+.pk-item:last-child{border-bottom:none;}
+.pk-item input[type=checkbox]{width:19px;height:19px;accent-color:var(--green);flex:0 0 auto;margin-top:1px;}
+.pk-txt{min-width:0;flex:1;}
+.pk-t{display:block;font-size:13px;line-height:1.4;font-weight:700;}
+.pk-d{display:block;font-size:11px;color:var(--sub);line-height:1.45;margin-top:2px;}
+.pk-item.done .pk-t{text-decoration:line-through;color:#8E9B94;}
+.pk-item.done .pk-d{color:#AEB8B1;}
+.pk-bdg{display:inline-block;font-size:9.5px;font-weight:900;border-radius:6px;padding:1px 5px;margin-left:5px;vertical-align:1px;white-space:nowrap;letter-spacing:0;}
+.pk-bdg.cabin{background:var(--mint);color:var(--green);}
+.pk-bdg.bag{background:#F7EBD9;color:#8A5A1E;}
+.pk-bdg.ban{background:#FDE2E1;color:#A3221E;}
+.pk-del{border:none;background:none;color:#A3221E;font-size:11.5px;font-weight:800;padding:6px 2px 0 4px;cursor:pointer;flex:0 0 auto;font-family:inherit;}
+.pk-add{display:flex;gap:6px;margin-top:2px;}
+.pk-add input[type=text]{flex:1;min-width:0;border:1px solid var(--line);border-radius:10px;padding:10px;font-size:13px;font-family:inherit;background:#fff;color:var(--ink);}
+.pk-add select{border:1px solid var(--line);border-radius:10px;padding:0 6px;font-size:12px;font-family:inherit;background:#fff;color:var(--ink);}
+.pk-add button{border:none;border-radius:10px;padding:0 13px;font-size:13px;font-weight:900;font-family:inherit;background:var(--green);color:#fff;cursor:pointer;}
+.pk-empty{font-size:12.5px;color:var(--sub);text-align:center;padding:16px 0;}
+
 </style>
 </head>
 <body>
@@ -488,12 +526,14 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
   <section id="tab-map" class="hidden">
     <div class="day-scroll" id="mapDayScroll"></div>
     <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
-      <button class="act-btn org" id="allPlBtn" onclick="toggleAllPlaces()">⭐ 추천 84곳 함께 보기</button>
+      <button class="act-btn org" id="allPlBtn" onclick="toggleAllPlaces()">⭐ 추천 88곳 함께 보기</button>
+      <button class="act-btn" id="atmBtn" style="border-color:#7B4FBF;color:#7B4FBF;font-weight:900;" onclick="toggleAtm()">🏧 ATM 4곳</button>
       <a class="act-btn map" href="./osaka_2026_all_places.kml" download>📥 KML</a>
     </div>
     <div id="mapBox"></div>
     <div id="mapGoogleBtn" style="margin-bottom:10px;"></div>
     <div class="sec-card" id="mapLegend"></div>
+    <div id="atmLegend"></div>
   </section>
 
   <!-- 4. 위시·면세·체크 -->
@@ -551,7 +591,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
     </details>
 
     <details style="margin-bottom:12px;">
-      <summary style="list-style:none;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;font-size:14.5px;font-weight:800;color:var(--green);cursor:pointer;">🗺️ 추천 장소 전체 84곳 · 지도·KML <span style="font-size:11.5px;color:var(--sub);font-weight:700;">(눌러서 펼치기)</span></summary>
+      <summary style="list-style:none;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;font-size:14.5px;font-weight:800;color:var(--green);cursor:pointer;">🗺️ 추천 장소 전체 88곳 (ATM 4 포함) · 지도·KML <span style="font-size:11.5px;color:var(--sub);font-weight:700;">(눌러서 펼치기)</span></summary>
       <div style="margin-top:8px;">
         <div class="sec-card" style="border-color:var(--gold);">
       <div style="font-size:12.5px;color:var(--sub);line-height:1.55;margin-bottom:8px;">
@@ -559,10 +599,11 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
         아래 <b>KML 내려받기</b>로 파일을 받아 두면 구글맵 앱 → <b>저장됨 → 지도</b>에서 바로 떠요.
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-        <button class="act-btn org" id="pf0" onclick="filterPlaces(0)">전체 84</button>
+        <button class="act-btn org" id="pf0" onclick="filterPlaces(0)">전체 88</button>
         <button class="act-btn" id="pf1" onclick="filterPlaces(1)">① 확정 일정 13</button>
         <button class="act-btn" id="pf2" onclick="filterPlaces(2)">② 맛집·카페 59</button>
         <button class="act-btn" id="pf3" onclick="filterPlaces(3)">③ 쇼핑·기타 12</button>
+        <button class="act-btn" id="pf4" onclick="filterPlaces(4)">🏧 ATM 4</button>
       </div>
       <a class="act-btn org" style="width:100%;justify-content:center;margin-bottom:6px;" target="_blank" rel="noopener" href="https://www.google.com/maps/d/view?mid=1d8qKSSFk_9lc4__nbFN7xX_U8MHXoRo">🗺️ 구글 마이맵스 「오사카 2026 전체 추천 지도」 열기</a>
       <a class="act-btn map" style="width:100%;justify-content:center;margin-bottom:10px;" href="./osaka_2026_all_places.kml" download>📥 KML 내려받기 (구글 마이맵스·구글맵용)</a>
@@ -711,6 +752,11 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
     </div><!-- /taxPane -->
 
     <div id="checkPane" class="hidden">
+      <div class="seg" style="margin-bottom:10px;">
+        <button id="seg-prep" class="active" onclick="checkSeg('prep')">☑️ 출국 준비</button>
+        <button id="seg-pack" onclick="checkSeg('pack')">🧳 짐 싸기</button>
+      </div>
+      <div id="prepPane">
       <div class="sec-card" style="background:var(--mint);border-color:var(--green);">
         <h3 style="color:var(--green);">☑️ 출국 전 준비 · 당일 체크</h3>
         <div id="checkProg" style="font-size:13.5px;line-height:1.65;color:var(--green);font-weight:700;"></div>
@@ -732,6 +778,35 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
         </div>
         <button class="act-btn" style="margin-top:9px;" onclick="taxSeg('tax')">🧾 면세 환급 순서 보기</button>
       </div>
+      </div><!-- /prepPane -->
+
+      <div id="packPane" class="hidden">
+        <div class="pk-hero">
+          <div class="pk-hero-t">🧳 짐 싸기 체크리스트</div>
+          <div class="pk-hero-s">진에어 <b>QE7QB2</b> · 기내 10kg / 위탁 15kg(3인 합산 45kg) · 11/28~12/01 오사카 <b>낮 15~18°C / 아침저녁 4~7°C</b> · 11/30 USJ는 종일 야외</div>
+          <div class="pk-bartrack"><div class="pk-barfill" id="pkBar"></div></div>
+          <div class="pk-count" id="pkCount">0 / 0 완료 · 0%</div>
+          <div class="pk-btns">
+            <button type="button" class="act-btn" id="pkFilter" onclick="pkFilterToggle()">👁️ 미완료만 보기</button>
+            <button type="button" class="act-btn" onclick="pkFoldAll()">📂 모두 접기/펼치기</button>
+            <button type="button" class="act-btn org" id="pkResetBtn" onclick="pkReset()">♻️ 전체 초기화</button>
+          </div>
+        </div>
+        <div id="pkCats"></div>
+        <div class="sec-card">
+          <h3>➕ 내 품목 추가</h3>
+          <div class="pk-add">
+            <input type="text" id="pkNew" maxlength="60" placeholder="예) 우비, 여분 렌즈, 멀미약" onkeydown="if(event.key==='Enter'){event.preventDefault();pkAdd();}"/>
+            <select id="pkNewB" aria-label="수하물 구분">
+              <option value="cabin">기내</option>
+              <option value="bag">위탁</option>
+              <option value="ban">반입주의</option>
+            </select>
+            <button type="button" onclick="pkAdd()">추가</button>
+          </div>
+          <div style="font-size:11px;color:var(--sub);line-height:1.5;margin-top:7px;">체크 표시·내 품목은 이 기기에만 저장돼요. 새로고침이나 비행기 모드에서도 그대로 남아 있어요.</div>
+        </div>
+      </div><!-- /packPane -->
     </div>
   </section>
 
@@ -944,7 +1019,12 @@ const PLACES = [
   {n:"아야 스파이스테이",c:"스프카레",l:2,w:"히가시신사이바시 1-13-19 · 11:00~15:00 · 점심만",la:34.673721,ln:135.5033989},
   {n:"치카치킨 다이마루 신사이바시",c:"치킨",l:2,w:"다이마루 B2F · 11:00~21:00 · 4.6★ · 하프 포장 OK",la:34.673163,ln:135.5009632},
 
-  {n:"GAP 신사이바시 (OSAKA 티셔츠)",c:"패션",l:3,w:"도톤보리점 없음 → 신사이바시 1-9-6 · 10:00~22:00",la:34.674423,ln:135.501298}
+  {n:"GAP 신사이바시 (OSAKA 티셔츠)",c:"패션",l:3,w:"도톤보리점 없음 → 신사이바시 1-9-6 · 10:00~22:00",la:34.674423,ln:135.501298},
+
+  {n:"🏧 간사이공항 T1 2층 이온·세븐 ATM",c:"ATM",l:4,w:"24시간 · 이온은행 수수료 0원(12/15까지) · T1 2층 난카이 공항급행 타는 층 · 트래블월렛 인출",la:34.4348,ln:135.2440},
+  {n:"🏧 오사카난바역 B2F 이온은행 ATM",c:"ATM",l:4,w:"04:45~24:45 · 이온은행 수수료 0원(12/15까지) · B2 서쪽 개찰구 밖 에스컬레이터 옆",la:34.66721,ln:135.49756},
+  {n:"🏧 닛폰바시역 이온은행 ATM",c:"ATM",l:4,w:"06:30~22:00 · 이온은행 수수료 0원(12/15까지) · 1-18-14 Nipponbashi · 숙소 도보권",la:34.6669,ln:135.5063},
+  {n:"🏧 세븐일레븐 닛폰바시역 히가시점 (세븐뱅크 ATM)",c:"ATM",l:4,w:"24시간 · 수수료 110~220엔 · 1-4-12 Nipponbashi · 야간·이른 아침 대안",la:34.66773,ln:135.50640}
 ];
 let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(JSON.stringify(DEFAULT_DAYS));
 // v8: 기기에 남아 있는 예전 저장본의 '11/28 가는 편 라피트'를 난카이 공항급행으로 치환 (12/01 귀국 라피트는 그대로)
@@ -2679,6 +2759,15 @@ function renderMap(){
       }
     }
   });
+  if(showAtm){
+    atmMarkers = [];
+    atmPts().forEach((p,i)=>{
+      const icon = L.divIcon({className:'',html:`<div style="background:#7B4FBF;color:#fff;border:2px solid #fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 6px rgba(0,0,0,.35);">🏧</div>`,iconSize:[26,26],iconAnchor:[13,13]});
+      const mk = L.marker([p.la,p.ln],{icon}).addTo(mapObj);
+      mk.bindPopup(`<b>${p.n}</b><br/><span style="color:#555">${p.c}</span><br/>${p.w||''}<br/><span style="color:#7B4FBF;font-weight:700;">트래블월렛 실물 카드로 인출</span><br/><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=${p.la},${p.ln}">구글맵에서 열기</a>`);
+      atmMarkers[i] = mk;
+    });
+  }
   if(showAllPlaces){
     PLACES.forEach(p=>{
       const mk = L.circleMarker([p.la,p.ln],{radius:6,color:'#fff',weight:1.5,fillColor:LAYER_COL[p.l],fillOpacity:0.95}).addTo(mapObj);
@@ -2699,11 +2788,11 @@ function renderMap(){
 }
 
 let placeFilter = 0, showAllPlaces = false;
-const LAYER_NAME = {1:'① 확정 일정',2:'② 맛집·카페',3:'③ 쇼핑·기타'};
-const LAYER_COL = {1:'#14493F',2:'#C2721E',3:'#1E5CA8'};
+const LAYER_NAME = {1:'① 확정 일정',2:'② 맛집·카페',3:'③ 쇼핑·기타',4:'🏧 ATM'};
+const LAYER_COL = {1:'#14493F',2:'#C2721E',3:'#1E5CA8',4:'#7B4FBF'};
 function filterPlaces(f){ placeFilter=f; renderPlaces(); }
 function renderPlaces(){
-  ['pf0','pf1','pf2','pf3'].forEach((id,i)=>{
+  ['pf0','pf1','pf2','pf3','pf4'].forEach((id,i)=>{
     const b=document.getElementById(id); if(!b) return;
     b.className='act-btn '+(placeFilter===i?'org':'');
   });
@@ -2721,8 +2810,40 @@ function renderPlaces(){
 function toggleAllPlaces(){
   showAllPlaces = !showAllPlaces;
   const b=document.getElementById('allPlBtn');
-  b.textContent = showAllPlaces ? '⭐ 추천 84곳 숨기기' : '⭐ 추천 84곳 함께 보기';
+  b.textContent = showAllPlaces ? '⭐ 추천 88곳 숨기기' : '⭐ 추천 88곳 함께 보기';
   renderMap();
+}
+let showAtm = false, atmMarkers = [];
+function atmPts(){ return PLACES.filter(p=>p.l===4); }
+function atmGo(i){
+  const p = atmPts()[i]; if(!p || !mapObj) return;
+  mapObj.setView([p.la,p.ln], 16);
+  if(atmMarkers[i]) try{ atmMarkers[i].openPopup(); }catch(e){}
+}
+function renderAtmLegend(){
+  const box = document.getElementById('atmLegend'); if(!box) return;
+  if(!showAtm){ box.innerHTML=''; return; }
+  box.innerHTML = `<div class="sec-card" style="border-color:#7B4FBF;">
+    <h3 style="color:#7B4FBF;">🏧 트래블월렛 인출 ATM 4곳</h3>
+    <div style="font-size:12px;color:var(--sub);line-height:1.55;margin-bottom:8px;">트래블월렛 <b>실물 카드</b>를 넣고 인출(애플페이 불가) · <b>이온은행 ATM은 12/15까지 수수료 0원</b>, 세븐뱅크는 110~220엔</div>
+    ${atmPts().map((p,i)=>`<div style="display:flex;gap:8px;align-items:flex-start;padding:9px 0;border-bottom:1px solid #EFEADF;">
+      <div style="flex:1;min-width:0;"><b style="font-size:12.5px;color:#7B4FBF;">${i+1}. ${esc(p.n)}</b>
+        <div style="font-size:11.5px;color:var(--sub);line-height:1.45;margin-top:2px;">${esc(p.w)}</div></div>
+      <button class="act-btn" style="flex:0 0 auto;padding:5px 8px;border-color:#7B4FBF;color:#7B4FBF;" onclick="atmGo(${i})">지도로</button>
+    </div>`).join('')}
+    <div style="font-size:11px;color:var(--sub);line-height:1.5;margin-top:8px;">💡 난바·닛폰바시 3곳은 숙소 도보권 — 밤 12시 넘으면 세븐일레븐(24시간)만 열려 있어요.</div>
+  </div>`;
+}
+function toggleAtm(){
+  showAtm = !showAtm;
+  const b=document.getElementById('atmBtn');
+  if(b){
+    b.style.background = showAtm ? '#7B4FBF' : '#fff';
+    b.style.color = showAtm ? '#fff' : '#7B4FBF';
+    b.textContent = showAtm ? '🏧 ATM 4곳 표시 중' : '🏧 ATM 4곳';
+  }
+  renderMap();
+  renderAtmLegend();
 }
 function renderChecks(){
   document.getElementById('osakaChecks').innerHTML = CHECKS.map((c,i)=>`
@@ -2779,7 +2900,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v64';
+const SW_CACHE = 'osaka-planner-v65';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
@@ -3260,5 +3381,170 @@ document.addEventListener('keydown', e => {
   </div>
   <div class="mag-ov-scroll" id="imgOvScroll"><img id="imgOvImg" alt="간사이국제공항 제1터미널 4층 면세 수속 지도" src=""></div>
 </div>
+<script>
+/* ───────── 🧳 짐 싸기 체크리스트 (osaka-planner-v65) ───────── */
+const PK_CATS = [
+  {id:'doc', emoji:'📄', name:'필수 서류 · 결제 · 앱', sub:'공항에서 바로 꺼내는 기내 가방에', items:[
+    {id:'d1', t:'여권', d:'유효기간 6개월 이상 남았는지 사진면 확인 · 3명 모두', b:'cabin'},
+    {id:'d2', t:'비짓재팬웹 입국·세관 QR 2종', d:'캡처 저장 · 공항 와이파이 느릴 때 대비', b:'cabin'},
+    {id:'d3', t:'진에어 모바일 탑승권', d:'예약번호 QE7QB2 · 3명 모두 저장', b:'cabin'},
+    {id:'d4', t:'USJ 1일권 QR', d:'11/30(월) · 3인', b:'cabin'},
+    {id:'d5', t:'USJ 익스프레스 4 QR', d:'12:40 동키콩 · 닌텐도 월드(재입장 불가)', b:'cabin'},
+    {id:'d6', t:'귀국 라피트 α 5호 예약내역', d:'12/01 07:00 난카이 난바 → 07:34 간사이공항', b:'cabin'},
+    {id:'d7', t:'호텔 바우처 (에스리드 호텔 난바 이스트 언넥스)', d:'참조코드 M261028461660 · 셀프 체크인 안내 메일 확인', b:'cabin'},
+    {id:'d8', t:'eSIM · 로밍 개통 확인', d:'출국 전에 설치하고 켜 두기', b:'cabin'},
+    {id:'d9', t:'실물 트래블월렛 카드', d:'⚠️ ATM 현금 인출은 애플페이로 안 돼요 · 실물 카드 필수!', b:'cabin'},
+    {id:'d10', t:'비상용 농협카드', d:'해외결제·해외ATM 차단 해제 확인 (트래블월렛 안 될 때)', b:'bag'},
+    {id:'d11', t:'엔화 현금 + 동전지갑', d:'1,000엔권 위주 · 시장·노점은 현금만', b:'cabin'},
+    {id:'d12', t:'모바일 이코카 (애플월렛)', d:'충전 잔액 확인 · 공항급행·지하철 탑승용', b:'cabin'}
+  ]},
+  {id:'elec', emoji:'🔌', name:'전자기기 · 배터리', sub:'배터리는 무조건 기내 — 위탁하면 반송돼요', items:[
+    {id:'e1', t:'보조배터리', d:'⚠️ 위탁 불가 · 기내 반입만. 단자는 테이프로 절연', b:'ban'},
+    {id:'e2', t:'충전기 · 케이블', d:'아이폰 · 보조배터리용', b:'cabin'},
+    {id:'e3', t:'멀티탭 (USB 포함)', d:'숙소 콘센트가 부족할 때 3명 동시 충전', b:'bag'},
+    {id:'e4', t:'일본 100V 돼지코 A타입 1~2개', d:'충전기 어댑터가 100~240V 지원인지 확인', b:'bag'},
+    {id:'e5', t:'이어폰', d:'비행기 · USJ 대기줄용', b:'cabin'},
+    {id:'e6', t:'셀카봉 · 삼각대', d:'기내 OK · 위탁하면 파손 주의', b:'bag'}
+  ]},
+  {id:'cloth', emoji:'🧥', name:'의류 · USJ 방한 (4~18°C)', sub:'11/30 USJ는 종일 야외 · 해 질 때 4°C까지', items:[
+    {id:'c1', t:'상·하의 3박 4일분', d:'겹쳐 입기 쉽게 얇은 옷 위주로', b:'bag'},
+    {id:'c2', t:'겉옷 (경량패딩/코트)', d:'비행기 · 밤 거리용', b:'bag'},
+    {id:'c3', t:'속옷 · 양말 여유분', d:'하루 1벌 + 1벌 더', b:'bag'},
+    {id:'c4', t:'편한 운동화', d:'USJ 하루 2만 보 · 새 신발은 금물', b:'bag'},
+    {id:'c5', t:'잠옷', d:'3박', b:'bag'},
+    {id:'c6', t:'USJ 방한 — 목도리 · 장갑 · 핫팩', d:'20:30 나이트쇼까지 야외', b:'cabin'},
+    {id:'c7', t:'바람막이', d:'USJ 저녁 바람 · 물 튀는 어트랙션', b:'bag'},
+    {id:'c8', t:'접이식 우산', d:'11/28 새벽 비 예보 대비', b:'cabin'}
+  ]},
+  {id:'wash', emoji:'🧴', name:'세면 · 화장품 · 액체류', sub:'100mL 넘으면 위탁 · 1L 비닐백 1개', items:[
+    {id:'w1', t:'스킨케어 · 선크림', d:'100mL 초과는 위탁으로', b:'bag'},
+    {id:'w2', t:'클렌징 · 칫솔 · 치약', d:'호텔 어메니티 있어도 익숙한 것', b:'bag'},
+    {id:'w3', t:'메이크업', d:'파우치 한 곳에 모으기', b:'bag'},
+    {id:'w4', t:'렌즈 · 인공눈물 · 안경', d:'인공눈물 100mL 이하 · 렌즈 여유분', b:'cabin'},
+    {id:'w5', t:'빗 · 유선 고데기', d:'무선(배터리 일체형) 고데기는 기내·위탁 모두 반입 불가', b:'ban'},
+    {id:'w6', t:'머리끈 · 집게핀', d:'USJ에서 머리 묶기', b:'cabin'},
+    {id:'w7', t:'물티슈 · 티슈', d:'기내 · USJ 손 소독 겸', b:'cabin'}
+  ]},
+  {id:'med', emoji:'💊', name:'상비약 · 쇼핑 대비', sub:'', items:[
+    {id:'m1', t:'개인 상비약', d:'소화제 · 진통제 · 밴드 · 멀미약', b:'bag'},
+    {id:'m2', t:'휴족시간 · 파스', d:'USJ 다음 날 아침용', b:'bag'},
+    {id:'m3', t:'에코백 · 접이식 장바구니', d:'돈키호테 쇼핑용', b:'cabin'},
+    {id:'m4', t:'압축팩 · 지퍼백', d:'영수증 · 액체류 · 면세품 정리', b:'cabin'}
+  ]}
+];
+const PK_BADGE = {cabin:'기내', bag:'위탁', ban:'기내 필수'};
+const PK_STORE = 'os_pack_v1', PK_CUSTOM = 'os_pack_custom_v1', PK_FOLD = 'os_pack_fold_v1', PK_SEG = 'os_check_seg';
+
+let pkState = {}, pkCustom = [], pkFold = {}, pkOnlyUndone = false, pkArmReset = 0;
+try{ pkState = JSON.parse(localStorage.getItem(PK_STORE)||'{}') || {}; }catch(e){ pkState = {}; }
+try{ pkCustom = JSON.parse(localStorage.getItem(PK_CUSTOM)||'[]') || []; }catch(e){ pkCustom = []; }
+try{ pkFold = JSON.parse(localStorage.getItem(PK_FOLD)||'{}') || {}; }catch(e){ pkFold = {}; }
+
+function pkSaveState(){ try{ localStorage.setItem(PK_STORE, JSON.stringify(pkState)); }catch(e){} }
+function pkSaveCustom(){ try{ localStorage.setItem(PK_CUSTOM, JSON.stringify(pkCustom)); }catch(e){} }
+function pkSaveFold(){ try{ localStorage.setItem(PK_FOLD, JSON.stringify(pkFold)); }catch(e){} }
+
+function pkCatList(){
+  const arr = PK_CATS.map(c=>({id:c.id, emoji:c.emoji, name:c.name, sub:c.sub, items:c.items.slice()}));
+  if(pkCustom.length){
+    arr.push({id:'mine', emoji:'➕', name:'내가 추가한 품목', sub:'', items:pkCustom.map(x=>({id:x.id, t:x.t, d:'', b:x.b||'cabin', mine:true}))});
+  }
+  return arr;
+}
+function pkRender(){
+  const box = document.getElementById('pkCats'); if(!box) return;
+  const cats = pkCatList();
+  const total = cats.reduce((a,c)=>a+c.items.length, 0);
+  const done  = cats.reduce((a,c)=>a+c.items.filter(it=>pkState[it.id]).length, 0);
+  const pct = total ? Math.round(done/total*100) : 0;
+  const bar = document.getElementById('pkBar'); if(bar) bar.style.width = pct + '%';
+  const cnt = document.getElementById('pkCount');
+  if(cnt) cnt.innerHTML = `<b>${done} / ${total}</b> 완료 · <b>${pct}%</b>` + (total && done === total ? ' 🎉 <b style="color:#0F6B33;">짐 싸기 완료!</b>' : '');
+  const fb = document.getElementById('pkFilter');
+  if(fb){ fb.className = 'act-btn' + (pkOnlyUndone ? ' org' : ''); fb.textContent = pkOnlyUndone ? '👁️ 전체 보기' : '👁️ 미완료만 보기'; }
+  let html = '';
+  cats.forEach(c=>{
+    const cdone = c.items.filter(it=>pkState[it.id]).length;
+    const items = pkOnlyUndone ? c.items.filter(it=>!pkState[it.id]) : c.items;
+    if(!items.length) return;
+    html += `<div class="pk-cat${pkFold[c.id]?' fold':''}">
+      <div class="pk-cat-h" onclick="pkToggleCat('${c.id}')">
+        <span class="pk-emoji">${c.emoji}</span>
+        <span class="pk-name">${esc(c.name)}${c.sub?`<span class="pk-sub">${esc(c.sub)}</span>`:''}</span>
+        <span class="pk-num">${cdone}/${c.items.length}</span>
+        <span class="pk-arrow">▼</span>
+      </div>
+      <div class="pk-body">${items.map(it=>`
+        <label class="pk-item${pkState[it.id]?' done':''}">
+          <input type="checkbox" ${pkState[it.id]?'checked':''} onchange="pkToggle('${it.id}',this.checked)"/>
+          <span class="pk-txt">
+            <span class="pk-t">${esc(it.t)}<span class="pk-bdg ${it.b}">${PK_BADGE[it.b]||''}</span></span>
+            ${it.d?`<span class="pk-d">${esc(it.d)}</span>`:''}
+          </span>
+          ${it.mine?`<button type="button" class="pk-del" onclick="event.preventDefault();event.stopPropagation();pkDel('${it.id}')">삭제</button>`:''}
+        </label>`).join('')}</div>
+    </div>`;
+  });
+  box.innerHTML = html || '<div class="pk-empty">미완료 품목이 없어요 🎉</div>';
+}
+function pkToggle(id, on){ pkState[id] = !!on; pkSaveState(); pkRender(); }
+function pkToggleCat(id){ pkFold[id] = !pkFold[id]; pkSaveFold(); pkRender(); }
+function pkFilterToggle(){ pkOnlyUndone = !pkOnlyUndone; pkRender(); }
+function pkFoldAll(){
+  const cats = pkCatList();
+  const anyOpen = cats.some(c=>!pkFold[c.id]);
+  cats.forEach(c=>{ pkFold[c.id] = anyOpen ? true : false; });
+  pkSaveFold(); pkRender();
+}
+function pkReset(){
+  const b = document.getElementById('pkResetBtn');
+  if(Date.now() - pkArmReset > 3500){
+    pkArmReset = Date.now();
+    if(b) b.textContent = '❗ 한 번 더 누르면 전부 지워요';
+    clearTimeout(pkReset._t);
+    pkReset._t = setTimeout(()=>{ pkArmReset = 0; if(b) b.textContent = '♻️ 전체 초기화'; }, 3500);
+    return;
+  }
+  clearTimeout(pkReset._t);
+  pkArmReset = 0;
+  pkState = {}; pkSaveState();
+  if(b) b.textContent = '♻️ 전체 초기화';
+  pkRender();
+}
+function pkAdd(){
+  const inp = document.getElementById('pkNew'), sel = document.getElementById('pkNewB');
+  const v = (inp && inp.value || '').trim();
+  if(!v) return;
+  pkCustom.push({id:'u'+Date.now().toString(36), t:v.slice(0,60), b:(sel && sel.value) || 'cabin'});
+  pkSaveCustom();
+  if(inp) inp.value = '';
+  pkFold['mine'] = false; pkSaveFold();
+  pkRender();
+  if(inp) inp.focus();
+}
+function pkDel(id){
+  pkCustom = pkCustom.filter(x=>x.id !== id);
+  delete pkState[id];
+  pkSaveCustom(); pkSaveState(); pkRender();
+}
+function checkSeg(k){
+  const isPrep = k !== 'pack';
+  const a = document.getElementById('prepPane'), b = document.getElementById('packPane');
+  if(!a || !b) return;
+  a.classList.toggle('hidden', !isPrep);
+  b.classList.toggle('hidden', isPrep);
+  const sp = document.getElementById('seg-prep'), sk = document.getElementById('seg-pack');
+  if(sp) sp.classList.toggle('active', isPrep);
+  if(sk) sk.classList.toggle('active', !isPrep);
+  try{ localStorage.setItem(PK_SEG, isPrep ? 'prep' : 'pack'); }catch(e){}
+  if(!isPrep) pkRender();
+}
+(function pkInit(){
+  pkRender();
+  let seg = 'prep';
+  try{ seg = localStorage.getItem(PK_SEG) === 'pack' ? 'pack' : 'prep'; }catch(e){}
+  checkSeg(seg);
+})();
+</script>
 </body>
 </html>
