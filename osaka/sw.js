@@ -50,6 +50,17 @@ self.addEventListener('fetch', e => {
       }
     }
     const hit = await c.match(req, { ignoreSearch: true });
+    /* 오프라인 목록은 항상 최신으로 — 예전 목록이 캐시에 남아 '준비 완료'로 잘못 보이던 문제 방지 */
+    if (url.pathname.endsWith('/offline-manifest.json')) {
+      try {
+        const res = await fetch(req, { cache: 'no-store' });
+        if (res && res.status === 200) c.put(req, res.clone());
+        return res;
+      } catch (err) {
+        if (hit) return hit;
+        throw err;
+      }
+    }
     if (hit) return hit;
     try {
       const res = await fetch(req);
