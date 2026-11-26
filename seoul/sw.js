@@ -1,4 +1,4 @@
-const CACHE = 'seoul-1211-v3';
+const CACHE = 'seoul-1211-v4';
 const CORE = [
   './',
   './index.html',
