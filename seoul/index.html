@@ -234,14 +234,14 @@ a.tel{color:var(--green);font-weight:800;text-decoration:none;}
       <div><b>2</b><span>두 사람이 정할 것</span></div>
     </div>
     <div class="day-scroll">
-      <button class="day-chip active" id="chipD1" onclick="pickDay(1,this)"><div class="d1">12/11</div><div class="d2">금요일</div><div class="d3">반지 4곳</div></button>
+      <button class="day-chip active" id="chipD1" onclick="pickDay(1,this)"><div class="d1">12/11</div><div class="d2">금요일</div><div class="d3">반지 3곳 + 15:30 선택</div></button>
       <button class="day-chip" id="chipD2" onclick="pickDay(2,this)"><div class="d1">12/12</div><div class="d2">토요일</div><div class="d3">본식 · A/B</div></button>
     </div>
 
     <div id="day1">
       <div class="day-banner">
-        <h2>12/11(금) — 김천 → 서울 → 반지 4곳</h2>
-        <p>11:44 KTX → 13:29 호텔 짐 보관 → 14:30 원골드 → 15:30 존폴 → 17:00 공방301(확정) → 18:30 새미 → 저녁 → 21:00 체크인</p>
+        <h2>12/11(금) — 김천 → 서울 → 반지 3곳 + 15:30 선택</h2>
+        <p>11:44 KTX → 13:29 호텔 짐 보관 → 14:30 원골드 → 15:30 선택 대기(후보 중) → 17:00 공방301(확정) → 18:30 새미 → 저녁 → 21:00 체크인</p>
       </div>
       <div id="tl1"></div>
       <div class="sec-card">
@@ -302,10 +302,10 @@ a.tel{color:var(--green);font-weight:800;text-decoration:none;}
   <!-- 💍 반지·체크 -->
   <section id="tab-ring" class="hidden">
     <div class="sec-card" style="background:var(--green);border-color:var(--green);color:#FAF7F0;">
-      <h3 style="color:var(--gold);margin-bottom:6px;">12/11(금) 반지 4곳 — 금 색감·가성비 순</h3>
+      <h3 style="color:var(--gold);margin-bottom:6px;">12/11(금) 반지 3곳 + 15:30 선택 — 금 색감·가성비 순</h3>
       <div style="font-size:13px;line-height:1.65;color:#DFEDE7;">
-        14:30 <b style="color:#fff;">원골드</b> → 15:30 <b style="color:#fff;">존폴쥬얼리</b> → 17:00 <b style="color:#fff;">공방301</b>(확정) → 18:30 <b style="color:#fff;">새미쥬얼리</b><br/>
-        나비드주얼리는 이번엔 <b style="color:var(--gold);">제외</b>했어요(18:00 마감 · 새미와 겹침).
+        14:30 <b style="color:#fff;">원골드</b> → 15:30 <b style="color:var(--gold);">선택 대기</b>(후보 중 고르기) → 17:00 <b style="color:#fff;">공방301</b>(확정) → 18:30 <b style="color:#fff;">새미쥬얼리</b><br/>
+        15:30은 아직 비워 둔 자리라 아래 <b style="color:var(--gold);">후보 7곳 비교</b>에서 그때 고르면 돼요. 나비드주얼리는 이번엔 <b style="color:var(--gold);">제외</b>예요(18:00 마감 · 새미와 겹침).
       </div>
       <div class="it-actions" style="margin-top:9px;">
         <button class="act-btn gold wide" onclick="jump7()">💍 후보 7곳 비교 · 바로 보기 ↓</button>
@@ -320,21 +320,21 @@ a.tel{color:var(--green);font-weight:800;text-decoration:none;}
     </div>
 
     <div class="sec-card">
-      <h3>📋 4곳 비교 <span class="sub">시간·가성비·취소·특징</span></h3>
+      <h3>📋 3곳 확정 비교 <span class="sub">시간·가성비·취소</span></h3>
       <table class="cmp ring">
-        <tr><th></th><th>원골드</th><th>존폴</th><th>공방301</th><th>새미</th></tr>
-        <tr><td>시간</td><td><b>14:30</b></td><td><b>15:30</b></td><td><b>17:00</b></td><td><b>18:30</b></td></tr>
-        <tr><td>가격대</td><td>80~170</td><td>190~250</td><td>160~230</td><td>230~280</td></tr>
-        <tr><td>가성비</td><td>1위</td><td>3위</td><td>2위</td><td>4위</td></tr>
-        <tr><td>금 색감</td><td>3위</td><td>2위</td><td><b>1위</b></td><td>4위</td></tr>
-        <tr><td>취소</td><td>당일도 무료</td><td>12/10까지</td><td><b>환불 불가</b></td><td>당일도 무료</td></tr>
+        <tr><th></th><th>원골드</th><th>공방301</th><th>새미</th></tr>
+        <tr><td>시간</td><td><b>14:30</b></td><td><b>17:00</b></td><td><b>18:30</b></td></tr>
+        <tr><td>가격대</td><td>80~170</td><td>160~230</td><td>230~280</td></tr>
+        <tr><td>가성비</td><td>1위</td><td>2위</td><td>3위</td></tr>
+        <tr><td>금 색감</td><td>2위</td><td><b>1위</b></td><td>3위</td></tr>
+        <tr><td>취소</td><td>당일도 무료</td><td><b>환불 불가</b></td><td>당일도 무료</td></tr>
       </table>
-      <p class="hint">가격대 단위 = 만 원(한 쌍) · 가성비 = 한 쌍 가격대 순 · 금 색감 = 11/23 정리한 색감·세공 순위</p>
+      <p class="hint">가격대 단위 = 만 원(한 쌍) · 순위는 이 3곳 안에서 매긴 순서예요 · 15:30 자리는 아래 후보 7곳에서 고르면 돼요</p>
     </div>
 
     <div class="sec-card" id="cmp7">
       <h3>💍 후보 7곳 비교 <span class="sub">가성비 · 감성 · 예약금 · 취소</span></h3>
-      <p class="hint" style="margin:0 0 9px;">12/11(금) 15:30 자리를 바꿀지 고를 때 보는 표예요. 가격은 <b>한 쌍</b> 기준이고 후기·상담으로 확인된 범위라 정확한 금액은 매장에서 확인해 주세요.</p>
+      <p class="hint" style="margin:0 0 9px;">12/11(금) <b>15:30 자리를 고를 때</b> 보는 표예요. <b>12/11</b> 칸에 "15:30 가능"으로 된 곳이 지금 예약할 수 있는 후보예요. 가격은 <b>한 쌍</b> 기준이고 후기·상담으로 확인된 범위라 정확한 금액은 매장에서 확인해 주세요.</p>
       <div class="seg7" id="seg7">
         <button class="on" data-k="value" onclick="setSort7('value')">가성비순</button>
         <button data-k="safe" onclick="setSort7('safe')">예약금 안전순</button>
@@ -343,17 +343,16 @@ a.tel{color:var(--green);font-weight:800;text-decoration:none;}
       <table class="cmp cmp7" id="ring7Table"></table>
       <p class="hint">예약금·취소는 2026-11-26 네이버 예약 화면에서 확인한 내용이에요. <span class="t-ok">초록</span>은 부담 없음 · <span class="t-warn">주황</span>은 기한 주의 · <span class="t-bad">빨강</span>은 환불 불가예요.</p>
       <div id="ring7List" style="margin-top:10px;"></div>
-      <p class="hint">카드를 누르면 감성·동선·예약 링크가 열려요. 마음에 드는 곳이 15:30에 나오면 뒤 매장은 그 자리에서 정리해도 예약금 손실이 없어요.</p>
+      <p class="hint">카드를 누르면 감성·동선·예약 링크가 열려요. 15:30에 고른 곳이 마음에 안 들면 다음 17:00 공방301로 그냥 넘어가면 돼요(예약금 0원 후보라면 정리해도 손해 없음).</p>
     </div>
 
     <div id="ringCards"></div>
 
     <div class="sec-card">
-      <h3>🔁 취소 규정 3단 정리</h3>
+      <h3>🔁 취소 규정 정리 <span class="sub">확정 3곳</span></h3>
       <div class="row"><div><b>취소 자유</b><br/><span style="font-size:12px;color:var(--sub);">원골드 · 새미 — 예약금 0원, 그 자리에서 정리해도 손해 없음</span></div><span class="pill p-g">안전</span></div>
-      <div class="row"><div><b>12/10(목)까지</b><br/><span style="font-size:12px;color:var(--sub);">존폴 — 그 뒤엔 예약금 2만 원이 날아감</span></div><span class="pill p-o">주의</span></div>
       <div class="row"><div><b>취소 불가</b><br/><span style="font-size:12px;color:var(--sub);">공방301 — 취소·미계약·15분 이상 지연이면 예약금 2만 원 환불 불가</span></div><span class="pill p-r">고정</span></div>
-      <p class="hint">마음에 드는 곳이 14:30~15:30에 나오면, 뒤 매장은 그 자리에서 정리해도 예약금 손실이 없어요.</p>
+      <p class="hint">15:30 후보는 위 <b>후보 7곳 비교</b>의 예약금 칸을 보면 돼요 — 제이버튼·나비드는 0원, 센슈얼링은 1만 원(방문 상담 시 환불 · 12/10~11 당일 취소는 환불 불가).</p>
     </div>
 
     <div class="sec-card">
@@ -428,7 +427,7 @@ a.tel{color:var(--green);font-weight:800;text-decoration:none;}
       <div class="mag-note">지하철·비행기처럼 인터넷이 없을 때는 아래 이미지 뷰가 바로 열려요.</div>
     </div>
     <div style="background:var(--orgbg);border-left:3.5px solid var(--org);border-radius:10px;padding:9px 11px;font-size:12.5px;line-height:1.55;color:#7A3214;font-weight:600;margin-bottom:10px;">
-      매거진 2·3쪽은 반지 <b>5곳(나비드 포함)</b>으로 만들어진 인쇄본이에요. 확정은 <b>이 앱 일정·반지 탭의 4곳</b>(나비드 제외 · 새미 18:30) 기준입니다.
+      매거진 2·3쪽은 반지 <b>5곳(나비드 포함)</b>으로 만들어진 인쇄본이에요. 앱 기준 확정은 <b>3곳(원골드 14:30 · 공방301 17:00 · 새미 18:30)</b>이고 <b>15:30은 후보 7곳에서 고르는 자리</b>예요.
     </div>
     <div class="mag-jump" id="magJump"></div>
     <div id="magPages"></div>
@@ -496,7 +495,6 @@ const P = {
   seoulStn:{name:'서울역', lat:37.55407, lng:126.97070, link:'http://place.map.kakao.com/9113903'},
   hotel:{name:'트래디업 호텔 바이 더 디자이너스', lat:37.57326, lng:126.98857, link:'http://place.map.kakao.com/1186497591'},
   onegold:{name:'원골드', lat:37.57556, lng:126.99044, link:'http://place.map.kakao.com/1975695201'},
-  johnpaul:{name:'존폴쥬얼리', lat:37.57233, lng:126.99186, link:'http://place.map.kakao.com/18552629'},
   gongbang:{name:'공방301 종로점', lat:37.57546, lng:126.99590, link:'http://place.map.kakao.com/1616862769'},
   saemi:{name:'새미쥬얼리', lat:37.57065, lng:126.99100, link:'http://place.map.kakao.com/17218011'},
   riu:{name:'리우 메이크업 by 성수', lat:37.54190, lng:127.05463, link:'http://place.map.kakao.com/852705240'},
@@ -559,17 +557,17 @@ const DAY1 = [
    price:'80~170만 원 · 가성비 1위',
    move:[{k:'walk',t:'도보',m:7}], total:'도보 7분 (14:15 출발)',
    acts:[['카카오맵', P.onegold,'map'],['길찾기', kakaoRoute(P.hotel,P.onegold),'map',1]]},
-  {t:'15:30 → 16:30', title:'존폴쥬얼리 — 무도금 샴페인골드', pill:['12/10까지','p-o'],
-   note:'도보 6분 · 15:22 출발 · 돈화문로10길 2 쥬얼리타운 4층<br/>예약금 2만 원(방문 시 환불) · <b>12/10(목)까지 100% 환불</b> · 그 뒤엔 2만 원 손실',
-   price:'190~250만 원 · 금 색감 2위',
-   move:[{k:'walk',t:'도보',m:6}], total:'도보 6분 (15:22 출발)',
-   acts:[['카카오맵', P.johnpaul,'map'],['길찾기', kakaoRoute(P.onegold,P.johnpaul),'map',1]]},
+  {t:'15:30 → 16:30', title:'15:30 자리 — 선택 대기 (후보 중 고르기)', pill:['선택 대기','p-o'],
+   note:'원골드가 15:20에 끝나면 15:30 자리는 비워 뒀어요. 후보 7곳 비교에서 그때 하나 고르면 돼요.<br/>15:30에 실제로 예약되는 곳: <b>센슈얼링</b>(예약금 1만 원 · 방문 상담 시 환불) · <b>제이버튼</b>(예약금 0원). 나비드는 자리 미확인, 소울앤제이는 15:30 마감이에요.',
+   price:'후보 100~250만 원 · 예약금 0원이면 당일 정리도 부담 없음',
+   move:[], total:'',
+   jump7:true},
   {t:'17:00 → 18:00', title:'공방301 종로점 — 확정', pill:['확정','p-g'],
-   note:'도보 10분 · 16:45 출발 · 동순라길 108 · 예약번호 <b>1414646049</b><br/>자체 공방 5색 금 컬러를 자연광 창가에서 비교',
+   note:'15:30에 고른 매장에서 도보 12~19분 · <b>16:40 출발</b> · 동순라길 108 · 예약번호 <b>1414646049</b><br/>자체 공방 5색 금 컬러를 자연광 창가에서 비교',
    price:'160~230만 원 · 금 색감 1위',
-   warn:'15분 이상 늦으면 예약금 2만 원 환불 불가 — 16:45엔 무조건 나가기',
-   move:[{k:'walk',t:'도보',m:10}], total:'도보 10분 (16:45 출발)',
-   acts:[['카카오맵', P.gongbang,'map'],['길찾기', kakaoRoute(P.johnpaul,P.gongbang),'map',1]]},
+   warn:'15분 이상 늦으면 예약금 2만 원 환불 불가 — 16:40엔 무조건 나가기',
+   move:[{k:'walk',t:'도보',m:15}], total:'15:30 매장 출발 · 도보 12~19분 (16:40 출발)',
+   acts:[['카카오맵', P.gongbang,'map'],['길찾기', kakaoRoute(P.onegold,P.gongbang),'map',1]]},
   {t:'18:30 → 19:00', title:'새미쥬얼리 — 탄탄한 세공', pill:['예약 전','p-n'],
    note:'도보 11분 · 18:15 출발 · 종로 121-1 1층 · <b>19:00 마감</b><br/>예약금 0원 · 평일 예약 시 5만 원 백화점 상품권',
    price:'230~280만 원 · 가장 높은 가격대',
@@ -651,16 +649,12 @@ const RINGS = [
    price:'80~170만 원', tag:'가성비 1위',
    note:'예약금 0원 · 당일 취소 무료 · 수 휴무 · 예약 시 최대 6만 원 할인<br/>샴페인골드 실착 후기가 많고 여러 톤을 한 번에 비교할 수 있어요.',
    acts:[['카카오맵', P.onegold,'map'],['길찾기', kakaoRoute(P.hotel,P.onegold),'map',1]]},
-  {n:2, time:'15:30', name:'존폴쥬얼리', pill:['12/10까지','p-o'], addr:'돈화문로10길 2 쥬얼리타운 4층 · 도보 6분',
-   price:'190~250만 원', tag:'금 색감 2위',
-   note:'예약금 2만 원(방문 시 환불) · 12/10(목)까지 100% 환불<br/>도금 없이 합금 자체로 색을 내는 무도금 샴페인골드·내추럴골드 · 10년 무상 A/S',
-   acts:[['카카오맵', P.johnpaul,'map'],['길찾기', kakaoRoute(P.onegold,P.johnpaul),'map',1]]},
-  {n:3, time:'17:00', name:'공방301 종로점', pill:['확정','p-g'], addr:'동순라길 108 · 도보 10분 · 예약 1414646049',
+  {n:2, time:'17:00', name:'공방301 종로점', pill:['확정','p-g'], addr:'동순라길 108 · 15:30 매장에서 도보 12~19분 · 예약 1414646049',
    price:'160~230만 원', tag:'금 색감 1위',
    note:'취소·미계약·15분 이상 지연이면 예약금 2만 원 환불 불가<br/>자체 공방에서 5가지 금 컬러(내추럴 화이트·브라운골드 등)를 직접 연구 · 자연광 창가 비교 · 직영이라 중간마진 없음',
-   warn:'15분 이상 늦으면 2만 원 환불 불가 — 16:45엔 나가기',
-   acts:[['카카오맵', P.gongbang,'map'],['길찾기', kakaoRoute(P.johnpaul,P.gongbang),'map',1]]},
-  {n:4, time:'18:30', name:'새미쥬얼리', pill:['예약 전','p-n'], addr:'종로 121-1 1층 · 도보 11분 · 19:00 마감',
+   warn:'15분 이상 늦으면 2만 원 환불 불가 — 16:40엔 나가기',
+   acts:[['카카오맵', P.gongbang,'map'],['길찾기', kakaoRoute(P.onegold,P.gongbang),'map',1]]},
+  {n:3, time:'18:30', name:'새미쥬얼리', pill:['예약 전','p-n'], addr:'종로 121-1 1층 · 도보 11분 · 19:00 마감',
    price:'230~280만 원', tag:'세공 마감 탄탄',
    note:'예약금 0원 · 평일 예약 시 5만 원 백화점 상품권 · 19:00 마감<br/>가격대는 가장 높지만 골드·백금 세공 마감이 깔끔해요.',
    warn:'19:00 마감 — 18:30에 도착하면 30분뿐이에요',
@@ -685,7 +679,7 @@ const RING7 = [
    depNote:'예약금 2만 원 — <b>상담만 받고 계약 안 하면 환불 불가</b>(계약 시 계약금에서 차감) · 12/9부터 취소해도 환불 불가',
    slot:'17:00 확정', slotTone:'ok', slotNote:'유저 예약 완료 · 예약번호 1414646049 · <b>15분 이상 지연 시 상담 어려움</b>',
    warn:'무료 취소는 12/8(화)까지 — 그 뒤엔 2만 원이 그대로 날아가요',
-   addr:'종로구 동순라길 108 · 존폴에서 도보 10분',
+   addr:'종로구 동순라길 108 · 종로3가역 7번 출구 쪽',
    walk:'17:00 확정 · 다음 새미까지 도보 11분',
    acts:[['예약 내역','https://booking.naver.com/my/bookings/1414646049','org'],['카카오맵', P.gongbang,'map']]},
   {n:3, name:'새미쥬얼리', tag:'디자인 특허', price:'230~280만', pmin:230, lookRank:7,
@@ -770,8 +764,13 @@ function renderRing7(){
   }).join('');
 }
 function jump7(){
-  const el = document.getElementById('cmp7');
-  if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  const sec = document.getElementById('tab-ring');
+  if(sec && sec.classList.contains('hidden')){
+    const btn = document.querySelectorAll('nav.tabbar .tab')[1];
+    if(btn) goTab('ring', btn);
+  }
+  const go = ()=>{ const el = document.getElementById('cmp7'); if(el) el.scrollIntoView({behavior:'smooth', block:'start'}); };
+  requestAnimationFrame(()=>requestAnimationFrame(go));
 }
 
 /* ───────── 체크리스트 ───────── */
@@ -779,7 +778,7 @@ const CHECKS = [
   ['AB', '예식 후 A안/B안 정하기', '정하면 바로 귀가 KTX 예매 (A 22:08 / B 19:35)'],
   ['KTX', '귀가 KTX 예매하기', '코레일톡 · A/B 정한 뒤 19:35 · 20:58 · 22:08 중 선택'],
   ['사진', '지름길 사진관 17:00 예약', 'A안 조건 · 네이버지도 · 2인 20,000 + 인화 10,000'],
-  ['반지', '원골드 14:30 · 존폴 15:30 · 새미 18:30 예약', '근호 님 쪽에서 진행 중 · 예약금은 존폴 2만 원만'],
+  ['반지', '원골드 14:30 · 공방301 17:00(확정) · 새미 18:30', '15:30은 후보 7곳에서 고르기 · 근호 님 쪽에서 진행 중'],
   ['짐', '호텔 밤 20~21시 짐 픽업 확인', '02-763-3196 · A안 조건이에요'],
   ['카톡', '리우 카톡 재확인', '남자분 12:50~13:00 완료 · 13:30 종료 (전화 금지)'],
   ['짐2', 'B안이면 예식 전 로얄호텔 프런트 짐 보관', '16:05에 찾아 캐리어와 함께 서촌으로'],
@@ -835,6 +834,7 @@ function itemHTML(it, i, small){
       '<p class="it-note">' + it.note + '</p>' + price + warn +
       (it.move && it.move.length ? routeBar(it.move, it.total) : '') +
       (acts ? '<div class="it-actions">' + acts + '</div>' : '') +
+      (it.jump7 ? '<div class="it-actions"><button class="act-btn gold wide" onclick="jump7()">💍 후보 7곳 비교 · 바로 고르기 ↓</button></div>' : '') +
     '</div></div></div>';
 }
 function renderPlan(){
@@ -920,15 +920,14 @@ const PINS = [
   {p:P.seoulStn, g:'start', n:'1', t:'서울역', d:'12/11 13:11 도착 · 12/12 22:08 출발'},
   {p:P.hotel, g:'ring', n:'2', t:'트래디업 호텔', d:'숙소 · 짐 보관 · 02-763-3196'},
   {p:P.onegold, g:'ring', n:'3', t:'원골드', d:'14:30 · 80~170만 · 취소 자유'},
-  {p:P.johnpaul, g:'ring', n:'4', t:'존폴쥬얼리', d:'15:30 · 190~250만 · 12/10까지 환불'},
-  {p:P.gongbang, g:'ring', n:'5', t:'공방301', d:'17:00 확정 · 160~230만 · 취소 불가'},
-  {p:P.saemi, g:'ring', n:'6', t:'새미쥬얼리', d:'18:30 · 230~280만 · 19:00 마감'},
+  {p:P.gongbang, g:'ring', n:'4', t:'공방301', d:'17:00 확정 · 160~230만 · 취소 불가'},
+  {p:P.saemi, g:'ring', n:'5', t:'새미쥬얼리', d:'18:30 · 230~280만 · 19:00 마감'},
   {p:P.sensualing, g:'ring', t:'센슈얼링 종로점(후보)', d:'15:30 가능 · 100~140만 · 예약금 1만(방문 상담 시 환불)'},
   {p:P.jbutton, g:'ring', t:'제이버튼 주얼리(후보)', d:'15:30 가능 · 150~250만 · 예약금 0원'},
   {p:P.navid, g:'ring', t:'나비드주얼리(후보)', d:'100~190만 · 예약금 0원 · 홈페이지 예약'},
   {p:P.soulnj, g:'ring', t:'소울앤제이(후보)', d:'100~150만 · 15:30 마감(16:30 가능)'},
-  {p:P.riu, g:'morning', n:'7', t:'리우 메이크업', d:'12/12 12:00~13:30 · 28만'},
-  {p:P.royal, g:'morning', n:'8', t:'로얄호텔서울', d:'12/12 14:30 본식 · 02-756-1112'},
+  {p:P.riu, g:'morning', n:'6', t:'리우 메이크업', d:'12/12 12:00~13:30 · 28만'},
+  {p:P.royal, g:'morning', n:'7', t:'로얄호텔서울', d:'12/12 14:30 본식 · 02-756-1112'},
   {p:P.shinheung, g:'A', n:'A', t:'신흥시장 (해방촌)', d:'A안 · 오토포토·지름길·시장 저녁'},
   {p:P.jireumgil, g:'A', n:'A', t:'지름길 사진관', d:'A안 17:00 · 2인 30,000원 · 미예약'},
   {p:P.namsan, g:'A', n:'A', t:'남산 전망 덱', d:'A안 · 일몰 17:14 · 도보 5분'},
@@ -1071,7 +1070,7 @@ function goTab(id, btn){
 }
 
 /* ───────── 오프라인 ───────── */
-const SW_CACHE = 'seoul-1211-v4';
+const SW_CACHE = 'seoul-1211-v5';
 let offList = null, offBusy = false;
 function isOffline(){ return !navigator.onLine; }
 function offToast(msg){
