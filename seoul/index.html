@@ -670,7 +670,7 @@ const RINGS = [
 /* ───────── 후보 7곳 비교 ───────── */
 const KMAP = n => 'https://map.kakao.com/link/search/' + kq(n);
 const RING7 = [
-  {n:1, name:'센슈얼링 종로점', price:'100~140만', pmin:100, lookRank:4,
+  {n:1, name:'센슈얼링 종로점', tag:'미니멀·데일리', price:'100~140만', pmin:100, lookRank:4,
    look:'미니멀·데일리 중심 · 커플링 최대 규모 매장(자체 디자인 포함) · 1:1 전문 상담',
    dep:'1만 원', depNum:10000, tone:'warn', cancel:'12/9까지 무료',
    depNote:'예약 확정금 1만 원 — <b>당일 방문 상담만 받아도 100% 환불</b> · 단 12/10(목)·12/11(금) 취소는 1만 원 환불 불가',
@@ -679,16 +679,16 @@ const RING7 = [
    addr:'종로구 율곡로8길 21-1 1층 · 종로3가역 7번 출구 도보 7분 · 주차 불가',
    walk:'원골드 → 도보 3분 · 공방301 → 도보 12분 · 금 색감·세공 4순위',
    acts:[['네이버 예약','https://m.booking.naver.com/booking/6/bizes/460783/items/3735250?startDate=2026-12-11','org'],['카카오맵', KMAP('센슈얼링 종로점'),'map']]},
-  {n:2, name:'공방301 종로점', price:'160~230만', pmin:160, lookRank:1,
+  {n:2, name:'공방301 종로점', tag:'5색 금 비교', price:'160~230만', pmin:160, lookRank:1,
    look:'자체 공방 5색 금 컬러를 자연광 창가에서 비교 · 직영이라 중간마진 없음 · 금 색감 1순위',
-   dep:'2만 원', depNum:20000, tone:'bad', cancel:'12/8까지 무료',
+   dep:'2만 원', depNum:20000, tone:'bad', cancel:'12/8 이후 불가',
    depNote:'예약금 2만 원 — <b>상담만 받고 계약 안 하면 환불 불가</b>(계약 시 계약금에서 차감) · 12/9부터 취소해도 환불 불가',
    slot:'17:00 확정', slotTone:'ok', slotNote:'유저 예약 완료 · 예약번호 1414646049 · <b>15분 이상 지연 시 상담 어려움</b>',
    warn:'무료 취소는 12/8(화)까지 — 그 뒤엔 2만 원이 그대로 날아가요',
    addr:'종로구 동순라길 108 · 존폴에서 도보 10분',
    walk:'17:00 확정 · 다음 새미까지 도보 11분',
    acts:[['예약 내역','https://booking.naver.com/my/bookings/1414646049','org'],['카카오맵', P.gongbang,'map']]},
-  {n:3, name:'새미쥬얼리', price:'230~280만', pmin:230, lookRank:7,
+  {n:3, name:'새미쥬얼리', tag:'디자인 특허', price:'230~280만', pmin:230, lookRank:7,
    look:'자체 디자인 특허·가드링 조합 커스텀 · 화려한 라인 강점(깔끔한 라인도 많아요) · 상담 1~1시간 40분 · 티아라·혼주 귀걸이 증정·평생 A/S',
    dep:'0원', depNum:0, tone:'ok', cancel:'당일도 무료',
    depNote:'예약금 0원 · 바로확정 · 당일 취소도 부담 없음',
@@ -697,7 +697,7 @@ const RING7 = [
    addr:'종로 121-1 1층 · 종로3가역 1번 출구 앞 · 국일관 3시간 무료주차',
    walk:'공방301 → 도보 11분 · 제이버튼 바로 옆',
    acts:[['네이버 예약(평일)','https://m.booking.naver.com/booking/6/bizes/570481/items/5726529?startDate=2026-12-11','org'],['카카오맵', P.saemi,'map']]},
-  {n:4, name:'제이버튼 주얼리', price:'150~250만', pmin:150, lookRank:3,
+  {n:4, name:'제이버튼 주얼리', tag:'샴페인·커스텀', price:'150~250만', pmin:150, lookRank:3,
    look:'샴페인골드·커스텀 감성 · 타임제 6타임(11:00·12:30·14:00·15:30·17:00·18:30) · 리뷰 6,094건으로 가장 많아요',
    dep:'0원', depNum:0, tone:'ok', cancel:'연락만 하면 변경',
    depNote:'예약금 0원 · 신청 후 확정(평균 40~50분) · 당일 취소도 연락만 주면 돼요',
@@ -706,7 +706,7 @@ const RING7 = [
    addr:'종로 119 2층 · 새미쥬얼리 바로 옆 · 1만 원 할인 쿠폰',
    walk:'원골드 → 도보 11분 · 공방301 → 도보 19분(16:30 출발하면 여유)',
    acts:[['네이버 예약','https://m.booking.naver.com/booking/13/bizes/495382/items/3832479?startDate=2026-12-11','org'],['카카오맵', KMAP('제이버튼 주얼리'),'map']]},
-  {n:5, name:'나비드주얼리', price:'100~190만', pmin:100, lookRank:2,
+  {n:5, name:'나비드주얼리', tag:'18K 밀그레인', price:'100~190만', pmin:100, lookRank:2,
    look:'18K 샴페인골드·밀그레인 정통 · 3부 다이아 · 평생 무상 A/S · 1:1 상담',
    dep:'0원', depNum:0, tone:'ok', cancel:'규정 미확인',
    depNote:'예약금 안내 없음 — 네이버 예약이 아니라 <b>홈페이지 예약</b>이에요 · 취소 규정은 예약 전에 문의',
@@ -715,7 +715,7 @@ const RING7 = [
    addr:'종로 183 효성주얼리시티 지하 1층 1008호 · 종로5가역 도보 4분 · 건물 지하주차',
    walk:'원골드 → 도보 19분 · 공방301 → 도보 11분 · 홈페이지 예약 시 평일 10% 할인',
    acts:[['홈페이지 예약','https://www.navidjewerly.co.kr/CONTACT','org'],['카카오맵', KMAP('나비드주얼리'),'map']]},
-  {n:6, name:'소울앤제이', price:'100~150만', pmin:100, lookRank:6,
+  {n:6, name:'소울앤제이', tag:'핸드메이드 공방', price:'100~150만', pmin:100, lookRank:6,
    look:'100% 핸드메이드·따뜻한 공방 감성 · 1팀 단독 상담 · 소울공방 상품도 같이 볼 수 있어요',
    dep:'0원', depNum:0, tone:'warn', cancel:'3일 전 취소 권고',
    depNote:'예약금 0원 · 바로확정 · 당일 취소가 잦아 <b>최소 3일 전</b> 변경·취소를 권하는 곳이에요',
@@ -724,7 +724,7 @@ const RING7 = [
    addr:'종로구 돈화문로 66 · 원골드에서 도보 3분',
    walk:'원골드 → 도보 3분 · 공방301 → 도보 16분',
    acts:[['네이버 예약','https://m.booking.naver.com/booking/6/bizes/928590/items/7453419?startDate=2026-12-11','org'],['카카오맵', KMAP('소울앤제이'),'map']]},
-  {n:7, name:'원골드', price:'80~170만', pmin:80, lookRank:5,
+  {n:7, name:'원골드', tag:'초가성비', price:'80~170만', pmin:80, lookRank:5,
    look:'디자인 수백 종을 한 매장에서 비교 · 14K/18K · 샴페인골드 실착 후기 다수 · 평생 무상 A/S',
    dep:'0원', depNum:0, tone:'ok', cancel:'당일도 무료',
    depNote:'예약금 0원 · 바로확정 · 당일 취소 무료',
@@ -758,7 +758,7 @@ function renderRing7(){
     const pill = r.depNum ? ('예약금 ' + r.dep) : '예약금 0원';
     const pcls = r.tone === 'ok' ? 'p-g' : (r.tone === 'warn' ? 'p-o' : 'p-r');
     return '<details class="r7"><summary><span class="r7-no">' + r.n + '</span>' +
-      '<span class="r7-nm"><b>' + esc(r.name) + '</b><span>' + esc(r.price) + ' · ' + esc(r.slot) + '</span></span>' +
+      '<span class="r7-nm"><b>' + esc(r.name) + '</b><span>' + esc(r.price) + ' · ' + esc(r.tag) + ' · ' + esc(r.slot) + '</span></span>' +
       '<span class="pill ' + pcls + '">' + esc(pill) + '</span></summary>' +
       '<div class="r7-body">' +
       '<div class="r7-line"><span class="r7-k">감성</span><span class="r7-v">' + r.look + '</span></div>' +
