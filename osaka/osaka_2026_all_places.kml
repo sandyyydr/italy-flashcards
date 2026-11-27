@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2"><Document>
 <name>🇯🇵 오사카 2026 전체 추천 지도</name>
-<description><![CDATA[이승현 님 오사카 3박 4일(2026.11.28~12.01) 추천 장소 전체 지도.<br/>① 확정 일정 ② 맛집·카페 59곳(최근호 님 매거진 + 유저 추가 + 블로그 20곳) ③ 쇼핑·기타.<br/>좌표는 2026-11-22 Google Maps 기준 확인. 만든 날 2026-11-22 · 핫플 5곳 추가 2026-11-24 · 맛집 20곳 추가 2026-11-25.]]></description>
+<description><![CDATA[이승현 님 오사카 3박 4일(2026.11.28~12.01) 추천 장소 전체 지도.<br/>① 확정 일정 ② 맛집·카페 59곳(최근호 님 매거진 + 유저 추가 + 블로그 20곳) ③ 쇼핑·기타.<br/>좌표는 2026-11-22 Google Maps 기준 확인. 만든 날 2026-11-22 · 핫플 5곳 추가 2026-11-24 · 맛집 20곳 추가 2026-11-25 · 11/27 동선 수정(신세카이·덴노지, 나카노시마, 그르니에) 반영.]]></description>
 <Style id="ly1"><IconStyle><color>ffffffff</color><scale>1.0</scale><Icon><href>http://maps.google.com/mapfiles/kml/paddle/red-circle.png</href></Icon></IconStyle><LabelStyle><scale>0.85</scale></LabelStyle></Style>
 <Style id="ly2"><IconStyle><color>ffffffff</color><scale>1.0</scale><Icon><href>http://maps.google.com/mapfiles/kml/paddle/orange-circle.png</href></Icon></IconStyle><LabelStyle><scale>0.85</scale></LabelStyle></Style>
 <Style id="ly3"><IconStyle><color>ffffffff</color><scale>1.0</scale><Icon><href>http://maps.google.com/mapfiles/kml/paddle/blu-circle.png</href></Icon></IconStyle><LabelStyle><scale>0.85</scale></LabelStyle></Style>
-<Folder><name>1. 확정 일정</name><description>11/28~12/01 실제로 가는 코스 · 13곳</description><open>1</open>
+<Folder><name>1. 확정 일정</name><description>11/28~12/01 실제로 가는 코스 · 17곳</description><open>1</open>
 <Placemark>
 <name>【11/28】간사이국제공항 제1터미널</name>
 <styleUrl>#ly1</styleUrl>
@@ -97,8 +97,36 @@
 <ExtendedData><Data name="구분"><value>역</value></Data><Data name="일정"><value>11/28 16:00 · 12/01 06:30</value></Data><Data name="주소"><value>5-chōme-10-1番60号 Namba, Chuo Ward, Osaka, 542-8503</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=8943465899133420071&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
 <Point><coordinates>135.502295,34.662933,0</coordinates></Point>
 </Placemark>
+<Placemark>
+<name>【11/28】츠텐카쿠 (신세카이 전망대)</name>
+<styleUrl>#ly1</styleUrl>
+<description><![CDATA[<b>전망대·야경</b><br/><span style='color:#666'>Tsutenkaku</span><br/>🗓 11/28 17:15<br/>¥1,500 · 9:00~21:45(마지막 입장 21:15) · 입장 시간예약제. 신세카이 골목 포토 스팟.<br/>📍 1-chōme-18-6 Ebisuhigashi, Naniwa Ward, Osaka<br/><a href='https://maps.google.com/?cid=16558556426972448087'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>전망대·야경</value></Data><Data name="일정"><value>11/28 17:15</value></Data><Data name="주소"><value>1-chōme-18-6 Ebisuhigashi, Naniwa Ward, Osaka</value></Data></ExtendedData>
+<Point><coordinates>135.5063058,34.6524992,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【11/28】쿠시카츠 다루마 신세카이 총본점</name>
+<styleUrl>#ly1</styleUrl>
+<description><![CDATA[<b>쿠시카츠</b><br/><span style='color:#666'>Kushikatsu Daruma Shinsekai Sohonten</span><br/>🗓 11/28 18:10 저녁<br/>1929년 창업 · 소스 두 번 찍기 금지 · 10:30~22:30(L.O.22:00) · 카운터 12석.<br/>📍 2-chōme-3-9 Ebisuhigashi, Naniwa Ward, Osaka<br/><a href='https://maps.google.com/?cid=17209588581346616951'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>쿠시카츠</value></Data><Data name="일정"><value>11/28 18:10 저녁</value></Data><Data name="주소"><value>2-chōme-3-9 Ebisuhigashi, Naniwa Ward, Osaka</value></Data></ExtendedData>
+<Point><coordinates>135.5062032,34.6515704,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【11/29】오사카시 중앙공회당</name>
+<styleUrl>#ly1</styleUrl>
+<description><![CDATA[<b>포토스팟</b><br/><span style='color:#666'>Osaka City Central Public Hall</span><br/>🗓 11/29 15:00<br/>1918년 네오르네상스 건축 · 무료 · 9:30~21:30 · 강 건너 정면샷.<br/>📍 1-chōme-1-27 Nakanoshima, Kita Ward, Osaka<br/><a href='https://maps.google.com/?cid=3859666275680740249'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>포토스팟</value></Data><Data name="일정"><value>11/29 15:00</value></Data><Data name="주소"><value>1-chōme-1-27 Nakanoshima, Kita Ward, Osaka</value></Data></ExtendedData>
+<Point><coordinates>135.5039123,34.6935485,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【11/29】나카노시마 장미공원</name>
+<styleUrl>#ly1</styleUrl>
+<description><![CDATA[<b>공원·포토스팟</b><br/><span style='color:#666'>Nakanoshima Rose Garden</span><br/>🗓 11/29 15:40<br/>24시간 무료 · 분수·강변·스카이라인. 11월 말은 장미가 거의 진 상태.<br/>📍 1-chōme-1 Nakanoshima, Kita Ward, Osaka<br/><a href='https://maps.google.com/?cid=332462143724265963'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>공원·포토스팟</value></Data><Data name="일정"><value>11/29 15:40</value></Data><Data name="주소"><value>1-chōme-1 Nakanoshima, Kita Ward, Osaka</value></Data></ExtendedData>
+<Point><coordinates>135.5078873,34.6923932,0</coordinates></Point>
+</Placemark>
 </Folder>
-<Folder><name>2. 맛집·카페</name><description>맛집·카페 59곳 — 기존 매거진 39곳 + 블로그에서 새로 담은 20곳(2026-11-25 좌표 확인)</description><open>1</open>
+<Folder><name>2. 맛집·카페</name><description>맛집·카페 65곳 — 기존 39 + 블로그 20 + 신세카이·덴노지·그르니에 6곳(2026-11-27 확인)</description><open>1</open>
 <Placemark>
 <name>551 호라이 본점</name>
 <styleUrl>#ly2</styleUrl>
@@ -512,6 +540,48 @@
 <description><![CDATA[<b>치킨</b><br/><span style='color:#666'>ぶりや チカチキン 大丸心斎橋店</span><br/>⭐ 4.6 / 5 (205리뷰)<br/>다이마루 B2F 치킨 · 하프 포장 · 11:00~21:00<br/>📍 〒542-0085 Osaka, Chuo Ward, Shinsaibashisuji, 1-chōme−7−１ Main Building, B2F<br/><a href='https://maps.google.com/?cid=16361755103346848577'>구글맵에서 열기</a>]]></description>
 <ExtendedData><Data name="구분"><value>치킨</value></Data><Data name="일정"><value>다이마루 B2F 치킨 · 하프 포장 · 11:00~21:00</value></Data><Data name="주소"><value>〒542-0085 Osaka, Chuo Ward, Shinsaibashisuji, 1-chōme−7−１ Main Building, B2F</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=16361755103346848577</value></Data></ExtendedData>
 <Point><coordinates>135.5009632,34.673162999999995,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【11/28】야에카츠 (신세카이 쿠시카츠)</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>쿠시카츠</b><br/><span style='color:#666'>Yaekatsu</span><br/>🗓 11/28 저녁 대안<br/>10:30~20:30 · 목 휴무 · 4.0 / 5 (3,979리뷰) · 다루마 줄 길 때.<br/>📍 3-chōme-4-13 Ebisuhigashi, Naniwa Ward, Osaka<br/><a href='https://maps.google.com/?cid=5223555477227955972'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>쿠시카츠</value></Data><Data name="일정"><value>11/28 저녁 대안</value></Data><Data name="주소"><value>3-chōme-4-13 Ebisuhigashi, Naniwa Ward, Osaka</value></Data></ExtendedData>
+<Point><coordinates>135.5060154,34.6496971,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【11/28】텐구 (쟌쟌요코초)</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>쿠시카츠·이자카야</b><br/><span style='color:#666'>Tengu</span><br/>🗓 11/28 저녁 대안<br/>10:30~20:00 · 무휴 · 3.9 / 5 (1,425리뷰) · 쟌쟌요코초 입구.<br/>📍 3-chōme-4-12 Ebisuhigashi, Naniwa Ward, Osaka<br/><a href='https://maps.google.com/?cid=5198892808408323011'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>쿠시카츠·이자카야</value></Data><Data name="일정"><value>11/28 저녁 대안</value></Data><Data name="주소"><value>3-chōme-4-12 Ebisuhigashi, Naniwa Ward, Osaka</value></Data></ExtendedData>
+<Point><coordinates>135.506053,34.6497933,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【11/28】야키니쿠 오노 신세카이</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>야키니쿠</b><br/><span style='color:#666'>Yakiniku Restaurant Ohno - Shinsekai</span><br/>🗓 11/28 저녁 대안<br/>11:30~23:00 · 4.9 / 5 (4,974리뷰) · 다루마 바로 옆 2F.<br/>📍 2-chōme-5-11 Ebisuhigashi, Naniwa Ward, Osaka<br/><a href='https://maps.google.com/?q=Yakiniku+Restaurant+Ohno+Shinsekai+Osaka'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>야키니쿠</value></Data><Data name="일정"><value>11/28 저녁 대안</value></Data><Data name="주소"><value>2-chōme-5-11 Ebisuhigashi, Naniwa Ward, Osaka</value></Data></ExtendedData>
+<Point><coordinates>135.5051843,34.6514594,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【11/28】아베노 하루카스 다이닝 (12~14F)</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>레스토랑가</b><br/><span style='color:#666'>Abeno Harukas Dining</span><br/>🗓 11/28 저녁 대안<br/>11:00~23:00 · 하루카스 12~14F 40여 곳 · 하루카스 300과 같은 건물.<br/>📍 1-chōme-1-43 Abenosuji, Abeno Ward, Osaka<br/><a href='https://maps.google.com/?cid=751765017320586560'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>레스토랑가</value></Data><Data name="일정"><value>11/28 저녁 대안</value></Data><Data name="주소"><value>1-chōme-1-43 Abenosuji, Abeno Ward, Osaka</value></Data></ExtendedData>
+<Point><coordinates>135.5134794,34.6460902,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【11/29】그르니에 우메다점 · 크림브륄레 밀푀유</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>디저트·테이크아웃</b><br/><span style='color:#666'>grenier Umeda</span><br/>🗓 11/29 10:00<br/>한큐 그랜드빌딩 1F · 10:00~20:00 · 테이크아웃 전용 · 16시 이후 품절.<br/>📍 1-chōme-1-1 Shibata, Kita Ward, Osaka<br/><a href='https://maps.google.com/?q=grenier+Umeda+Osaka'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>디저트·테이크아웃</value></Data><Data name="일정"><value>11/29 10:00</value></Data><Data name="주소"><value>1-chōme-1-1 Shibata, Kita Ward, Osaka</value></Data></ExtendedData>
+<Point><coordinates>135.499191,34.703542,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【11/29】그르니에 기타하마점 · 크림브륄레 밀푀유</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>디저트·테이크아웃</b><br/><span style='color:#666'>grenier Kitahama branch</span><br/>🗓 11/29 16:00<br/>도쇼마치 1-3-8 · 기타하마역 4번 출구 도보 6분 · 10:00~19:00 · 테이크아웃 전용 · 4.7 / 5 (376리뷰).<br/>📍 1-chōme-3-8 Doshōmachi, Chuo Ward, Osaka<br/><a href='https://maps.google.com/?q=grenier+Kitahama+Osaka'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>디저트·테이크아웃</value></Data><Data name="일정"><value>11/29 16:00</value></Data><Data name="주소"><value>1-chōme-3-8 Doshōmachi, Chuo Ward, Osaka</value></Data></ExtendedData>
+<Point><coordinates>135.5089982,34.6883296,0</coordinates></Point>
 </Placemark>
 </Folder>
 <Folder><name>3. 쇼핑·기타</name><description>쇼핑·체험·전망대 · 12곳</description><open>1</open>
