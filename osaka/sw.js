@@ -1,4 +1,4 @@
-const CACHE = 'osaka-planner-v88';
+const CACHE = 'osaka-planner-v89';
 const CORE = [
   './',
   './index.html',
