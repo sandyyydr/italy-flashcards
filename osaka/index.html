@@ -1186,6 +1186,27 @@ let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(
     if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
   }catch(e){}
 })();
+// v92: 저장본 2일차 10:55 덴진바시스지 카드에 디저트 3곳(위치·구글맵 링크) 반영
+(function migrateDessertV92(){
+  try{
+    if(localStorage.getItem('os_mig_v92')==='1') return;
+    const src = (DEFAULT_DAYS.find(x=>x.d==='11/29(일)')||{items:[]}).items.find(it=>it.t==='10:55');
+    let changed = false;
+    if(src){
+      (days||[]).forEach(d=>{
+        if(!d || d.d!=='11/29(일)') return;
+        (d.items||[]).forEach(it=>{
+          if(it.t==='10:55' && !/디저트 3곳/.test(it.note||'')){
+            it.name = src.name; it.note = src.note; it.warn = src.warn;
+            changed = true;
+          }
+        });
+      });
+    }
+    localStorage.setItem('os_mig_v92','1');
+    if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
+  }catch(e){}
+})();
 // v89: 저장본 1·2·3일차를 최신 기본값(2일차 신사이바시 후반 코스)으로 재동기화
 (function refreshDaysV89(){
   try{
