@@ -2817,7 +2817,7 @@ function savePlanModal(){
 function renderPlan(){
   document.getElementById('dayScroll').innerHTML = days.map((x,i)=>`<div class="day-chip ${i===curDay?'active':''}" onclick="curDay=${i};renderPlan()"><div class="d1">DAY ${i+1}</div><div class="d2">${x.d}</div><div class="d3">${x.city}</div></div>`).join('');
   const d = days[curDay];
-  document.getElementById('dayBanner').innerHTML = `<div><h2>DAY ${curDay+1} · ${d.d} (${d.city})</h2><p>${d.sub}</p></div><div style="display:flex;gap:5px;"><button class="act-btn" style="background:#fff;color:var(--green);border:1px solid #C8D8CE;" onclick="resetOsDays()">초기화</button><button class="act-btn" style="background:var(--gold);color:var(--green);font-weight:900;" onclick="openPlanModal(null)">+ 일정</button></div>`;
+  document.getElementById('dayBanner').innerHTML = `<div><h2>DAY ${curDay+1} · ${d.d} (${d.city})</h2><p>${d.sub}</p></div><div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end;flex-shrink:0;"><button class="act-btn" style="background:#fff;color:var(--green);border:1px solid #C8D8CE;white-space:nowrap;flex-shrink:0;" onclick="resetOsDays()">초기화</button><button class="act-btn" style="background:var(--gold);color:var(--green);font-weight:900;white-space:nowrap;flex-shrink:0;" onclick="openPlanModal(null)">+ 일정</button></div>`;
   document.getElementById('planList').innerHTML = d.items.map((it,idx)=>`
     <div class="item-card">
       <div><span class="time-badge">${it.t}</span><span class="move-badge">${it.move}</span></div>
