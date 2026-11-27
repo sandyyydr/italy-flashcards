@@ -1186,24 +1186,21 @@ let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(
     if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
   }catch(e){}
 })();
-// v92: 저장본 2일차 10:55 덴진바시스지 카드에 디저트 3곳(위치·구글맵 링크) 반영
+// v92: 저장본 2일차 10:55 덴진바시스지 카드에 디저트 3곳(위치·구글맵 링크) 반영 — 내용 기준이라 여러 번 실행해도 안전
 (function migrateDessertV92(){
   try{
-    if(localStorage.getItem('os_mig_v92')==='1') return;
     const src = (DEFAULT_DAYS.find(x=>x.d==='11/29(일)')||{items:[]}).items.find(it=>it.t==='10:55');
+    if(!src || !/dmap/.test(src.note||'')) return;
     let changed = false;
-    if(src){
-      (days||[]).forEach(d=>{
-        if(!d || d.d!=='11/29(일)') return;
-        (d.items||[]).forEach(it=>{
-          if(it.t==='10:55' && !/디저트 3곳/.test(it.note||'')){
-            it.name = src.name; it.note = src.note; it.warn = src.warn;
-            changed = true;
-          }
-        });
+    (days||[]).forEach(d=>{
+      if(!d || d.d!=='11/29(일)') return;
+      (d.items||[]).forEach(it=>{
+        if(it.t==='10:55' && /^덴진바시스지 4~5초메/.test(it.name||'') && !/dmap/.test(it.note||'')){
+          it.name = src.name; it.note = src.note; it.warn = src.warn;
+          changed = true;
+        }
       });
-    }
-    localStorage.setItem('os_mig_v92','1');
+    });
     if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
   }catch(e){}
 })();
