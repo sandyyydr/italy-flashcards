@@ -285,6 +285,12 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
 .stf-note{margin-top:7px;background:#FFF7E3;border:1px dashed #D9B25C;border-radius:8px;padding:6px 8px;font-size:11.5px;line-height:1.5;color:#6B4C12;}
 .stf-note b{color:#5A3A05;}
 .stf-warn{margin-top:7px;background:var(--orgbg);border-left:3px solid var(--org);border-radius:8px;padding:6px 8px;font-size:11.5px;line-height:1.5;color:#7A3214;font-weight:600;}
+/* ── 🧾 면세 서브 탭 (v92) ── */
+.tax-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:0 0 13px;scroll-margin-top:70px;}
+.tax-tab{display:flex;align-items:center;justify-content:center;gap:5px;border:1.5px solid var(--line);background:#fff;border-radius:11px;padding:10px 5px;font-size:12.5px;font-weight:900;color:var(--sub);font-family:inherit;cursor:pointer;letter-spacing:-.4px;line-height:1.15;white-space:nowrap;}
+.tax-tab span{font-size:14px;line-height:1;}
+.tax-tab.active{background:var(--green);border-color:var(--green);color:#fff;box-shadow:0 2px 8px rgba(20,73,63,.22);}
+.tax-pane{scroll-margin-top:70px;}
 
 /* ───────── 🛍️ 위시(쇼핑) 탭 · 2026-11-25 개편 ───────── */
 .wish-hero{background:var(--green);color:#FAF7F0;border-radius:16px;padding:14px 15px 13px;margin-bottom:11px;position:relative;box-shadow:0 2px 10px rgba(20,73,63,.14);}
@@ -408,7 +414,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
   <div class="h-flight">
     <b>항공(QE7QB2)</b> 11/28(토) 부산 14:05 &rarr; 간사이 15:25 &nbsp;|&nbsp; 12/01(화) 11:00 귀국<br/>
     <b>숙소</b> 에스리드 호텔 난바 이스트 언넥스 · <b>USJ</b> 11/30(월) 11:00 입장 · 닌텐도 12:40<br/>
-    <b>기차(예매 완료)</b> 11/27(금) 김천구미 20:07 &rarr; 부산 21:23 &nbsp;|&nbsp; 12/01(화) 구포 15:31 &rarr; 김천구미 16:59 <span style="font-size:10px;font-weight:900;opacity:.55;">· v91</span>
+    <b>기차(예매 완료)</b> 11/27(금) 김천구미 20:07 &rarr; 부산 21:23 &nbsp;|&nbsp; 12/01(화) 구포 15:31 &rarr; 김천구미 16:59 <span style="font-size:10px;font-weight:900;opacity:.55;">· v92</span>
   </div>
   <div class="off-bar" id="offBar" onclick="toggleOffPanel()">
     <span class="off-dot" id="offDot"></span>
@@ -591,18 +597,97 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
       <button id="seg-tax" class="active" onclick="taxSeg('tax')">🧾 면세</button>
       <button id="seg-check" onclick="taxSeg('check')">☑️ 체크</button>
     </div>
-    <div id="taxPane">
-<div class="sec-card" style="background:var(--orgbg);border-color:var(--org);">
+    <div id="taxPane"><div class="sec-card" style="background:var(--orgbg);border-color:var(--org);">
       <h3 style="color:var(--org);">🚨 2026-11 개편 일본 면세 주의!</h3>
       <div style="font-size:13px;line-height:1.55;color:#5A3118;">
         • 매장에서 <b>정가 결제</b> 후 출국일(12/1 07:34 공항 도착) <b>수하물 위탁 전</b> 세관 단말기에서 여권+면세품(소모품 미사용) 확인 필수!<br/>
         • <b>나카노시마 미술관</b>은 월·화 휴관 → 11/29(일) 필수!<br/>
         • <b>USJ 닌텐도 월드</b>(12:40)는 재입장 불가!
       </div>
-      <a class="act-btn org" style="width:100%;justify-content:center;margin-top:10px;text-decoration:none;" onclick="goTab('tax',document.querySelector('.tab:nth-child(4)'));return false;" href="#tax-map">🧾 면세 환급 4단계 순서도 · T1 지도 보기 →</a>
-      <a class="act-btn" style="width:100%;justify-content:center;margin-top:7px;text-decoration:none;border-color:var(--green);color:var(--green);font-weight:900;" href="#tax-stores">🛒 우리가 가는 매장별 면세 가이드 →</a>
+      <a class="act-btn org" style="width:100%;justify-content:center;margin-top:10px;text-decoration:none;" onclick="return taxJump('flow')" href="#tax-tabs">🧾 면세 환급 4단계 순서도 →</a>
+      <a class="act-btn" style="width:100%;justify-content:center;margin-top:7px;text-decoration:none;border-color:var(--green);color:var(--green);font-weight:900;" onclick="return taxJump('stores')" href="#tax-tabs">🛒 우리가 가는 매장별 면세 가이드 →</a>
     </div>
-    <div class="sec-card" style="border-color:var(--gold);background:#FFFBEF;">
+
+    <div class="tax-tabs" id="tax-tabs" role="tablist" aria-label="면세 세부 메뉴">
+      <button type="button" class="tax-tab active" data-tt="stores" onclick="taxSub('stores')"><span>🏪</span>매장별 가이드</button>
+      <button type="button" class="tax-tab" data-tt="flow" onclick="taxSub('flow')"><span>📋</span>절차 · 11/1 규칙</button>
+      <button type="button" class="tax-tab" data-tt="fee" onclick="taxSub('fee')"><span>💳</span>대행사 · 수수료</button>
+      <button type="button" class="tax-tab" data-tt="map" onclick="taxSub('map')"><span>🗺️</span>공항 지도</button>
+    </div>
+    <div id="taxsub-stores" class="tax-pane">
+<div class="sec-card" id="tax-stores" style="margin-top:0;border-color:var(--green);">
+      <h3>🛒 우리가 가는 매장별 면세 실전 가이드</h3>
+      <div class="stf-lead">일정표에 있는 매장만 모았어요. <b>매장마다 환급 방식이 달라요</b> — 앱으로 하는 곳, 카운터에서 하는 곳, 아예 안 되는 곳이 섞여 있어요. 결제 전에 이 카드만 보고 움직이면 돼요.</div>
+      <div class="stf-legend">
+        <span class="stf-lg">📱 앱 환급</span>
+        <span class="stf-lg">🏬 매장 카운터</span>
+        <span class="stf-lg n">✕ 면세 없음</span>
+      </div>
+
+      <div class="stf-card">
+        <div class="stf-head"><div class="stf-ico">🏔️</div><div class="stf-nm">몽벨 아베노점</div><div class="stf-when">1일차 토 19:10</div></div>
+        <div class="stf-body">
+          <div class="stf-method">📱 Pie VAT 앱 환급 · 현장 즉시 할인 아님</div>
+          <div class="stf-row"><div class="stf-k">준비</div><div class="stf-v"><b>매장에 와이파이 없어요</b> → eSIM을 미리 켜 두고, <b>Pie VAT 앱은 집·호텔 와이파이에서 미리 설치</b>하고 계정까지 만들어 두기</div></div>
+          <div class="stf-row"><div class="stf-k">매장</div><div class="stf-v">여권 원본 제시 → <b>세금 포함 전액 결제</b>(카드 결제 권장 · 현금 불가 사례 있음) → 직원에게 <b>QR·6자리 코드</b> 달라고 하기 → 앱에서 <b>영수증·여권 스캔 등록</b></div></div>
+          <div class="stf-row"><div class="stf-k">사용</div><div class="stf-v">목도리·패딩은 <b>옷(일반품)</b>이라 여행 중 <b>입고 써도 OK</b> — 대신 <b>본인이 직접 들고 출국</b>, <b>품번 택·포장·영수증 보관</b></div></div>
+          <div class="stf-row"><div class="stf-k">공항</div><div class="stf-v">수하물 위탁 <b>전</b> 4층 세관 키오스크 여권 스캔 → 승인된 뒤 앱에서 환급 수령</div></div>
+          <div class="stf-note">수수료 <b>세전 금액의 1.5%+</b>(매장별 차이) · 입금까지 <b>영업일 5~10일</b> · 목도리 3개(¥11,100)면 세전 ¥10,091로 기준 통과</div>
+        </div>
+      </div>
+
+      <div class="stf-card">
+        <div class="stf-head"><div class="stf-ico">🐧</div><div class="stf-nm">돈키호테 난바센니치마에점</div><div class="stf-when org">3일차 월 밤 · 24시간</div></div>
+        <div class="stf-body">
+          <div class="stf-method ok">🏬 면세 전용 카운터 + 웹쿠폰</div>
+          <div class="stf-row"><div class="stf-k">매장</div><div class="stf-v">일반 계산대 <b>말고</b> <b>면세 전용 카운터(Tax-Free)</b>에 줄 서기 → 결제 <b>직전에</b> <b>웹 5~7% 할인 쿠폰</b> 화면 보여주기 → 여권 제시 후 결제</div></div>
+          <div class="stf-row"><div class="stf-k">주의</div><div class="stf-v">쿠폰은 <b>캡처·스크린샷 불가</b> — 그 자리에서 실시간 페이지로 열어야 해요. <b>화장품·과자·안약(소모품)은 일본에서 쓰거나 먹으면 그 영수증 전체 환급 불가</b> → 당장 쓸 건 <b>계산대에서 따로 결제</b></div></div>
+          <div class="stf-row"><div class="stf-k">공항</div><div class="stf-v">위탁 전 4층 세관 키오스크 여권 스캔 (돈키는 <b>환급 수수료 0엔</b> · 영수증 QR로 J-TaxRefund 카드 등록)</div></div>
+          <div class="stf-note">3인 합산 <b>세전 ¥33,000↑</b>이면 7% 쿠폰 · <b>¥10,000↑</b>이면 5% — 살 게 많으니 한 번에 몰아서 계산하는 게 이득</div>
+        </div>
+      </div>
+
+      <div class="stf-card">
+        <div class="stf-head"><div class="stf-ico">🏬</div><div class="stf-nm">한큐백화점 우메다 본점 · 루쿠아</div><div class="stf-when">2일차 일 12:45~</div></div>
+        <div class="stf-body">
+          <div class="stf-method">🏬 백화점 면세 카운터 (루쿠아는 매장별)</div>
+          <div class="stf-row"><div class="stf-k">매장</div><div class="stf-v">브랜드 매장에서 여권 지참하고 <b>세금 포함 전액 결제</b> + <b>"Tax-Free 되나요?"</b> 확인 → <b>종이 영수증 전부</b> 모으기</div></div>
+          <div class="stf-row"><div class="stf-k">카운터</div><div class="stf-v">한큐는 <b>B1 해외고객카운터</b> 또는 <b>1F 면세 카운터(15번 출입구 옆)</b>에서 <b>당일 영업 마감 전</b> 수속 — 영수증 + 여권 원본 + <b>결제한 본인 카드</b> 지참</div></div>
+          <div class="stf-row"><div class="stf-k">공항</div><div class="stf-v">위탁 전 4층 세관 키오스크 여권 스캔</div></div>
+          <div class="stf-note">수수료 약 <b>1.55%</b>(Global Blue · 카운터 안내 기준) · 여권으로 <b>5% 게스트 쿠폰</b>을 먼저 받으면 할인 + 면세 둘 다 가능</div>
+          <div class="stf-warn">루쿠아는 건물 통합 카운터가 아니라 <b>브랜드 매장별 수속</b>이에요(공식 안내). 안 되는 매장이 있으니 계산 전에 꼭 물어보고, 로프트는 <b>마감 30분 전</b>까지예요.</div>
+        </div>
+      </div>
+
+      <div class="stf-card">
+        <div class="stf-head"><div class="stf-ico">🛍️</div><div class="stf-nm">난바파크스</div><div class="stf-when gray">2일차 일 20:20</div></div>
+        <div class="stf-body">
+          <div class="stf-method">✕ 대부분 면세 없음 — 일반 결제</div>
+          <div class="stf-row"><div class="stf-k">1F</div><div class="stf-v"><b>스탠다드 프로덕트 · 다이소</b>는 면세 미적용이에요. 그냥 일반 결제하고 영수증도 챙길 필요 없어요</div></div>
+          <div class="stf-row"><div class="stf-k">4F</div><div class="stf-v"><b>타워레코드</b> 등은 매장에 <b>"Tax-Free" 표시·직원 확인</b> 후 그 매장만 카운터 이용</div></div>
+          <div class="stf-row"><div class="stf-k">주의</div><div class="stf-v">20:20은 늦은 시간 — <b>면세 카운터 마감</b>이 먼저예요. 안 되면 미련 없이 일반 결제로 넘어가기</div></div>
+          <div class="stf-warn">면세를 못 받는 매장에서 억지로 ¥5,000을 채우지 마세요. 면세는 <b>같은 날·같은 매장</b> 합산이라 여기서 산 건 여기서만 계산돼요.</div>
+        </div>
+      </div>
+
+      <div class="stf-card">
+        <div class="stf-head"><div class="stf-ico">💊</div><div class="stf-nm">드럭스토어 (마츠모토키요시 · 스기약국 등)</div><div class="stf-when gray">수시</div></div>
+        <div class="stf-body">
+          <div class="stf-method ok">🏬 매장 카운터에서 수속</div>
+          <div class="stf-row"><div class="stf-k">매장</div><div class="stf-v">여권 원본 + <b>할인 쿠폰</b> 제시 → 세금 포함 결제 → <b>소모품은 일본에서 쓰지 말고 그대로</b>(하나라도 쓰면 그 영수증 전체 환급 불가 — 쓸 건 따로 결제)</div></div>
+          <div class="stf-row"><div class="stf-k">공항</div><div class="stf-v">위탁 전 4층 세관 키오스크 여권 스캔</div></div>
+          <div class="stf-note">합산은 <b>같은 날·같은 지점</b>만 — 다른 지점·다른 날에 산 건 따로 <b>세전 ¥5,000</b>을 넘겨야 해요</div>
+        </div>
+      </div>
+
+      <div class="imp" style="margin-top:11px;">
+        🎒 공항은 <b>한 번뿐</b> — 면세품은 전부 캐리어 <b>맨 위</b>에 넣고, <b>위탁 전에</b> 4층 키오스크에서 여권 스캔. 옷·신발·가방은 입어도 되지만 <b>본인이 직접 들고 나가야</b> 하고, <b>소모품은 하나라도 쓰면 그 영수증은 환급 0원</b>이에요.
+      </div>
+    </div>
+    </div>
+
+    <div id="taxsub-flow" class="tax-pane hidden">
+<div class="sec-card" style="border-color:var(--gold);background:#FFFBEF;">
       <h3 style="color:#8A6414;">📦 11/1 최신 규칙 — 밀봉 봉투(특수포장)는 폐지됐어요</h3>
       <div style="font-size:12.5px;line-height:1.55;color:#5A4410;">이제 <b>봉투에 넣어 밀봉하는 규정 자체가 없어요.</b> 대신 <b>본인이 직접 한국으로 들고 나가야</b> 환급돼요. 아래 두 줄만 기억하면 돼요.</div>
       <div class="ok" style="margin-top:8px;">👕 <b>옷·신발·가방 (소모품 외)</b> — 여행 중 <b>입고 써도 OK</b>. 단 <b>본인이 직접 들고 출국</b>해야 하고, 공항 키오스크 <b>Red 판정</b> 때 확인받을 수 있게 <b>품번 택·원래 포장·영수증은 버리지 말고 보관</b>.</div>
@@ -674,78 +759,28 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
         </ul>
       </div>
     </div>
-
-    <div class="sec-card" id="tax-stores" style="margin-top:16px;border-color:var(--green);">
-      <h3>🛒 우리가 가는 매장별 면세 실전 가이드</h3>
-      <div class="stf-lead">일정표에 있는 매장만 모았어요. <b>매장마다 환급 방식이 달라요</b> — 앱으로 하는 곳, 카운터에서 하는 곳, 아예 안 되는 곳이 섞여 있어요. 결제 전에 이 카드만 보고 움직이면 돼요.</div>
-      <div class="stf-legend">
-        <span class="stf-lg">📱 앱 환급</span>
-        <span class="stf-lg">🏬 매장 카운터</span>
-        <span class="stf-lg n">✕ 면세 없음</span>
-      </div>
-
-      <div class="stf-card">
-        <div class="stf-head"><div class="stf-ico">🏔️</div><div class="stf-nm">몽벨 아베노점</div><div class="stf-when">1일차 토 19:10</div></div>
-        <div class="stf-body">
-          <div class="stf-method">📱 Pie VAT 앱 환급 · 현장 즉시 할인 아님</div>
-          <div class="stf-row"><div class="stf-k">준비</div><div class="stf-v"><b>매장에 와이파이 없어요</b> → eSIM을 미리 켜 두고, <b>Pie VAT 앱은 집·호텔 와이파이에서 미리 설치</b>하고 계정까지 만들어 두기</div></div>
-          <div class="stf-row"><div class="stf-k">매장</div><div class="stf-v">여권 원본 제시 → <b>세금 포함 전액 결제</b>(카드 결제 권장 · 현금 불가 사례 있음) → 직원에게 <b>QR·6자리 코드</b> 달라고 하기 → 앱에서 <b>영수증·여권 스캔 등록</b></div></div>
-          <div class="stf-row"><div class="stf-k">사용</div><div class="stf-v">목도리·패딩은 <b>옷(일반품)</b>이라 여행 중 <b>입고 써도 OK</b> — 대신 <b>본인이 직접 들고 출국</b>, <b>품번 택·포장·영수증 보관</b></div></div>
-          <div class="stf-row"><div class="stf-k">공항</div><div class="stf-v">수하물 위탁 <b>전</b> 4층 세관 키오스크 여권 스캔 → 승인된 뒤 앱에서 환급 수령</div></div>
-          <div class="stf-note">수수료 <b>세전 금액의 1.5%+</b>(매장별 차이) · 입금까지 <b>영업일 5~10일</b> · 목도리 3개(¥11,100)면 세전 ¥10,091로 기준 통과</div>
-        </div>
-      </div>
-
-      <div class="stf-card">
-        <div class="stf-head"><div class="stf-ico">🐧</div><div class="stf-nm">돈키호테 난바센니치마에점</div><div class="stf-when org">3일차 월 밤 · 24시간</div></div>
-        <div class="stf-body">
-          <div class="stf-method ok">🏬 면세 전용 카운터 + 웹쿠폰</div>
-          <div class="stf-row"><div class="stf-k">매장</div><div class="stf-v">일반 계산대 <b>말고</b> <b>면세 전용 카운터(Tax-Free)</b>에 줄 서기 → 결제 <b>직전에</b> <b>웹 5~7% 할인 쿠폰</b> 화면 보여주기 → 여권 제시 후 결제</div></div>
-          <div class="stf-row"><div class="stf-k">주의</div><div class="stf-v">쿠폰은 <b>캡처·스크린샷 불가</b> — 그 자리에서 실시간 페이지로 열어야 해요. <b>화장품·과자·안약(소모품)은 일본에서 쓰거나 먹으면 그 영수증 전체 환급 불가</b> → 당장 쓸 건 <b>계산대에서 따로 결제</b></div></div>
-          <div class="stf-row"><div class="stf-k">공항</div><div class="stf-v">위탁 전 4층 세관 키오스크 여권 스캔 (돈키는 <b>환급 수수료 0엔</b> · 영수증 QR로 J-TaxRefund 카드 등록)</div></div>
-          <div class="stf-note">3인 합산 <b>세전 ¥33,000↑</b>이면 7% 쿠폰 · <b>¥10,000↑</b>이면 5% — 살 게 많으니 한 번에 몰아서 계산하는 게 이득</div>
-        </div>
-      </div>
-
-      <div class="stf-card">
-        <div class="stf-head"><div class="stf-ico">🏬</div><div class="stf-nm">한큐백화점 우메다 본점 · 루쿠아</div><div class="stf-when">2일차 일 12:45~</div></div>
-        <div class="stf-body">
-          <div class="stf-method">🏬 백화점 면세 카운터 (루쿠아는 매장별)</div>
-          <div class="stf-row"><div class="stf-k">매장</div><div class="stf-v">브랜드 매장에서 여권 지참하고 <b>세금 포함 전액 결제</b> + <b>"Tax-Free 되나요?"</b> 확인 → <b>종이 영수증 전부</b> 모으기</div></div>
-          <div class="stf-row"><div class="stf-k">카운터</div><div class="stf-v">한큐는 <b>B1 해외고객카운터</b> 또는 <b>1F 면세 카운터(15번 출입구 옆)</b>에서 <b>당일 영업 마감 전</b> 수속 — 영수증 + 여권 원본 + <b>결제한 본인 카드</b> 지참</div></div>
-          <div class="stf-row"><div class="stf-k">공항</div><div class="stf-v">위탁 전 4층 세관 키오스크 여권 스캔</div></div>
-          <div class="stf-note">수수료 약 <b>1.55%</b>(Global Blue · 카운터 안내 기준) · 여권으로 <b>5% 게스트 쿠폰</b>을 먼저 받으면 할인 + 면세 둘 다 가능</div>
-          <div class="stf-warn">루쿠아는 건물 통합 카운터가 아니라 <b>브랜드 매장별 수속</b>이에요(공식 안내). 안 되는 매장이 있으니 계산 전에 꼭 물어보고, 로프트는 <b>마감 30분 전</b>까지예요.</div>
-        </div>
-      </div>
-
-      <div class="stf-card">
-        <div class="stf-head"><div class="stf-ico">🛍️</div><div class="stf-nm">난바파크스</div><div class="stf-when gray">2일차 일 20:20</div></div>
-        <div class="stf-body">
-          <div class="stf-method">✕ 대부분 면세 없음 — 일반 결제</div>
-          <div class="stf-row"><div class="stf-k">1F</div><div class="stf-v"><b>스탠다드 프로덕트 · 다이소</b>는 면세 미적용이에요. 그냥 일반 결제하고 영수증도 챙길 필요 없어요</div></div>
-          <div class="stf-row"><div class="stf-k">4F</div><div class="stf-v"><b>타워레코드</b> 등은 매장에 <b>"Tax-Free" 표시·직원 확인</b> 후 그 매장만 카운터 이용</div></div>
-          <div class="stf-row"><div class="stf-k">주의</div><div class="stf-v">20:20은 늦은 시간 — <b>면세 카운터 마감</b>이 먼저예요. 안 되면 미련 없이 일반 결제로 넘어가기</div></div>
-          <div class="stf-warn">면세를 못 받는 매장에서 억지로 ¥5,000을 채우지 마세요. 면세는 <b>같은 날·같은 매장</b> 합산이라 여기서 산 건 여기서만 계산돼요.</div>
-        </div>
-      </div>
-
-      <div class="stf-card">
-        <div class="stf-head"><div class="stf-ico">💊</div><div class="stf-nm">드럭스토어 (마츠모토키요시 · 스기약국 등)</div><div class="stf-when gray">수시</div></div>
-        <div class="stf-body">
-          <div class="stf-method ok">🏬 매장 카운터에서 수속</div>
-          <div class="stf-row"><div class="stf-k">매장</div><div class="stf-v">여권 원본 + <b>할인 쿠폰</b> 제시 → 세금 포함 결제 → <b>소모품은 일본에서 쓰지 말고 그대로</b>(하나라도 쓰면 그 영수증 전체 환급 불가 — 쓸 건 따로 결제)</div></div>
-          <div class="stf-row"><div class="stf-k">공항</div><div class="stf-v">위탁 전 4층 세관 키오스크 여권 스캔</div></div>
-          <div class="stf-note">합산은 <b>같은 날·같은 지점</b>만 — 다른 지점·다른 날에 산 건 따로 <b>세전 ¥5,000</b>을 넘겨야 해요</div>
-        </div>
-      </div>
-
-      <div class="imp" style="margin-top:11px;">
-        🎒 공항은 <b>한 번뿐</b> — 면세품은 전부 캐리어 <b>맨 위</b>에 넣고, <b>위탁 전에</b> 4층 키오스크에서 여권 스캔. 옷·신발·가방은 입어도 되지만 <b>본인이 직접 들고 나가야</b> 하고, <b>소모품은 하나라도 쓰면 그 영수증은 환급 0원</b>이에요.
+<div class="sec-card" style="border-color:var(--gold);background:#FFFBEF;">
+      <h3 style="color:#8A6414;">🧠 한 줄 요약</h3>
+      <div style="font-size:13px;line-height:1.6;color:#5A4410;">
+        <b>세금 포함으로 사고 → 영수증 QR로 카드 등록 → 짐 부치기 전에 4층 키오스크 → 귀국 후 입금 확인.</b><br/>
+        이 네 개만 하면 10%를 다 돌려받아요. 하나라도 빠지면 0원이에요.
       </div>
     </div>
+    </div>
 
-    <div class="sec-card" style="margin-top:14px;">
+    <div id="taxsub-fee" class="tax-pane hidden">
+    <div class="sec-card" style="border-color:var(--green);background:var(--mint);">
+      <h3 style="color:var(--green);">💳 결제 · 환급 수단 고르는 법</h3>
+      <div class="ok" style="margin-top:0;background:#fff;">
+        <b>① 결제할 때</b> — <b>여권 명의자와 같은 본인 명의 Visa / Mastercard</b>로 결제하세요. 트래블월렛·체크카드·신용카드 모두 괜찮아요. 몽벨(Pie VAT)처럼 <b>현금 결제는 면세가 안 되는</b> 매장이 있으니 카드가 제일 안전해요.<br/>
+        <span style="font-weight:700;color:var(--sub);">※ Amex는 J-TaxRefund 등록이 안 돼요</span>
+      </div>
+      <div class="ok" style="margin-top:7px;background:#fff;">
+        <b>② 환급받을 때</b> — 대행사·카운터에서 수단을 고르라고 하면 <b>신용·체크카드(Visa / Master) 환급</b>을 선택하세요. 공항 세관 스캔이 끝나면 <b>약 5~14일 안에 카드로 자동 입금</b>돼서, 공항에서 현금 찾으러 줄 설 필요가 없어요.
+      </div>
+      <div class="imp">현금·모바일페이 환급은 매장마다 미지원인 경우가 많고, 공항에서 현금으로 받으면 수수료가 더 붙어요(10% 수준). 카드 환급이 제일 간단해요.</div>
+    </div>
+<div class="sec-card" style="margin-top:0;">
       <h3>💸 매장별 환급 대행사 · 수수료</h3>
       <table class="tbl">
         <tr><th>매장</th><th>대행사</th><th>환급 수수료</th></tr>
@@ -762,8 +797,31 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
         수수료·대행사는 매장이 정하고 예고 없이 바뀌어요. <b>영수증 QR</b>에 뜬 사이트·금액이 최종이에요. 공항에서 <b>현금</b>으로 받으면 어느 매장이든 수수료가 더 붙어요(10% 수준).
       </div>
     </div>
+<div class="sec-card" style="border-color:var(--gold);">
+      <h3>🛍️ 돈키호테 결제 팁 — 쿠폰·카카오페이</h3>
+      <div style="font-size:12.5px;line-height:1.55;color:var(--ink);">
+        <b>① 5~7% 할인쿠폰</b> — 세전 <b>1만 엔↑ 5% / 3만 엔↑ 7%</b> 추가 할인.
+      </div>
+      <div class="imp" style="margin-top:7px;">📵 <b>스크린샷·캡처는 안 통해요.</b> 매장 와이파이로 <b>실시간 웹 화면</b>을 열어 <b>결제 전에</b> 계산대에서 보여주세요.</div>
+      <div style="font-size:12.5px;line-height:1.55;color:var(--ink);margin-top:12px;">
+        <b>② 카카오페이 일본 첫 결제 50%</b> (최대 1만 원) — 일본에서 <b>첫 결제</b>라면 편의점 소액 말고 <b>2,400엔(약 2만 원) 이상</b> 결제에 카카오페이머니로 쓰는 게 이득.
+      </div>
+      <div class="ok" style="margin-top:7px;">💳 단, <b>돈키호테에서 카드 환급 0%</b>를 받으려면 결제·환급 모두 <b>본인 명의 VISA / Mastercard</b>로 하는 게 가장 안전해요. 카카오페이는 환급 대상 아님!</div>
+      <div style="font-size:11.5px;color:var(--sub);line-height:1.5;margin-top:8px;">※ 릴스에 나온 「1,500엔 할인」은 2025년에 끝난 행사예요. 쿠폰·카카오페이 조건은 결제 당일 앱에서 다시 확인하세요.</div>
+    </div>
+    </div>
 
-    <div class="sec-card" id="tax-map">
+    <div id="taxsub-map" class="tax-pane hidden">
+    <div class="sec-card" style="background:var(--mint);border-color:var(--green);">
+      <h3 style="color:var(--green);">🛫 12/01 출국 당일 — 이 3줄만</h3>
+      <div style="font-size:12.5px;line-height:1.6;color:#14493F;font-weight:600;">
+        ① 4층 출발 로비에서 <b>짐 부치기 전</b> 키오스크에 여권 스캔<br/>
+        ② 초록불 <b>Completed and Approved</b> 확인 — 빨간불이면 옆 <b>세관 검사장</b><br/>
+        ③ 확인 끝난 뒤에 항공사 카운터에서 <b>수하물 위탁</b>
+      </div>
+      <a class="act-btn" style="width:100%;justify-content:center;margin-top:10px;text-decoration:none;" onclick="return taxJump('flow')" href="#tax-tabs">📋 4단계 전체 순서는 &lsquo;절차&rsquo; 탭에서 →</a>
+    </div>
+<div class="sec-card" id="tax-map">
       <h3>🗺️ 간사이 T1 4층 — 키오스크 위치</h3>
       <div style="font-size:12.5px;color:var(--sub);line-height:1.55;margin-bottom:9px;">
         국제선 출발 로비(보안검색 <b>전</b>). <b>B·C 사이</b>와 <b>F·G 사이</b>에 면세 수속 키오스크가 각 12대, 세관 직원이 상주해요. 빨간 테두리 안이 <b>전용 Wi-Fi 연결 구역</b>(Visit Japan Web 온라인 수속용)이에요.
@@ -779,26 +837,6 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
       </figure>
       <a class="act-btn" style="width:100%;justify-content:center;" target="_blank" rel="noopener" href="./kix_tax_refund_kr.pdf">📄 일본 세관 공식 안내 PDF (한국어 4쪽)</a>
     </div>
-
-    <div class="sec-card" style="border-color:var(--gold);">
-      <h3>🛍️ 돈키호테 결제 팁 — 쿠폰·카카오페이</h3>
-      <div style="font-size:12.5px;line-height:1.55;color:var(--ink);">
-        <b>① 5~7% 할인쿠폰</b> — 세전 <b>1만 엔↑ 5% / 3만 엔↑ 7%</b> 추가 할인.
-      </div>
-      <div class="imp" style="margin-top:7px;">📵 <b>스크린샷·캡처는 안 통해요.</b> 매장 와이파이로 <b>실시간 웹 화면</b>을 열어 <b>결제 전에</b> 계산대에서 보여주세요.</div>
-      <div style="font-size:12.5px;line-height:1.55;color:var(--ink);margin-top:12px;">
-        <b>② 카카오페이 일본 첫 결제 50%</b> (최대 1만 원) — 일본에서 <b>첫 결제</b>라면 편의점 소액 말고 <b>2,400엔(약 2만 원) 이상</b> 결제에 카카오페이머니로 쓰는 게 이득.
-      </div>
-      <div class="ok" style="margin-top:7px;">💳 단, <b>돈키호테에서 카드 환급 0%</b>를 받으려면 결제·환급 모두 <b>본인 명의 VISA / Mastercard</b>로 하는 게 가장 안전해요. 카카오페이는 환급 대상 아님!</div>
-      <div style="font-size:11.5px;color:var(--sub);line-height:1.5;margin-top:8px;">※ 릴스에 나온 「1,500엔 할인」은 2025년에 끝난 행사예요. 쿠폰·카카오페이 조건은 결제 당일 앱에서 다시 확인하세요.</div>
-    </div>
-
-    <div class="sec-card" style="border-color:var(--gold);background:#FFFBEF;">
-      <h3 style="color:#8A6414;">🧠 한 줄 요약</h3>
-      <div style="font-size:13px;line-height:1.6;color:#5A4410;">
-        <b>세금 포함으로 사고 → 영수증 QR로 카드 등록 → 짐 부치기 전에 4층 키오스크 → 귀국 후 입금 확인.</b><br/>
-        이 네 개만 하면 10%를 다 돌려받아요. 하나라도 빠지면 0원이에요.
-      </div>
     </div>
     </div><!-- /taxPane -->
 
@@ -827,7 +865,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
           <b>기내(10kg)</b> — 액체·젤·에어졸 각 100mL 이하, 1L 비닐백 1개. 안약·헤어오일 100mL·비누·마스크팩·파스 OK<br/>
           <b>위탁(15kg)</b> — 100mL 넘는 액체·유리병·칼날·스프레이·액체세제. 면세품은 <b>소모품 미사용</b> 상태로 위탁 전 세관 확인(옷·신발은 입어도 OK)
         </div>
-        <button class="act-btn" style="margin-top:9px;" onclick="taxSeg('tax')">🧾 면세 환급 순서 보기</button>
+        <button class="act-btn" style="margin-top:9px;" onclick="taxJump('flow')">🧾 면세 환급 순서 보기</button>
       </div>
       </div><!-- /prepPane -->
 
@@ -868,7 +906,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
   <button class="tab active" onclick="goTab('money',this)"><span class="ico">💴</span>가계부</button>
   <button class="tab" onclick="goTab('plan',this)"><span class="ico">📋</span>일정</button>
   <button class="tab" onclick="goTab('map',this)"><span class="ico">🗺️</span>지도</button>
-  <button class="tab" onclick="goTab('tax',this)"><span class="ico">🧾</span>면세</button>
+  <button class="tab" data-tab="tax" onclick="goTab('tax',this)"><span class="ico">🧾</span>면세</button>
   <button class="tab" onclick="goTab('wish',this)"><span class="ico">🛍️</span>위시</button>
 </nav>
 
@@ -1103,6 +1141,7 @@ let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(
   }));
   if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
 })();
+// v92: 면세 탭에 서브 탭 전환 UI 추가 — 🏪 매장별 가이드(기본) · 📋 절차·11/1 규칙 · 💳 대행사·수수료(+ 결제·환급 수단 고르는 법 카드) · 🗺️ 공항 지도 · 상단 🚨 카드 점프 버튼 연결 · 캐시 v92
 // v91: 2026-11-01 최신 규칙 반영 — 밀봉 봉투(특수포장) 폐지 · 옷·신발·가방은 사용 가능(본인 반출·택 보관) · 소모품 1개라도 쓰면 그 영수증 전체 환급 불가 · 캐시 v91
 // v90: 면세 탭에 '우리가 가는 매장별 면세 실전 가이드'(몽벨·돈키·한큐/루쿠아·난바파크스·드럭스토어) 추가 · 캐시 v90
 // v89: 2일차 신사이바시 후반 — 오렌지 스트릿(18:15) → 와규카츠 반자이(19:25) → 난바파크스(20:45) → 숙소(21:45) · 캐시 v89
@@ -3163,7 +3202,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v91';
+const SW_CACHE = 'osaka-planner-v92';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
@@ -3447,6 +3486,27 @@ document.addEventListener('keydown', e=>{
   const ov=document.getElementById('wishModal');
   if(ov && ov.classList.contains('open') && e.key==='Escape') wishClose();
 });
+/* ── 면세 서브 탭 (매장별 가이드 · 절차 · 대행사 · 공항 지도) ── */
+function taxSub(k){
+  const ids=['stores','flow','fee','map'];
+  if(ids.indexOf(k)<0) k='stores';
+  ids.forEach(id=>{
+    const p=document.getElementById('taxsub-'+id);
+    if(p) p.classList.toggle('hidden', id!==k);
+  });
+  document.querySelectorAll('.tax-tab').forEach(b=>b.classList.toggle('active', b.getAttribute('data-tt')===k));
+  try{ localStorage.setItem('os_tax_sub', k); }catch(e){}
+}
+/* 다른 화면·상단 경고 카드에서 해당 서브 탭으로 바로 이동 */
+function taxJump(k){
+  const tb=document.querySelector('.tab[data-tab="tax"]');
+  goTab('tax', tb);
+  taxSeg('tax');
+  taxSub(k);
+  const t=document.getElementById('tax-tabs');
+  if(t) setTimeout(()=>{ try{ t.scrollIntoView({block:'start',behavior:'smooth'}); }catch(e){ t.scrollIntoView(); } }, 50);
+  return false;
+}
 /* ── 면세 | 체크 세그먼트 ── */
 function taxSeg(k){
   const isTax = k!=='check';
@@ -3469,6 +3529,7 @@ function renderCheckProg(){
 
 updateDday(); initExpDate(true); initExpTime(true); updateSaveBtn(); renderMoney(); renderPlan(); renderChecks(); renderPlaces(); renderTaxChecks();
 try{ taxSeg(localStorage.getItem('os_tax_seg')==='check'?'check':'tax'); }catch(e){ taxSeg('tax'); }
+try{ taxSub(localStorage.getItem('os_tax_sub')||'stores'); }catch(e){ taxSub('stores'); }
 renderWish();
 updateOffBadge(); setTimeout(updateOffBadge, 2500); setTimeout(updateOffBadge, 7000);
 if(!isOffline()) setTimeout(()=>ensureOffline(false), 1500);
