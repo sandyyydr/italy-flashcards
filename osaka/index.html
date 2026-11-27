@@ -213,40 +213,9 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
 .r-txt{font-size:12px;color:#14493F;font-weight:700;margin-top:5px;line-height:1.4;}
 
 
-/* ───────── 📖 매거진 탭 ───────── */
-.mag-hero{background:var(--green);color:#FAF7F0;border-radius:16px;padding:14px 15px;margin-bottom:12px;}
-.mag-hero .mt{font-size:16.5px;font-weight:800;letter-spacing:-.2px;}
-.mag-hero .ms{font-size:12.5px;color:#CFE0D9;margin-top:5px;line-height:1.5;}
-.mag-hero.food{background:#8E2A20;}
-.mag-hero.food .ms{color:#F3D7D1;}
-.mag-hero.food .mag-note{color:#F3D7D1;}
-.mag-hero.shop{background:#1F3A5F;}
-.mag-hero.shop .ms{color:#CFDCEC;}
-.mag-hero.shop .mag-note{color:#CFDCEC;}
-.mag-tabs{display:flex;gap:6px;margin:0 0 10px;}
-.mag-tabs button{flex:1;border:1.5px solid var(--line);background:var(--card);border-radius:11px;padding:9px 2px;font-size:12.5px;font-weight:800;color:var(--sub);cursor:pointer;font-family:inherit;}
-.mag-tabs button.on{background:var(--green);border-color:var(--green);color:#fff;}
-.mag-sec{scroll-margin-top:96px;}
-.mag-sp{margin:16px 0 9px;font-size:15.5px;font-weight:900;color:var(--green);letter-spacing:-.2px;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 6px;line-height:1.45;}
-.mag-sp span{font-size:12px;font-weight:800;color:var(--sub);min-width:0;}
-.mag-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;}
-.mag-btn{display:flex;align-items:center;justify-content:center;gap:5px;padding:14px 4px;border-radius:12px;font-size:14px;font-weight:800;text-decoration:none;border:1.5px solid transparent;line-height:1.2;text-align:center;}
-.mag-btn.solid{background:var(--gold);color:#14493F;}
-.mag-btn.out{background:rgba(255,255,255,.13);color:#fff;border-color:rgba(255,255,255,.5);}
-.mag-hero.food .mag-btn.solid,.mag-hero.shop .mag-btn.solid{background:var(--gold);color:#14493F;}
-.mag-note{font-size:11.5px;color:#CFE0D9;margin-top:9px;line-height:1.55;}
-.mag-jump{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none;}
-.mag-jump::-webkit-scrollbar{display:none;}
-.mag-jump button{flex:0 0 auto;min-width:36px;height:34px;border-radius:9px;border:1.5px solid var(--line);background:var(--card);font-size:12.5px;font-weight:800;color:var(--sub);cursor:pointer;padding:0 6px;}
-.mag-jump button.on{background:var(--green);border-color:var(--green);color:#fff;}
-.mag-page{position:relative;margin:0 0 10px;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#fff;box-shadow:0 1px 5px rgba(20,73,63,.07);scroll-margin-top:104px;}
-.mag-page img{display:block;width:100%;height:auto;cursor:zoom-in;}
-.mag-page .pgno{position:absolute;left:8px;top:8px;background:rgba(20,73,63,.85);color:#fff;font-size:11px;font-weight:800;padding:3px 8px;border-radius:99px;}
-.mag-page .zoomhint{position:absolute;right:8px;bottom:8px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;font-weight:700;padding:3px 8px;border-radius:99px;}
 .mag-ov{position:fixed;inset:0;background:#0E0E0E;z-index:70;display:none;flex-direction:column;}
 .mag-ov.open{display:flex;}
 .mag-ov-bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:calc(env(safe-area-inset-top,10px) + 9px) 12px 9px;background:#191919;color:#fff;font-size:13px;font-weight:800;}
-.mag-ov-bar #magOvNo{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .mag-ov-bar button{background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:9px;padding:8px 11px;font-size:13px;font-weight:800;cursor:pointer;}
 .mag-ov-z{display:flex;align-items:center;gap:2px;}
 .mag-ov-z span{min-width:46px;text-align:center;font-size:12px;font-weight:800;}
@@ -257,24 +226,6 @@ nav.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,253,247,.9
 .tabbar.tight .tab{font-size:10.5px;}
 .tabbar.tight .tab .ico{font-size:19px;}
 
-/* ───────── 📖 매거진 챕터 뷰어 ───────── */
-.mr-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:2px 0 8px;}
-.mr-tt{font-size:15px;font-weight:900;color:var(--green);letter-spacing:-.2px;}
-.mr-ss{font-size:11.5px;color:var(--sub);font-weight:700;}
-.mr-chips{display:flex;gap:5px;overflow-x:auto;padding:0 0 9px;scrollbar-width:none;}
-.mr-chips::-webkit-scrollbar{display:none;}
-.mr-chip{flex:0 0 auto;border:1.5px solid var(--line);background:var(--card);border-radius:9px;padding:6px 9px;font-size:11.5px;font-weight:800;color:var(--sub);cursor:pointer;font-family:inherit;white-space:nowrap;}
-.mr-chip.on{background:var(--green);border-color:var(--green);color:#fff;}
-.mr-stage{position:relative;background:#EDE9DC;border:1px solid var(--line);border-radius:14px;padding:6px;display:flex;align-items:center;justify-content:center;min-height:220px;}
-.mr-stage img{display:block;width:100%;height:auto;max-height:calc(100vh - 330px);max-height:calc(100dvh - 330px);object-fit:contain;border-radius:10px;background:#fff;cursor:zoom-in;}
-.mr-nav{position:absolute;top:50%;transform:translateY(-50%);width:32px;height:54px;border-radius:10px;border:none;background:rgba(20,73,63,.68);color:#fff;font-size:22px;font-weight:900;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0 0 3px;}
-.mr-nav.l{left:8px;}
-.mr-nav.r{right:8px;}
-.mr-count{position:absolute;bottom:12px;right:12px;background:rgba(20,73,63,.85);color:#fff;font-size:11px;font-weight:800;padding:3px 9px;border-radius:99px;}
-.mr-bar{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-top:8px;}
-.mr-bar button,.mr-bar a{border:1.5px solid var(--line);background:var(--card);border-radius:10px;padding:10px 2px;font-size:12.5px;font-weight:800;color:var(--ink);font-family:inherit;text-decoration:none;cursor:pointer;text-align:center;display:flex;align-items:center;justify-content:center;}
-.mr-bar a{background:var(--green);border-color:var(--green);color:#fff;}
-.mr-tip{font-size:11.5px;color:var(--sub);line-height:1.5;background:#F7F5EE;border-radius:10px;padding:8px 10px;margin-top:8px;}
 
 /* ───────── 🧾 면세 환급 탭 ───────── */
 .tax-hero{background:linear-gradient(150deg,#14493F 0%,#226B5B 100%);color:#FAF7F0;border-radius:16px;padding:15px 16px 13px;margin-bottom:12px;box-shadow:0 2px 10px rgba(20,73,63,.16);}
@@ -432,7 +383,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
   </div>
   <div class="h-flight">
     <b>항공(QE7QB2)</b> 11/28(토) 부산 14:05 &rarr; 간사이 15:25 &nbsp;|&nbsp; 12/01(화) 11:00 귀국<br/>
-    <b>숙소</b> 에스리드 호텔 난바 이스트 언넥스 · <b>USJ</b> 11/30(월) 닌텐도 12:40<br/>
+    <b>숙소</b> 에스리드 호텔 난바 이스트 언넥스 · <b>USJ</b> 11/30(월) 11:00 입장 · 닌텐도 12:40<br/>
     <b>기차(예매 완료)</b> 11/27(금) 김천구미 20:07 &rarr; 부산 21:23 &nbsp;|&nbsp; 12/01(화) 구포 15:31 &rarr; 김천구미 16:59
   </div>
   <div class="off-bar" id="offBar" onclick="toggleOffPanel()">
@@ -442,7 +393,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
   </div>
   <div class="off-panel" id="offPanel">
     <div class="op-t" id="offPanelTitle">📴 비행기 모드 사용법</div>
-    <div id="offPanelBody">와이파이에서 이 앱을 <b>한 번만 열어두면</b> 비행기 모드에서도 일정·가계부·매거진·면세 순서도·지도까지 다 열립니다.<div id="offStatus" style="margin-top:6px;color:#9AF0C2;font-weight:800;"></div></div>
+    <div id="offPanelBody">와이파이에서 이 앱을 <b>한 번만 열어두면</b> 비행기 모드에서도 일정·가계부·면세 순서도·지도·쇼핑 사진까지 다 열립니다.<div id="offStatus" style="margin-top:6px;color:#9AF0C2;font-weight:800;"></div></div>
     <button class="off-btn" onclick="event.stopPropagation();ensureOffline(true)">🔄 지금 다시 저장</button>
   </div>
 </header>
@@ -552,7 +503,6 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
     <div class="wish-hero">
       <div class="wt">🛍️ 오사카 쇼핑 리스트 <span style="font-size:11px;font-weight:900;background:var(--gold);color:var(--green);border-radius:99px;padding:2px 8px;vertical-align:3px;">160종</span></div>
       <div class="ws">담아두고, 매장에서 하나씩 체크하세요!</div>
-      <button class="wm" onclick="goTab('mag',document.querySelector('.tab:nth-child(6)'));magPick('shop',2)">📖 쇼핑 매거진</button>
     </div>
 
     <div class="wish-search">
@@ -565,19 +515,6 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
     <div class="wish-count" id="wishCount"></div>
     <div class="wgrid" id="wishGrid"></div>
     <div id="wishEmpty" class="hidden" style="text-align:center;padding:28px 10px;color:var(--sub);font-size:13px;font-weight:700;line-height:1.6;">검색 결과가 없어요.<br/><span style="font-size:12px;font-weight:600;">일본어 일부만 넣어도 찾아요 (예: ロート · 石けん · お菓子)</span></div>
-
-    <div class="sec-card" style="margin-top:14px;">
-      <h3>📖 쇼핑 매거진 바로 보기</h3>
-      <div style="font-size:12px;color:var(--sub);line-height:1.5;margin-bottom:9px;">22쪽 큰 글씨판 · 위시 41종 + 약·구강 2 + 안약 19종을 매장별·수하물별로 정리했어요.</div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;">
-        <button class="act-btn org" onclick="goTab('mag',document.querySelector('.tab:nth-child(6)'));magPick('shop',2)">📖 2쪽 원픽</button>
-        <button class="act-btn" onclick="goTab('mag',document.querySelector('.tab:nth-child(6)'));magPick('shop',3)">🍫 3쪽 간식</button>
-        <button class="act-btn" onclick="goTab('mag',document.querySelector('.tab:nth-child(6)'));magPick('shop',14)">🧳 14쪽 위탁/기내</button>
-        <button class="act-btn" onclick="goTab('mag',document.querySelector('.tab:nth-child(6)'));magPick('shop',18)">🇯🇵 18쪽 가격비교</button>
-        <button class="act-btn" onclick="goTab('mag',document.querySelector('.tab:nth-child(6)'));magPick('shop',19)">🏪 19쪽 매장별</button>
-        <button class="act-btn" onclick="goTab('mag',document.querySelector('.tab:nth-child(6)'));magPick('shop',21)">👁️ 21쪽 안약</button>
-      </div>
-    </div>
 
     <details style="margin-bottom:12px;">
       <summary style="list-style:none;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;font-size:14.5px;font-weight:800;color:var(--green);cursor:pointer;">🧳 수하물 정리 · 일본이 더 싼 것 <span style="font-size:11.5px;color:var(--sub);font-weight:700;">(눌러서 펼치기)</span></summary>
@@ -822,41 +759,6 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
     </div>
   </section>
 
-  <!-- 📖 매거진 (전체 일정 · 맛집 · 쇼핑 PDF) -->
-  <!-- 📖 매거진 · 챕터별 1장 뷰어 -->
-  <section id="tab-mag" class="hidden">
-    <div class="mag-tabs">
-      <button type="button" id="mtab-main" class="on" onclick="magPick('main')">📖 일정 11</button>
-      <button type="button" id="mtab-food" onclick="magPick('food')">🍜 맛집 22</button>
-      <button type="button" id="mtab-shop" onclick="magPick('shop')">🛍️ 쇼핑 22</button>
-    </div>
-    <div class="mr-head">
-      <div class="mr-tt" id="mrTitle">📖 오사카 3박 4일 매거진</div>
-      <div class="mr-ss" id="mrSub"></div>
-    </div>
-    <div class="mr-chips" id="mrChips"></div>
-    <div class="mr-stage" id="mrStage">
-      <img id="mrImg" alt="매거진 페이지" src="./mag/p01.webp" onclick="magOpenCur()">
-      <button type="button" class="mr-nav l" id="mrPrev" onclick="magStep(-1)" aria-label="이전 페이지">‹</button>
-      <button type="button" class="mr-nav r" id="mrNext" onclick="magStep(1)" aria-label="다음 페이지">›</button>
-      <div class="mr-count" id="mrCount">1 / 11</div>
-    </div>
-    <div class="mr-bar">
-      <button type="button" onclick="magStep(-1)">◀ 이전</button>
-      <button type="button" onclick="magOpenCur()">🔍 확대</button>
-      <a id="mrPdf" href="./magazine.pdf" target="_blank" rel="noopener">📄 PDF</a>
-      <button type="button" onclick="magStep(1)">다음 ▶</button>
-    </div>
-    <div class="mr-tip" id="mrTip"></div>
-
-    <div class="sec-card" style="margin-top:12px;">
-      <h3>📄 함께 보는 PDF</h3>
-      <div class="row"><div><b>A안 · B안 하루 일정 비교</b><br/><span style="font-size:12px;color:var(--sub);">2쪽 요약본 · 11/19 작성</span></div><a class="act-btn map" target="_blank" rel="noopener" href="./osaka_ab_compare.pdf">PDF 열기</a></div>
-      <div class="row"><div><b>완전판 일정 매거진</b><br/><span style="font-size:12px;color:var(--sub);">11쪽 · 11/27 확정본(1일차 MTTM·텐시바 마켓·몽벨·분고 예약 반영) · 위 뷰어와 같은 파일</span></div><a class="act-btn" href="./magazine.pdf" download="오사카_3박4일_매거진_2026.pdf">⬇️ 저장</a></div>
-      <div class="row"><div><b>오사카 맛집 매거진 · 세로형 큰 글씨판</b><br/><span style="font-size:12px;color:var(--sub);">22쪽 · 60곳 · 신규 20곳 포함</span></div><a class="act-btn" href="./food_magazine.pdf" download="오사카_맛집_매거진_세로형_2026.pdf">⬇️ 저장</a></div>
-      <div class="row"><div><b>오사카 쇼핑 매거진 · 세로형 큰 글씨판</b><br/><span style="font-size:12px;color:var(--sub);">22쪽 · 41종+약2·안약19 · 위탁/기내·가격·매장별</span></div><a class="act-btn" href="./shopping_magazine.pdf" download="오사카_쇼핑_매거진_세로형_2026.pdf">⬇️ 저장</a></div>
-    </div>
-  </section>
 </main>
 
 <nav class="tabbar tight">
@@ -865,7 +767,6 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
   <button class="tab" onclick="goTab('map',this)"><span class="ico">🗺️</span>지도</button>
   <button class="tab" onclick="goTab('tax',this)"><span class="ico">🧾</span>면세</button>
   <button class="tab" onclick="goTab('wish',this)"><span class="ico">🛍️</span>위시</button>
-  <button class="tab" onclick="goTab('mag',this)"><span class="ico">📖</span>매거진</button>
 </nav>
 
 <div id="wishBar" class="wbar" onclick="wishMyOnly()">
@@ -943,12 +844,17 @@ const DEFAULT_DAYS = [
     {t:"19:00", name:"저녁 · 야키니쿠 카메다 남센바", gq:"Yakiniku KAMEDA Minamisenba Store, Osaka", move:"도보 5분", segs:[{l:"도보 5분",w:2}], how:"신사이바시 PARCO → 미나미센바 4-8-2 2층 (신사이바시역 도보 5분)", note:"4.8★ · 특상 우설 · 17:00~다음날 04:00 · 1인 ¥4,000~6,000", warn:"일요일 저녁은 웨이팅 가능 — 이름 적고 20~30분 기다리거나, 바로 옆 야키토리 갓포(쯔쿠네·타베로그 3.22·2천엔대·화~일 17:00~23:00)/메이지켄(20:00 마감)/토리소바 자긴(22:00까지)으로 바꿔도 좋아요. 🥩 와규카츠 반자이(구글 4.9·1,600건 · 11:00~22:30 · 예약 불가 · 1인 3,000~5,000엔)도 신사이바시역 도보 6분 후보!", lat:34.6776732, lng:135.4994804},
     {t:"20:40", name:"미도스지 일루미네이션 야경 → 숙소", gq:"Midosuji, Chuo Ward, Osaka", move:"지하철 1정거장", segs:[{b:"M",l:"2분",w:2,c:"#D62828"},{l:"도보 10분",w:3}], how:"저녁 식사 후 미도스지 대로로 나와 신사이바시~혼마치 구간 야경 산책 → 신사이바시역 미도스지선 1정거장 난바역 → 도보 10분 숙소", note:"17:00~25:00 점등 · 신사이바시 구간이 가장 예뻐요", warn:"도톤보리 글리코상까지는 10분 더 — 오늘은 신사이바시 구간만 보고 숙소로! 피곤하면 택시 10분.", img:"./img/xmas.jpg", lat:34.6780, lng:135.5005}
   ]},
-  {d:"11/30(월)", city:"USJ", sub:"8~17°C · 종일 맑음(0%) · 익스프레스4 · 닌텐도 12:40", items:[
-    {t:"09:10", name:"🏨 에스리드 호텔 난바 이스트 언넥스 (출발)", gq:"Eslead Hotel Namba East Annex, Osaka", move:"숙소 출발", note:"오사카난바역(한신선) 방면으로 도보 이동", img:"./img/hotel.jpg", lat:34.6612, lng:135.5061},
-    {t:"09:15", name:"난바 출발 &rarr; 유니버설 시티", gq:"Universal Studios Japan, Osaka", move:"한신+JR 25분", segs:[{b:"한신",l:"8분",w:2,c:"#E5532D"},{b:"JR",l:"5분",w:2,c:"#1E5CA8"},{l:"도보 5분",w:1}], how:"오사카난바역 → 한신 난바선 니시쿠조역 환승 → JR 유메사키선 유니버설시티역", note:"니시쿠조역에서 JR 유메사키선 환승", warn:"모바일 이코카 잔액 ¥1,000+ 확인! USJ 앱에 3명 QR 미리 묶어 두세요.", lat:34.6654, lng:135.4323},
-    {t:"10:15", name:"미니언 메이헴 · 죠스", gq:"Minion Park, Universal Studios Japan", move:"파크 도보", segs:[{l:"도보 7분",w:3}], how:"정문 입장 후 오른쪽 할리우드 구역 통과 → 미니언 파크 → 죠스 도보 7분", note:"적당 스릴 코스 집중", warn:"할리우드 드림 제외, 죠스 선택! 죠스는 배 왼쪽 끝 좌석이 상어가 가까워 제일 재밌어요.", lat:34.6648, lng:135.4335},
-    {t:"12:40", name:"슈퍼 닌텐도 월드 · 동키콩 트램카", gq:"Super Nintendo World, Universal Studios Japan", move:"도보 5분(재입장불가)", segs:[{l:"도보 5분",w:3}], how:"죠스 옆 워터월드 방향 토관 입구로 12:40 입장 (동키콩→마리오카트→포토스팟)", note:"동키콩(12:40~13:10) → 마리오카트 → 포토스팟", warn:"한 번 나오면 재입장 절대 불가! 동키콩·마리오카트·키노피오 카페·포토스팟까지 다 보고 퇴장!", lat:34.6673, lng:135.4306},
-    {t:"16:00", name:"해리포터 포비든 저니 · 호수 야경", gq:"The Wizarding World of Harry Potter, Universal Studios Japan", move:"도보+귀환", segs:[{l:"도보 5분",w:2},{b:"JR+한신",l:"25분",w:3,c:"#1E5CA8"}], how:"닌텐도 월드 퇴장 후 바로 옆 위저딩 월드 입장 → 19:30 퇴장 후 역순으로 난바 귀환", note:"19:30 퇴장 → 난바 귀환", warn:"포비든 저니 타기 전 무료 락커에 가방/모자 보관 필수! 해 질 녘 호수 앞 성 야경 포토스팟!", lat:34.6665, lng:135.4316}
+  {d:"11/30(월)", city:"USJ", sub:"11:00 여유 입장 · 미니언 → 12:40 닌텐도 → 해리포터 → 애미티(죠스) 일직선 · 8~17°C 종일 맑음(0%)", items:[
+    {t:"10:00", name:"🏨 에스리드 호텔 난바 이스트 언넥스 (출발)", gq:"Eslead Hotel Namba East Annex, Osaka", move:"숙소 출발", note:"11:00 입장이라 서두르지 않아요 — 물·핫팩·보조배터리·이코카만 챙겨 가볍게", warn:"오늘 밤에 짐 싸기까지! 내일 06:30 체크아웃·07:00 라피트라 캐리어 정리는 오늘 저녁에 끝내세요.", img:"./img/hotel.jpg", lat:34.6612, lng:135.5061},
+    {t:"10:10", name:"난바 &rarr; 유니버설시티역 (한신 + JR)", gq:"Universal-City Station, Osaka", move:"약 40분", segs:[{b:"한신",l:"8분",w:2,c:"#E5532D"},{b:"JR",l:"5분",w:2,c:"#1E5CA8"},{l:"도보 8분",w:2}], how:"오사카난바역 → 한신 난바선 니시쿠조역 환승 → JR 유메사키선 유니버설시티역 (도보 포함 35~45분)", note:"10:10 오사카난바역 출발 → 10:45~10:50 유니버설시티역 도착 → 게이트까지 도보 8분", warn:"⚠️ JR 서일본은 트래블월렛 컨택리스 결제 불가 — 모바일 이코카 잔액 ¥1,000+ 확인하고, 없으면 니시쿠조·유니버설시티역 매표기에서 종이표를 사세요! USJ 앱에 3명 입장권 QR도 미리 묶어 두기.", lat:34.6678049, lng:135.4385577},
+    {t:"11:00", name:"USJ 입장 &rarr; 미니언 파크", gq:"Minion Park, Universal Studios Japan", move:"입장 + 도보 5분", segs:[{l:"도보 5분",w:2}], how:"정문 입장 → 오른쪽 할리우드 스트리트 → 미니언 파크", note:"익스프레스4로 미니언 메이헴 우선 탑승 + 미니언 파크 구경·사진 (11:00~11:30)", warn:"입장 직후 USJ 앱에서 대기시간 확인 — 미니언 메이헴이 20분 이하면 바로 타고, 40분 이상이면 사진·굿즈부터 하고 11:30 점심으로.", lat:34.6633572, lng:135.432446},
+    {t:"11:30", name:"이른 점심 · 해피니스 카페 (대안 멜즈 · 피네간즈)", gq:"Happiness Cafe, Universal Studios Japan", move:"도보 3분", segs:[{l:"도보 3분",w:2}], how:"미니언 파크 → 해피니스 카페 도보 3분 (샌프란시스코 구역 · 10:00~19:00)", note:"12시 피크 전에 들어가 12:20까지 식사 — 대안은 멜즈 드라이브인(할리우드 · 09:00~21:00) · 피네간즈 바&그릴(뉴욕 구역)", warn:"12:25에는 닌텐도 월드 입구로 이동(도보 5~7분)! 12:40 입장 시간은 바꿀 수 없어요.", lat:34.66415, lng:135.432293},
+    {t:"12:40", name:"슈퍼 닌텐도 월드™ (12:40~13:40 확정)", gq:"Super Nintendo World, Universal Studios Japan", move:"도보 6분 · 재입장 불가", segs:[{l:"도보 6분",w:3}], how:"뉴욕 구역 → 토관 입구로 12:40 입장 → 동키콩 → 마리오카트 → 요시 → 포토스팟", note:"동키콩 마인 카트 매드니스 12:40~13:10(익스프레스) → 마리오카트 → 요시의 아일랜드 → 포토스팟", warn:"한 번 나오면 재입장 절대 불가! 13:40까지 동키콩·마리오카트·요시·포토를 다 보고 나오세요. 키노피오 카페는 줄이 길면 패스.", lat:34.6679655, lng:135.4303229},
+    {t:"13:40", name:"닌텐도 월드 퇴장 · 자유시간 (굿즈 · 간식)", gq:"Universal Studios Japan, Osaka", move:"파크 도보", segs:[{l:"도보 5분",w:2}], how:"닌텐도 월드 퇴장 → 해리포터 입구 방향으로 천천히 (화장실·간식)", note:"14:30 해리포터 전 50분 여유 — 닌텐도 굿즈는 월드 안에서만 살 수 있으니 나오기 전에 챙기세요!", warn:"팝콘·음료로 당 충전. 해리포터 구역은 보통 자유 입장이라 조금 일찍 도착해도 들어갈 수 있어요(당일 입구 안내 확인).", lat:34.6673, lng:135.4306},
+    {t:"14:30", name:"해리포터 위저딩 월드 (14:30~16:00)", gq:"The Wizarding World of Harry Potter, Universal Studios Japan", move:"도보 3분", segs:[{l:"도보 3분",w:1}], how:"닌텐도 월드 출구에서 도보 2~3분 — 해리포터 입구", note:"포비든 저니(익스프레스) → 호그스미드 마을 · 버터맥주 · 성과 호수 포토스팟", warn:"포비든 저니 전 무료 락커에 가방·모자 보관 필수(휴대폰은 주머니로). 버터맥주는 호그스미드 안 3곳 — 야외 테이블이 성 뷰 명당!", lat:34.6680294, lng:135.4316945},
+    {t:"16:00", name:"애미티 빌리지 · 죠스 (16:00~)", gq:"Amity Village, Universal Studios Japan", move:"도보 4분", segs:[{l:"도보 4분",w:2}], how:"해리포터 출구 → 바로 아래 애미티 빌리지(죠스) 도보 3~4분", note:"익스프레스4로 죠스 탑승 — 배 왼쪽 끝 좌석이 상어가 제일 가까워요", warn:"해리포터에서 내려와 계단·언덕만 넘으면 애미티예요. 해 질 무렵 조명 켜진 마을이 사진 명당.", lat:34.6659206, lng:135.4319379},
+    {t:"17:30", name:"퍼레이드 · 나이트쇼 · 굿즈 쇼핑", gq:"Universal Studios Japan, Osaka", move:"파크 도보", segs:[{l:"도보 6분",w:2}], how:"애미티 → 할리우드 스트리트 기념품숍 → 퍼레이드 코스", note:"해가 16:50 무렵 져서 조명 켜진 파크가 예뻐요 · 퍼레이드·나이트쇼 시간은 당일 USJ 앱에서 확인", warn:"나이트쇼 '라이 업 더 나이트'는 20:30 무렵 — 내일 07:00 라피트라 무리하면 굿즈만 사고 나오세요. 밤 9~10°C, 핫팩 필수.", lat:34.6656768, lng:135.4323185},
+    {t:"19:30", name:"USJ 퇴장 &rarr; 숙소 복귀", gq:"Universal-City Station, Osaka", move:"JR + 한신 약 40분", segs:[{b:"JR",l:"5분",w:2,c:"#1E5CA8"},{b:"한신",l:"8분",w:2,c:"#E5532D"},{l:"도보 10분",w:2}], how:"유니버설시티역 → JR 유메사키선 니시쿠조역 → 한신 난바선 오사카난바역 → 숙소 도보 10분", note:"20:10 전후 숙소 도착 · 편의점 저녁이나 숙소 근처 야식(로쿠노미야 난바 등) → 짐 싸기", warn:"내일 06:30 체크아웃 · 07:00 라피트 α 5호라 오늘은 여기서 마무리! 면세 소모품은 개봉 금지, 위탁 캐리어 맨 위에.", lat:34.6678049, lng:135.4385577}
   ]},
   {d:"12/01(화)", city:"귀국", sub:"10~18°C · 맑음 · 07:00 라피트 α 5호 → 15:31 구포→16:59 김천구미 KTX(예매 완료)", items:[
     {t:"06:30", name:"🏨 에스리드 호텔 난바 이스트 언넥스 (체크아웃)", gq:"Eslead Hotel Namba East Annex, Osaka", move:"숙소 출발", note:"면세 쇼핑품 개봉 금지 · 캐리어 맨 위 정리 확인!", img:"./img/hotel.jpg", lat:34.6612, lng:135.5061},
@@ -1060,7 +966,7 @@ const PLACES = [
   {n:"멘츠루 카미토라 히고바시",c:"라멘",l:2,a:"후쿠지마·히고바시",w:"일정 외 후보",la:34.691743,ln:135.495573},
   {n:"야키니쿠 우시가타리",c:"야키니쿠",l:2,a:"후쿠지마·히고바시",w:"후쿠시마역 1-6-18 · 17:00~23:30 · 화 휴무 · 4.8★",la:34.6953907,ln:135.4878649},
   {n:"이즈모 후쿠시마 본점",c:"장어덮밥",l:2,a:"후쿠지마·히고바시",w:"후쿠시마 5-12-18 · 11:00~15:00/17:00~23:00 · 계란 장어덮밥",la:34.6964067,ln:135.4867012},
-  {n:"유니버설 스튜디오 재팬 (USJ)",c:"테마파크",l:1,a:"그 외·근교",w:"11/30 09:15 출발 → 10:15 입장 · 19:30 퇴장",la:34.665677,ln:135.432319},
+  {n:"유니버설 스튜디오 재팬 (USJ)",c:"테마파크",l:1,a:"그 외·근교",w:"11/30 10:00 출발 → 11:00 입장 · 19:30 퇴장",la:34.665677,ln:135.432319},
   {n:"컵누들 박물관 오사카 이케다점",c:"체험·박물관",l:3,a:"그 외·근교",w:"11/29 오후 대안 (우메다에서 한큐 20분)",la:34.817885,ln:135.426644},
   {n:"마구로 잇테츠 교바시점",c:"스시",l:2,a:"그 외·근교",w:"히가시노다마치 3-11-9 · 11:30~15:00/17:00~23:00 · 참치 스탠딩 스시",la:34.6987531,ln:135.5340576},
   {n:"간사이국제공항 제1터미널",c:"공항",l:1,a:"공항",w:"11/28 15:25 도착 · 12/01 07:34 출발",la:34.434386,ln:135.24261},
@@ -1082,6 +988,7 @@ let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(
   }));
   if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
 })();
+// v78: 3일차(11/30 USJ) 11:00 여유 입장 → 미니언 → 12:40 닌텐도 → 해리포터 → 애미티(죠스) 일직선 · 매거진 탭 제거 → 캐시 v78
 // v77: 1일차 최종(11:30 김해공항·14:05 진에어·16:55 MTTM·17:25 신세카이)
 // v76: 1일차 확정(텐시바 마켓·몽벨 19:10·분고 20:30 예약)
 // v75: 저장본 2일차 재동기화(와규카츠 반자이 저녁 후보)
@@ -1101,6 +1008,23 @@ let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(
       changed = true;
     });
     localStorage.setItem('os_mig_v77','1');
+    if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
+  }catch(e){}
+})();
+// v78: 저장본 3일차(11/30 USJ)를 11:00 입장 최단 동선으로 재동기화
+(function refreshDay3V78(){
+  try{
+    if(localStorage.getItem('os_mig_v78')==='1') return;
+    let changed = false;
+    (days||[]).forEach((d,i)=>{
+      if(!d || i !== 2) return;
+      const src = DEFAULT_DAYS.find(x=>x.d === d.d);
+      if(!src) return;
+      d.city = src.city; d.sub = src.sub; d.stay = src.stay;
+      d.items = JSON.parse(JSON.stringify(src.items));
+      changed = true;
+    });
+    localStorage.setItem('os_mig_v78','1');
     if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
   }catch(e){}
 })();
@@ -1226,7 +1150,7 @@ const CHECKS = [
   "110V 돼지코 · 멀티탭 · 보조배터리(기내)",
   "💊 파브론 비염 캡슐 Sα 구매 (돈키호테 약 코너 21~22시 전 방문 · 미개봉 면세)",
   "🛍️ 돈키호테 3인 합산 33,000엔↑ 7% 쿠폰 · 여권 3개 준비",
-  "📴 출국 전 와이파이에서 앱 한 번 열어 오프라인 저장(지도·매거진·면세 순서도)",
+  "📴 출국 전 와이파이에서 앱 한 번 열어 오프라인 저장(지도·면세 순서도·쇼핑 사진)",
   "🚄 기차 승차권 예매 완료 — 11/27(금) 김천구미 20:07→부산 21:23 · 12/01(화) 구포 15:31→김천구미 16:59 (각 1매)"
 ];
 
@@ -3094,7 +3018,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v77';
+const SW_CACHE = 'osaka-planner-v78';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
@@ -3137,7 +3061,7 @@ async function updateOffBadge(){
   if(total && n >= total - 1){
     bar.classList.add('ok');
     badge.innerHTML = `📴 <b>오프라인 준비 완료</b> · ${n}개`;
-    if(st) st.innerHTML = '✔ 일정·가계부·매거진 55쪽·면세 순서도·지도 타일까지 저장됨';
+    if(st) st.innerHTML = '✔ 일정·가계부·면세 순서도·지도 타일·쇼핑 위시 사진까지 저장됨';
   } else if(off){
     bar.classList.remove('ok');
     badge.innerHTML = `📴 오프라인 · <b>${n}/${total||'?'}</b> 저장됨`;
@@ -3196,25 +3120,12 @@ function toggleOffPanel(){
   updateOffBadge();
 }
 
-/* 비행기 모드에서 PDF 링크를 누르면 → 앱 안 페이지 뷰로 대신 열기 */
-document.addEventListener('click', e=>{
-  const a = e.target && e.target.closest ? e.target.closest('a[href$=".pdf"]') : null;
-  if(!a || !isOffline()) return;
-  const href = a.getAttribute('href') || '';
-  if(href.indexOf('kix_tax_refund') >= 0) return;
-  e.preventDefault();
-  const key = href.indexOf('food') >= 0 ? 'food' : (href.indexOf('shopping') >= 0 ? 'shop' : 'main');
-  try{ magInit(); magPick(key); }catch(err){}
-  offToast('비행기 모드예요 — 앱 안 페이지 뷰로 열었어요 (PDF는 인터넷 필요)');
-});
-
 function goTab(id, btn){
   document.querySelectorAll('main > section').forEach(s=>s.classList.add('hidden'));
   document.getElementById('tab-'+id).classList.remove('hidden');
   document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
   if(id==='map') renderMap();
-  if(id==='mag') magInit();
   if(id==='wish'){ try{ renderWish(); }catch(e){} }
   const wb = document.getElementById('wishBar');
   if(wb) wb.classList.toggle('show', id==='wish' && wishMine.size>0);
@@ -3429,139 +3340,7 @@ if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').the
     }catch(e){}
   });
 }).catch(()=>{});
-const MAGS = {
-  main:{pages:11, dir:'./mag/', file:'./magazine.pdf', name:'오사카 3박 4일 매거진', short:'📖 일정',
-        title:'📖 오사카 3박 4일 매거진', sub:'11쪽 · 2026-11-27 확정본(1일차 MTTM·텐시바 마켓·몽벨·분고 예약 반영)',
-        note:'💡 일정·지도·숙소·먹거리·면세까지 11쪽. 위 챕터 버튼을 누르면 그 페이지로 바로 가요.'},
-  food:{pages:22, dir:'./pages_food/', file:'./food_magazine.pdf', name:'오사카 맛집 매거진 세로형 큰 글씨판', short:'🍜 맛집',
-        title:'🍜 오사카 맛집 매거진 · 세로형 큰 글씨판', sub:'22쪽 · 맛집 60곳(신규 20 + 기존 40) · 2026-11-27 17쪽 동선 갱신',
-        note:'💡 3~7쪽 「새로 담은 20곳」 → 8~9쪽 「먼저 갈 8곳」 → 10~14쪽 장르별 → 15쪽 예약·휴무 → 18쪽 인덱스 순서로 보세요.'},
-  shop:{pages:22, dir:'./pages_shop/', file:'./shopping_magazine.pdf', name:'오사카 쇼핑 매거진 세로형 큰 글씨판', short:'🛍️ 쇼핑',
-        title:'🛍️ 오사카 쇼핑 매거진 · 세로형 큰 글씨판', sub:'22쪽 · 쇼핑 41종 + 약·구강 2 + 안약 19 · 2026-11-24 최신',
-        note:'💡 2쪽 원픽 3종 → 3쪽 간식·식품 → 5쪽 세안·클렌징 → 14쪽 위탁·기내 → 18쪽 일본 vs 한국 → 19쪽 매장별 → 20쪽 약·구강(페이타스·브레스케어) → 21~22쪽 안약 19종(렌즈 구분) 순서로 보세요.'}
-};
-const MAG_CH = {
-  main:[{p:1,n:'표지'},{p:2,n:'목차·날씨'},{p:3,n:'구역지도'},{p:4,n:'Day1~2'},{p:5,n:'USJ'},{p:6,n:'귀국·면세'},{p:7,n:'숙소·교통'},{p:8,n:'위시'},{p:9,n:'준비'},{p:10,n:'휴무·링크'},{p:11,n:'예산'}],
-  food:[{p:1,n:'표지'},{p:2,n:'한눈에 보기'},{p:3,n:'새로 담은 20곳 ①'},{p:4,n:'새로 담은 20곳 ②'},{p:5,n:'새로 담은 20곳 ③'},{p:6,n:'새로 담은 20곳 ④'},{p:7,n:'새로 담은 20곳 ⑤'},{p:8,n:'먼저 갈 8곳 ①'},{p:9,n:'먼저 갈 8곳 ②'},{p:10,n:'고기'},{p:11,n:'스시·해산물'},{p:12,n:'라멘·카레'},{p:13,n:'분식·양식'},{p:14,n:'카페·디저트'},{p:15,n:'예약·휴무'},{p:16,n:'오픈런'},{p:17,n:'일정에 끼우기'},{p:18,n:'인덱스 1/3'},{p:19,n:'인덱스 2/3'},{p:20,n:'인덱스 3/3'},{p:21,n:'링크'},{p:22,n:'출처'}],
-  shop:[{p:1,n:'표지'},{p:2,n:'원픽 3종'},{p:3,n:'간식·식품'},{p:4,n:'뷰티·스킨'},{p:5,n:'세안·클렌징'},{p:6,n:'메이크업'},{p:7,n:'헤어오일'},{p:8,n:'헤어도구'},{p:9,n:'청소'},{p:10,n:'주방·생활'},{p:11,n:'세탁'},{p:12,n:'패션·직영점'},{p:13,n:'쿠폰 3단계'},{p:14,n:'위탁·기내'},{p:15,n:'면세·주의'},{p:16,n:'정리 ①'},{p:17,n:'정리 ②'},{p:18,n:'가격비교'},{p:19,n:'매장별'},{p:20,n:'약·구강'},{p:21,n:'안약 ①'},{p:22,n:'안약 ②'}]
-};
-let magReady = false, magZoom = 1, magCur = 'main', magIdx = 1;
-const magPos = {main:1, food:1, shop:1};
-
-function magInit(){ if(magReady) return; magReady = true; magPick(magCur, magPos[magCur]); }
-
-function magPick(k, p){
-  if(!MAGS[k]) return;
-  magCur = k;
-  const m = MAGS[k];
-  document.querySelectorAll('.mag-tabs button').forEach(b => b.classList.toggle('on', b.id === 'mtab-' + k));
-  document.getElementById('mrTitle').innerHTML = m.title;
-  document.getElementById('mrSub').innerHTML = m.sub;
-  document.getElementById('mrTip').innerHTML = m.note;
-  document.getElementById('mrPdf').href = m.file;
-  document.getElementById('mrChips').innerHTML = MAG_CH[k].map(c => `<button type="button" class="mr-chip" onclick="magGo(${c.p})">${c.n}</button>`).join('');
-  magShow(p || magPos[k] || 1);
-}
-function magGoto(k){ magPick(k); }        /* 구버전 호환 */
-function magGo(p){ magShow(p); }
-function magShow(p){
-  const m = MAGS[magCur];
-  if(!m) return;
-  p = Math.max(1, Math.min(m.pages, parseInt(p, 10) || 1));
-  magIdx = p; magPos[magCur] = p;
-  const img = document.getElementById('mrImg');
-  const src = m.dir + 'p' + String(p).padStart(2, '0') + '.webp';
-  if(img.getAttribute('src') !== src) img.src = src;
-  img.alt = m.name + ' ' + p + '쪽';
-  document.getElementById('mrCount').textContent = p + ' / ' + m.pages;
-  const chips = document.querySelectorAll('#mrChips .mr-chip');
-  let ci = 0;
-  MAG_CH[magCur].forEach((c, i) => { if(c.p <= p) ci = i; });
-  chips.forEach((b, i) => b.classList.toggle('on', i === ci));
-  if(chips[ci] && chips[ci].scrollIntoView) chips[ci].scrollIntoView({block:'nearest', inline:'center'});
-  document.getElementById('mrPrev').style.opacity = p <= 1 ? .3 : 1;
-  document.getElementById('mrNext').style.opacity = p >= m.pages ? .3 : 1;
-  ['p' + String(p - 1).padStart(2, '0'), 'p' + String(p + 1).padStart(2, '0')].forEach(n => {
-    if(n !== 'p00' && n !== 'p' + String(m.pages + 1).padStart(2, '0')) { const pre = new Image(); pre.src = m.dir + n + '.webp'; }
-  });
-}
-function magStep(d){ magShow(magIdx + d); }
-function magOpenCur(){ magOpen(magCur, magIdx); }
-function magSetZoom(z){
-  magZoom = Math.min(3, Math.max(1, z));
-  document.getElementById('magOvImg').style.width = (magZoom * 100) + '%';
-  document.getElementById('magOvZ').textContent = Math.round(magZoom * 100) + '%';
-}
-function magOpen(key, i, keepZoom){
-  const m = MAGS[key];
-  if(!m || i < 1 || i > m.pages) return;
-  magCur = key; magIdx = i;
-  document.getElementById('magOvImg').src = m.dir + 'p' + String(i).padStart(2, '0') + '.webp';
-  document.getElementById('magOvNo').textContent = m.short + '  ' + i + ' / ' + m.pages;
-  document.getElementById('magOvPdf').href = m.file;
-  document.getElementById('magOv').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  if(!keepZoom) magSetZoom(1);
-  document.getElementById('magOvScroll').scrollTop = 0;
-  document.getElementById('magOvScroll').scrollLeft = 0;
-}
-function magOvStep(d){
-  const m = MAGS[magCur];
-  const n = magIdx + d;
-  if(!m || n < 1 || n > m.pages) return;
-  magOpen(magCur, n, true);
-}
-function magOvClose(){
-  document.getElementById('magOv').classList.remove('open');
-  document.body.style.overflow = '';
-  if(magCur) magShow(magIdx);
-}
-document.addEventListener('keydown', e => {
-  const ov = document.getElementById('magOv');
-  if(ov && ov.classList.contains('open')){
-    if(e.key === 'Escape') magOvClose();
-    if(e.key === 'ArrowRight') magOvStep(1);
-    if(e.key === 'ArrowLeft') magOvStep(-1);
-    return;
-  }
-  const sec = document.getElementById('tab-mag');
-  if(sec && !sec.classList.contains('hidden')){
-    if(e.key === 'ArrowRight') magStep(1);
-    if(e.key === 'ArrowLeft') magStep(-1);
-  }
-});
-/* 좌우 스와이프로 페이지 넘기기 */
-(function(){
-  const st = document.getElementById('mrStage');
-  if(!st) return;
-  let sx = null, sy = null;
-  st.addEventListener('touchstart', e => { const t = e.touches[0]; sx = t.clientX; sy = t.clientY; }, {passive:true});
-  st.addEventListener('touchend', e => {
-    if(sx === null) return;
-    const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
-    sx = null;
-    if(Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.4) magStep(dx < 0 ? 1 : -1);
-  }, {passive:true});
-})();
 </script>
-
-<div class="mag-ov" id="magOv">
-  <div class="mag-ov-bar">
-    <button type="button" onclick="magOvClose()">✕ 닫기</button>
-    <span id="magOvNo">1 / 1</span>
-    <div class="mag-ov-z">
-      <button type="button" onclick="magSetZoom(magZoom-0.5)">−</button>
-      <span id="magOvZ">100%</span>
-      <button type="button" onclick="magSetZoom(magZoom+0.5)">＋</button>
-    </div>
-  </div>
-  <div class="mag-ov-scroll" id="magOvScroll"><img id="magOvImg" alt="매거진 페이지" src=""></div>
-  <div class="mag-ov-nav">
-    <button type="button" onclick="magOvStep(-1)">◀ 이전</button>
-    <a id="magOvPdf" href="./magazine.pdf" target="_blank" rel="noopener">🔍 PDF로 보기</a>
-    <button type="button" onclick="magOvStep(1)">다음 ▶</button>
-  </div>
-</div>
 
 <div class="mag-ov" id="imgOv">
   <div class="mag-ov-bar">
@@ -3607,7 +3386,7 @@ const PK_CATS = [
     {id:'c3', t:'속옷 · 양말 여유분', d:'하루 1벌 + 1벌 더', b:'bag'},
     {id:'c4', t:'편한 운동화', d:'USJ 하루 2만 보 · 새 신발은 금물', b:'bag'},
     {id:'c5', t:'잠옷', d:'3박', b:'bag'},
-    {id:'c6', t:'USJ 방한 — 목도리 · 장갑 · 핫팩', d:'20:30 나이트쇼까지 야외', b:'cabin'},
+    {id:'c6', t:'USJ 방한 — 목도리 · 장갑 · 핫팩', d:'해 질 무렵 9~10°C까지 야외', b:'cabin'},
     {id:'c7', t:'바람막이', d:'USJ 저녁 바람 · 물 튀는 어트랙션', b:'bag'},
     {id:'c8', t:'접이식 우산', d:'11/28 새벽 비 예보 대비', b:'cabin'}
   ]},
