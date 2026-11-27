@@ -2924,6 +2924,8 @@ function renderMap(){
   pts.forEach((p,idx)=>{
     /* 좌표 없는 항목(김해공항·구포역 같은 국내 구간)은 지도에서 건너뛰기 */
     if(typeof p.lat !== 'number' || typeof p.lng !== 'number') return;
+    /* 간사이·오사카 권역 밖(김해공항 등 국내 구간)은 지도에서 제외 — 지도가 한반도까지 축소되지 않게 */
+    if(p.lat < 34.25 || p.lat > 34.95 || p.lng < 134.95 || p.lng > 135.75) return;
     const ll = [p.lat, p.lng]; latlngs.push(ll);
     const icon = L.divIcon({className:'',html:`<div style="background:#14493F;color:#F2C879;border:2px solid #fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.35);">${p.move==='숙소 출발'?'🏨':idx+1}</div>`,iconSize:[28,28],iconAnchor:[14,14]});
     const mk = L.marker(ll,{icon}).addTo(mapObj).bindPopup(`<b>${p.move==='숙소 출발'?'🏨':idx+1}. ${p.name}</b><br/>${p.t} · ${p.move}${p.how?`<br/><span style="color:#14493F;font-weight:700;">${p.how}</span>`:''}`);
