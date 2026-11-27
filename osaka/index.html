@@ -537,7 +537,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
   <section id="tab-map" class="hidden">
     <div class="day-scroll" id="mapDayScroll"></div>
     <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
-      <button class="act-btn org" id="allPlBtn" onclick="toggleAllPlaces()">⭐ 추천 107곳 함께 보기</button>
+      <button class="act-btn org" id="allPlBtn" onclick="toggleAllPlaces()">⭐ 추천 108곳 함께 보기</button>
       <button class="act-btn" id="atmBtn" style="border-color:#7B4FBF;color:#7B4FBF;font-weight:900;" onclick="toggleAtm()">🏧 ATM 4곳</button>
       <a class="act-btn map" href="./osaka_2026_all_places.kml" download>📥 KML</a>
     </div>
@@ -602,7 +602,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
     </details>
 
     <details style="margin-bottom:12px;">
-      <summary style="list-style:none;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;font-size:14.5px;font-weight:800;color:var(--green);cursor:pointer;">🗺️ 추천 장소 전체 107곳 (ATM 4 포함) · 동네별 정리 · 지도·KML <span style="font-size:11.5px;color:var(--sub);font-weight:700;">(눌러서 펼치기)</span></summary>
+      <summary style="list-style:none;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;font-size:14.5px;font-weight:800;color:var(--green);cursor:pointer;">🗺️ 추천 장소 전체 108곳 (ATM 4 포함) · 동네별 정리 · 지도·KML <span style="font-size:11.5px;color:var(--sub);font-weight:700;">(눌러서 펼치기)</span></summary>
       <div style="margin-top:8px;">
         <div class="sec-card" style="border-color:var(--gold);">
       <div style="font-size:12.5px;color:var(--sub);line-height:1.55;margin-bottom:8px;">
@@ -610,10 +610,10 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
         아래 <b>KML 내려받기</b>로 파일을 받아 두면 구글맵 앱 → <b>저장됨 → 지도</b>에서 바로 떠요.
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-        <button class="act-btn org" id="pf0" onclick="filterPlaces(0)">전체 107</button>
+        <button class="act-btn org" id="pf0" onclick="filterPlaces(0)">전체 108</button>
         <button class="act-btn" id="pf1" onclick="filterPlaces(1)">① 확정 일정 18</button>
         <button class="act-btn" id="pf2" onclick="filterPlaces(2)">② 맛집·카페 74</button>
-        <button class="act-btn" id="pf3" onclick="filterPlaces(3)">③ 쇼핑·기타 11</button>
+        <button class="act-btn" id="pf3" onclick="filterPlaces(3)">③ 쇼핑·기타 12</button>
         <button class="act-btn" id="pf4" onclick="filterPlaces(4)">🏧 ATM 4</button>
       </div>
       <a class="act-btn org" style="width:100%;justify-content:center;margin-bottom:6px;" target="_blank" rel="noopener" href="https://www.google.com/maps/d/view?mid=1d8qKSSFk_9lc4__nbFN7xX_U8MHXoRo">🗺️ 구글 마이맵스 「오사카 2026 전체 추천 지도」 열기</a>
@@ -917,14 +917,17 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
 const RATE = 8.49; // 100엔 = 849원
 const CATS = ['🍽️ 밥·카페','🎟️ 입장·체험','🚇 교통','🛍️ 쇼핑·굿즈','🏪 편의점·기타'];
 const DEFAULT_DAYS = [
-  {d:"11/28(토)", city:"신세카이·덴노지", sub:"도착일 · 신세카이 포토 → 몽벨 아베노(21:00 마감) → 덴노지 저녁 · 밤 11°C라 겉옷 필수", items:[
-    {t:"15:25", name:"간사이공항(T1) 도착", gq:"Kansai International Airport Terminal 1, Osaka", move:"공항급행 45분", segs:[{b:"공항급행",l:"45분",w:4,c:"#1E5CA8"}], how:"간사이공항역 1·2번 홈 → 난카이 공항급행(난바행) 탑승 → 난카이 난바역 도착 (약 45분)", note:"입국 수속 후 난카이 공항급행 · 970엔 · 모바일 이코카 찍고 탑승(예약 불필요)", warn:"비짓재팬웹 QR 2종 미리 캡처해 두세요(공항 와이파이 느림). 공항급행은 특급권 없이 모바일 이코카로 개찰 통과 — 잔액 ¥1,000+ 확인, 혼잡하면 서서 갈 수 있어요.", lat:34.4320, lng:135.2304},
-    {t:"16:30", name:"에스리드 호텔 난바 이스트 언넥스", gq:"Eslead Hotel Namba East Annex, Osaka", move:"도보 6분", segs:[{l:"도보 6분",w:3}], how:"난카이 난바역 남출구 → 닛폰바시 방면 직진 도보 6분", note:"체크인(M261028461660) · 짐 풀고 가볍게 다시 나서기", warn:"셀프 체크인 안내 메일·비밀번호 미리 확인! 캐리어는 두고 우산만 챙겨 나가세요.", img:"./img/hotel.jpg", lat:34.6612, lng:135.5061},
-    {t:"17:10", name:"신세카이 · 츠텐카쿠 (골목 포토)", gq:"Tsutenkaku, Osaka", move:"도보 14분", segs:[{l:"도보 14분",w:3}], how:"호텔 → 닛폰바시 4초메 큰길(다마미즈바시스지) 남쪽 직진 → 니혼바시 5초메 → 신세카이 입구 (약 1km)", note:"17:10~17:55 포토 45분 — 빌리켄 동상 · 자이언트 후구 · 「新世界」 간판 · 네온 골목", warn:"해가 16:50 무렵 져서 네온이 켜져요 → 17시대가 제일 예뻐요. 전망대(¥1,500·마지막 입장 21:15)는 오늘은 건너뛰고 사진만! 비 오면 닛폰바시역 사카이스지선 1정거장 → 에비스초역 하차 → 도보 4분.", lat:34.6524992, lng:135.5063058},
-    {t:"18:00", name:"몽벨 아베노점 (목도리 · 경량패딩) 쇼핑", gq:"Montbell Abeno Store, Abenosuji, Osaka", move:"도보 10분", segs:[{l:"도보 10분",w:3}], how:"신세카이 → 덴노지 공원 텐시바 산책로 → 동물원 앞길 지나 아베노 방면 도보 10분 → 하루카스 바로 옆 岸本ビル 1~2F (阿倍野筋1-3-21)", note:"10:00~21:00 · 연중무휴 · 1F 남성복·모자·장갑·가방 / 2F 여성복·신발·캠핑 · 면세 가능(여권) · 이코카·QR 결제 OK", warn:"21:00 마감이라 저녁보다 먼저 들러요! 몽벨 다운 머플러 #1118824(¥3,700)는 1F 모자·장갑 코너 — 3개 사면 ¥11,100로 면세 기준(¥5,500) 넘어요. 하루카스 서쪽 岸本ビル 유리 건물이에요.", lat:34.645473, lng:135.512894},
-    {t:"19:15", name:"저녁 · 덴노지 몽벨 앞 4곳 (또는 신세카이 쿠시카츠)", gq:"Abenosuji 1-chome, Abeno Ward, Osaka", move:"도보 2~5분", segs:[{l:"도보 3분",w:1}], how:"몽벨 아베노점 → 아베노스지·하루카스 방면 도보 2~5분 (고하쿠 MIO 플라자관 M2F · 스탠드 후지 루시아스 B1F · 야키니쿠 분고 1-2-8 2F · 우라텐노지 야스베에 호리코시초)", note:"타베로그 3.55 고하쿠(프렌치 오뎅·43석) · 3.52 우라텐노지 야스베에(야키니쿠) · 3.49 스탠드 후지(수산회사 직영 해산물) · 3.49 야키니쿠 분고(오이타 와규·예약 1위)", warn:"토요일 19시는 웨이팅 — 스탠드 후지(11:30~23:00·예약 불가)는 바로 들어가기 좋고, 고하쿠는 22:00 L.O., 분고는 3인 15,000~18,000엔. 쿠시카츠가 땡기면 신세카이 다루마 총본점(도보 10분·L.O. 22:00)도 그대로 후보!", lat:34.64731, lng:135.51385},
-    {t:"21:00", name:"숙소 복귀", gq:"Eslead Hotel Namba East Annex, Osaka", move:"지하철 2정거장", segs:[{l:"도보 5분",w:2},{b:"사카이스지",l:"4분",w:2,c:"#8B4513"},{l:"도보 5분",w:2}], how:"덴노지역 → 도보 3분 → 도부쓰엔마에역 사카이스지선(갈색) 닛폰바시역 2정거장 → 도보 5분 (덴노지역 미도스지선 3정거장 난바역도 가능)", note:"21:00 숙소 도착 · 내일 09:40 출발이라 오늘은 여기서 마무리", warn:"밤 11°C까지 떨어져요 — 겉옷 꼭 챙기고, 덴노지역에서 택시 10분(1,000~1,500엔)도 가능. 너무 피곤하면 저녁만 먹고 20:20 복귀하세요.", lat:34.660737, lng:135.507316},
-    {t:"21:20", name:"(선택) 돈키호테 난바센니치마에 · 첫 면세 구매", gq:"Don Quijote Namba Sennichimae, Osaka", move:"도보 8분", segs:[{l:"도보 8분",w:3}], how:"숙소 → 난바센니치마에 상점가 → 돈키호테(24시간) 도보 8분", note:"3인 합산 33,000엔↑ 7% 쿠폰 · 첫 구매 한 번에 몰아서(면세+쿠폰)", warn:"💊 파브론 비염 캡슐 Sα는 약 코너 직원 상주 시간(21~22시)에만 판매! 오늘 피곤하면 건너뛰고 11/29 밤에 사도 늦지 않아요. 🍢 밤 2차는 스미야키쇼텐 요우(노른자 쯔쿠네 759엔·02:30까지)나 마코야(5종 모둠·24:00까지).", lat:34.6646517, lng:135.5030246},
+  {d:"11/28(토)", city:"신세카이·덴노지", sub:"도착일 · 16:55 MTTM → 신세카이 포토 → 텐시바 마켓 → 몽벨 → 분고 20:30 예약 · 밤 11°C 겉옷 필수", items:[
+    {t:"11:30", name:"김해공항 도착 · 수하물 · 점심", gq:"Gimhae International Airport, Busan", move:"공항 도착", note:"진에어 국제선 카운터 수하물 위탁(3인 합산 45kg) → 출국심사 전 식당가에서 점심(플레이팅 등)", warn:"14:05 출발이라 12:40까지 보안검색 통과! 비짓재팬웹 QR 2종·탑승권 미리 캡처, 보조배터리는 기내 가방에.", lat:35.1795, lng:128.9382},
+    {t:"14:05", name:"진에어 LJ615 김해 &rarr; 간사이 T1 (15:25 도착)", gq:"Kansai International Airport Terminal 1, Osaka", move:"비행 90분", segs:[{b:"항공",l:"비행 90분",w:4,c:"#14493F"}], how:"김해공항 14:05 이륙 → 15:25 간사이공항 T1 도착 · 입국 수속 30~40분", note:"예약 QE7QB2 · 도착 후 ① 이온은행 ATM 무료 인출(트래블월렛 실물카드) ② 난카이 매표기에서 실물 이코카 구매 ③ 난카이 공항급행 970엔", warn:"이온 ATM은 T1 1층 남쪽 — 수수료 0원(12/15까지). 이코카는 매표기에서 현금/카드로 1,000엔부터, 공항급행은 특급권 없이 개찰 통과!", lat:34.4320, lng:135.2304},
+    {t:"16:30", name:"에스리드 호텔 난바 이스트 언넥스", gq:"Eslead Hotel Namba East Annex, Osaka", move:"공항급행 45분 + 도보 6분", segs:[{b:"공항급행",l:"45분",w:4,c:"#1E5CA8"},{l:"도보 6분",w:3}], how:"간사이공항역 → 난카이 공항급행(난바행) 45분 → 난카이 난바역 남출구 → 닛폰바시 방면 직진 도보 6분", note:"체크인(M261028461660) · 짐 풀고 가볍게 다시 나서기", warn:"셀프 체크인 안내 메일·비밀번호 미리 확인! 수속이 늦으면 짐만 맡기고 바로 나가세요(16:55 MTTM). 캐리어는 두고 우산만.", img:"./img/hotel.jpg", lat:34.6612, lng:135.5061},
+    {t:"16:55", name:"MTTM (니혼바시 토이·리테일)", gq:"MTTM, 5 Chome-7-18 Nipponbashi, Osaka", move:"도보 6분", segs:[{l:"도보 6분",w:2}], how:"숙소 → 닛폰바시 5초메 방면 직진 도보 6분 (5-7-18) — 신세카이로 가는 길목", note:"10:00~20:00 · 구글 5.0 · 리테일/토이스토어 · 30분 쇼핑", warn:"20:00 마감이라 오늘 아니면 못 들러요! 신세카이 가는 길에 있어 들렀다 바로 이어서 걷습니다.", lat:34.65688, lng:135.50583},
+    {t:"17:25", name:"신세카이 · 츠텐카쿠 (골목 포토)", gq:"Tsutenkaku, Osaka", move:"도보 8분", segs:[{l:"도보 8분",w:2}], how:"MTTM → 니혼바시 5초메 → 신세카이 입구 도보 8분", note:"17:25~18:00 포토 35분 — 빌리켄 동상 · 자이언트 후구 · 「新世界」 간판 · 네온 골목", warn:"해가 16:50 무렵 져서 네온이 켜져요. 전망대(¥1,500·마지막 입장 21:15)는 오늘은 건너뛰고 사진만! 비 오면 닛폰바시역 사카이스지선 1정거장 → 에비스초역 하차 → 도보 4분.", lat:34.6524992, lng:135.5063058},
+    {t:"18:10", name:"덴노지 텐시바 크리스마스 마켓 (天王寺公園 てんしば)", gq:"Tenshiba, Tennoji Park, Osaka", move:"도보 7분", segs:[{l:"도보 7분",w:2}], how:"신세카이 → 동물원 앞길(덴노지 동물원 정문 방향) → 덴노지 공원 텐시바 잔디광장 도보 7분", note:"11:00~21:00 (L.O. 20:30) · 무료 입장 · 크리스마스 마켓·푸드트럭·조명", warn:"조명 켜진 18시대가 제일 예뻐요 — 50분 보고 몽벨로 이동! 야외라 비 오면 짧게(우산 필수).", lat:34.6486, lng:135.5105},
+    {t:"19:10", name:"몽벨 아베노점 (목도리 · 경량패딩) 쇼핑", gq:"Montbell Abeno Store, Abenosuji, Osaka", move:"도보 3분", segs:[{l:"도보 3분",w:1}], how:"텐시바 잔디광장 → 하루카스 방향으로 도보 3분 → 하루카스 바로 옆 岸本ビル 1~2F (阿倍野筋1-3-21)", note:"10:00~21:00 · 연중무휴 · 1F 남성복·모자·장갑·가방 / 2F 여성복·신발·캠핑 · 면세 가능(여권) · 이코카·QR 결제 OK", warn:"20:20엔 계산 줄에 서야 20:30 예약에 늦지 않아요! 몽벨 다운 머플러 #1118824(¥3,700)는 1F 모자·장갑 코너 — 3개 사면 ¥11,100로 면세 기준(¥5,500) 넘어요.", lat:34.645473, lng:135.512894},
+    {t:"20:30", name:"야키니쿠 호르몬 분고 덴노지점 · 예약 확정(3명)", gq:"Yakiniku Horumon Bungo Tennoji, Osaka", move:"도보 3분", segs:[{l:"도보 3분",w:1}], how:"몽벨 아베노점 → 아베노스지 1-2-8 2F 도보 3분 (하루카스 남쪽, 아베노스지 상점가)", note:"예약 20:30 · 3명 · 23:00 영업 마감(L.O. 22:30) · 오이타 와규 · 3인 15,000~18,000엔", warn:"20:20까지 도착! 예약 시간 15분 넘으면 취소 처리될 수 있어요. 2시간제라 90분 뒤 라스트오더 안내 — 우설·육회·육초밥 먼저 주문하세요.", lat:34.644661, lng:135.514145},
+    {t:"22:15", name:"숙소 복귀", gq:"Eslead Hotel Namba East Annex, Osaka", move:"지하철 2정거장", segs:[{l:"도보 5분",w:2},{b:"사카이스지",l:"4분",w:2,c:"#8B4513"},{l:"도보 5분",w:2}], how:"덴노지역 → 도보 3분 → 도부쓰엔마에역 사카이스지선(갈색) 닛폰바시역 2정거장 → 도보 5분 (덴노지역 미도스지선 3정거장 난바역도 가능)", note:"22:15 숙소 도착 · 내일 09:40 출발이라 오늘은 여기서 마무리", warn:"밤 11°C — 겉옷 챙기고, 덴노지역에서 택시 10분(1,000~1,500엔)도 가능. 많이 피곤하면 돈키호테는 건너뛰세요.", lat:34.660737, lng:135.507316},
+    {t:"22:30", name:"(선택) 돈키호테 난바센니치마에 · 첫 면세 구매", gq:"Don Quijote Namba Sennichimae, Osaka", move:"도보 8분", segs:[{l:"도보 8분",w:3}], how:"숙소 → 난바센니치마에 상점가 → 돈키호테(24시간) 도보 8분", note:"3인 합산 33,000엔↑ 7% 쿠폰 · 첫 구매 한 번에 몰아서(면세+쿠폰)", warn:"💊 파브론 비염 캡슐 Sα는 약 코너 직원 상주 시간(21~22시)에만 판매! 오늘 피곤하면 내일 밤에 사도 늦지 않아요.", lat:34.6646517, lng:135.5030246},
   ]},
   {d:"11/29(일)", city:"우메다·나카노시마·신사이바시", sub:"오전 비 60%(최저 4°C) → 오후 그침 · 우산 필수 · 북(우메다) → 중(나카노시마) → 남(신사이바시) 일직선", items:[
     {t:"09:40", name:"🏨 에스리드 호텔 난바 이스트 언넥스 (출발)", gq:"Eslead Hotel Namba East Annex, Osaka", move:"숙소 출발", note:"편의점에서 커피·빵으로 가볍게 아침(호텔 도보 4분) · 우산 챙기기", warn:"오전 비 60% · 최저 4°C — 히트텍+겉옷, 접이식 우산 꼭!", img:"./img/hotel.jpg", lat:34.6612, lng:135.5061},
@@ -957,19 +960,19 @@ const DEFAULT_DAYS = [
   ]}
 ];
 const PLACES = [
-  {n:"몽벨 아베노점 (목도리·경량패딩)",c:"아웃도어·쇼핑",l:3,a:"덴노지·신세카이",w:"11/28 18:00 · 10:00~21:00 · 연중무휴 · 아베노스지 1-3-21 岸本ビル 1~2F (하루카스 옆) · 면세 가능 · 신세카이에서 텐시바 지나 도보 10분",la:34.645473,ln:135.512894},
+  {n:"몽벨 아베노점 (목도리·경량패딩)",c:"아웃도어·쇼핑",l:3,a:"덴노지·신세카이",w:"11/28 19:10 · 10:00~21:00 · 연중무휴 · 아베노스지 1-3-21 岸本ビル 1~2F (하루카스 옆) · 면세 가능 · 신세카이에서 텐시바 지나 도보 10분",la:34.645473,ln:135.512894},
   {n:"고하쿠 (赤白) 덴노지 MIO점 · 프렌치 오뎅",c:"프렌치 오뎅·와인바",l:2,a:"덴노지·신세카이",w:"11/28 19:15 저녁 후보 · 미오 플라자관 M2F · 11:00~23:00(L.O.22:00) · 예약 불가 43석 · 타베로그 3.55(592) · 포르치니 크림 오뎅",la:34.64731,ln:135.51385},
   {n:"스탠드 후지 본점 · 해산물·초밥",c:"해산물·이자카야",l:2,a:"덴노지·신세카이",w:"11/28 19:15 저녁 후보 · 아베노스지 1-5-1 루시아스 B1F · 11:30~23:00 무휴 · 예약 불가 · 타베로그 3.49(1,063) · 수산회사 직영",la:34.646484,ln:135.512863},
-  {n:"야키니쿠 분고 (焼肉ホルモン ブンゴ) 덴노지",c:"야키니쿠·오이타 와규",l:2,a:"덴노지·신세카이",w:"11/28 19:15 저녁 후보 · 아베노스지 1-2-8 2F · 토일 16:00~23:00 · 타베로그 3.49(596·예약 1위) · 3인 15,000~18,000엔",la:34.644661,ln:135.514145},
+  {n:"야키니쿠 호르몬 분고 (焼肉ホルモン ブンゴ) 덴노지 · 예약 확정",c:"야키니쿠·오이타 와규",l:1,a:"덴노지·신세카이",w:"11/28 20:30 예약(3명) · 아베노스지 1-2-8 2F · 23:00 마감(L.O.22:30) · 몽벨 도보 3분 · 타베로그 3.49(596·예약 1위) · 3인 15,000~18,000엔",la:34.644661,ln:135.514145},
   {n:"우라텐노지 야스베에 (焼肉 裏天王寺安兵衛)",c:"야키니쿠",l:2,a:"덴노지·신세카이",w:"11/28 19:15 저녁 후보 · 호리코시초 13-10 · 토 12:00~23:00(L.O.22:00)·월 휴무 · 타베로그 3.52 · 몽벨에서 도보 5분",la:34.64867,ln:135.513947},
-  {n:"덴시바 (덴노지 공원 크리스마스 마켓)",c:"마켓·야경",l:1,a:"덴노지·신세카이",w:"일정 외 (시간 남으면) · 12/25까지 야간 마켓",la:34.648538,ln:135.511045},
+  {n:"덴노지 텐시바 크리스마스 마켓 (天王寺公園 てんしば)",c:"마켓·야경",l:1,a:"덴노지·신세카이",w:"11/28 18:10 · 11:00~21:00(L.O.20:30) · 무료 입장 · 덴노지 공원 텐시바 잔디광장 · 신세카이에서 도보 7분",la:34.6486,ln:135.5105},
   {n:"오코노미야키 치토세",c:"오코노미야키",l:2,a:"덴노지·신세카이",w:"11/28 신세카이 저녁 대안",la:34.647525,ln:135.504666},
   {n:"카와치야 본점 (신세카이 50엔 쿠시카츠)",c:"쿠시카츠",l:2,a:"덴노지·신세카이",w:"11/28 신세카이 저녁 대안 (50엔)",la:34.65148,ln:135.506003},
   {n:"하루카스 300 (아베노 하루카스 전망대)",c:"전망대",l:1,a:"덴노지·신세카이",w:"일정 외 (선택 · 9:00~22:00 · 마지막 입장 21:30)",la:34.646306,ln:135.513309},
   {n:"로만테이 아베노 하루카스점",c:"카츠산도",l:2,a:"덴노지·신세카이",w:"하루카스 B2F · 10:00~20:00 · 타마고산도·에비산도",la:34.6458129,ln:135.514368},
   {n:"츠루하시 오토코구시",c:"야키토리·야타이",l:2,a:"덴노지·신세카이",w:"에비스초 3-1-1 · 19:30~24:00 · 수 휴무 · 로컬 야타이",la:34.6521314,ln:135.5044792},
   {n:"츠텐카쿠 (신세카이 전망대)",c:"전망대·야경",l:1,a:"덴노지·신세카이",w:"11/28 17:10 골목 포토 (전망대는 선택 · ¥1,500 · 9:00~21:45·입장 21:15)",la:34.6524992,ln:135.5063058},
-  {n:"쿠시카츠 다루마 신세카이 총본점",c:"쿠시카츠",l:1,a:"덴노지·신세카이",w:"11/28 19:15 저녁 후보(신세카이) · 1929년 창업 · 10:30~22:30(L.O.22:00)",la:34.6515704,ln:135.5062032},
+  {n:"쿠시카츠 다루마 신세카이 총본점",c:"쿠시카츠",l:2,a:"덴노지·신세카이",w:"일정 외 후보(신세카이) · 1929년 창업 · 10:30~22:30(L.O.22:00)",la:34.6515704,ln:135.5062032},
   {n:"八重勝 야에카츠 (신세카이 쿠시카츠)",c:"쿠시카츠",l:2,a:"덴노지·신세카이",w:"에비스히가시 3-4-13 · 10:30~20:30 · 목 휴무 · 타베로그 3.49(2,098) · 구글 4.0(3,979) · 1947년 창업, 49석 카운터·현금만",la:34.6496971,ln:135.5060154},
   {n:"天狗 텐구 (쟌쟌요코초)",c:"쿠시카츠·이자카야",l:2,a:"덴노지·신세카이",w:"에비스히가시 3-4-12 · 10:30~20:00 · 무휴 · 3.9★(1,425)",la:34.6497933,ln:135.506053},
   {n:"야키니쿠 오노 신세카이",c:"야키니쿠",l:2,a:"덴노지·신세카이",w:"에비스히가시 2-5-11 2F · 11:30~23:00 · 4.9★(4,974) · 다루마 옆",la:34.6514594,ln:135.5051843},
@@ -994,6 +997,7 @@ const PLACES = [
   {n:"라멘 마코토야 신사이바시",c:"라멘",l:2,a:"난바·도톤보리·닛폰바시",w:"일정 외 후보 (24시간)",la:34.670325,ln:135.500787},
   {n:"아마토 마에다 (난바워크)",c:"스시",l:2,a:"난바·도톤보리·닛폰바시",w:"일정 외 후보",la:34.667201,ln:135.505567},
   {n:"돈키호테 난바센니치마에점",c:"면세 쇼핑",l:3,a:"난바·도톤보리·닛폰바시",w:"11/28 21:40 (첫 구매)",la:34.664652,ln:135.503025},
+  {n:"MTTM (니혼바시 토이·리테일)",c:"토이·리테일",l:3,a:"난바·도톤보리·닛폰바시",w:"11/28 16:55 · 10:00~20:00 · 니혼바시 5-7-18 · 구글 5.0 · 숙소 도보 6분(신세카이 가는 길목)",la:34.65688,ln:135.50583},
   {n:"라신반 오사카 닛폰바시 본점",c:"굿즈·중고",l:3,a:"난바·도톤보리·닛폰바시",w:"11/28~29 닛폰바시",la:34.660547,ln:135.504613},
   {n:"타워레코드 난바 (난바파크스 4F)",c:"음반",l:3,a:"난바·도톤보리·닛폰바시",w:"일정 외 (난바파크스 4F)",la:34.661649,ln:135.502188},
   {n:"울트라마켓 (닛폰바시 위스키)",c:"주류",l:3,a:"난바·도톤보리·닛폰바시",w:"위시리스트",la:34.659747,ln:135.506023},
@@ -1078,9 +1082,45 @@ let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(
   }));
   if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
 })();
+// v77: 1일차 최종(11:30 김해공항·14:05 진에어·16:55 MTTM·17:25 신세카이)
+// v76: 1일차 확정(텐시바 마켓·몽벨 19:10·분고 20:30 예약)
 // v75: 저장본 2일차 재동기화(와규카츠 반자이 저녁 후보)
 // v74: 2일차 신사이바시 와규카츠 반자이(구글 4.9) 지도·저녁 후보 추가, 매거진 4쪽 갱신 → 캐시 v74
 // v73: 11/28 1일차에 몽벨 아베노점(18:00) 쇼핑 + 덴노지 저녁 4곳(고하쿠·스탠드 후지·야스베에·분고) 반영, 지도 107곳
+// v77: 저장본 1일차를 최종 타임라인(11:30 김해공항 → 14:05 진에어 → 16:55 MTTM → 17:25 신세카이)으로 재동기화
+(function refreshDay1V77(){
+  try{
+    if(localStorage.getItem('os_mig_v77')==='1') return;
+    let changed = false;
+    (days||[]).forEach((d,i)=>{
+      if(!d || i !== 0) return;
+      const src = DEFAULT_DAYS.find(x=>x.d === d.d);
+      if(!src) return;
+      d.city = src.city; d.sub = src.sub; d.stay = src.stay;
+      d.items = JSON.parse(JSON.stringify(src.items));
+      changed = true;
+    });
+    localStorage.setItem('os_mig_v77','1');
+    if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
+  }catch(e){}
+})();
+// v76: 저장본 1일차를 확정 타임라인(텐시바 마켓 18:10 → 몽벨 19:10 → 분고 20:30 예약)으로 재동기화
+(function refreshDay1V76(){
+  try{
+    if(localStorage.getItem('os_mig_v76')==='1') return;
+    let changed = false;
+    (days||[]).forEach((d,i)=>{
+      if(!d || i !== 0) return;
+      const src = DEFAULT_DAYS.find(x=>x.d === d.d);
+      if(!src) return;
+      d.city = src.city; d.sub = src.sub; d.stay = src.stay;
+      d.items = JSON.parse(JSON.stringify(src.items));
+      changed = true;
+    });
+    localStorage.setItem('os_mig_v76','1');
+    if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
+  }catch(e){}
+})();
 // v75: 저장본 2일차를 최신 기본값(와규카츠 반자이 저녁 후보)으로 재동기화
 (function refreshDay2V75(){
   try{
@@ -2962,7 +3002,7 @@ function renderPlaces(){
 function toggleAllPlaces(){
   showAllPlaces = !showAllPlaces;
   const b=document.getElementById('allPlBtn');
-  b.textContent = showAllPlaces ? '⭐ 추천 107곳 숨기기' : '⭐ 추천 107곳 함께 보기';
+  b.textContent = showAllPlaces ? '⭐ 추천 108곳 숨기기' : '⭐ 추천 108곳 함께 보기';
   renderMap();
 }
 let showAtm = false, atmMarkers = [];
@@ -3052,7 +3092,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v74';
+const SW_CACHE = 'osaka-planner-v76';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;

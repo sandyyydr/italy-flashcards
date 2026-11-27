@@ -647,7 +647,7 @@
 <Point><coordinates>135.513947,34.64867,0</coordinates></Point>
 </Placemark>
 </Folder>
-<Folder><name>3. 쇼핑·기타</name><description>쇼핑·체험·전망대 · 13곳 (몽벨 아베노점 포함)</description><open>1</open>
+<Folder><name>3. 쇼핑·기타</name><description>쇼핑·체험·전망대 · 14곳 (몽벨 아베노점·MTTM 포함)</description><open>1</open>
 <Placemark>
 <name>카와치야 본점 (신세카이 50엔 쿠시카츠)</name>
 <styleUrl>#ly3</styleUrl>
@@ -738,6 +738,13 @@
 <description><![CDATA[<b>아웃도어·쇼핑</b><br/><span style='color:#666'>Montbell Abeno Store</span><br/>🗓 11/28 18:00~19:00 쇼핑<br/>10:00~21:00 · 연중무휴 · 하루카스 옆 岸本ビル 1~2F · 1F 남성복·모자·장갑·가방 / 2F 여성복·신발·캠핑 · 면세 가능(여권) · 이코카·QR 결제 · 신세카이에서 텐시바 지나 도보 10분<br/>📍 阿倍野筋1-3-21 岸本ビル1·2F, 阿倍野区, 大阪市<br/><a href='https://www.google.com/maps/search/?api=1&query=34.645473,135.512894'>구글맵에서 열기</a>]]></description>
 <ExtendedData><Data name="구분"><value>아웃도어·쇼핑</value></Data><Data name="일정"><value>11/28 18:00~19:00 쇼핑</value></Data><Data name="주소"><value>阿倍野筋1-3-21 岸本ビル1·2F, 阿倍野区, 大阪市</value></Data></ExtendedData>
 <Point><coordinates>135.512894,34.645473,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【11/28】MTTM (니혼바시 토이·리테일)</name>
+<styleUrl>#ly3</styleUrl>
+<description><![CDATA[<b>토이·리테일</b><br/><span style='color:#666'>MTTM</span><br/>🗓 11/28 16:55<br/>⭐ 구글 5.0<br/>10:00~20:00 · 5-7-18 Nipponbashi · 숙소 도보 6분(신세카이 가는 길목).<br/>📍 5-chōme-7-18 Nipponbashi, Naniwa Ward, Osaka<br/><a href='https://www.google.com/maps/search/?api=1&query=34.65688,135.50583'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>토이·리테일</value></Data><Data name="일정"><value>11/28 16:55</value></Data><Data name="주소"><value>5-chōme-7-18 Nipponbashi, Naniwa Ward, Osaka</value></Data></ExtendedData>
+<Point><coordinates>135.50583,34.65688,0</coordinates></Point>
 </Placemark>
 </Folder>
 </Document></kml>
