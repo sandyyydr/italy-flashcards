@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2"><Document>
 <name>🇯🇵 오사카 2026 전체 추천 지도</name>
-<description><![CDATA[이승현 님 오사카 3박 4일(2026.11.28~12.01) 추천 장소 전체 지도.<br/>① 확정 일정 ② 맛집·카페 74곳(최근호 님 매거진 + 유저 추가 + 블로그 20곳 + 덴노지 4곳) ③ 쇼핑·기타.<br/>좌표는 2026-11-22 Google Maps 기준 확인. 만든 날 2026-11-22 · 핫플 5곳 추가 2026-11-24 · 맛집 20곳 추가 2026-11-25 · 11/27 동선 수정(신세카이·덴노지, 나카노시마, 그르니에) 반영 · 11/27 밤 몽벨 아베노점(1일차 18:00)과 덴노지 저녁 4곳 추가.]]></description>
+<description><![CDATA[이승현 님 오사카 3박 4일(2026.11.28~12.01) 추천 장소 전체 지도.<br/>① 확정 일정 ② 맛집·카페 75곳(최근호 님 매거진 + 유저 추가 + 블로그 20곳 + 덴노지 4곳) ③ 쇼핑·기타.<br/>좌표는 2026-11-22 Google Maps 기준 확인. 만든 날 2026-11-22 · 핫플 5곳 추가 2026-11-24 · 맛집 20곳 추가 2026-11-25 · 11/27 동선 수정(신세카이·덴노지, 나카노시마, 그르니에) 반영 · 11/27 밤 몽벨 아베노점(1일차 18:00)·덴노지 저녁 4곳·와규카츠 반자이 추가.]]></description>
 <Style id="ly1"><IconStyle><color>ffffffff</color><scale>1.0</scale><Icon><href>http://maps.google.com/mapfiles/kml/paddle/red-circle.png</href></Icon></IconStyle><LabelStyle><scale>0.85</scale></LabelStyle></Style>
 <Style id="ly2"><IconStyle><color>ffffffff</color><scale>1.0</scale><Icon><href>http://maps.google.com/mapfiles/kml/paddle/orange-circle.png</href></Icon></IconStyle><LabelStyle><scale>0.85</scale></LabelStyle></Style>
 <Style id="ly3"><IconStyle><color>ffffffff</color><scale>1.0</scale><Icon><href>http://maps.google.com/mapfiles/kml/paddle/blu-circle.png</href></Icon></IconStyle><LabelStyle><scale>0.85</scale></LabelStyle></Style>
@@ -126,7 +126,7 @@
 <Point><coordinates>135.5078873,34.6923932,0</coordinates></Point>
 </Placemark>
 </Folder>
-<Folder><name>2. 맛집·카페</name><description>맛집·카페 74곳 — 기존 39 + 블로그 20 + 신세카이·덴노지·그르니에 6곳 + 덴노지 저녁 4곳(고하쿠·스탠드 후지·분고·야스베에, 2026-11-27 확인)</description><open>1</open>
+<Folder><name>2. 맛집·카페</name><description>맛집·카페 75곳 — 기존 39 + 블로그 20 + 신세카이·덴노지·그르니에 6곳 + 덴노지 저녁 4곳(고하쿠·스탠드 후지·분고·야스베에) + 신사이바시 와규카츠 반자이(2026-11-27 확인)</description><open>1</open>
 <Placemark>
 <name>551 호라이 본점</name>
 <styleUrl>#ly2</styleUrl>
@@ -645,6 +645,13 @@
 <description><![CDATA[<b>야키니쿠</b><br/><span style='color:#666'>Yakiniku Ura Tennoji Yasubee</span><br/>🗓 11/28 19:15 저녁 후보<br/>타베로그 3.52(280) · 호리코시초 13-10 · 토 12:00~23:00(L.O.22:00) · 월 휴무 · 몽벨에서 도보 5분 · 본점은 焼肉 WEST 백명점 2026<br/>📍 堀越町13-10, 天王寺区, 大阪市<br/><a href='https://www.google.com/maps/search/?api=1&query=34.64867,135.513947'>구글맵에서 열기</a>]]></description>
 <ExtendedData><Data name="구분"><value>야키니쿠</value></Data><Data name="일정"><value>11/28 19:15 저녁 후보</value></Data><Data name="주소"><value>堀越町13-10, 天王寺区, 大阪市</value></Data></ExtendedData>
 <Point><coordinates>135.513947,34.64867,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【11/29】와규카츠 반자이 (和牛かつ 万歳)</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>규카츠·와규</b><br/><span style='color:#666'>Wagyu Katsu Banzei</span><br/>🗓 11/29 저녁 후보<br/>구글 4.9(1,600) · 타베로그 3.08(16) · 미나미큐호지초 3-2-15 三休橋ガーデンスケープA · 신사이바시역 도보 6분/사카이스지혼마치역 5분 · 11:00~22:30(L.O.22:00) · 예약 불가(워크인) · 카드·QR OK<br/>와규 규카츠 120g ¥2,600 / 프리미엄 ¥3,800 (밥·국 별도 ¥450) · 1인 3,000~5,000엔<br/>📍 南久宝寺町3-2-15, 中央区, 大阪市<br/><a href='https://www.google.com/maps/search/?api=1&query=34.678825,135.503357'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>규카츠·와규</value></Data><Data name="일정"><value>11/29 저녁 후보</value></Data><Data name="주소"><value>南久宝寺町3-2-15, 中央区, 大阪市</value></Data></ExtendedData>
+<Point><coordinates>135.503357,34.678825,0</coordinates></Point>
 </Placemark>
 </Folder>
 <Folder><name>3. 쇼핑·기타</name><description>쇼핑·체험·전망대 · 13곳 (몽벨 아베노점 포함)</description><open>1</open>
