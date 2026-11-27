@@ -1074,6 +1074,7 @@ let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(
   }));
   if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
 })();
+// v72: 저장본 1·2일차를 최신 기본값으로 재동기화
 // v71: 쯔쿠네 5곳에 타베로그 평점·리뷰 요약
 // v70: 쯔쿠네·야키토리 5곳(덴노지·우메다·신사이바시·난바) 추가
 // v69: 11/28 신세카이·덴노지 저녁 / 11/29 우메다→나카노시마→신사이바시, 맛집 동네별 정리
@@ -1114,6 +1115,23 @@ let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(
       changed = true;
     });
     localStorage.setItem('os_mig_v69','1');
+    if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
+  }catch(e){}
+})();
+// v72: 저장본 1·2일차를 최신 기본값으로 한 번 더 맞춤(쯔쿠네·그르니에 안내 문구까지)
+(function refreshDay1Day2V72(){
+  try{
+    if(localStorage.getItem('os_mig_v72')==='1') return;
+    let changed = false;
+    (days||[]).forEach((d,i)=>{
+      if(!d || i > 1) return;
+      const src = DEFAULT_DAYS.find(x=>x.d === d.d);
+      if(!src) return;
+      d.city = src.city; d.sub = src.sub; d.stay = src.stay;
+      d.items = JSON.parse(JSON.stringify(src.items));
+      changed = true;
+    });
+    localStorage.setItem('os_mig_v72','1');
     if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
   }catch(e){}
 })();
@@ -2993,7 +3011,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v71';
+const SW_CACHE = 'osaka-planner-v72';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
@@ -3475,7 +3493,7 @@ document.addEventListener('keydown', e => {
   <div class="mag-ov-scroll" id="imgOvScroll"><img id="imgOvImg" alt="간사이국제공항 제1터미널 4층 면세 수속 지도" src=""></div>
 </div>
 <script>
-/* ───────── 🧳 짐 싸기 체크리스트 (osaka-planner-v71) ───────── */
+/* ───────── 🧳 짐 싸기 체크리스트 (osaka-planner-v72) ───────── */
 const PK_CATS = [
   {id:'doc', emoji:'📄', name:'필수 서류 · 결제 · 앱', sub:'공항에서 바로 꺼내는 기내 가방에', items:[
     {id:'d1', t:'여권', d:'유효기간 6개월 이상 남았는지 사진면 확인 · 3명 모두', b:'cabin'},
