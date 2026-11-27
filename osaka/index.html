@@ -610,10 +610,10 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
         아래 <b>KML 내려받기</b>로 파일을 받아 두면 구글맵 앱 → <b>저장됨 → 지도</b>에서 바로 떠요.
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-        <button class="act-btn org" id="pf0" onclick="filterPlaces(0)">전체 102</button>
+        <button class="act-btn org" id="pf0" onclick="filterPlaces(0)">전체 107</button>
         <button class="act-btn" id="pf1" onclick="filterPlaces(1)">① 확정 일정 18</button>
-        <button class="act-btn" id="pf2" onclick="filterPlaces(2)">② 맛집·카페 70</button>
-        <button class="act-btn" id="pf3" onclick="filterPlaces(3)">③ 쇼핑·기타 10</button>
+        <button class="act-btn" id="pf2" onclick="filterPlaces(2)">② 맛집·카페 74</button>
+        <button class="act-btn" id="pf3" onclick="filterPlaces(3)">③ 쇼핑·기타 11</button>
         <button class="act-btn" id="pf4" onclick="filterPlaces(4)">🏧 ATM 4</button>
       </div>
       <a class="act-btn org" style="width:100%;justify-content:center;margin-bottom:6px;" target="_blank" rel="noopener" href="https://www.google.com/maps/d/view?mid=1d8qKSSFk_9lc4__nbFN7xX_U8MHXoRo">🗺️ 구글 마이맵스 「오사카 2026 전체 추천 지도」 열기</a>
@@ -852,7 +852,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
     <div class="sec-card" style="margin-top:12px;">
       <h3>📄 함께 보는 PDF</h3>
       <div class="row"><div><b>A안 · B안 하루 일정 비교</b><br/><span style="font-size:12px;color:var(--sub);">2쪽 요약본 · 11/19 작성</span></div><a class="act-btn map" target="_blank" rel="noopener" href="./osaka_ab_compare.pdf">PDF 열기</a></div>
-      <div class="row"><div><b>완전판 일정 매거진</b><br/><span style="font-size:12px;color:var(--sub);">11쪽 · 11/27 수정본(Day 1·2 반영) · 위 뷰어와 같은 파일</span></div><a class="act-btn" href="./magazine.pdf" download="오사카_3박4일_매거진_2026.pdf">⬇️ 저장</a></div>
+      <div class="row"><div><b>완전판 일정 매거진</b><br/><span style="font-size:12px;color:var(--sub);">11쪽 · 11/27 수정본(1일차 몽벨 아베노점·덴노지 저녁 반영) · 위 뷰어와 같은 파일</span></div><a class="act-btn" href="./magazine.pdf" download="오사카_3박4일_매거진_2026.pdf">⬇️ 저장</a></div>
       <div class="row"><div><b>오사카 맛집 매거진 · 세로형 큰 글씨판</b><br/><span style="font-size:12px;color:var(--sub);">22쪽 · 60곳 · 신규 20곳 포함</span></div><a class="act-btn" href="./food_magazine.pdf" download="오사카_맛집_매거진_세로형_2026.pdf">⬇️ 저장</a></div>
       <div class="row"><div><b>오사카 쇼핑 매거진 · 세로형 큰 글씨판</b><br/><span style="font-size:12px;color:var(--sub);">22쪽 · 41종+약2·안약19 · 위탁/기내·가격·매장별</span></div><a class="act-btn" href="./shopping_magazine.pdf" download="오사카_쇼핑_매거진_세로형_2026.pdf">⬇️ 저장</a></div>
     </div>
@@ -3370,7 +3370,7 @@ if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').the
 }).catch(()=>{});
 const MAGS = {
   main:{pages:11, dir:'./mag/', file:'./magazine.pdf', name:'오사카 3박 4일 매거진', short:'📖 일정',
-        title:'📖 오사카 3박 4일 매거진', sub:'11쪽 · 2026-11-27 수정본(Day 1·2 동선 반영)',
+        title:'📖 오사카 3박 4일 매거진', sub:'11쪽 · 2026-11-27 수정본(1일차 몽벨 아베노점·덴노지 저녁 반영)',
         note:'💡 일정·지도·숙소·먹거리·면세까지 11쪽. 위 챕터 버튼을 누르면 그 페이지로 바로 가요.'},
   food:{pages:22, dir:'./pages_food/', file:'./food_magazine.pdf', name:'오사카 맛집 매거진 세로형 큰 글씨판', short:'🍜 맛집',
         title:'🍜 오사카 맛집 매거진 · 세로형 큰 글씨판', sub:'22쪽 · 맛집 60곳(신규 20 + 기존 40) · 2026-11-27 17쪽 동선 갱신',
