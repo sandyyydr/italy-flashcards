@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2"><Document>
 <name>🇯🇵 오사카 2026 전체 추천 지도</name>
-<description><![CDATA[이승현 님 오사카 3박 4일(2026.11.28~12.01) 추천 장소 전체 지도.<br/>① 확정 일정 ② 맛집·카페 75곳(최근호 님 매거진 + 유저 추가 + 블로그 20곳 + 덴노지 4곳) ③ 쇼핑·기타.<br/>좌표는 2026-11-22 Google Maps 기준 확인. 만든 날 2026-11-22 · 핫플 5곳 추가 2026-11-24 · 맛집 20곳 추가 2026-11-25 · 11/27 동선 수정(신세카이·덴노지, 나카노시마, 그르니에) 반영 · 11/27 밤 몽벨 아베노점(1일차 18:00)·덴노지 저녁 4곳·와규카츠 반자이 추가.]]></description>
+<description><![CDATA[이승현 님 오사카 3박 4일(2026.11.28~12.01) 추천 장소 전체 지도.<br/>① 확정 일정 ② 맛집·카페 74곳(최근호 님 매거진 + 유저 추가 + 블로그 20곳 + 덴노지 4곳) ③ 쇼핑·기타.<br/>좌표는 2026-11-22 Google Maps 기준 확인. 만든 날 2026-11-22 · 핫플 5곳 추가 2026-11-24 · 맛집 20곳 추가 2026-11-25 · 11/27 동선 수정(신세카이·덴노지, 나카노시마, 그르니에) 반영 · 11/27 밤 몽벨 아베노점(1일차 18:00)·덴노지 저녁 4곳·와규카츠 반자이 추가.]]></description>
 <Style id="ly1"><IconStyle><color>ffffffff</color><scale>1.0</scale><Icon><href>http://maps.google.com/mapfiles/kml/paddle/red-circle.png</href></Icon></IconStyle><LabelStyle><scale>0.85</scale></LabelStyle></Style>
 <Style id="ly2"><IconStyle><color>ffffffff</color><scale>1.0</scale><Icon><href>http://maps.google.com/mapfiles/kml/paddle/orange-circle.png</href></Icon></IconStyle><LabelStyle><scale>0.85</scale></LabelStyle></Style>
 <Style id="ly3"><IconStyle><color>ffffffff</color><scale>1.0</scale><Icon><href>http://maps.google.com/mapfiles/kml/paddle/blu-circle.png</href></Icon></IconStyle><LabelStyle><scale>0.85</scale></LabelStyle></Style>
@@ -126,7 +126,7 @@
 <Point><coordinates>135.5078873,34.6923932,0</coordinates></Point>
 </Placemark>
 </Folder>
-<Folder><name>2. 맛집·카페</name><description>맛집·카페 75곳 — 기존 39 + 블로그 20 + 신세카이·덴노지·그르니에 6곳 + 덴노지 저녁 4곳(고하쿠·스탠드 후지·분고·야스베에) + 신사이바시 와규카츠 반자이(2026-11-27 확인)</description><open>1</open>
+<Folder><name>2. 맛집·카페</name><description>맛집·카페 74곳 — 기존 39 + 블로그 20 + 신세카이·덴노지·그르니에 6곳 + 덴노지 저녁 4곳(고하쿠·스탠드 후지·분고·야스베에) + 신사이바시 와규카츠 반자이(2026-11-27 확인)</description><open>1</open>
 <Placemark>
 <name>551 호라이 본점</name>
 <styleUrl>#ly2</styleUrl>
@@ -208,21 +208,21 @@
 <name>히로시다이 Z (후쿠시마)</name>
 <styleUrl>#ly2</styleUrl>
 <description><![CDATA[<b>해산물 이자카야</b><br/><span style='color:#666'>Hiroshidai Z</span><br/>🗓 일정 외 후보<br/>⭐ 3.9 / 5 (72리뷰)<br/>이부리갓코(홋카이도산 해산물) · 1인 4,000엔대(추정) · 평점 3.9(72).<br/>17:00~23:00 · 휴무 수요일.<br/>📍 5-chōme-13-3 Fukushima, Fukushima Ward, Osaka, 553-0003<br/><a href='https://maps.google.com/?cid=537834487793366541&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA'>구글맵에서 열기</a>]]></description>
-<ExtendedData><Data name="구분"><value>해산물 이자카야</value></Data><Data name="일정"><value>일정 외 후보</value></Data><Data name="주소"><value>5-chōme-13-3 Fukushima, Fukushima Ward, Osaka, 553-0003</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=537834487793366541&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
+<ExtendedData><Data name="구분"><value>해산물 이자카야</value></Data><Data name="일정"><value>11/29 19:00 저녁 후보</value></Data><Data name="주소"><value>5-chōme-13-3 Fukushima, Fukushima Ward, Osaka, 553-0003</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=537834487793366541&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
 <Point><coordinates>135.486605,34.696456,0</coordinates></Point>
 </Placemark>
 <Placemark>
 <name>키타신치 야키니쿠 마루</name>
 <styleUrl>#ly2</styleUrl>
 <description><![CDATA[<b>야키니쿠</b><br/><span style='color:#666'>Yakiniku Maru Kitashinchi</span><br/>🗓 일정 외 후보<br/>⭐ 4.6 / 5 (769리뷰)<br/>두꺼운 우삼겹·로스 · 1인 5,000엔대(추정) · 평점 4.6(769).<br/>17:00~다음날 04:00 · 예약 권장(최근 리뷰 확인).<br/>📍 〒530-0002 Osaka, Kita Ward, Sonezakishinchi, 1-chōme−5−１８ 零北新地ビル 10F<br/><a href='https://maps.google.com/?cid=11396693024112930960&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA'>구글맵에서 열기</a>]]></description>
-<ExtendedData><Data name="구분"><value>야키니쿠</value></Data><Data name="일정"><value>일정 외 후보</value></Data><Data name="주소"><value>〒530-0002 Osaka, Kita Ward, Sonezakishinchi, 1-chōme−5−１８ 零北新地ビル 10F</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=11396693024112930960&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
+<ExtendedData><Data name="구분"><value>야키니쿠</value></Data><Data name="일정"><value>11/29 19:00 저녁 후보</value></Data><Data name="주소"><value>〒530-0002 Osaka, Kita Ward, Sonezakishinchi, 1-chōme−5−１８ 零北新地ビル 10F</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=11396693024112930960&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
 <Point><coordinates>135.497023,34.697991,0</coordinates></Point>
 </Placemark>
 <Placemark>
 <name>간안 난바 (쿠시카츠)</name>
 <styleUrl>#ly2</styleUrl>
 <description><![CDATA[<b>쿠시카츠·도미솥밥</b><br/><span style='color:#666'>Ginan</span><br/>🗓 일정 외 후보<br/>⭐ 4.8 / 5 (115리뷰)<br/>낭바센니치마에 · 평점 4.8(115) · 출구(出汁)에 찍어 먹는 쿠시카츠+도미 솥밥.<br/>17:00~23:30 · 휴무 수요일 · 예약 가능 · 숙소 도보 8분.<br/>📍 5-8 Nanbasennichimae, Chuo Ward, Osaka, 542-0075<br/><a href='https://maps.google.com/?cid=12148513487706514280&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA'>구글맵에서 열기</a>]]></description>
-<ExtendedData><Data name="구분"><value>쿠시카츠·도미솥밥</value></Data><Data name="일정"><value>일정 외 후보</value></Data><Data name="주소"><value>5-8 Nanbasennichimae, Chuo Ward, Osaka, 542-0075</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=12148513487706514280&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
+<ExtendedData><Data name="구분"><value>쿠시카츠·도미솥밥</value></Data><Data name="일정"><value>11/29 19:00 저녁 후보</value></Data><Data name="주소"><value>5-8 Nanbasennichimae, Chuo Ward, Osaka, 542-0075</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=12148513487706514280&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
 <Point><coordinates>135.504930,34.663920,0</coordinates></Point>
 </Placemark>
 <Placemark>
@@ -255,10 +255,10 @@
 </Placemark>
 
 <Placemark>
-<name>와규카츠 반자이</name>
+<name>【11/29】와규카츠 반자이 (和牛かつ 万歳)</name>
 <styleUrl>#ly2</styleUrl>
-<description><![CDATA[<b>규카츠</b><br/><span style='color:#666'>Wagyu Katsu BANZAI</span><br/>🗓 일정 외 후보<br/>⭐ 4.9 / 5 (1,617리뷰)<br/>A5 고베규 카츠+버섯소스 · 평점 4.9(1,617). 11:00~22:30 · 예약/줄서기.<br/>📍 〒541-0058 Osaka, Chuo Ward, Minamikyūhōjimachi, 3-chōme−2−１５ 三休橋ガーデンスケープA<br/><a href='https://maps.google.com/?cid=7989385729098918939&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA'>구글맵에서 열기</a>]]></description>
-<ExtendedData><Data name="구분"><value>규카츠</value></Data><Data name="일정"><value>일정 외 후보</value></Data><Data name="주소"><value>〒541-0058 Osaka, Chuo Ward, Minamikyūhōjimachi, 3-chōme−2−１５ 三休橋ガーデンスケープA</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=7989385729098918939&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
+<description><![CDATA[<b>규카츠</b><br/><span style='color:#666'>Wagyu Katsu BANZAI</span><br/>🗓 11/29 19:00 저녁 후보<br/>⭐ 구글 4.9(1,600) · 타베로그 3.08(16)<br/>와규 규카츠 120g ¥2,600 / 프리미엄 ¥3,800 (밥·국 별도 +¥450) · 1인 3,000~5,000엔 · 11:00~22:30(L.O.22:00) · 예약 불가(워크인) · 카드·QR OK · 신사이바시역 도보 6분/사카이스지혼마치역 5분.<br/>📍 〒541-0058 Osaka, Chuo Ward, Minamikyūhōjimachi, 3-chōme−2−１５ 三休橋ガーデンスケープA<br/><a href='https://maps.google.com/?cid=7989385729098918939&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>규카츠</value></Data><Data name="일정"><value>11/29 19:00 저녁 후보</value></Data><Data name="주소"><value>〒541-0058 Osaka, Chuo Ward, Minamikyūhōjimachi, 3-chōme−2−１５ 三休橋ガーデンスケープA</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=7989385729098918939&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
 <Point><coordinates>135.503324,34.678866,0</coordinates></Point>
 </Placemark>
 <Placemark>
@@ -272,7 +272,7 @@
 <name>쵸카소바 무겐 (후쿠시마 에비에)</name>
 <styleUrl>#ly2</styleUrl>
 <description><![CDATA[<b>라멘</b><br/><span style='color:#666'>Chukasoba Mugen</span><br/>🗓 일정 외 후보<br/>쇼유 라멘 · 평점 4.0(910) · 11:00~15:00(점심만) · 휴무 화.<br/>📍 5-5-10 Ebie, Fukushima Ward, Osaka<br/><a href='https://www.google.com/maps/search/?api=1&query=34.696603,135.472201'>구글맵에서 열기</a>]]></description>
-<ExtendedData><Data name="구분"><value>라멘</value></Data><Data name="일정"><value>일정 외 후보</value></Data><Data name="주소"><value>5-5-10 Ebie, Fukushima Ward, Osaka</value></Data><Data name="구글맵"><value>https://www.google.com/maps/search/?api=1&amp;query=34.696603,135.472201</value></Data></ExtendedData>
+<ExtendedData><Data name="구분"><value>라멘</value></Data><Data name="일정"><value>11/29 19:00 저녁 후보</value></Data><Data name="주소"><value>5-5-10 Ebie, Fukushima Ward, Osaka</value></Data><Data name="구글맵"><value>https://www.google.com/maps/search/?api=1&amp;query=34.696603,135.472201</value></Data></ExtendedData>
 <Point><coordinates>135.472201,34.696603,0</coordinates></Point>
 </Placemark>
 <Placemark>
@@ -286,35 +286,35 @@
 <name>다나카노 쵸카소바 (우조보리)</name>
 <styleUrl>#ly2</styleUrl>
 <description><![CDATA[<b>라멘</b><br/><span style='color:#666'>Tanaka-no-chukasoba</span><br/>🗓 일정 외 후보<br/>⭐ 4.4 / 5 (699리뷰)<br/>조개육수+채수 · 평점 4.4(699) · 11:30~15:00 / 19:00~21:00 · 휴무 월.<br/>📍 1-chōme-18-23 Utsubohonmachi, Nishi Ward, Osaka, 550-0004<br/><a href='https://maps.google.com/?cid=14278764577806048484&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA'>구글맵에서 열기</a>]]></description>
-<ExtendedData><Data name="구분"><value>라멘</value></Data><Data name="일정"><value>일정 외 후보</value></Data><Data name="주소"><value>1-chōme-18-23 Utsubohonmachi, Nishi Ward, Osaka, 550-0004</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=14278764577806048484&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
+<ExtendedData><Data name="구분"><value>라멘</value></Data><Data name="일정"><value>11/29 19:00 저녁 후보</value></Data><Data name="주소"><value>1-chōme-18-23 Utsubohonmachi, Nishi Ward, Osaka, 550-0004</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=14278764577806048484&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
 <Point><coordinates>135.495035,34.684216,0</coordinates></Point>
 </Placemark>
 <Placemark>
 <name>아워로그 커피 로스터스 (혼조)</name>
 <styleUrl>#ly2</styleUrl>
 <description><![CDATA[<b>카페</b><br/><span style='color:#666'>Ourlog Coffee Roasters</span><br/>🗓 일정 외 후보<br/>⭐ 4.4 / 5 (446리뷰)<br/>고소한 말차라떼·조용한 로스터리 카페 · 평점 4.4(446) · 10:00~19:00.<br/>📍 1-chōme-24-7 Honjōhigashi, Kita Ward, Osaka, 531-0074<br/><a href='https://maps.google.com/?cid=16052146623551553906&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA'>구글맵에서 열기</a>]]></description>
-<ExtendedData><Data name="구분"><value>카페</value></Data><Data name="일정"><value>일정 외 후보</value></Data><Data name="주소"><value>1-chōme-24-7 Honjōhigashi, Kita Ward, Osaka, 531-0074</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=16052146623551553906&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
+<ExtendedData><Data name="구분"><value>카페</value></Data><Data name="일정"><value>11/29 19:00 저녁 후보</value></Data><Data name="주소"><value>1-chōme-24-7 Honjōhigashi, Kita Ward, Osaka, 531-0074</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=16052146623551553906&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
 <Point><coordinates>135.506876,34.711104,0</coordinates></Point>
 </Placemark>
 <Placemark>
 <name>헨리스 피자 (다니마치)</name>
 <styleUrl>#ly2</styleUrl>
 <description><![CDATA[<b>피자</b><br/><span style='color:#666'>Henry's PIZZA</span><br/>🗓 일정 외 후보<br/>⭐ 4.6 / 5 (802리뷰)<br/>버디(Verdy)가 연 피자집 · 평점 4.6(802) · 11:30~21:30 · 오픈런(11:30).<br/>📍 4-chōme-2-2 Tanimachi, Chuo Ward, Osaka, 540-0012<br/><a href='https://maps.google.com/?cid=17737086142384880007&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA'>구글맵에서 열기</a>]]></description>
-<ExtendedData><Data name="구분"><value>피자</value></Data><Data name="일정"><value>일정 외 후보</value></Data><Data name="주소"><value>4-chōme-2-2 Tanimachi, Chuo Ward, Osaka, 540-0012</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=17737086142384880007&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
+<ExtendedData><Data name="구분"><value>피자</value></Data><Data name="일정"><value>11/29 19:00 저녁 후보</value></Data><Data name="주소"><value>4-chōme-2-2 Tanimachi, Chuo Ward, Osaka, 540-0012</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=17737086142384880007&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
 <Point><coordinates>135.518475,34.680597,0</coordinates></Point>
 </Placemark>
 <Placemark>
 <name>멘츠루 카미토라 히고바시</name>
 <styleUrl>#ly2</styleUrl>
 <description><![CDATA[<b>라멘</b><br/><span style='color:#666'>Kamitora - Higobashi</span><br/>🗓 일정 외 후보<br/>⭐ 4.3 / 5 (1,347리뷰)<br/>돈코츠+간사이 다시 · 평점 4.3(1,347) · 10:00~23:00 · 하카타 돈코츠 애호가용.<br/>📍 1-chōme-14-12 Edobori, Nishi Ward, Osaka, 550-0002<br/><a href='https://maps.google.com/?cid=11727498370384631121&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA'>구글맵에서 열기</a>]]></description>
-<ExtendedData><Data name="구분"><value>라멘</value></Data><Data name="일정"><value>일정 외 후보</value></Data><Data name="주소"><value>1-chōme-14-12 Edobori, Nishi Ward, Osaka, 550-0002</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=11727498370384631121&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
+<ExtendedData><Data name="구분"><value>라멘</value></Data><Data name="일정"><value>11/29 19:00 저녁 후보</value></Data><Data name="주소"><value>1-chōme-14-12 Edobori, Nishi Ward, Osaka, 550-0002</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=11727498370384631121&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
 <Point><coordinates>135.495573,34.691743,0</coordinates></Point>
 </Placemark>
 <Placemark>
 <name>대중주장 산마 (텐마)</name>
 <styleUrl>#ly2</styleUrl>
 <description><![CDATA[<b>이자카야</b><br/><span style='color:#666'>Taisyu Sakaba Sanma</span><br/>🗓 일정 외 후보<br/>⭐ 3.7 / 5 (582리뷰)<br/>이자카야·해산물 · 평점 3.7(582) · 10:00~23:30 · 텐진바시 4-10-10.<br/>📍 4-chōme-10-10 Tenjinbashi, Kita Ward, Osaka, 530-0041<br/><a href='https://maps.google.com/?cid=11377475135632947428&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA'>구글맵에서 열기</a>]]></description>
-<ExtendedData><Data name="구분"><value>이자카야</value></Data><Data name="일정"><value>일정 외 후보</value></Data><Data name="주소"><value>4-chōme-10-10 Tenjinbashi, Kita Ward, Osaka, 530-0041</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=11377475135632947428&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
+<ExtendedData><Data name="구분"><value>이자카야</value></Data><Data name="일정"><value>11/29 19:00 저녁 후보</value></Data><Data name="주소"><value>4-chōme-10-10 Tenjinbashi, Kita Ward, Osaka, 530-0041</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=11377475135632947428&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
 <Point><coordinates>135.511278,34.706354,0</coordinates></Point>
 </Placemark>
 <Placemark>
@@ -349,7 +349,7 @@
 <name>아마토 마에다 (난바워크)</name>
 <styleUrl>#ly2</styleUrl>
 <description><![CDATA[<b>스시</b><br/><span style='color:#666'>Amato Maeda Namba-Walk</span><br/>🗓 일정 외 후보<br/>⭐ 4.2 / 5 (758리뷰)<br/>스시·나바워크 상점가 · 평점 4.2(758) · 10:00~21:30 · 비 오는 날 동선 편함.<br/>📍 なんばウォーク 三番街, 5-12, 1-chōme-3-5-12 Sennichimae, Chuo Ward, Osaka, 542-0074<br/><a href='https://maps.google.com/?cid=1150895435098072036&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA'>구글맵에서 열기</a>]]></description>
-<ExtendedData><Data name="구분"><value>스시</value></Data><Data name="일정"><value>일정 외 후보</value></Data><Data name="주소"><value>なんばウォーク 三番街, 5-12, 1-chōme-3-5-12 Sennichimae, Chuo Ward, Osaka, 542-0074</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=1150895435098072036&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
+<ExtendedData><Data name="구분"><value>스시</value></Data><Data name="일정"><value>11/29 19:00 저녁 후보</value></Data><Data name="주소"><value>なんばウォーク 三番街, 5-12, 1-chōme-3-5-12 Sennichimae, Chuo Ward, Osaka, 542-0074</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=1150895435098072036&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
 <Point><coordinates>135.505567,34.667201,0</coordinates></Point>
 </Placemark>
 <Placemark>
@@ -645,13 +645,6 @@
 <description><![CDATA[<b>야키니쿠</b><br/><span style='color:#666'>Yakiniku Ura Tennoji Yasubee</span><br/>🗓 11/28 19:15 저녁 후보<br/>타베로그 3.52(280) · 호리코시초 13-10 · 토 12:00~23:00(L.O.22:00) · 월 휴무 · 몽벨에서 도보 5분 · 본점은 焼肉 WEST 백명점 2026<br/>📍 堀越町13-10, 天王寺区, 大阪市<br/><a href='https://www.google.com/maps/search/?api=1&query=34.64867,135.513947'>구글맵에서 열기</a>]]></description>
 <ExtendedData><Data name="구분"><value>야키니쿠</value></Data><Data name="일정"><value>11/28 19:15 저녁 후보</value></Data><Data name="주소"><value>堀越町13-10, 天王寺区, 大阪市</value></Data></ExtendedData>
 <Point><coordinates>135.513947,34.64867,0</coordinates></Point>
-</Placemark>
-<Placemark>
-<name>【11/29】와규카츠 반자이 (和牛かつ 万歳)</name>
-<styleUrl>#ly2</styleUrl>
-<description><![CDATA[<b>규카츠·와규</b><br/><span style='color:#666'>Wagyu Katsu Banzei</span><br/>🗓 11/29 저녁 후보<br/>구글 4.9(1,600) · 타베로그 3.08(16) · 미나미큐호지초 3-2-15 三休橋ガーデンスケープA · 신사이바시역 도보 6분/사카이스지혼마치역 5분 · 11:00~22:30(L.O.22:00) · 예약 불가(워크인) · 카드·QR OK<br/>와규 규카츠 120g ¥2,600 / 프리미엄 ¥3,800 (밥·국 별도 ¥450) · 1인 3,000~5,000엔<br/>📍 南久宝寺町3-2-15, 中央区, 大阪市<br/><a href='https://www.google.com/maps/search/?api=1&query=34.678825,135.503357'>구글맵에서 열기</a>]]></description>
-<ExtendedData><Data name="구분"><value>규카츠·와규</value></Data><Data name="일정"><value>11/29 저녁 후보</value></Data><Data name="주소"><value>南久宝寺町3-2-15, 中央区, 大阪市</value></Data></ExtendedData>
-<Point><coordinates>135.503357,34.678825,0</coordinates></Point>
 </Placemark>
 </Folder>
 <Folder><name>3. 쇼핑·기타</name><description>쇼핑·체험·전망대 · 13곳 (몽벨 아베노점 포함)</description><open>1</open>

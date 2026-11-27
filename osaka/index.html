@@ -537,7 +537,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
   <section id="tab-map" class="hidden">
     <div class="day-scroll" id="mapDayScroll"></div>
     <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
-      <button class="act-btn org" id="allPlBtn" onclick="toggleAllPlaces()">⭐ 추천 108곳 함께 보기</button>
+      <button class="act-btn org" id="allPlBtn" onclick="toggleAllPlaces()">⭐ 추천 107곳 함께 보기</button>
       <button class="act-btn" id="atmBtn" style="border-color:#7B4FBF;color:#7B4FBF;font-weight:900;" onclick="toggleAtm()">🏧 ATM 4곳</button>
       <a class="act-btn map" href="./osaka_2026_all_places.kml" download>📥 KML</a>
     </div>
@@ -602,7 +602,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
     </details>
 
     <details style="margin-bottom:12px;">
-      <summary style="list-style:none;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;font-size:14.5px;font-weight:800;color:var(--green);cursor:pointer;">🗺️ 추천 장소 전체 108곳 (ATM 4 포함) · 동네별 정리 · 지도·KML <span style="font-size:11.5px;color:var(--sub);font-weight:700;">(눌러서 펼치기)</span></summary>
+      <summary style="list-style:none;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;font-size:14.5px;font-weight:800;color:var(--green);cursor:pointer;">🗺️ 추천 장소 전체 107곳 (ATM 4 포함) · 동네별 정리 · 지도·KML <span style="font-size:11.5px;color:var(--sub);font-weight:700;">(눌러서 펼치기)</span></summary>
       <div style="margin-top:8px;">
         <div class="sec-card" style="border-color:var(--gold);">
       <div style="font-size:12.5px;color:var(--sub);line-height:1.55;margin-bottom:8px;">
@@ -610,9 +610,9 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
         아래 <b>KML 내려받기</b>로 파일을 받아 두면 구글맵 앱 → <b>저장됨 → 지도</b>에서 바로 떠요.
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-        <button class="act-btn org" id="pf0" onclick="filterPlaces(0)">전체 108</button>
+        <button class="act-btn org" id="pf0" onclick="filterPlaces(0)">전체 107</button>
         <button class="act-btn" id="pf1" onclick="filterPlaces(1)">① 확정 일정 18</button>
-        <button class="act-btn" id="pf2" onclick="filterPlaces(2)">② 맛집·카페 75</button>
+        <button class="act-btn" id="pf2" onclick="filterPlaces(2)">② 맛집·카페 74</button>
         <button class="act-btn" id="pf3" onclick="filterPlaces(3)">③ 쇼핑·기타 11</button>
         <button class="act-btn" id="pf4" onclick="filterPlaces(4)">🏧 ATM 4</button>
       </div>
@@ -1011,14 +1011,13 @@ const PLACES = [
   {n:"마코야 (まこ家) 난바점 (쯔쿠네 5종 모둠)",c:"야키토리·쯔쿠네",l:2,a:"난바·도톤보리·닛폰바시",w:"난바 3-3-7 라이즈빌딩 2F · 난바역 도보 1분 · 12:00~24:00 · 무휴 · 타베로그 3.31(2호점·102) · 구글 3.8(246) · 먹어본 중 가장 부드러운 쯔쿠네, 5종 모둠 1,078엔",la:34.666421,ln:135.5015238},
   {n:"신사이바시 PARCO",c:"쇼핑몰",l:1,a:"신사이바시·아메무라",w:"11/29 17:50 신사이바시",la:34.673847,ln:135.500957},
   {n:"미도스지 일루미네이션",c:"야경",l:1,a:"신사이바시·아메무라",w:"11/29 20:40 야경 산책",la:34.678351,ln:135.500301},
-  {n:"와규카츠 반자이",c:"규카츠",l:2,a:"신사이바시·아메무라",w:"일정 외 후보",la:34.678866,ln:135.503324},
+  {n:"와규카츠 반자이 (和牛かつ 万歳)",c:"규카츠·와규",l:2,a:"신사이바시·아메무라",w:"11/29 19:00 저녁 후보 · 미나미큐호지초 3-2-15 三休橋ガーデンスケープA · 신사이바시역 도보 6분/사카이스지혼마치역 5분 · 11:00~22:30(L.O.22:00) · 예약 불가(워크인) · 카드·QR OK · 와규 규카츠 120g ¥2,600/프리미엄 ¥3,800(밥·국 +¥450) · 1인 3,000~5,000엔 · 구글 4.9(1,600) · 타베로그 3.08(16)",la:34.678866,ln:135.503324},
   {n:"다나카노 쵸카소바 (우조보리)",c:"라멘",l:2,a:"신사이바시·아메무라",w:"일정 외 후보",la:34.684216,ln:135.495035},
   {n:"헨리스 피자 (다니마치)",c:"피자",l:2,a:"신사이바시·아메무라",w:"일정 외 후보",la:34.680597,ln:135.518475},
   {n:"나가노 마켓 (신사이바시 PARCO 5F)",c:"쇼핑",l:3,a:"신사이바시·아메무라",w:"11/29 17:50 신사이바시",la:34.673847,ln:135.500957},
   {n:"점프샵 오사카 (다이마루 신사이바시 9F)",c:"굿즈",l:3,a:"신사이바시·아메무라",w:"11/29 17:50 신사이바시",la:34.673167,ln:135.501153},
   {n:"겟토 (月盗)",c:"이자카야·계란말이",l:2,a:"신사이바시·아메무라",w:"계란말이 세계챔피언 · 도톤보리 4분 · 11:30~14:30/18:00~23:00 · 일 휴무",la:34.6841649,ln:135.5147271},
   {n:"야키니쿠 카메다 남센바",c:"야키니쿠",l:2,a:"신사이바시·아메무라",w:"11/29 19:00 저녁 · 미나미센바 4-8-2 · 17:00~다음날 04:00 · 무휴 · 타베로그 3.39(109) · 구글 4.8(1,281)",la:34.6776732,ln:135.4994804},
-  {n:"와규카츠 반자이 (和牛かつ 万歳)",c:"규카츠·와규",l:2,a:"신사이바시·아메무라",w:"11/29 저녁 후보 · 미나미큐호지초 3-2-15 三休橋ガーデンスケープA · 신사이바시역 도보 6분/사카이스지혼마치역 5분 · 11:00~22:30(L.O.22:00) · 예약 불가 · 카드·QR OK · 와규 규카츠 120g 2,600엔/프리미엄 3,800엔(밥·국 +450엔) · 구글 4.9(1,600) · 타베로그 3.08(16)",la:34.678825,ln:135.503357},
   {n:"토리소바 자긴 니보시점",c:"라멘",l:2,a:"신사이바시·아메무라",w:"11/29 저녁 대안 (22:00까지)",la:34.6776623,ln:135.5011218},
   {n:"쿠시카츠 다나카 아메무라점",c:"쿠시카츠",l:2,a:"신사이바시·아메무라",w:"아메무라 · 12:00~翌5:00 · 4.7★ · 타코야키 체험",la:34.6734395,ln:135.4979834},
   {n:"메이지켄",c:"오므라이스·쿠시카츠",l:2,a:"신사이바시·아메무라",w:"11/29 저녁 대안 · 신사이바시 1-5-32 · 11:00~15:00/17:00~20:00 · 수 휴무 · 타베로그 3.49(1,746)·洋食WEST백명점 2025 · 1925년 창업",la:34.6726613,ln:135.5022323},
@@ -2945,7 +2944,7 @@ function renderPlaces(){
 function toggleAllPlaces(){
   showAllPlaces = !showAllPlaces;
   const b=document.getElementById('allPlBtn');
-  b.textContent = showAllPlaces ? '⭐ 추천 108곳 숨기기' : '⭐ 추천 108곳 함께 보기';
+  b.textContent = showAllPlaces ? '⭐ 추천 107곳 숨기기' : '⭐ 추천 107곳 함께 보기';
   renderMap();
 }
 let showAtm = false, atmMarkers = [];
