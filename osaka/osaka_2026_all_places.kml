@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2"><Document>
 <name>🇯🇵 오사카 2026 전체 추천 지도</name>
-<description><![CDATA[이승현 님 오사카 3박 4일(2026.11.28~12.01) 추천 장소 전체 지도.<br/>① 확정 일정 ② 맛집·카페 59곳(최근호 님 매거진 + 유저 추가 + 블로그 20곳) ③ 쇼핑·기타.<br/>좌표는 2026-11-22 Google Maps 기준 확인. 만든 날 2026-11-22 · 핫플 5곳 추가 2026-11-24 · 맛집 20곳 추가 2026-11-25 · 11/27 동선 수정(신세카이·덴노지, 나카노시마, 그르니에) 반영.]]></description>
+<description><![CDATA[이승현 님 오사카 3박 4일(2026.11.28~12.01) 추천 장소 전체 지도.<br/>① 확정 일정 ② 맛집·카페 74곳(최근호 님 매거진 + 유저 추가 + 블로그 20곳 + 덴노지 4곳) ③ 쇼핑·기타.<br/>좌표는 2026-11-22 Google Maps 기준 확인. 만든 날 2026-11-22 · 핫플 5곳 추가 2026-11-24 · 맛집 20곳 추가 2026-11-25 · 11/27 동선 수정(신세카이·덴노지, 나카노시마, 그르니에) 반영 · 11/27 밤 몽벨 아베노점(1일차 18:00)과 덴노지 저녁 4곳 추가.]]></description>
 <Style id="ly1"><IconStyle><color>ffffffff</color><scale>1.0</scale><Icon><href>http://maps.google.com/mapfiles/kml/paddle/red-circle.png</href></Icon></IconStyle><LabelStyle><scale>0.85</scale></LabelStyle></Style>
 <Style id="ly2"><IconStyle><color>ffffffff</color><scale>1.0</scale><Icon><href>http://maps.google.com/mapfiles/kml/paddle/orange-circle.png</href></Icon></IconStyle><LabelStyle><scale>0.85</scale></LabelStyle></Style>
 <Style id="ly3"><IconStyle><color>ffffffff</color><scale>1.0</scale><Icon><href>http://maps.google.com/mapfiles/kml/paddle/blu-circle.png</href></Icon></IconStyle><LabelStyle><scale>0.85</scale></LabelStyle></Style>
@@ -107,7 +107,7 @@
 <Placemark>
 <name>【11/28】쿠시카츠 다루마 신세카이 총본점</name>
 <styleUrl>#ly1</styleUrl>
-<description><![CDATA[<b>쿠시카츠</b><br/><span style='color:#666'>Kushikatsu Daruma Shinsekai Sohonten</span><br/>🗓 11/28 18:10 저녁<br/>1929년 창업 · 소스 두 번 찍기 금지 · 10:30~22:30(L.O.22:00) · 카운터 12석.<br/>📍 2-chōme-3-9 Ebisuhigashi, Naniwa Ward, Osaka<br/><a href='https://maps.google.com/?cid=17209588581346616951'>구글맵에서 열기</a>]]></description>
+<description><![CDATA[<b>쿠시카츠</b><br/><span style='color:#666'>Kushikatsu Daruma Shinsekai Sohonten</span><br/>🗓 11/28 19:15 저녁 후보<br/>1929년 창업 · 소스 두 번 찍기 금지 · 10:30~22:30(L.O.22:00) · 카운터 12석.<br/>📍 2-chōme-3-9 Ebisuhigashi, Naniwa Ward, Osaka<br/><a href='https://maps.google.com/?cid=17209588581346616951'>구글맵에서 열기</a>]]></description>
 <ExtendedData><Data name="구분"><value>쿠시카츠</value></Data><Data name="일정"><value>11/28 18:10 저녁</value></Data><Data name="주소"><value>2-chōme-3-9 Ebisuhigashi, Naniwa Ward, Osaka</value></Data></ExtendedData>
 <Point><coordinates>135.5062032,34.6515704,0</coordinates></Point>
 </Placemark>
@@ -126,7 +126,7 @@
 <Point><coordinates>135.5078873,34.6923932,0</coordinates></Point>
 </Placemark>
 </Folder>
-<Folder><name>2. 맛집·카페</name><description>맛집·카페 70곳 — 기존 39 + 블로그 20 + 신세카이·덴노지·그르니에 6곳(2026-11-27 확인)</description><open>1</open>
+<Folder><name>2. 맛집·카페</name><description>맛집·카페 74곳 — 기존 39 + 블로그 20 + 신세카이·덴노지·그르니에 6곳 + 덴노지 저녁 4곳(고하쿠·스탠드 후지·분고·야스베에, 2026-11-27 확인)</description><open>1</open>
 <Placemark>
 <name>551 호라이 본점</name>
 <styleUrl>#ly2</styleUrl>
@@ -618,8 +618,36 @@
 <ExtendedData><Data name="구분"><value>야키토리·쯔쿠네</value></Data><Data name="일정"><value>난바 밤 2차 대안</value></Data><Data name="주소"><value>3-chōme-3-7 Namba, Chuo Ward, Osaka</value></Data></ExtendedData>
 <Point><coordinates>135.5015238,34.666421,0</coordinates></Point>
 </Placemark>
+<Placemark>
+<name>【11/28】고하쿠 (赤白) 덴노지 MIO점 · 프렌치 오뎅</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>프렌치 오뎅·와인바</b><br/><span style='color:#666'>KOHAKU Tennoji MIO</span><br/>🗓 11/28 19:15 저녁 후보<br/>타베로그 3.55(592) · 미오 플라자관 M2F · 11:00~23:00(L.O.22:00) · 예약 불가 43석 · 포르치니 크림 오뎅·안심 스테이크 · 2,000~2,999엔<br/>📍 天王寺ミオ プラザ館 M2F, 悲田院町10-48, 天王寺区, 大阪市<br/><a href='https://www.google.com/maps/search/?api=1&query=34.64731,135.51385'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>프렌치 오뎅·와인바</value></Data><Data name="일정"><value>11/28 19:15 저녁 후보</value></Data><Data name="주소"><value>天王寺ミオ プラザ館 M2F, 悲田院町10-48, 天王寺区, 大阪市</value></Data></ExtendedData>
+<Point><coordinates>135.51385,34.64731,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【11/28】스탠드 후지 본점 · 해산물</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>해산물·이자카야</b><br/><span style='color:#666'>Stand Fuji Honten</span><br/>🗓 11/28 19:15 저녁 후보<br/>타베로그 3.49(1,063) · 아베노스지 1-5-1 루시아스 B1F · 11:30~23:00 무휴 · 예약 불가(2016년 중단) · 수산회사 직영 해산물·초밥 · 2,000~2,999엔<br/>📍 阿倍野筋1-5-1 ルシアスビル B1F, 阿倍野区, 大阪市<br/><a href='https://www.google.com/maps/search/?api=1&query=34.646484,135.512863'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>해산물·이자카야</value></Data><Data name="일정"><value>11/28 19:15 저녁 후보</value></Data><Data name="주소"><value>阿倍野筋1-5-1 ルシアスビル B1F, 阿倍野区, 大阪市</value></Data></ExtendedData>
+<Point><coordinates>135.512863,34.646484,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【11/28】야키니쿠 분고 (焼肉ホルモン ブンゴ) 天王寺</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>야키니쿠·오이타 와규</b><br/><span style='color:#666'>Yakiniku Horumon Bungo Tennoji</span><br/>🗓 11/28 19:15 저녁 후보<br/>타베로그 3.49(596·예약 1위) · 아베노스지 1-2-8 2F · 토·일 11:30~15:00 / 16:00~23:00 · 3인 15,000~18,000엔<br/>📍 阿倍野筋1-2-8 2F, 阿倍野区, 大阪市<br/><a href='https://www.google.com/maps/search/?api=1&query=34.644661,135.514145'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>야키니쿠·오이타 와규</value></Data><Data name="일정"><value>11/28 19:15 저녁 후보</value></Data><Data name="주소"><value>阿倍野筋1-2-8 2F, 阿倍野区, 大阪市</value></Data></ExtendedData>
+<Point><coordinates>135.514145,34.644661,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【11/28】야키니쿠 裏天王寺 安兵衛 (우라텐노지 야스베에)</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>야키니쿠</b><br/><span style='color:#666'>Yakiniku Ura Tennoji Yasubee</span><br/>🗓 11/28 19:15 저녁 후보<br/>타베로그 3.52(280) · 호리코시초 13-10 · 토 12:00~23:00(L.O.22:00) · 월 휴무 · 몽벨에서 도보 5분 · 본점은 焼肉 WEST 백명점 2026<br/>📍 堀越町13-10, 天王寺区, 大阪市<br/><a href='https://www.google.com/maps/search/?api=1&query=34.64867,135.513947'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>야키니쿠</value></Data><Data name="일정"><value>11/28 19:15 저녁 후보</value></Data><Data name="주소"><value>堀越町13-10, 天王寺区, 大阪市</value></Data></ExtendedData>
+<Point><coordinates>135.513947,34.64867,0</coordinates></Point>
+</Placemark>
 </Folder>
-<Folder><name>3. 쇼핑·기타</name><description>쇼핑·체험·전망대 · 12곳</description><open>1</open>
+<Folder><name>3. 쇼핑·기타</name><description>쇼핑·체험·전망대 · 13곳 (몽벨 아베노점 포함)</description><open>1</open>
 <Placemark>
 <name>카와치야 본점 (신세카이 50엔 쿠시카츠)</name>
 <styleUrl>#ly3</styleUrl>
@@ -703,6 +731,13 @@
 <description><![CDATA[<b>패션</b><br/><span style='color:#666'>GAP 신사이바시 (OSAKA 티셔츠)</span><br/>🗓 추천 · 11/28 신사이바시 쇼핑<br/>⭐ 3.9 / 5 (383리뷰)<br/>영업 10:00~22:00 (매일). GAP 도톤보리점은 현재 없음 → 가장 가까운 신사이바시점(도톤보리에서 도보 8분). OSAKA 로고 티셔츠는 매장 재고 확인.<br/>📍 〒542-0085 Osaka, Chuo Ward, Shinsaibashisuji, 1-chōme−9−6 心斎橋MGビル<br/><a href='https://maps.google.com/?cid=11641388750629567930&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA'>구글맵에서 열기</a>]]></description>
 <ExtendedData><Data name="구분"><value>패션</value></Data><Data name="일정"><value>추천 · 11/28 신사이바시 쇼핑</value></Data><Data name="주소"><value>〒542-0085 Osaka, Chuo Ward, Shinsaibashisuji, 1-chōme−9−6 心斎橋MGビル</value></Data><Data name="구글맵"><value>https://maps.google.com/?cid=11641388750629567930&amp;g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA</value></Data></ExtendedData>
 <Point><coordinates>135.501298,34.674423,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【11/28】몽벨 아베노점 (モンベル あべの店)</name>
+<styleUrl>#ly3</styleUrl>
+<description><![CDATA[<b>아웃도어·쇼핑</b><br/><span style='color:#666'>Montbell Abeno Store</span><br/>🗓 11/28 18:00~19:00 쇼핑<br/>10:00~21:00 · 연중무휴 · 하루카스 옆 岸本ビル 1~2F · 1F 남성복·모자·장갑·가방 / 2F 여성복·신발·캠핑 · 면세 가능(여권) · 이코카·QR 결제 · 신세카이에서 텐시바 지나 도보 10분<br/>📍 阿倍野筋1-3-21 岸本ビル1·2F, 阿倍野区, 大阪市<br/><a href='https://www.google.com/maps/search/?api=1&query=34.645473,135.512894'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>아웃도어·쇼핑</value></Data><Data name="일정"><value>11/28 18:00~19:00 쇼핑</value></Data><Data name="주소"><value>阿倍野筋1-3-21 岸本ビル1·2F, 阿倍野区, 大阪市</value></Data></ExtendedData>
+<Point><coordinates>135.512894,34.645473,0</coordinates></Point>
 </Placemark>
 </Folder>
 </Document></kml>
