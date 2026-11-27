@@ -126,7 +126,7 @@
 <Point><coordinates>135.5078873,34.6923932,0</coordinates></Point>
 </Placemark>
 </Folder>
-<Folder><name>2. 맛집·카페</name><description>맛집·카페 65곳 — 기존 39 + 블로그 20 + 신세카이·덴노지·그르니에 6곳(2026-11-27 확인)</description><open>1</open>
+<Folder><name>2. 맛집·카페</name><description>맛집·카페 70곳 — 기존 39 + 블로그 20 + 신세카이·덴노지·그르니에 6곳(2026-11-27 확인)</description><open>1</open>
 <Placemark>
 <name>551 호라이 본점</name>
 <styleUrl>#ly2</styleUrl>
@@ -582,6 +582,41 @@
 <description><![CDATA[<b>디저트·테이크아웃</b><br/><span style='color:#666'>grenier Kitahama branch</span><br/>🗓 11/29 16:00<br/>도쇼마치 1-3-8 · 기타하마역 4번 출구 도보 6분 · 10:00~19:00 · 테이크아웃 전용 · 4.7 / 5 (376리뷰).<br/>📍 1-chōme-3-8 Doshōmachi, Chuo Ward, Osaka<br/><a href='https://maps.google.com/?q=grenier+Kitahama+Osaka'>구글맵에서 열기</a>]]></description>
 <ExtendedData><Data name="구분"><value>디저트·테이크아웃</value></Data><Data name="일정"><value>11/29 16:00</value></Data><Data name="주소"><value>1-chōme-3-8 Doshōmachi, Chuo Ward, Osaka</value></Data></ExtendedData>
 <Point><coordinates>135.5089982,34.6883296,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【쯔쿠네】야키토리 porc 덴노지점</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>야키토리·쯔쿠네</b><br/><span style='color:#666'>天王寺 焼とりporc</span><br/>🗓 덴노지 저녁 대안<br/>17:00~23:00 · 무휴 · 4.2 / 5 (50리뷰) · 타레·소금·치즈 쯔쿠네 & 쯔쿠네 스프.<br/>📍 2-chōme-3-53 Matsuzakichō, Abeno Ward, Osaka<br/><a href='https://www.google.com/maps/search/?api=1&query=34.6451245,135.5145702'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>야키토리·쯔쿠네</value></Data><Data name="일정"><value>덴노지 저녁 대안</value></Data><Data name="주소"><value>2-chōme-3-53 Matsuzakichō, Abeno Ward, Osaka</value></Data></ExtendedData>
+<Point><coordinates>135.5145702,34.6451245,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【쯔쿠네】우메다 야키토리 클럽</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>야키토리·쯔쿠네</b><br/><span style='color:#666'>Umeda Yakitori Club</span><br/>🗓 우메다 저녁 대안<br/>평일 17:00~23:30 / 토·일 12:00~23:30 · 4.3 / 5 (381리뷰) · 타베로그 3.48.<br/>📍 2-chōme-10-15 Sonezaki, Kita Ward, Osaka<br/><a href='https://www.google.com/maps/search/?api=1&query=34.700753,135.5006495'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>야키토리·쯔쿠네</value></Data><Data name="일정"><value>우메다 저녁 대안</value></Data><Data name="주소"><value>2-chōme-10-15 Sonezaki, Kita Ward, Osaka</value></Data></ExtendedData>
+<Point><coordinates>135.5006495,34.700753,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【쯔쿠네】야키토리 갓포</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>야키토리·쯔쿠네</b><br/><span style='color:#666'>Yakitori Gappo</span><br/>🗓 신사이바시 저녁 대안<br/>화~일 17:00~23:00 · 월 휴무 · 4.3 / 5 (366리뷰) · 200엔대 꼬치·쯔쿠네.<br/>📍 1-chōme-7-16 Higashishinsaibashi, Chuo Ward, Osaka<br/><a href='https://www.google.com/maps/search/?api=1&query=34.6727908,135.5044946'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>야키토리·쯔쿠네</value></Data><Data name="일정"><value>신사이바시 저녁 대안</value></Data><Data name="주소"><value>1-chōme-7-16 Higashishinsaibashi, Chuo Ward, Osaka</value></Data></ExtendedData>
+<Point><coordinates>135.5044946,34.6727908,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【쯔쿠네】스미야키쇼텐 요우 난바점</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>야키토리·쯔쿠네</b><br/><span style='color:#666'>Sumiyaki-shoten Yo Namba</span><br/>🗓 난바 밤 2차<br/>15:00~다음날 02:30 · 무휴 · 4.0 / 5 (472리뷰) · 철판 노른자 쯔쿠네 759엔.<br/>📍 14-25 Nanbasennichimae, Chuo Ward, Osaka<br/><a href='https://www.google.com/maps/search/?api=1&query=34.6640787,135.5031245'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>야키토리·쯔쿠네</value></Data><Data name="일정"><value>난바 밤 2차</value></Data><Data name="주소"><value>14-25 Nanbasennichimae, Chuo Ward, Osaka</value></Data></ExtendedData>
+<Point><coordinates>135.5031245,34.6640787,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【쯔쿠네】마코야 난바점</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>야키토리·쯔쿠네</b><br/><span style='color:#666'>Makoya</span><br/>🗓 난바 밤 2차 대안<br/>12:00~24:00 · 무휴 · 3.8 / 5 (246리뷰) · 쯔쿠네 5종 모둠 1,078엔 · 난바역 1분.<br/>📍 3-chōme-3-7 Namba, Chuo Ward, Osaka<br/><a href='https://www.google.com/maps/search/?api=1&query=34.666421,135.5015238'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="구분"><value>야키토리·쯔쿠네</value></Data><Data name="일정"><value>난바 밤 2차 대안</value></Data><Data name="주소"><value>3-chōme-3-7 Namba, Chuo Ward, Osaka</value></Data></ExtendedData>
+<Point><coordinates>135.5015238,34.666421,0</coordinates></Point>
 </Placemark>
 </Folder>
 <Folder><name>3. 쇼핑·기타</name><description>쇼핑·체험·전망대 · 12곳</description><open>1</open>
