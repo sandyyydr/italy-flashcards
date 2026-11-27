@@ -1053,6 +1053,7 @@ let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(
   }));
   if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
 })();
+// v68: 짐 싸기 — '기본 목록 복원' 확인 단계를 다른 동작 전까지 유지(타임아웃 없이)
 // v67: 짐 싸기 체크리스트 — 모든 항목(기본 37개 포함) ✕ 삭제 + '기본 목록 복원'(os_pack_hidden_v1)
 // v66: 12/01 귀국 KTX 예매 완료(구포 15:31 → 김천구미 16:59) · 김해공항→구포역 이동을 저장본에도 넣기
 (function migrateReturnKtx(){
@@ -2941,7 +2942,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v67';
+const SW_CACHE = 'osaka-planner-v68';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
@@ -3423,7 +3424,7 @@ document.addEventListener('keydown', e => {
   <div class="mag-ov-scroll" id="imgOvScroll"><img id="imgOvImg" alt="간사이국제공항 제1터미널 4층 면세 수속 지도" src=""></div>
 </div>
 <script>
-/* ───────── 🧳 짐 싸기 체크리스트 (osaka-planner-v67) ───────── */
+/* ───────── 🧳 짐 싸기 체크리스트 (osaka-planner-v68) ───────── */
 const PK_CATS = [
   {id:'doc', emoji:'📄', name:'필수 서류 · 결제 · 앱', sub:'공항에서 바로 꺼내는 기내 가방에', items:[
     {id:'d1', t:'여권', d:'유효기간 6개월 이상 남았는지 사진면 확인 · 3명 모두', b:'cabin'},
@@ -3477,7 +3478,7 @@ const PK_CATS = [
 const PK_BADGE = {cabin:'기내', bag:'위탁', ban:'기내 필수'};
 const PK_STORE = 'os_pack_v1', PK_CUSTOM = 'os_pack_custom_v1', PK_FOLD = 'os_pack_fold_v1', PK_SEG = 'os_check_seg', PK_HIDDEN = 'os_pack_hidden_v1';
 
-let pkState = {}, pkCustom = [], pkFold = {}, pkHidden = {}, pkOnlyUndone = false, pkArmReset = 0, pkArmRestore = 0;
+let pkState = {}, pkCustom = [], pkFold = {}, pkHidden = {}, pkOnlyUndone = false, pkArmReset = 0, pkRestoreArmed = false;
 try{ pkState = JSON.parse(localStorage.getItem(PK_STORE)||'{}') || {}; }catch(e){ pkState = {}; }
 try{ pkCustom = JSON.parse(localStorage.getItem(PK_CUSTOM)||'[]') || []; }catch(e){ pkCustom = []; }
 try{ pkFold = JSON.parse(localStorage.getItem(PK_FOLD)||'{}') || {}; }catch(e){ pkFold = {}; }
@@ -3508,6 +3509,7 @@ function pkRender(){
   if(cnt) cnt.innerHTML = `<b>${done} / ${total}</b> 완료 · <b>${pct}%</b>` + (total && done === total ? ' 🎉 <b style="color:#0F6B33;">짐 싸기 완료!</b>' : '');
   const fb = document.getElementById('pkFilter');
   if(fb){ fb.className = 'act-btn' + (pkOnlyUndone ? ' org' : ''); fb.textContent = pkOnlyUndone ? '👁️ 전체 보기' : '👁️ 미완료만 보기'; }
+  pkRestoreArmed = false;
   const rb = document.getElementById('pkRestoreBtn');
   if(rb){ const hid = Object.keys(pkHidden).length; rb.textContent = '↩️ 기본 목록 복원' + (hid ? ' ('+hid+')' : ''); }
   let html = '';
@@ -3586,18 +3588,15 @@ function pkRestore(){
   const b = document.getElementById('pkRestoreBtn');
   const n = Object.keys(pkHidden).length;
   if(!n){
-    if(b){ b.textContent = '지운 기본 품목이 없어요'; clearTimeout(pkRestore._t); pkRestore._t = setTimeout(()=>pkRender(), 1600); }
+    if(b){ b.textContent = '지운 기본 품목이 없어요'; setTimeout(()=>pkRender(), 1600); }
     return;
   }
-  if(!pkArmRestore || Date.now() - pkArmRestore > 3500){
-    pkArmRestore = Date.now();
+  if(!pkRestoreArmed){
+    pkRestoreArmed = true;
     if(b) b.textContent = '❗ 한 번 더 누르면 ' + n + '개가 돌아와요';
-    clearTimeout(pkRestore._t);
-    pkRestore._t = setTimeout(()=>{ pkArmRestore = 0; pkRender(); }, 3500);
     return;
   }
-  clearTimeout(pkRestore._t);
-  pkArmRestore = 0;
+  pkRestoreArmed = false;
   pkHidden = {}; pkSaveHidden();
   pkRender();
 }
