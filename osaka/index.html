@@ -400,8 +400,9 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
 .pk-cat.fold .pk-arrow{transform:rotate(-90deg);}
 .pk-cat.fold .pk-body{display:none;}
 .pk-body{padding:2px 12px 6px;}
-.pk-item{display:flex;gap:9px;align-items:flex-start;padding:9px 0;border-bottom:1px solid #F0EBDF;cursor:pointer;}
+.pk-item{display:flex;gap:4px;align-items:flex-start;padding:2px 0;border-bottom:1px solid #F0EBDF;}
 .pk-item:last-child{border-bottom:none;}
+.pk-main{display:flex;gap:9px;align-items:flex-start;flex:1;min-width:0;padding:7px 0;cursor:pointer;}
 .pk-item input[type=checkbox]{width:19px;height:19px;accent-color:var(--green);flex:0 0 auto;margin-top:1px;}
 .pk-txt{min-width:0;flex:1;}
 .pk-t{display:block;font-size:13px;line-height:1.4;font-weight:700;}
@@ -412,7 +413,9 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
 .pk-bdg.cabin{background:var(--mint);color:var(--green);}
 .pk-bdg.bag{background:#F7EBD9;color:#8A5A1E;}
 .pk-bdg.ban{background:#FDE2E1;color:#A3221E;}
-.pk-del{border:none;background:none;color:#A3221E;font-size:11.5px;font-weight:800;padding:6px 2px 0 4px;cursor:pointer;flex:0 0 auto;font-family:inherit;}
+.pk-del{border:none;background:#F4F0E6;color:#8E9B94;font-size:14px;font-weight:900;line-height:1;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:9px;cursor:pointer;flex:0 0 auto;font-family:inherit;margin-top:5px;padding:0;-webkit-tap-highlight-color:transparent;}
+.pk-del:hover{background:#FDE2E1;color:#A3221E;}
+.pk-del:active{background:#F6C9C7;color:#A3221E;}
 .pk-add{display:flex;gap:6px;margin-top:2px;}
 .pk-add input[type=text]{flex:1;min-width:0;border:1px solid var(--line);border-radius:10px;padding:10px;font-size:13px;font-family:inherit;background:#fff;color:var(--ink);}
 .pk-add select{border:1px solid var(--line);border-radius:10px;padding:0 6px;font-size:12px;font-family:inherit;background:#fff;color:var(--ink);}
@@ -791,13 +794,14 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
       <div id="packPane" class="hidden">
         <div class="pk-hero">
           <div class="pk-hero-t">🧳 짐 싸기 체크리스트</div>
-          <div class="pk-hero-s">진에어 <b>QE7QB2</b> · 기내 10kg / 위탁 15kg(3인 합산 45kg) · 11/28~12/01 오사카 <b>낮 15~18°C / 아침저녁 4~7°C</b> · 11/30 USJ는 종일 야외</div>
+          <div class="pk-hero-s">진에어 <b>QE7QB2</b> · 기내 10kg / 위탁 15kg(3인 합산 45kg) · 11/28~12/01 오사카 <b>낮 15~18°C / 아침저녁 4~7°C</b> · 11/30 USJ는 종일 야외<br/>필요 없는 품목은 오른쪽 <b>✕</b>로 지우세요 — 기본 품목도 지울 수 있고, 실수로 지웠으면 <b>기본 목록 복원</b>으로 되살려요.</div>
           <div class="pk-bartrack"><div class="pk-barfill" id="pkBar"></div></div>
           <div class="pk-count" id="pkCount">0 / 0 완료 · 0%</div>
           <div class="pk-btns">
             <button type="button" class="act-btn" id="pkFilter" onclick="pkFilterToggle()">👁️ 미완료만 보기</button>
             <button type="button" class="act-btn" onclick="pkFoldAll()">📂 모두 접기/펼치기</button>
             <button type="button" class="act-btn org" id="pkResetBtn" onclick="pkReset()">♻️ 전체 초기화</button>
+            <button type="button" class="act-btn" id="pkRestoreBtn" onclick="pkRestore()">↩️ 기본 목록 복원</button>
           </div>
         </div>
         <div id="pkCats"></div>
@@ -812,7 +816,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
             </select>
             <button type="button" onclick="pkAdd()">추가</button>
           </div>
-          <div style="font-size:11px;color:var(--sub);line-height:1.5;margin-top:7px;">체크 표시·내 품목은 이 기기에만 저장돼요. 새로고침이나 비행기 모드에서도 그대로 남아 있어요.</div>
+          <div style="font-size:11px;color:var(--sub);line-height:1.5;margin-top:7px;">체크 표시·지운 품목·내 품목은 이 기기에만 저장돼요. 새로고침이나 비행기 모드에서도 그대로 남아 있어요.</div>
         </div>
       </div><!-- /packPane -->
     </div>
@@ -1049,6 +1053,7 @@ let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(
   }));
   if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
 })();
+// v67: 짐 싸기 체크리스트 — 모든 항목(기본 37개 포함) ✕ 삭제 + '기본 목록 복원'(os_pack_hidden_v1)
 // v66: 12/01 귀국 KTX 예매 완료(구포 15:31 → 김천구미 16:59) · 김해공항→구포역 이동을 저장본에도 넣기
 (function migrateReturnKtx(){
   const srcDay = DEFAULT_DAYS.find(x=>x.d==='12/01(화)');
@@ -2936,7 +2941,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v66';
+const SW_CACHE = 'osaka-planner-v67';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
@@ -3418,7 +3423,7 @@ document.addEventListener('keydown', e => {
   <div class="mag-ov-scroll" id="imgOvScroll"><img id="imgOvImg" alt="간사이국제공항 제1터미널 4층 면세 수속 지도" src=""></div>
 </div>
 <script>
-/* ───────── 🧳 짐 싸기 체크리스트 (osaka-planner-v66) ───────── */
+/* ───────── 🧳 짐 싸기 체크리스트 (osaka-planner-v67) ───────── */
 const PK_CATS = [
   {id:'doc', emoji:'📄', name:'필수 서류 · 결제 · 앱', sub:'공항에서 바로 꺼내는 기내 가방에', items:[
     {id:'d1', t:'여권', d:'유효기간 6개월 이상 남았는지 사진면 확인 · 3명 모두', b:'cabin'},
@@ -3470,19 +3475,23 @@ const PK_CATS = [
   ]}
 ];
 const PK_BADGE = {cabin:'기내', bag:'위탁', ban:'기내 필수'};
-const PK_STORE = 'os_pack_v1', PK_CUSTOM = 'os_pack_custom_v1', PK_FOLD = 'os_pack_fold_v1', PK_SEG = 'os_check_seg';
+const PK_STORE = 'os_pack_v1', PK_CUSTOM = 'os_pack_custom_v1', PK_FOLD = 'os_pack_fold_v1', PK_SEG = 'os_check_seg', PK_HIDDEN = 'os_pack_hidden_v1';
 
-let pkState = {}, pkCustom = [], pkFold = {}, pkOnlyUndone = false, pkArmReset = 0;
+let pkState = {}, pkCustom = [], pkFold = {}, pkHidden = {}, pkOnlyUndone = false, pkArmReset = 0, pkArmRestore = 0;
 try{ pkState = JSON.parse(localStorage.getItem(PK_STORE)||'{}') || {}; }catch(e){ pkState = {}; }
 try{ pkCustom = JSON.parse(localStorage.getItem(PK_CUSTOM)||'[]') || []; }catch(e){ pkCustom = []; }
 try{ pkFold = JSON.parse(localStorage.getItem(PK_FOLD)||'{}') || {}; }catch(e){ pkFold = {}; }
+try{ pkHidden = JSON.parse(localStorage.getItem(PK_HIDDEN)||'{}') || {}; }catch(e){ pkHidden = {}; }
+if(!pkHidden || typeof pkHidden !== 'object' || Array.isArray(pkHidden)) pkHidden = {};
 
 function pkSaveState(){ try{ localStorage.setItem(PK_STORE, JSON.stringify(pkState)); }catch(e){} }
 function pkSaveCustom(){ try{ localStorage.setItem(PK_CUSTOM, JSON.stringify(pkCustom)); }catch(e){} }
 function pkSaveFold(){ try{ localStorage.setItem(PK_FOLD, JSON.stringify(pkFold)); }catch(e){} }
+function pkSaveHidden(){ try{ localStorage.setItem(PK_HIDDEN, JSON.stringify(pkHidden)); }catch(e){} }
 
 function pkCatList(){
-  const arr = PK_CATS.map(c=>({id:c.id, emoji:c.emoji, name:c.name, sub:c.sub, items:c.items.slice()}));
+  const arr = PK_CATS.map(c=>({id:c.id, emoji:c.emoji, name:c.name, sub:c.sub,
+    items:c.items.filter(it=>!pkHidden[it.id]).map(it=>({id:it.id, t:it.t, d:it.d, b:it.b}))}));
   if(pkCustom.length){
     arr.push({id:'mine', emoji:'➕', name:'내가 추가한 품목', sub:'', items:pkCustom.map(x=>({id:x.id, t:x.t, d:'', b:x.b||'cabin', mine:true}))});
   }
@@ -3499,8 +3508,11 @@ function pkRender(){
   if(cnt) cnt.innerHTML = `<b>${done} / ${total}</b> 완료 · <b>${pct}%</b>` + (total && done === total ? ' 🎉 <b style="color:#0F6B33;">짐 싸기 완료!</b>' : '');
   const fb = document.getElementById('pkFilter');
   if(fb){ fb.className = 'act-btn' + (pkOnlyUndone ? ' org' : ''); fb.textContent = pkOnlyUndone ? '👁️ 전체 보기' : '👁️ 미완료만 보기'; }
+  const rb = document.getElementById('pkRestoreBtn');
+  if(rb){ const hid = Object.keys(pkHidden).length; rb.textContent = '↩️ 기본 목록 복원' + (hid ? ' ('+hid+')' : ''); }
   let html = '';
   cats.forEach(c=>{
+    if(!c.items.length) return;
     const cdone = c.items.filter(it=>pkState[it.id]).length;
     const items = pkOnlyUndone ? c.items.filter(it=>!pkState[it.id]) : c.items;
     if(!items.length) return;
@@ -3512,17 +3524,21 @@ function pkRender(){
         <span class="pk-arrow">▼</span>
       </div>
       <div class="pk-body">${items.map(it=>`
-        <label class="pk-item${pkState[it.id]?' done':''}">
-          <input type="checkbox" ${pkState[it.id]?'checked':''} onchange="pkToggle('${it.id}',this.checked)"/>
-          <span class="pk-txt">
-            <span class="pk-t">${esc(it.t)}<span class="pk-bdg ${it.b}">${PK_BADGE[it.b]||''}</span></span>
-            ${it.d?`<span class="pk-d">${esc(it.d)}</span>`:''}
-          </span>
-          ${it.mine?`<button type="button" class="pk-del" onclick="event.preventDefault();event.stopPropagation();pkDel('${it.id}')">삭제</button>`:''}
-        </label>`).join('')}</div>
+        <div class="pk-item${pkState[it.id]?' done':''}">
+          <label class="pk-main">
+            <input type="checkbox" ${pkState[it.id]?'checked':''} onchange="pkToggle('${it.id}',this.checked)"/>
+            <span class="pk-txt">
+              <span class="pk-t">${esc(it.t)}<span class="pk-bdg ${it.b}">${PK_BADGE[it.b]||''}</span></span>
+              ${it.d?`<span class="pk-d">${esc(it.d)}</span>`:''}
+            </span>
+          </label>
+          <button type="button" class="pk-del" aria-label="이 품목 삭제" title="이 품목 삭제" onclick="pkDel('${it.id}')">✕</button>
+        </div>`).join('')}</div>
     </div>`;
   });
-  box.innerHTML = html || '<div class="pk-empty">미완료 품목이 없어요 🎉</div>';
+  box.innerHTML = html || (total
+    ? '<div class="pk-empty">미완료 품목이 없어요 🎉</div>'
+    : '<div class="pk-empty">표시할 품목이 없어요.<br/><b>↩️ 기본 목록 복원</b>을 누르면 기본 품목이 돌아와요.</div>');
 }
 function pkToggle(id, on){ pkState[id] = !!on; pkSaveState(); pkRender(); }
 function pkToggleCat(id){ pkFold[id] = !pkFold[id]; pkSaveFold(); pkRender(); }
@@ -3560,9 +3576,30 @@ function pkAdd(){
   if(inp) inp.focus();
 }
 function pkDel(id){
-  pkCustom = pkCustom.filter(x=>x.id !== id);
+  const wasCustom = pkCustom.some(x=>x.id === id);
+  if(wasCustom){ pkCustom = pkCustom.filter(x=>x.id !== id); pkSaveCustom(); }
+  else { pkHidden[id] = 1; pkSaveHidden(); }
   delete pkState[id];
-  pkSaveCustom(); pkSaveState(); pkRender();
+  pkSaveState(); pkRender();
+}
+function pkRestore(){
+  const b = document.getElementById('pkRestoreBtn');
+  const n = Object.keys(pkHidden).length;
+  if(!n){
+    if(b){ b.textContent = '지운 기본 품목이 없어요'; clearTimeout(pkRestore._t); pkRestore._t = setTimeout(()=>pkRender(), 1600); }
+    return;
+  }
+  if(!pkArmRestore || Date.now() - pkArmRestore > 3500){
+    pkArmRestore = Date.now();
+    if(b) b.textContent = '❗ 한 번 더 누르면 ' + n + '개가 돌아와요';
+    clearTimeout(pkRestore._t);
+    pkRestore._t = setTimeout(()=>{ pkArmRestore = 0; pkRender(); }, 3500);
+    return;
+  }
+  clearTimeout(pkRestore._t);
+  pkArmRestore = 0;
+  pkHidden = {}; pkSaveHidden();
+  pkRender();
 }
 function checkSeg(k){
   const isPrep = k !== 'pack';
