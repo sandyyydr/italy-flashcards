@@ -384,7 +384,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
   <div class="h-flight">
     <b>항공(QE7QB2)</b> 11/28(토) 부산 14:05 &rarr; 간사이 15:25 &nbsp;|&nbsp; 12/01(화) 11:00 귀국<br/>
     <b>숙소</b> 에스리드 호텔 난바 이스트 언넥스 · <b>USJ</b> 11/30(월) 11:00 입장 · 닌텐도 12:40<br/>
-    <b>기차(예매 완료)</b> 11/27(금) 김천구미 20:07 &rarr; 부산 21:23 &nbsp;|&nbsp; 12/01(화) 구포 15:31 &rarr; 김천구미 16:59 <span style="font-size:10px;font-weight:900;opacity:.55;">· v87</span>
+    <b>기차(예매 완료)</b> 11/27(금) 김천구미 20:07 &rarr; 부산 21:23 &nbsp;|&nbsp; 12/01(화) 구포 15:31 &rarr; 김천구미 16:59 <span style="font-size:10px;font-weight:900;opacity:.55;">· v88</span>
   </div>
   <div class="off-bar" id="offBar" onclick="toggleOffPanel()">
     <span class="off-dot" id="offDot"></span>
@@ -856,7 +856,8 @@ const DEFAULT_DAYS = [
     {t:"14:30", name:"해리포터 위저딩 월드 (14:30~16:00)", gq:"The Wizarding World of Harry Potter, Universal Studios Japan", move:"도보 3분", segs:[{l:"도보 3분",w:1}], how:"닌텐도 월드 출구에서 도보 2~3분 — 해리포터 입구", note:"포비든 저니(익스프레스) → 호그스미드 마을 · 버터맥주 · 성과 호수 포토스팟", warn:"포비든 저니 전 무료 락커에 가방·모자 보관 필수(휴대폰은 주머니로). 버터맥주는 호그스미드 안 3곳 — 야외 테이블이 성 뷰 명당!", lat:34.6680294, lng:135.4316945},
     {t:"16:00", name:"애미티 빌리지 · 죠스 (16:00~)", gq:"Amity Village, Universal Studios Japan", move:"도보 4분", segs:[{l:"도보 4분",w:2}], how:"해리포터 출구 → 바로 아래 애미티 빌리지(죠스) 도보 3~4분", note:"익스프레스4로 죠스 탑승 — 배 왼쪽 끝 좌석이 상어가 제일 가까워요", warn:"해리포터에서 내려와 계단·언덕만 넘으면 애미티예요. 해 질 무렵 조명 켜진 마을이 사진 명당.", lat:34.6659206, lng:135.4319379},
     {t:"17:30", name:"퍼레이드 · 나이트쇼 · 굿즈 쇼핑", gq:"Universal Studios Japan, Osaka", move:"파크 도보", segs:[{l:"도보 6분",w:2}], how:"애미티 → 할리우드 스트리트 기념품숍 → 퍼레이드 코스", note:"해가 16:50 무렵 져서 조명 켜진 파크가 예뻐요 · 퍼레이드·나이트쇼 시간은 당일 USJ 앱에서 확인", warn:"나이트쇼 '라이 업 더 나이트'는 20:30 무렵 — 내일 07:00 라피트라 무리하면 굿즈만 사고 나오세요. 밤 9~10°C, 핫팩 필수.", lat:34.6656768, lng:135.4323185},
-    {t:"19:30", name:"USJ 퇴장 &rarr; 숙소 복귀", gq:"Universal-City Station, Osaka", move:"JR + 한신 약 40분", segs:[{b:"JR",l:"5분",w:2,c:"#1E5CA8"},{b:"한신",l:"8분",w:2,c:"#E5532D"},{l:"도보 10분",w:2}], how:"유니버설시티역 → JR 유메사키선 니시쿠조역 → 한신 난바선 오사카난바역 → 숙소 도보 10분", note:"20:10 전후 숙소 도착 · 편의점 저녁이나 숙소 근처 야식(로쿠노미야 난바 등) → 짐 싸기", warn:"내일 06:30 체크아웃 · 07:00 라피트 α 5호라 오늘은 여기서 마무리! 면세 소모품은 개봉 금지, 위탁 캐리어 맨 위에.", lat:34.6678049, lng:135.4385577}
+    {t:"19:30", name:"USJ 퇴장 &rarr; 숙소 복귀", gq:"Universal-City Station, Osaka", move:"JR + 한신 약 40분", segs:[{b:"JR",l:"5분",w:2,c:"#1E5CA8"},{b:"한신",l:"8분",w:2,c:"#E5532D"},{l:"도보 10분",w:2}], how:"유니버설시티역 → JR 유메사키선 니시쿠조역 → 한신 난바선 오사카난바역 → 숙소 도보 10분", note:"20:10 전후 숙소 도착 · 짐 풀고 바로 돈키호테로 (편의점 저녁은 이동 중에)", warn:"내일 06:30 체크아웃 · 07:00 라피트 α 5호라 무리하지 말고, 돈키호테만 보고 숙소로!", lat:34.6678049, lng:135.4385577},
+    {t:"20:30", name:"돈키호테 난바센니치마에점 · 면세 쇼핑 (24시간)", gq:"Don Quijote Namba Sennichimae, Osaka", move:"도보 8분", segs:[{l:"도보 8분",w:3}], how:"숙소 → 난바센니치마에 상점가 → 돈키호테 난바센니치마에점 도보 8분 (24시간 영업)", note:"여권 3개 지참 · 위시 리스트 160종을 한 번에 담기 · 3인 합산 ¥33,000↑ 7% 쿠폰 + 면세(세전 ¥5,000↑)", warn:"쿠폰은 웹 캡처가 안 돼 매장에서 화면 제시 — 출발 전에 쿠폰 페이지 열어두세요. 면세 소모품은 개봉 금지! 22:30엔 숙소로 (내일 06:30 체크아웃).", lat:34.6646517, lng:135.5030246}
   ]},
   {d:"12/01(화)", city:"귀국", sub:"10~18°C · 맑음 · 07:00 라피트 α 5호 → 15:31 구포→16:59 김천구미 KTX(예매 완료)", items:[
     {t:"06:30", name:"🏨 에스리드 호텔 난바 이스트 언넥스 (체크아웃)", gq:"Eslead Hotel Namba East Annex, Osaka", move:"숙소 출발", note:"면세 쇼핑품 개봉 금지 · 캐리어 맨 위 정리 확인!", img:"./img/hotel.jpg", lat:34.6612, lng:135.5061},
@@ -996,6 +997,7 @@ let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(
   }));
   if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
 })();
+// v88: 3일차 마지막에 돈키호테 난바센니치마에 면세 쇼핑(20:30) 추가 · 캐시 v88
 // v87: 2일차 식사·카페 리듬 확정 — 10:55 덴진바시스지 간식 → 11:45 나카자키초 브런치 → 12:45 우메다 쇼핑·간식 → 15:30 기타하마 분좋카 → 17:45 신사이바시 → 18:40 와규카츠 반자이 · 캐시 v87
 // v86: 2일차 덴진바시스지 간식 — 나카무라야 고로케(일·공휴일 휴무) 대신 하루코마 스시(11:00~)·우마이야 타코야키(11:30~) · 캐시 v86
 // v85: 2일차 우메다 구간에서 사우스 게이트 빌딩(다이마루 우메다) 제외 — 한큐·그르니에 → 루쿠아 → 우메키타 공원 3곳 · 캐시 v85
@@ -1028,10 +1030,10 @@ let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(
     if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
   }catch(e){}
 })();
-// v87: 저장본 1·2·3일차를 최신 기본값(2일차 식사·카페 리듬)으로 재동기화
-(function refreshDaysV87(){
+// v88: 저장본 1·2·3일차를 최신 기본값(3일차 돈키호테 포함)으로 재동기화
+(function refreshDaysV88(){
   try{
-    if(localStorage.getItem('os_mig_v87')==='1') return;
+    if(localStorage.getItem('os_mig_v88')==='1') return;
     let changed = false;
     (days||[]).forEach((d,i)=>{
       if(!d || i > 2) return;
@@ -1041,7 +1043,7 @@ let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(
       d.items = JSON.parse(JSON.stringify(src.items));
       changed = true;
     });
-    localStorage.setItem('os_mig_v87','1');
+    localStorage.setItem('os_mig_v88','1');
     if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
   }catch(e){}
 })();
@@ -3052,7 +3054,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v87';
+const SW_CACHE = 'osaka-planner-v88';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
