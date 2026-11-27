@@ -52,6 +52,7 @@ main{padding:12px 14px calc(env(safe-area-inset-bottom,16px) + 78px);max-width:6
 .move-badge{display:inline-block;background:var(--mint);color:var(--green);font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:7px;margin-left:4px;}
 .item-title{font-size:15.5px;font-weight:800;margin:7px 0 4px;}
 .item-note{font-size:13px;color:var(--sub);line-height:1.48;margin:0;}
+.dmap{display:inline-block;background:var(--green);color:#fff;border-radius:6px;padding:1px 7px;font-size:10.5px;font-weight:900;text-decoration:none;line-height:1.5;white-space:nowrap;vertical-align:1px;}
 .item-body{display:flex;gap:11px;align-items:flex-start;}
 .item-thumb{width:74px;height:74px;border-radius:12px;object-fit:cover;flex-shrink:0;border:1px solid var(--line);margin-top:4px;}
 .item-warn{margin-top:8px;background:var(--orgbg);border-left:3.5px solid var(--org);border-radius:8px;padding:7px 10px;font-size:12.5px;color:#7A3214;line-height:1.45;font-weight:600;}
@@ -518,7 +519,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
   <section id="tab-map" class="hidden">
     <div class="day-scroll" id="mapDayScroll"></div>
     <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
-      <button class="act-btn org" id="allPlBtn" onclick="toggleAllPlaces()">⭐ 추천 108곳 함께 보기</button>
+      <button class="act-btn org" id="allPlBtn" onclick="toggleAllPlaces()">⭐ 추천 111곳 함께 보기</button>
       <button class="act-btn" id="atmBtn" style="border-color:#7B4FBF;color:#7B4FBF;font-weight:900;" onclick="toggleAtm()">🏧 ATM 4곳</button>
       <a class="act-btn map" href="./osaka_2026_all_places.kml" download>📥 KML</a>
     </div>
@@ -569,7 +570,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
     </details>
 
     <details style="margin-bottom:12px;">
-      <summary style="list-style:none;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;font-size:14.5px;font-weight:800;color:var(--green);cursor:pointer;">🗺️ 추천 장소 전체 108곳 (ATM 4 포함) · 동네별 정리 · 지도·KML <span style="font-size:11.5px;color:var(--sub);font-weight:700;">(눌러서 펼치기)</span></summary>
+      <summary style="list-style:none;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;font-size:14.5px;font-weight:800;color:var(--green);cursor:pointer;">🗺️ 추천 장소 전체 111곳 (ATM 4 포함) · 동네별 정리 · 지도·KML <span style="font-size:11.5px;color:var(--sub);font-weight:700;">(눌러서 펼치기)</span></summary>
       <div style="margin-top:8px;">
         <div class="sec-card" style="border-color:var(--gold);">
       <div style="font-size:12.5px;color:var(--sub);line-height:1.55;margin-bottom:8px;">
@@ -579,7 +580,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
         <button class="act-btn org" id="pf0" onclick="filterPlaces(0)">전체 108</button>
         <button class="act-btn" id="pf1" onclick="filterPlaces(1)">① 확정 일정 18</button>
-        <button class="act-btn" id="pf2" onclick="filterPlaces(2)">② 맛집·카페 74</button>
+        <button class="act-btn" id="pf2" onclick="filterPlaces(2)">② 맛집·카페 77</button>
         <button class="act-btn" id="pf3" onclick="filterPlaces(3)">③ 쇼핑·기타 12</button>
         <button class="act-btn" id="pf4" onclick="filterPlaces(4)">🏧 ATM 4</button>
       </div>
@@ -975,8 +976,8 @@ const DEFAULT_DAYS = [
     {t:"22:30", name:"(선택) 돈키호테 난바센니치마에 · 첫 면세 구매", gq:"Don Quijote Namba Sennichimae, Osaka", move:"도보 8분", segs:[{l:"도보 8분",w:3}], how:"숙소 → 난바센니치마에 상점가 → 돈키호테(24시간) 도보 8분", note:"3인 합산 33,000엔↑ 7% 쿠폰 · 첫 구매 한 번에 몰아서(면세+쿠폰)", warn:"💊 파브론 비염 캡슐 Sα는 약 코너 직원 상주 시간(21~22시)에만 판매! 오늘 피곤하면 11/30(월) USJ 복귀 후 돈키호테 코스에서 사도 돼요.", lat:34.6646517, lng:135.5030246},
   ]},
   {d:"11/29(일)", city:"덴진바시스지·우메다", sub:"오전 비 60%(최저 4°C) · 덴진바시스지 간식 → 나카자키초 브런치 → 우메다 쇼핑 → 기타하마 분좋카 → 신사이바시 와규카츠", items:[
-    {t:"10:30", name:"🏨 숙소 출발 &rarr; 덴진바시스지 상점가", gq:"Tenjinbashisuji Shotengai, Osaka", move:"약 20분 · 190엔", segs:[{l:"도보 8분",w:2},{b:"K",l:"9분",w:3,c:"#8B4513"},{l:"도보 3분",w:1}], how:"호텔 → 닛폰바시역 도보 8분 → 사카이스지선(갈색) 오기마치역 4정거장 9분 → 출구 도보 3분", note:"10:50 오기마치 도착 → 상점가 입구 · 편의점 커피·빵으로 가볍게 아침 먹고 출발(호텔 도보 4분)", warn:"오전 비 60%인데 덴진바시스지 아케이드는 지붕이 있어 우산 없이 걸어요. 최저 4°C — 히트텍+겉옷, 이코카 190엔 터치!", img:"./img/hotel.jpg", lat:34.6995, lng:135.5117},
-    {t:"10:55", name:"덴진바시스지 4~5초메 (덴마) · 가벼운 간식", gq:"Takoyaki Umaiya, Tenjinbashisuji, Osaka", move:"상점가 도보", segs:[{l:"도보 3분",w:2}], how:"오기마치역 출구 → 상점가를 북쪽(4~5초메·덴마 방면)으로 15분", note:"우마이야 타코야키(11:30~18:30) · 쿠시카츠 골목(시치후쿠진 등) · 간식은 한두 개만", warn:"나카무라야 고로케는 일·공휴일 정기휴무라 오늘은 패스! 우마이야는 11:30 오픈이라 조금 기다려요. 11:40엔 나카자키초로 이동(도보 10~11분).", lat:34.7075749, lng:135.5104961},
+    {t:"10:30", name:"🏨 숙소 출발 &rarr; 덴진바시스지 상점가", gq:"Tenjinbashisuji Shotengai, Osaka", move:"약 20분 · 190엔", segs:[{l:"도보 8분",w:2},{b:"K",l:"9분",w:3,c:"#8B4513"},{l:"도보 3분",w:1}], how:"호텔 → 닛폰바시역 도보 8분 → 사카이스지선(갈색) 오기마치역 4정거장 9분 → 출구 도보 3분", note:"우마이야 타코야키(11:30~18:30) · 쿠시카츠 골목(시치후쿠진 등) · 간식은 한두 개만<br/>🍮 <b>디저트 3곳</b><br/>· <b>Crepe 아마노자쿠</b> — 📍오기마치역 1번출구 도보 1분 · 11:30~19:00 · 타베로그 3.50 · <b>슈가버터 크레페 강추</b>(크림브륄레는 평일만) <a class=\"dmap\" href=\"https://www.google.com/maps/search/?api=1&amp;query=34.7024,135.5117\" target=\"_blank\" rel=\"noopener\">지도</a><br/>· <b>아베노 당고 본점</b> — 📍4초메 · 11:00~19:00 · <b>키나코 당고 160엔</b> <a class=\"dmap\" href=\"https://www.google.com/maps/search/?api=1&amp;query=34.7033,135.5117\" target=\"_blank\" rel=\"noopener\">지도</a><br/>· <b>마루야마 크레페</b> — 📍3초메 · 11:30~18:00 · 구글 4.6 <a class=\"dmap\" href=\"https://www.google.com/maps/search/?api=1&amp;query=34.7006,135.5117\" target=\"_blank\" rel=\"noopener\">지도</a>", warn:"오전 비 60%인데 덴진바시스지 아케이드는 지붕이 있어 우산 없이 걸어요. 최저 4°C — 히트텍+겉옷, 이코카 190엔 터치!", img:"./img/hotel.jpg", lat:34.6995, lng:135.5117},
+    {t:"10:55", name:"덴진바시스지 4~5초메 (덴마) · 가벼운 간식 & 디저트", gq:"Takoyaki Umaiya, Tenjinbashisuji, Osaka", move:"상점가 도보", segs:[{l:"도보 3분",w:2}], how:"오기마치역 출구 → 상점가를 북쪽(4~5초메·덴마 방면)으로 15분", note:"우마이야 타코야키(11:30~18:30) · 쿠시카츠 골목(시치후쿠진 등) · 간식은 한두 개만<br/>🍮 <b>디저트 3곳</b><br/>· <b>Crepe 아마노자쿠</b> — 11:30~19:00 · 타베로그 3.50 · 오기마치역 1번출구 1분 · <b>슈가버터 크레페 강추</b>(크림브륄레는 평일만)<br/>· <b>아베노 당고 본점</b> — 11:00~19:00 · 4초메 · <b>키나코 당고 160엔</b><br/>· <b>마루야마 크레페</b> — 11:30~18:00 · 구글 4.6 · 3초메", warn:"나카무라야 고로케는 일·공휴일 정기휴무라 오늘은 패스! 우마이야는 11:30 오픈이라 조금 기다려요. 11:40엔 나카자키초로 이동(도보 10~11분). 🍮 크레페 2곳은 11:30 오픈 — 10:55엔 당고(11:00~)부터 보고, 크레페는 11:30 이후에!", lat:34.7075749, lng:135.5104961},
     {t:"11:45", name:"나카자키초 카페거리 · 브런치 (中崎町)", gq:"Nakazaki-cho, Kita Ward, Osaka", move:"도보 10~11분(0.7~0.8km)", segs:[{l:"도보 10~11분",w:3}], how:"덴진바시스지(오기마치·6초메) → 서쪽으로 도보 약 10~11분 (0.7~0.8km)", note:"빈티지 소품숍·개인 카페 골목 — 브런치 1곳 + 소품샵 2~3곳 (11:45~12:40) · 살롱 드 아만토 12:00~22:00", warn:"골목 카페는 브런치 메뉴가 있는 집으로! 12:40엔 한큐백화점으로 이동해요(도보 12분).", lat:34.7069, lng:135.5055},
     {t:"12:45", name:"한큐백화점 우메다 본점 · 그르니에 우메다점 (간식)", gq:"Hankyu Umeda Main Store, Osaka", move:"도보 12분(0.9km)", segs:[{l:"도보 12분",w:3}], how:"나카자키초 역 → 한큐백화점 우메다 본점(가쿠다초 8-7) 도보 약 12분 (0.9km) → 2층 연결로로 바로 옆 한큐 그랜드빌딩 1F 그르니에 우메다점", note:"쇼핑 + 간식 — 그르니에 크림브륄레 밀푀유(테이크아웃) · 한큐 B1 잇신도 과일찹쌀떡 · 10:00~20:00", warn:"🥐 밀푀유는 16시 전에 품절 — 여기서 먼저 사두세요. 비 오면 한큐 지하 통로로 루쿠아까지 실내 이동!", img:"./img/umeda.jpg", lat:34.7028186, lng:135.4985323},
     {t:"13:35", name:"루쿠아 · 루쿠아 1100", gq:"LUCUA Osaka, Umeda", move:"도보 5분", segs:[{l:"도보 5분",w:2}], how:"한큐 → 2층 덱·지하 연결통로 → JR 오사카역 3층 루쿠아(10:30~20:30) 도보 5~7분 → 서쪽으로 이어진 루쿠아 1100(10:00~23:00)", note:"루쿠아 13F 닌텐도 오사카 · 루쿠아 1100은 바로 옆 건물(10~13F 뷰티·잡화·서점)", warn:"루쿠아·1100 모두 JR 오사카역 3층과 바로 연결 — 비 와도 실내로 이동! 13F 닌텐도는 붐비니 20분만 보고 나머지는 1100에서.", lat:34.7028866, lng:135.4953236},
@@ -1122,6 +1123,9 @@ const PLACES = [
   {n:"루쿠아 · 루쿠아 1100 (JR 오사카역 3F 연결)",c:"쇼핑몰",l:3,a:"우메다·텐진바시",w:"11/29 14:00 · 루쿠아 10:30~20:30 / 1100 10:00~23:00",la:34.7027213,ln:135.4946018},
   {n:"우메키타 공원 (그랜드 그린 오사카)",c:"공원",l:3,a:"우메다·텐진바시",w:"11/29 14:45 · 24시간 무료 · 잔디광장·겨울 조명",la:34.7036618,ln:135.4925478},
   {n:"덴진바시스지 상점가 (天神橋筋商店街)",c:"상점가·간식",l:3,a:"우메다·텐진바시",w:"11/29(일) 10:55 · 일본 최장 2.6km · 지붕 아케이드(비 OK) · 하루코마 스시 11:00~ · 우마이야 타코야키 11:30~",la:34.6995,ln:135.5117},
+  {n:"Crepe 아마노자쿠",c:"디저트·크레페",l:2,a:"우메다·텐진바시",w:"11/29(일) 10:55 · 11:30~19:00 · 타베로그 3.50 · 오기마치역 1번출구 도보 1분 · 슈가버터 크레페 강추(크림브륄레는 평일만)",la:34.7024,ln:135.5117},
+  {n:"아베노 당고 본점",c:"디저트·당고",l:2,a:"우메다·텐진바시",w:"11/29(일) 10:55 · 11:00~19:00 · 4초메 · 키나코 당고 160엔",la:34.7033,ln:135.5117},
+  {n:"마루야마 크레페",c:"디저트·크레페",l:2,a:"우메다·텐진바시",w:"11/29(일) 10:55 · 11:30~18:00 · 구글 4.6 · 3초메",la:34.7006,ln:135.5117},
   {n:"유니버설 스튜디오 재팬 (USJ)",c:"테마파크",l:1,a:"그 외·근교",w:"11/30 10:00 출발 → 11:00 입장 · 19:30 퇴장",la:34.665677,ln:135.432319},
   {n:"컵누들 박물관 오사카 이케다점",c:"체험·박물관",l:3,a:"그 외·근교",w:"11/29 오후 대안 (우메다에서 한큐 20분)",la:34.817885,ln:135.426644},
   {n:"마구로 잇테츠 교바시점",c:"스시",l:2,a:"그 외·근교",w:"히가시노다마치 3-11-9 · 11:30~15:00/17:00~23:00 · 참치 스탠딩 스시",la:34.6987531,ln:135.5340576},
@@ -1144,6 +1148,7 @@ let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(
   }));
   if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
 })();
+// v92: 2일차 덴진바시스지(10:55) 카드에 디저트 3곳(Crepe 아마노자쿠·아베노 당고 본점·마루야마 크레페) 추가
 // v92: 면세 탭에 서브 탭 전환 UI 추가 — 🏪 매장별 가이드(기본) · 📋 절차·11/1 규칙 · 💳 대행사·수수료(+ 결제·환급 수단 고르는 법 카드) · 🗺️ 공항 지도 · 상단 🚨 카드 점프 버튼 연결 · 캐시 v92
 // v91: 2026-11-01 최신 규칙 반영 — 밀봉 봉투(특수포장) 폐지 · 옷·신발·가방은 사용 가능(본인 반출·택 보관) · 소모품 1개라도 쓰면 그 영수증 전체 환급 불가 · 캐시 v91
 // v90: 면세 탭에 '우리가 가는 매장별 면세 실전 가이드'(몽벨·돈키·한큐/루쿠아·난바파크스·드럭스토어) 추가 · 캐시 v90
@@ -3115,7 +3120,7 @@ function renderPlaces(){
 function toggleAllPlaces(){
   showAllPlaces = !showAllPlaces;
   const b=document.getElementById('allPlBtn');
-  b.textContent = showAllPlaces ? '⭐ 추천 108곳 숨기기' : '⭐ 추천 108곳 함께 보기';
+  b.textContent = showAllPlaces ? '⭐ 추천 111곳 숨기기' : '⭐ 추천 111곳 함께 보기';
   renderMap();
 }
 let showAtm = false, atmMarkers = [];
@@ -3507,7 +3512,13 @@ function taxJump(k){
   taxSeg('tax');
   taxSub(k);
   const t=document.getElementById('tax-tabs');
-  if(t) setTimeout(()=>{ try{ t.scrollIntoView({block:'start',behavior:'smooth'}); }catch(e){ t.scrollIntoView(); } }, 50);
+  if(t) setTimeout(()=>{
+    try{
+      const hd=document.querySelector('.header');
+      t.style.scrollMarginTop = ((hd?hd.getBoundingClientRect().height:0)+10)+'px';
+      t.scrollIntoView({block:'start',behavior:'smooth'});
+    }catch(e){ try{ t.scrollIntoView(); }catch(err){} }
+  }, 50);
   return false;
 }
 /* ── 면세 | 체크 세그먼트 ── */
