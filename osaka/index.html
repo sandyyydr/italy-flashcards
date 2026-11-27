@@ -1078,8 +1078,26 @@ let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(
   }));
   if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
 })();
+// v75: 저장본 2일차 재동기화(와규카츠 반자이 저녁 후보)
 // v74: 2일차 신사이바시 와규카츠 반자이(구글 4.9) 지도·저녁 후보 추가, 매거진 4쪽 갱신 → 캐시 v74
 // v73: 11/28 1일차에 몽벨 아베노점(18:00) 쇼핑 + 덴노지 저녁 4곳(고하쿠·스탠드 후지·야스베에·분고) 반영, 지도 107곳
+// v75: 저장본 2일차를 최신 기본값(와규카츠 반자이 저녁 후보)으로 재동기화
+(function refreshDay2V75(){
+  try{
+    if(localStorage.getItem('os_mig_v75')==='1') return;
+    let changed = false;
+    (days||[]).forEach((d,i)=>{
+      if(!d || i !== 1) return;
+      const src = DEFAULT_DAYS.find(x=>x.d === d.d);
+      if(!src) return;
+      d.city = src.city; d.sub = src.sub; d.stay = src.stay;
+      d.items = JSON.parse(JSON.stringify(src.items));
+      changed = true;
+    });
+    localStorage.setItem('os_mig_v75','1');
+    if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
+  }catch(e){}
+})();
 // v73: 저장본 1일차를 최신 기본값(몽벨 아베노점 18:00)으로 재동기화
 (function refreshDay1V73(){
   try{
