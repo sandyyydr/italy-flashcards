@@ -384,7 +384,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
   <div class="h-flight">
     <b>항공(QE7QB2)</b> 11/28(토) 부산 14:05 &rarr; 간사이 15:25 &nbsp;|&nbsp; 12/01(화) 11:00 귀국<br/>
     <b>숙소</b> 에스리드 호텔 난바 이스트 언넥스 · <b>USJ</b> 11/30(월) 11:00 입장 · 닌텐도 12:40<br/>
-    <b>기차(예매 완료)</b> 11/27(금) 김천구미 20:07 &rarr; 부산 21:23 &nbsp;|&nbsp; 12/01(화) 구포 15:31 &rarr; 김천구미 16:59
+    <b>기차(예매 완료)</b> 11/27(금) 김천구미 20:07 &rarr; 부산 21:23 &nbsp;|&nbsp; 12/01(화) 구포 15:31 &rarr; 김천구미 16:59 <span style="font-size:10px;font-weight:900;opacity:.55;">· v79</span>
   </div>
   <div class="off-bar" id="offBar" onclick="toggleOffPanel()">
     <span class="off-dot" id="offDot"></span>
@@ -845,8 +845,7 @@ const DEFAULT_DAYS = [
     {t:"20:40", name:"미도스지 일루미네이션 야경 → 숙소", gq:"Midosuji, Chuo Ward, Osaka", move:"지하철 1정거장", segs:[{b:"M",l:"2분",w:2,c:"#D62828"},{l:"도보 10분",w:3}], how:"저녁 식사 후 미도스지 대로로 나와 신사이바시~혼마치 구간 야경 산책 → 신사이바시역 미도스지선 1정거장 난바역 → 도보 10분 숙소", note:"17:00~25:00 점등 · 신사이바시 구간이 가장 예뻐요", warn:"도톤보리 글리코상까지는 10분 더 — 오늘은 신사이바시 구간만 보고 숙소로! 피곤하면 택시 10분.", img:"./img/xmas.jpg", lat:34.6780, lng:135.5005}
   ]},
   {d:"11/30(월)", city:"USJ", sub:"11:00 여유 입장 · 미니언 → 12:40 닌텐도 → 해리포터 → 애미티(죠스) 일직선 · 8~17°C 종일 맑음(0%)", items:[
-    {t:"10:00", name:"🏨 에스리드 호텔 난바 이스트 언넥스 (출발)", gq:"Eslead Hotel Namba East Annex, Osaka", move:"숙소 출발", note:"11:00 입장이라 서두르지 않아요 — 물·핫팩·보조배터리·이코카만 챙겨 가볍게", warn:"오늘 밤에 짐 싸기까지! 내일 06:30 체크아웃·07:00 라피트라 캐리어 정리는 오늘 저녁에 끝내세요.", img:"./img/hotel.jpg", lat:34.6612, lng:135.5061},
-    {t:"10:10", name:"난바 &rarr; 유니버설시티역 (한신 + JR)", gq:"Universal-City Station, Osaka", move:"약 40분", segs:[{b:"한신",l:"8분",w:2,c:"#E5532D"},{b:"JR",l:"5분",w:2,c:"#1E5CA8"},{l:"도보 8분",w:2}], how:"오사카난바역 → 한신 난바선 니시쿠조역 환승 → JR 유메사키선 유니버설시티역 (도보 포함 35~45분)", note:"10:10 오사카난바역 출발 → 10:45~10:50 유니버설시티역 도착 → 게이트까지 도보 8분", warn:"⚠️ JR 서일본은 트래블월렛 컨택리스 결제 불가 — 모바일 이코카 잔액 ¥1,000+ 확인하고, 없으면 니시쿠조·유니버설시티역 매표기에서 종이표를 사세요! USJ 앱에 3명 입장권 QR도 미리 묶어 두기.", lat:34.6678049, lng:135.4385577},
+    {t:"10:15", name:"🏨 숙소 출발 &rarr; 유니버설시티역 (한신 + JR)", gq:"Universal-City Station, Osaka", move:"총 약 37~45분", segs:[{l:"도보 11분",w:2},{b:"한신",l:"8분",w:2,c:"#E5532D"},{l:"환승 7분",w:1},{b:"JR",l:"5분",w:2,c:"#1E5CA8"},{l:"도보 6분",w:2}], how:"호텔 → 오사카난바역 도보 11분 → 한신 난바선(오사카난바→니시쿠조) 8분 → 니시쿠조 환승 7분 → JR 유메사키선(니시쿠조→유니버설시티) 5분 → 역에서 USJ 게이트 도보 6분", note:"10:15 호텔 출발 → 10:52~11:00 게이트 도착 · 11:00 입장. 물·핫팩·보조배터리·이코카만 챙겨 가볍게, 캐리어 정리는 오늘 밤에!", warn:"⚠️ JR 서일본은 트래블월렛 컨택리스 결제 불가 — 모바일 이코카 잔액 ¥1,000+ 확인하고, 없으면 니시쿠조·유니버설시티역 매표기에서 종이표를 사세요! USJ 앱에 3명 입장권 QR도 미리 묶어 두기.", img:"./img/hotel.jpg", lat:34.6678049, lng:135.4385577},
     {t:"11:00", name:"USJ 입장 &rarr; 미니언 파크", gq:"Minion Park, Universal Studios Japan", move:"입장 + 도보 5분", segs:[{l:"도보 5분",w:2}], how:"정문 입장 → 오른쪽 할리우드 스트리트 → 미니언 파크", note:"익스프레스4로 미니언 메이헴 우선 탑승 + 미니언 파크 구경·사진 (11:00~11:30)", warn:"입장 직후 USJ 앱에서 대기시간 확인 — 미니언 메이헴이 20분 이하면 바로 타고, 40분 이상이면 사진·굿즈부터 하고 11:30 점심으로.", lat:34.6633572, lng:135.432446},
     {t:"11:30", name:"이른 점심 · 해피니스 카페 (대안 멜즈 · 피네간즈)", gq:"Happiness Cafe, Universal Studios Japan", move:"도보 3분", segs:[{l:"도보 3분",w:2}], how:"미니언 파크 → 해피니스 카페 도보 3분 (샌프란시스코 구역 · 10:00~19:00)", note:"12시 피크 전에 들어가 12:20까지 식사 — 대안은 멜즈 드라이브인(할리우드 · 09:00~21:00) · 피네간즈 바&그릴(뉴욕 구역)", warn:"12:25에는 닌텐도 월드 입구로 이동(도보 5~7분)! 12:40 입장 시간은 바꿀 수 없어요.", lat:34.66415, lng:135.432293},
     {t:"12:40", name:"슈퍼 닌텐도 월드™ (12:40~13:40 확정)", gq:"Super Nintendo World, Universal Studios Japan", move:"도보 6분 · 재입장 불가", segs:[{l:"도보 6분",w:3}], how:"뉴욕 구역 → 토관 입구로 12:40 입장 → 동키콩 → 마리오카트 → 요시 → 포토스팟", note:"동키콩 마인 카트 매드니스 12:40~13:10(익스프레스) → 마리오카트 → 요시의 아일랜드 → 포토스팟", warn:"한 번 나오면 재입장 절대 불가! 13:40까지 동키콩·마리오카트·요시·포토를 다 보고 나오세요. 키노피오 카페는 줄이 길면 패스.", lat:34.6679655, lng:135.4303229},
@@ -988,6 +987,7 @@ let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(
   }));
   if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
 })();
+// v79: 3일차 10:15 출발 · 이동 소요시간(도보 11·한신 8·환승 7·JR 5·도보 6 = 37~45분) 정확 표기, 캐시 v79
 // v78: 3일차(11/30 USJ) 11:00 여유 입장 → 미니언 → 12:40 닌텐도 → 해리포터 → 애미티(죠스) 일직선 · 매거진 탭 제거 → 캐시 v78
 // v77: 1일차 최종(11:30 김해공항·14:05 진에어·16:55 MTTM·17:25 신세카이)
 // v76: 1일차 확정(텐시바 마켓·몽벨 19:10·분고 20:30 예약)
@@ -1011,10 +1011,10 @@ let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(
     if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
   }catch(e){}
 })();
-// v78: 저장본 3일차(11/30 USJ)를 11:00 입장 최단 동선으로 재동기화
-(function refreshDay3V78(){
+// v79: 저장본 3일차(11/30 USJ)를 10:15 출발·정확한 소요시간 동선으로 재동기화
+(function refreshDay3V79(){
   try{
-    if(localStorage.getItem('os_mig_v78')==='1') return;
+    if(localStorage.getItem('os_mig_v79')==='1') return;
     let changed = false;
     (days||[]).forEach((d,i)=>{
       if(!d || i !== 2) return;
@@ -1024,7 +1024,7 @@ let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(
       d.items = JSON.parse(JSON.stringify(src.items));
       changed = true;
     });
-    localStorage.setItem('os_mig_v78','1');
+    localStorage.setItem('os_mig_v79','1');
     if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
   }catch(e){}
 })();
@@ -3018,7 +3018,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v78';
+const SW_CACHE = 'osaka-planner-v79';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
@@ -3328,17 +3328,22 @@ renderWish();
 updateOffBadge(); setTimeout(updateOffBadge, 2500); setTimeout(updateOffBadge, 7000);
 if(!isOffline()) setTimeout(()=>ensureOffline(false), 1500);
 if(FORCE_OFFLINE) setTimeout(()=>{ syncOnlineLayer(); offToast('오프라인 모드로 열었어요 (저장된 지도만 표시)'); }, 1200);
-if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').then(reg=>{
-  setTimeout(()=>{ try{ reg.update(); }catch(e){} }, 4000);
-  setInterval(()=>{ try{ reg.update(); }catch(e){} }, 30*60*1000);
-  navigator.serviceWorker.addEventListener('controllerchange', ()=>{
-    updateOffBadge();
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }).then(reg=>{
+  /* 새 버전 확인 — sw.js는 HTTP 캐시를 쓰지 않고, 앱을 열 때·화면 복귀할 때·30분마다 한 번 더 확인 */
+  const checkUpdate = ()=>{ try{ reg.update(); }catch(e){} };
+  checkUpdate();
+  setTimeout(checkUpdate, 1500);
+  setInterval(checkUpdate, 15*60*1000);
+  document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='visible') checkUpdate(); });
+  const reloadOnce = ()=>{
     try{
-      if(sessionStorage.getItem('os_sw_reload')) return;
+      if(sessionStorage.getItem('os_sw_reload')) return;   /* 무한 새로고침 방지 */
       sessionStorage.setItem('os_sw_reload','1');
       location.reload();
     }catch(e){}
-  });
+  };
+  navigator.serviceWorker.addEventListener('controllerchange', ()=>{ updateOffBadge(); reloadOnce(); });
+  navigator.serviceWorker.addEventListener('message', e=>{ if(e.data && e.data.type==='sw-activated') reloadOnce(); });
 }).catch(()=>{});
 </script>
 

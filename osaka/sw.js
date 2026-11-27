@@ -1,4 +1,4 @@
-const CACHE = 'osaka-planner-v78';
+const CACHE = 'osaka-planner-v79';
 const CORE = [
   './',
   './index.html',
@@ -11,6 +11,8 @@ const CORE = [
 ];
 
 self.addEventListener('install', e => {
+  /* 새 워커가 준비되는 즉시 대기 상태를 건너뛰고 활성화 단계로 넘어가요 */
+  self.skipWaiting();
   e.waitUntil((async () => {
     const c = await caches.open(CACHE);
     await Promise.all(CORE.map(u => c.add(new Request(u, { cache: 'reload' })).catch(() => {})));
@@ -20,9 +22,17 @@ self.addEventListener('install', e => {
 
 self.addEventListener('activate', e => {
   e.waitUntil((async () => {
+    /* 현재 버전만 남기고 이 오사카 앱의 모든 예전 캐시를 삭제 */
     const ks = await caches.keys();
-    await Promise.all(ks.filter(k => k !== CACHE && k.indexOf('osaka-planner-') === 0).map(k => caches.delete(k)));
+    await Promise.all(ks
+      .filter(k => k !== CACHE && /osaka/i.test(k))
+      .map(k => caches.delete(k)));
     await self.clients.claim();
+    /* 열려 있는 화면에 새 버전이 켜졌다고 알림 (index.html이 1회 자동 새로고침) */
+    try{
+      const cs = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+      cs.forEach(c => { try{ c.postMessage({ type: 'sw-activated', cache: CACHE }); }catch(err){} });
+    }catch(err){}
   })());
 });
 
