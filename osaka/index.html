@@ -384,7 +384,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
   <div class="h-flight">
     <b>항공(QE7QB2)</b> 11/28(토) 부산 14:05 &rarr; 간사이 15:25 &nbsp;|&nbsp; 12/01(화) 11:00 귀국<br/>
     <b>숙소</b> 에스리드 호텔 난바 이스트 언넥스 · <b>USJ</b> 11/30(월) 11:00 입장 · 닌텐도 12:40<br/>
-    <b>기차(예매 완료)</b> 11/27(금) 김천구미 20:07 &rarr; 부산 21:23 &nbsp;|&nbsp; 12/01(화) 구포 15:31 &rarr; 김천구미 16:59 <span style="font-size:10px;font-weight:900;opacity:.55;">· v85</span>
+    <b>기차(예매 완료)</b> 11/27(금) 김천구미 20:07 &rarr; 부산 21:23 &nbsp;|&nbsp; 12/01(화) 구포 15:31 &rarr; 김천구미 16:59 <span style="font-size:10px;font-weight:900;opacity:.55;">· v86</span>
   </div>
   <div class="off-bar" id="offBar" onclick="toggleOffPanel()">
     <span class="off-dot" id="offDot"></span>
@@ -832,7 +832,7 @@ const DEFAULT_DAYS = [
   ]},
   {d:"11/29(일)", city:"덴진바시스지·우메다", sub:"오전 비 60%(최저 4°C) · 덴진바시스지 → 나카자키초 → 우메다 → 나카노시마 → 신사이바시 서진 일직선", items:[
     {t:"10:30", name:"🏨 숙소 출발 &rarr; 덴진바시스지 상점가", gq:"Tenjinbashisuji Shotengai, Osaka", move:"약 20분 · 190엔", segs:[{l:"도보 8분",w:2},{b:"K",l:"9분",w:3,c:"#8B4513"},{l:"도보 3분",w:1}], how:"호텔 → 닛폰바시역 도보 8분 → 사카이스지선(갈색) 오기마치역 4정거장 9분 → 출구 도보 3분", note:"10:50 오기마치 도착 → 상점가 입구 · 편의점 커피·빵으로 가볍게 아침 먹고 출발(호텔 도보 4분)", warn:"오전 비 60%인데 덴진바시스지 아케이드는 지붕이 있어 우산 없이 걸어요. 최저 4°C — 히트텍+겉옷, 이코카 190엔 터치!", img:"./img/hotel.jpg", lat:34.6995, lng:135.5117},
-    {t:"10:55", name:"덴진바시스지 상점가 (天神橋筋商店街) 산책 · 간식", gq:"Tenjinbashisuji Shotengai, Osaka", move:"상점가 도보", segs:[{l:"도보 3분",w:2}], how:"오기마치역 출구 → 상점가 입구 → 북쪽(덴진바시스지6초메) 방면으로 15분", note:"일본에서 가장 긴 상점가 2.6km — 오늘은 오기마치~6초메 15분 구간만: 나카무라야 고로케 · 오사카텐만구 · 간식 골목", warn:"줄 긴 집은 한 곳만! 11:40엔 나카자키초 카페거리로 이동해요(도보 10~11분). 지붕 아케이드라 비 와도 발밑만 조심.", lat:34.6995, lng:135.5117},
+    {t:"10:55", name:"덴진바시스지 상점가 (天神橋筋商店街) 산책 · 간식", gq:"Tenjinbashisuji Shotengai, Osaka", move:"상점가 도보", segs:[{l:"도보 3분",w:2}], how:"오기마치역 출구 → 상점가 입구 → 북쪽(덴진바시스지6초메) 방면으로 15분", note:"일본에서 가장 긴 상점가 2.6km — 오늘은 오기마치~덴마(4~5초메) 구간만: 하루코마 스시(11:00~) · 우마이야 타코야키(11:30~) · 오사카텐만구", warn:"나카무라야 고로케는 일·공휴일 정기휴무라 오늘은 패스! 줄 긴 집은 한 곳만 — 11:40엔 나카자키초 카페거리로 이동(도보 10~11분). 지붕 아케이드라 비 와도 발밑만 조심.", lat:34.6995, lng:135.5117},
     {t:"11:45", name:"나카자키초 카페거리 (中崎町) 소품·카페 골목", gq:"Nakazaki-cho, Kita Ward, Osaka", move:"도보 10~11분(0.7~0.8km)", segs:[{l:"도보 10~11분",w:3}], how:"덴진바시스지 상점가(오기마치·6초메) → 서쪽으로 도보 약 10~11분 (0.7~0.8km)", note:"빈티지 소품숍·개인 카페가 늘어선 골목 · 살롱 드 아만토(12:00~22:00) · 골목 포토 25분", warn:"가게 대부분 12시 오픈 — 문 닫힌 골목 감성 사진 + 커피 한 잔만. 12:10엔 한큐백화점으로 이동(도보 12분)!", lat:34.7069, lng:135.5055},
     {t:"12:25", name:"한큐백화점 우메다 본점 · 그르니에 우메다점", gq:"Hankyu Umeda Main Store, Osaka", move:"도보 12분(0.9km)", segs:[{l:"도보 12분",w:3}], how:"나카자키초 역 → 한큐백화점 우메다 본점(가쿠다초 8-7) 도보 약 12분 (0.9km) → 2층 연결로로 바로 옆 한큐 그랜드빌딩 1F 그르니에 우메다점", note:"한큐 B1 잇신도 과일찹쌀떡 · 그르니에 크림브륄레 밀푀유(테이크아웃 전용) · 10:00~20:00", warn:"🥐 밀푀유는 16시 이후 품절 — 여기서 먼저 사두세요. 비 오면 한큐 지하 통로로 루쿠아까지 실내 이동!", img:"./img/umeda.jpg", lat:34.7028186, lng:135.4985323},
     {t:"13:10", name:"우메다 점심 (비 그칠 때까지 실내)", gq:"Grand Front Osaka, Umeda", move:"도보 5분", segs:[{l:"도보 5분",w:2}], how:"한큐 2층 덱 → 그랜드프론트 오사카 북관 6F 우메키타 플로어 (또는 한신 9F 보타니커리)", note:"우메키타 플로어(푸드홀 30여 곳) · 보타니커리 스파이스카레(한신 9F)", warn:"그랜드프론트·한큐·루쿠아는 2층 덱으로 연결돼 우산 없이 이동 가능! 13:10이면 12시 피크가 지나 줄이 짧아요.", lat:34.705169, lng:135.494640},
@@ -973,7 +973,7 @@ const PLACES = [
   {n:"한큐백화점 우메다 본점",c:"백화점",l:3,a:"우메다·텐진바시",w:"11/29 12:25 · 10:00~20:00 · 바로 옆 그르니에 우메다점(그랜드빌딩 1F)",la:34.7028186,ln:135.4985323},
   {n:"루쿠아 · 루쿠아 1100 (JR 오사카역 3F 연결)",c:"쇼핑몰",l:3,a:"우메다·텐진바시",w:"11/29 14:00 · 루쿠아 10:30~20:30 / 1100 10:00~23:00",la:34.7027213,ln:135.4946018},
   {n:"우메키타 공원 (그랜드 그린 오사카)",c:"공원",l:3,a:"우메다·텐진바시",w:"11/29 14:45 · 24시간 무료 · 잔디광장·겨울 조명",la:34.7036618,ln:135.4925478},
-  {n:"덴진바시스지 상점가 (天神橋筋商店街)",c:"상점가·간식",l:3,a:"우메다·텐진바시",w:"11/29(일) 10:50 · 일본 최장 2.6km · 지붕 아케이드(비 OK) · 나카무라야 고로케",la:34.6995,ln:135.5117},
+  {n:"덴진바시스지 상점가 (天神橋筋商店街)",c:"상점가·간식",l:3,a:"우메다·텐진바시",w:"11/29(일) 10:55 · 일본 최장 2.6km · 지붕 아케이드(비 OK) · 하루코마 스시 11:00~ · 우마이야 타코야키 11:30~",la:34.6995,ln:135.5117},
   {n:"유니버설 스튜디오 재팬 (USJ)",c:"테마파크",l:1,a:"그 외·근교",w:"11/30 10:00 출발 → 11:00 입장 · 19:30 퇴장",la:34.665677,ln:135.432319},
   {n:"컵누들 박물관 오사카 이케다점",c:"체험·박물관",l:3,a:"그 외·근교",w:"11/29 오후 대안 (우메다에서 한큐 20분)",la:34.817885,ln:135.426644},
   {n:"마구로 잇테츠 교바시점",c:"스시",l:2,a:"그 외·근교",w:"히가시노다마치 3-11-9 · 11:30~15:00/17:00~23:00 · 참치 스탠딩 스시",la:34.6987531,ln:135.5340576},
@@ -996,6 +996,7 @@ let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(
   }));
   if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
 })();
+// v86: 2일차 덴진바시스지 간식 — 나카무라야 고로케(일·공휴일 휴무) 대신 하루코마 스시(11:00~)·우마이야 타코야키(11:30~) · 캐시 v86
 // v85: 2일차 우메다 구간에서 사우스 게이트 빌딩(다이마루 우메다) 제외 — 한큐·그르니에 → 루쿠아 → 우메키타 공원 3곳 · 캐시 v85
 // v84: 1·2일차 구글맵 실측 이동시간/거리 반영(숙소→MTTM 8분·텐시바 12분·나카자키초 10~11분·우메키타 14분 등) · 캐시 v84
 // v83: 2일차 도보 시간 실측 반영 — 덴진바시스지→나카자키초 10~11분(0.7~0.8km), 나카자키초→한큐백화점 12분(0.9km) · 캐시 v83
@@ -1026,10 +1027,10 @@ let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(
     if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
   }catch(e){}
 })();
-// v85: 저장본 1·2·3일차를 최신 기본값(사우스게이트 제외)으로 재동기화
-(function refreshDaysV85(){
+// v86: 저장본 1·2·3일차를 최신 기본값으로 재동기화
+(function refreshDaysV86(){
   try{
-    if(localStorage.getItem('os_mig_v85')==='1') return;
+    if(localStorage.getItem('os_mig_v86')==='1') return;
     let changed = false;
     (days||[]).forEach((d,i)=>{
       if(!d || i > 2) return;
@@ -1039,7 +1040,7 @@ let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(
       d.items = JSON.parse(JSON.stringify(src.items));
       changed = true;
     });
-    localStorage.setItem('os_mig_v85','1');
+    localStorage.setItem('os_mig_v86','1');
     if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
   }catch(e){}
 })();
@@ -3050,7 +3051,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v85';
+const SW_CACHE = 'osaka-planner-v86';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
