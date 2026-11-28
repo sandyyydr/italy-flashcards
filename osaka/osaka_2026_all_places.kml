@@ -65,15 +65,22 @@
 <Placemark>
 <name>【11/29 09:00】브루클린 로스팅 컴퍼니 기타하마점 (강변 카페)</name>
 <styleUrl>#ly2</styleUrl>
-<description><![CDATA[<b>브루클린 로스팅 컴퍼니 기타하마점 (강변 카페)</b><br/><span style='color:#666'>09:00 · 강변 도보 3분</span><br/>🚇 기타하마역 4번 출구 → 도쇼마치 방면 강변 도보 3분 · 기타하마 1-1-9 하우저빌딩 1F<br/>08:00~19:00(일) · 구글 4.4(2,149) · 강변 창가·테라스석 · 09:00~10:15 커피+브런치<br/>⚠️ 9시~9시반은 야외 자리 여유, 10시 넘으면 브런치 손님이 몰려요. 화장실은 매장 안쪽.<br/><a href='https://www.google.com/maps/search/?api=1&amp;query=34.6910465,135.5091563'>구글맵에서 열기</a>]]></description>
+<description><![CDATA[<b>브루클린 로스팅 컴퍼니 기타하마점 (강변 카페)</b><br/><span style='color:#666'>09:00 · 강변 도보 3분</span><br/>🚇 기타하마역 4번 출구 → 도쇼마치 방면 강변 도보 3분 · 기타하마 1-1-9 하우저빌딩 1F<br/>08:00~19:00(일) · 구글 4.4(2,149) · 강변 창가·테라스석 · 09:00~10:05 커피+브런치<br/>⚠️ 9시~9시반은 야외 자리 여유, 10시 넘으면 브런치 손님이 몰려요. 화장실은 매장 안쪽.<br/><a href='https://www.google.com/maps/search/?api=1&amp;query=34.6910465,135.5091563'>구글맵에서 열기</a>]]></description>
 <ExtendedData><Data name="일자"><value>11/29</value></Data><Data name="시간"><value>09:00</value></Data><Data name="이동"><value>강변 도보 3분</value></Data><Data name="구글맵"><value>https://www.google.com/maps/search/?api=1&amp;query=34.6910465,135.5091563</value></Data></ExtendedData>
 <Point><coordinates>135.5091563,34.6910465,0</coordinates></Point>
 </Placemark>
 <Placemark>
-<name>【11/29 10:30】덴진바시스지 상점가 (天神橋筋商店街) 구경</name>
+<name>【11/29 10:10】오사카시 중앙공회당 (大阪市中央公会堂) · 나카노시마 포토스팟</name>
 <styleUrl>#ly2</styleUrl>
-<description><![CDATA[<b>덴진바시스지 상점가 (天神橋筋商店街) 구경</b><br/><span style='color:#666'>10:30 · 도보 13분(1.0km)</span><br/>🚇 브루클린 → 텐마바시 건너 오기마치 방면 → 상점가 남쪽 입구 도보 13분 (1.0km)<br/>가게 10~11시 오픈 · 길이 2.6km 일본 최장 상점가 · 아케이드라 비 와도 OK · 1초메 남쪽 입구 도착(도보 13분 1.0km) → 4~5초메(덴마)까지 15분 북상 → 11:25 텐진스시로 11분 남하<br/>⚠️ 11:25엔 텐진스시(2초메)로 남쪽 11분 내려와요 — 올라간 만큼 돌아오는 길이라 55분이 딱이에요.<br/><a href='https://www.google.com/maps/search/?api=1&amp;query=34.6995,135.5117'>구글맵에서 열기</a>]]></description>
-<ExtendedData><Data name="일자"><value>11/29</value></Data><Data name="시간"><value>10:30</value></Data><Data name="이동"><value>도보 13분(1.0km)</value></Data><Data name="구글맵"><value>https://www.google.com/maps/search/?api=1&amp;query=34.6995,135.5117</value></Data></ExtendedData>
+<description><![CDATA[<b>오사카시 중앙공회당 (大阪市中央公会堂) · 나카노시마 포토스팟</b><br/><span style='color:#666'>10:10 · 도보 10분(0.8km)</span><br/>🚇 브루클린 → 텐마바시 방향 강변길 → 나카노시마 공원 중앙공회당 도보 10분 (0.8km)<br/>09:30~21:30 · 무료 입장 · 구글 4.3(5,293) · 1918년 네오르네상스 붉은 벽돌 건물 · 강 건너 정면샷·계단 앞 광장 포토 · 10:10~10:28<br/>⚠️ 오전 햇빛에 벽돌색이 제일 잘 나와요. 강변 데크에서 다리까지 함께 담으면 한 장에 다 들어옵니다.<br/><a href='https://www.google.com/maps/search/?api=1&amp;query=34.6935485,135.5039123'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="일자"><value>11/29</value></Data><Data name="시간"><value>10:10</value></Data><Data name="이동"><value>도보 10분(0.8km)</value></Data><Data name="구글맵"><value>https://www.google.com/maps/search/?api=1&amp;query=34.6935485,135.5039123</value></Data></ExtendedData>
+<Point><coordinates>135.5039123,34.6935485,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>【11/29 10:40】덴진바시스지 상점가 (天神橋筋商店街) 구경</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>덴진바시스지 상점가 (天神橋筋商店街) 구경</b><br/><span style='color:#666'>10:40 · 도보 13분(0.9km)</span><br/>🚇 중앙공회당 → 텐마바시 건너 天神橋筋 → 상점가 1초메 남쪽 입구 도보 13분 (0.9km)<br/>가게 10~11시 오픈 · 길이 2.6km 일본 최장 상점가 · 아케이드라 비 와도 OK · 10:40 1초메 남쪽 입구 → 4~5초메(덴마)까지 15분 북상 → 11:25 텐진스시로 11분 남하 (45분)<br/>⚠️ 11:25엔 텐진스시(2초메)로 남쪽 11분 내려와요 — 올라간 만큼 돌아오는 길이라 45분이 딱이에요.<br/><a href='https://www.google.com/maps/search/?api=1&amp;query=34.6995,135.5117'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="일자"><value>11/29</value></Data><Data name="시간"><value>10:40</value></Data><Data name="이동"><value>도보 13분(0.9km)</value></Data><Data name="구글맵"><value>https://www.google.com/maps/search/?api=1&amp;query=34.6995,135.5117</value></Data></ExtendedData>
 <Point><coordinates>135.5117,34.6995,0</coordinates></Point>
 </Placemark>
 <Placemark>
@@ -98,10 +105,17 @@
 <Point><coordinates>135.4985323,34.7028186,0</coordinates></Point>
 </Placemark>
 <Placemark>
+<name>【11/29 15:30】우메키타 공원 (うめきた公園) · 벤치에서 디저트</name>
+<styleUrl>#ly2</styleUrl>
+<description><![CDATA[<b>우메키타 공원 (うめきた公園) · 벤치에서 디저트</b><br/><span style='color:#666'>15:30 · 도보 10~12분(0.7~0.8km)</span><br/>🚇 한큐백화점 → 우메키타 지하보도 → 그랜드 그린 오사카 우메키타 공원 도보 10~12분 (0.7~0.8km)<br/>24시간 무료 · 구글 4.5(725) · 잔디광장·분수·JR 오사카역 스카이라인 · 🍰 그르니에 밀푀유 + 🍓 잇신도 과일모찌는 둘 다 테이크아웃 전용 — 공원 벤치·잔디에서 먹고 사진 찍고 쉬기 · 15:30~16:10<br/>⚠️ 바람 부는 야외라 목도리·핫팩 필수, 쓰레기통이 적으니 포장 봉투에 다시 담아요. 16:10엔 니시우메다역으로(도보 9분).<br/><a href='https://www.google.com/maps/search/?api=1&amp;query=34.7036618,135.4925478'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="일자"><value>11/29</value></Data><Data name="시간"><value>15:30</value></Data><Data name="이동"><value>도보 10~12분(0.7~0.8km)</value></Data><Data name="구글맵"><value>https://www.google.com/maps/search/?api=1&amp;query=34.7036618,135.4925478</value></Data></ExtendedData>
+<Point><coordinates>135.4925478,34.7036618,0</coordinates></Point>
+</Placemark>
+<Placemark>
 <name>【11/29 16:30】오렌지 스트릿 (호리에 편집샵 거리)</name>
 <styleUrl>#ly2</styleUrl>
-<description><![CDATA[<b>오렌지 스트릿 (호리에 편집샵 거리)</b><br/><span style='color:#666'>16:30 · 지하철 약 15분</span><br/>🚇 한큐 → 니시우메다역 도보 6분 → 요쓰바시선(요쓰바시역) 5분 → 오렌지 스트릿 남쪽 입구 도보 7분 (도보만 가면 27분 2.2km)<br/>편집샵·빈티지·가구 골목 · 편집샵 19~20시 마감 · 16:30~17:35<br/>⚠️ ⚠️ 비숍(Bshop)은 오렌지 스트릿에 없어요 — 난바파크스 3층·그랑프론트 우메다 남관 3층에만 있어요!<br/><a href='https://www.google.com/maps/search/?api=1&amp;query=34.6709849,135.4963594'>구글맵에서 열기</a>]]></description>
-<ExtendedData><Data name="일자"><value>11/29</value></Data><Data name="시간"><value>16:30</value></Data><Data name="이동"><value>지하철 약 15분</value></Data><Data name="구글맵"><value>https://www.google.com/maps/search/?api=1&amp;query=34.6709849,135.4963594</value></Data></ExtendedData>
+<description><![CDATA[<b>오렌지 스트릿 (호리에 편집샵 거리)</b><br/><span style='color:#666'>16:30 · 지하철 약 20분</span><br/>🚇 우메키타 공원 → 니시우메다역 도보 9분 → 요쓰바시선(요쓰바시역) 5분 → 오렌지 스트릿 남쪽 입구 도보 7분 (도보만 가면 58분 4.0km — 지하철 필수)<br/>편집샵·빈티지·가구 골목 · 편집샵 19~20시 마감 · 16:30~17:35<br/>⚠️ ⚠️ 비숍(Bshop)은 오렌지 스트릿에 없어요 — 난바파크스 3층·그랑프론트 우메다 남관 3층에만 있어요!<br/><a href='https://www.google.com/maps/search/?api=1&amp;query=34.6709849,135.4963594'>구글맵에서 열기</a>]]></description>
+<ExtendedData><Data name="일자"><value>11/29</value></Data><Data name="시간"><value>16:30</value></Data><Data name="이동"><value>지하철 약 20분</value></Data><Data name="구글맵"><value>https://www.google.com/maps/search/?api=1&amp;query=34.6709849,135.4963594</value></Data></ExtendedData>
 <Point><coordinates>135.4963594,34.6709849,0</coordinates></Point>
 </Placemark>
 <Placemark>
