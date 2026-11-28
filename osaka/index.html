@@ -415,7 +415,7 @@ table.tbl .fee1{color:var(--org);font-weight:900;}
   <div class="h-flight">
     <b>항공(QE7QB2)</b> 11/28(토) 부산 14:05 &rarr; 간사이 15:25 &nbsp;|&nbsp; 12/01(화) 11:00 귀국<br/>
     <b>숙소</b> 에스리드 호텔 난바 이스트 언넥스 · <b>USJ</b> 11/30(월) 11:00 입장 · 닌텐도 12:40<br/>
-    <b>기차(예매 완료)</b> 11/27(금) 김천구미 20:07 &rarr; 부산 21:23 &nbsp;|&nbsp; 12/01(화) 구포 15:31 &rarr; 김천구미 16:59 <span style="font-size:10px;font-weight:900;opacity:.55;">· v93</span>
+    <b>기차(예매 완료)</b> 11/27(금) 김천구미 20:07 &rarr; 부산 21:23 &nbsp;|&nbsp; 12/01(화) 구포 15:31 &rarr; 김천구미 16:59 <span style="font-size:10px;font-weight:900;opacity:.55;">· v94</span>
   </div>
   <div class="off-bar" id="offBar" onclick="toggleOffPanel()">
     <span class="off-dot" id="offDot"></span>
@@ -1188,6 +1188,23 @@ let days = JSON.parse(localStorage.getItem('os_days_v2')||'null') || JSON.parse(
   }catch(e){}
 })();
 // v93: 1일차 실제 일정(17:43 체크인 · 18:40 쿠시카츠 다이쇼군 캐시리스 · 분고 20:30 · 로손 22:20 · 22:34 숙소) + 2일차 새 동선(09:00 브루클린 → 덴진바시스지 → 텐진스시 12:00 → 나카자키초 → 한큐 → 오렌지·난바파크스 → 도톤보리 모토무라 → 메가 돈키) · 지도 128곳 · 캐시 v93
+// v94: 카드마다 🕒 체류·여유 시간 배지 · 1·2일차 최종 시간표(09:10~23:20) · 저장본 재동기화(os_mig_v94 없이 내용 비교)
+// v94: 저장본 1·2일차를 최종본(체류 시간 배지 + 최종 시간표)으로 재동기화 — 이미 v93으로 한 번 열었던 기기도 갱신
+(function refreshDay1Day2V94(){
+  try{
+    let changed = false;
+    (days||[]).forEach((d,i)=>{
+      if(!d || i > 1) return;
+      const src = DEFAULT_DAYS.find(x=>x.d === d.d);
+      if(!src) return;
+      if(JSON.stringify(d.items)===JSON.stringify(src.items) && d.sub===src.sub) return;
+      d.city = src.city; d.sub = src.sub; d.stay = src.stay;
+      d.items = JSON.parse(JSON.stringify(src.items));
+      changed = true;
+    });
+    if(changed) localStorage.setItem('os_days_v2', JSON.stringify(days));
+  }catch(e){}
+})();
 // v93: 저장본 1·2일차를 실제 진행한 1일차 + 새 2일차 동선으로 재동기화 (가계부 os_exp_v1·체크 os_chk_v1·짐 목록은 그대로)
 (function refreshDay1Day2V93(){
   try{
@@ -3238,7 +3255,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ───────── 📴 오프라인(비행기 모드) 저장소 ───────── */
-const SW_CACHE = 'osaka-planner-v93';
+const SW_CACHE = 'osaka-planner-v94';
 const FORCE_OFFLINE = /[?&]off=1/.test(location.search);
 function isOffline(){ return FORCE_OFFLINE || navigator.onLine === false; }
 let onlineLayer = null, offList = null, offBusy = false;
